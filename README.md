@@ -1,2 +1,2 @@
-# getgrinnected
+# GetGrinnected
 CSC324-01 Spring '25 Project: GetGrinnected
