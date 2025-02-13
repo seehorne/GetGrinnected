@@ -1,36 +1,25 @@
-# GetGrinnected
+# About GetGrinnected
 
-GetGrinnected is an iOS and Android app that provides an event calendar option for Grinnellians attending and organizing events.
-Attendees can use it to find and follow events they are interested in, and organizers can use it to communicate with their communities.
+*GetGrinnected* is an iOS and Android app designed to help Grinnell students find out and attend events on and around Grinnell campus. Offering seamless UI that helps sort events based on certain days and event tags allowing you to easily find events you are looking for. Students will sign into accounts with their college emails to confirm their identity as a Grinnell student. This ensures limiting the user base to those who should have access to events limiting potential safety hazards. *GetGrinnected* will also allow students to get in contact with organization leaders to join mailing lists for more direct connections for events. Helping drive engagement with opportunities will benefit campus culture. Helping event organizers advertise and gain attendance and helping students find cool and fun opportunities. 
 
-It was created to TODO - WRITE MORE ABOUT REASONS HERE. I am struggling to phrase.
+# Layout of Repository
+This repository is a *working*, and *live document*, meaning that any challenges we encounter can be solved through changing these meta-rules and technical decisions (i.e. changing the database that we are using to better fit our needs). 
+Our tools: We use google docs as a staging area for many of these textual descriptions of our product and ReadMe.md, Trello as our issue tracking tool, github for our git repository, and [Discord](https://discord.gg/e4PrM4RyEr) as our means of communication. 
 
-# In this repo
-
-Here's what each directory in this repo is:
-
-- `written reports` - Markdown writeups for class milestones
+The structure of our Repository is as follows: 
+- `written reports` - Markdown write-ups for class milestones
 - `LICENSE` - MIT license for all content in the repo
 - `README.md` - The file you're reading, explaining the repo
+- `src` - Directory for all code
+    - `android` - Kotlin (front-end)
+    - `ios` - Swift (front-end)
+    - `backend` - Node.js (back-end) 
 
-# Issue tracking
+# Trello: Our Issue Tracking Tool
 
-TODO - Will discuss further in class Feb 14.
+[Issue Tracker](https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected)
 
 # Developer guidelines
 
-TODO - Establish these, not explicitly stated but is part of "setting up github." Leah's basic ones are:
-
 - Make a new branch for each feature
-- `main` branch is protected, don't merge in without oversight
-    - TODO: If we go wit this, actually protect `main`. Perhaps specify if we require merge reqs on the web interface
-
-# TODO: Delete this section? Seems like it will be covered by Trello
-
-TODO FOR MILESTONE 2
-* Describe idea and goals of project
-* Explain repo layout
-* Attach issue board link
-
-TODONE FOR MILESTONE 2
-* None (yet!)
+- `main` branch is protected, and you need 2 approvals to merge
