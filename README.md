@@ -9,7 +9,6 @@ It was created to TODO - WRITE MORE ABOUT REASONS HERE. I am struggling to phras
 
 Here's what each directory in this repo is:
 
-- `src` - App code
 - `written reports` - Markdown writeups for class milestones
 - `LICENSE` - MIT license for all content in the repo
 - `README.md` - The file you're reading, explaining the repo
