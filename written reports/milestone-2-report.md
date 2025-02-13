@@ -4,7 +4,7 @@
 2. Create A Trello Board - Ethan
 3. Organize Trello - almond
 4. Discuss Tools we will use - Everyone
-5. Layout of Repository  - Anthony,Budhil
+5. Layout of Repository  - Anthony, Budhil
 6. Writing Report - 
     - Created document - Anthony
     - Important-decisions - Budhil, Ellie
