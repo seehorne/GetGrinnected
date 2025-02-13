@@ -19,11 +19,7 @@ The structure of our Repository is as follows:
 
 [Issue Tracker](https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected)
 
-
 # Developer guidelines
 
-TODO - Establish these, not explicitly stated but is part of "setting up github." Leah's basic ones are:
-
 - Make a new branch for each feature
-- `main` branch is protected, don't merge in without oversight
-    - TODO: If we go wit this, actually protect `main`. Perhaps specify if we require merge reqs on the web interface
+- `main` branch is protected, and you need 2 approvals to merge
