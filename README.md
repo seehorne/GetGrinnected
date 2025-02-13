@@ -11,13 +11,13 @@ The structure of our Repository is as follows:
 - `LICENSE` - MIT license for all content in the repo
 - `README.md` - The file you're reading, explaining the repo
 - `src` - Folder to code directories
-    - Android - Kotlin (front-end)
-    - iOS - Swift (front-end)
-    - Node.js (back-end) 
+    - `android` - Kotlin (front-end)
+    - `ios` - Swift (front-end)
+    - `backend` - Node.js (back-end) 
 
 # Trello: Our Issue Tracking Tool
 
-https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected 
+[Issue Tracker](https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected)
 
 
 # Developer guidelines
