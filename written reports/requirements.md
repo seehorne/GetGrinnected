@@ -197,6 +197,8 @@ Microtransactions or pay functions
   - If the database cannot be reached for any reason, start the alternative flow "connection error."
 5. After entering their username, the user enters their Grinnell email and clicks a button labeled "Verify Email."
 6. If the email address ends in @grinnell.edu, send an email containing a verification code to the email address entered. 
+  - If the email already belongs to an account, start the alternative flow "account already exists."
+    - If the database cannot be reached, start "connection error."
   - If it does not, start the alternative flow "non grinnell email."
   - If the email server cannot be reached for any reason, start the alternative flow "connection error."
 7. The app changes to a new screen asking for a verification code, and telling the user to check their Grinnell email for the code. A button labelled "Cancel Verification" is also displayed.
@@ -214,12 +216,38 @@ Microtransactions or pay functions
 
 **Alternative flows:**
 
-TODO.
+username not available:
 
-- username not available
-- connection error
-- incorrect verification code
-- invalid password
+1. The app displays an error message: "That username is already in use."
+2. Focus is returned to the username box, so a username can be retyped
+3. Return to the main flow of whatever step caused this alternate flow.
+
+connection error:
+
+1. The app displays an error message: "Error connecting to resources. Try again later, or contact the developers."
+  - This can be customized based on what resource could not be reached
+2. Return to the main flow of whatever step caused this alternate flow.
+
+account already exists:
+
+1. The app displays an error message: "An account is already registered with that email"
+2. The app displays an informational message: "Do you want to log in?"
+3. Two buttons are displayed: "Log In" and "Use a different email".
+  - If "Log In" is pressed, stop the flow and start the log in flow.
+  - If "Use a different email" is pressed, go back to step 4 of the sign up flow.
+
+incorrect verification code:
+
+1. The app displays an error message: "Verification code does not match."
+2. The box(es) where the code was typed get cleared out.
+3. Return to the main flow of whatever step caused this alternate flow.
+
+invalid password:
+
+1. The app displays an error message: "Password does not meet requirements."
+  - Can specify what needs to be fixed.
+2. The password box is cleared, and a new password can be typed.
+3. Return to the main flow of whatever step caused this alternate flow.
 
 # Citations
 
