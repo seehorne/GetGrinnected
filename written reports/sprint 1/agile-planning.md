@@ -84,3 +84,5 @@ almond:
 # Issue Tracker
 
 To view our work, you can look at "Sprint 1 Backlog" "In Progress" and "Done in Sprint 1" on our Trello.
+
+<https://trello.com/b/pAnl7SQ3/getgrinnected>
