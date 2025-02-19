@@ -23,7 +23,8 @@ The structure of our Repository is as follows:
 - `src/` - Directory for all code
     - `android` - Kotlin (front-end)
     - `ios` - Swift (front-end)
-    - `backend` - Node.js (back-end) 
+    - `backend` - Node.js (back-end)
+- `image-utils` - images/visual elements app will use
 
 # Issue Tracking
 
