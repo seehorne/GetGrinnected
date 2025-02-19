@@ -169,6 +169,8 @@ Parties or personal get togethers
 Normal users creating their own events
 Microtransactions or pay functions
 
+# Use Cases
+
 # Citations
 
 1. Do, Nam, Brian Goodell, Samantha Chu, Lívia Freitas, Kevin Peng, and Bradley Ramsey. 2024. “GrinSync.” Grin-ArchiTech (blog). December 2024. <https://softarchitech.cs.grinnell.edu/grinsync/>.
