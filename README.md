@@ -10,6 +10,10 @@ The structure of our Repository is as follows:
 
 - `written reports/` - Markdown write-ups for class milestones
   - `requirements.md` - Living requirements document
+  - `sprint #/` - directory containing writeups for a specific sprint
+    - `agile-planning.md` - Agile planning (goal: name planned outcomes)
+    - `agile-review.md` - Agile review (goal: show what has been completed)
+    - `sprint-journal.md` - Sprint journal (goal: store written work not belonging to an agile component)
 - `LICENSE` - MIT license for all content in the repo
 - `README.md` - The file you're reading, explaining the repo
 - `src` - Directory for all code
