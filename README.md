@@ -7,7 +7,9 @@ This repository is a *working*, and *live document*, meaning that any challenges
 Our tools: We use google docs as a staging area for many of these textual descriptions of our product and ReadMe.md, Trello as our issue tracking tool, github for our git repository, and [Discord](https://discord.gg/e4PrM4RyEr) as our means of communication. 
 
 The structure of our Repository is as follows: 
-- `written reports` - Markdown write-ups for class milestones
+
+- `written reports/` - Markdown write-ups for class milestones
+  - `requirements.md` - Living requirements document
 - `LICENSE` - MIT license for all content in the repo
 - `README.md` - The file you're reading, explaining the repo
 - `src` - Directory for all code
