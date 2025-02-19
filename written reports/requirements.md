@@ -169,6 +169,86 @@ Parties or personal get togethers
 Normal users creating their own events
 Microtransactions or pay functions
 
+# Use Cases
+
+## Use Case 1: Signing Up
+
+**Actor:** A new user to the app. They have no user role yet.
+
+**Goal:** Sign up to use GetGrinnected. 
+
+- Since the user doesn't exist yet, you could say either all user roles or no user roles can trigger this case.
+- This wasn't explicitly covered by any of our user stories.
+
+**Trigger:** The user clicks "sign up" on the initial screen of the app (which only appears if they are not already signed in)
+
+**Preconditions:** No existing login data stored for app
+
+**Postconditions:** New user created in database, app stores login data locally.
+
+**Flow:**
+
+1. The user opens the app.
+2. They have choices "Sign In" and "Sign Up".
+3. They click "Sign Up."
+4. On a new screen, the user enters their desired username.
+  - If it is available, continue with the main flow.
+  - If not, start the alternative flow "username not available."
+  - If the database cannot be reached for any reason, start the alternative flow "connection error."
+5. After entering their username, the user enters their Grinnell email and clicks a button labeled "Verify Email."
+6. If the email address ends in @grinnell.edu, send an email containing a verification code to the email address entered. 
+  - If the email already belongs to an account, start the alternative flow "account already exists."
+    - If the database cannot be reached, start "connection error."
+  - If it does not, start the alternative flow "non grinnell email."
+  - If the email server cannot be reached for any reason, start the alternative flow "connection error."
+7. The app changes to a new screen asking for a verification code, and telling the user to check their Grinnell email for the code. A button labelled "Cancel Verification" is also displayed.
+  - If the user presses "Cancel Verification", return them to step 5 and allow them to enter a different email address.
+8. The user enters the verification code that has been emailed to them.
+  - If it matches the correct code, continue the main flow.
+  - If it does not match, start the alternative flow "incorrect verification code."
+9. The app changes to a new screen asking the user to enter a password for their account. It lists any password requirements.
+10. The user enters a password. It is checked against requirements.
+  - If it fulfils all requirements, continue the main flow.
+  - If it does not, start the alternative flow "invalid password".
+11. A user account is created in the database
+  - If the database cannot be reached for any reason, start the alternative flow "connection error."
+12. The user is let into their account, onto the default landing page.
+
+**Alternative flows:**
+
+username not available:
+
+1. The app displays an error message: "That username is already in use."
+2. Focus is returned to the username box, so a username can be retyped
+3. Return to the main flow of whatever step caused this alternate flow.
+
+connection error:
+
+1. The app displays an error message: "Error connecting to resources. Try again later, or contact the developers."
+  - This can be customized based on what resource could not be reached
+2. Return to the main flow of whatever step caused this alternate flow.
+
+account already exists:
+
+1. The app displays an error message: "An account is already registered with that email"
+2. The app displays an informational message: "Do you want to log in?"
+3. Two buttons are displayed: "Log In" and "Use a different email".
+  - If "Log In" is pressed, stop the flow and start the log in flow.
+  - If "Use a different email" is pressed, go back to step 4 of the sign up flow.
+
+incorrect verification code:
+
+1. The app displays an error message: "Verification code does not match."
+2. The box(es) where the code was typed get cleared out.
+3. Return to the main flow of whatever step caused this alternate flow.
+
+invalid password:
+
+1. The app displays an error message: "Password does not meet requirements."
+  - Can specify what needs to be fixed.
+2. The password box is cleared, and a new password can be typed.
+3. Return to the main flow of whatever step caused this alternate flow.
+
 # Citations
 
 1. Do, Nam, Brian Goodell, Samantha Chu, Lívia Freitas, Kevin Peng, and Bradley Ramsey. 2024. “GrinSync.” Grin-ArchiTech (blog). December 2024. <https://softarchitech.cs.grinnell.edu/grinsync/>.
