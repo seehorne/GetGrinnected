@@ -6,6 +6,7 @@
 #### When: 2/21/2025
 
 - A narrative describing the test.
+    -TO DO
 
 - What roles did each team member play during the test?
     - almond was the Computer
@@ -16,6 +17,7 @@
     - TO DO
 
 - Additional notes describing the session, e.g. observations of the test user's behavior.
+    - TO DO
 
 - Notes Taken From Session
     - Signup and Login
@@ -44,8 +46,8 @@
         - Favorite view was to see what was overlapping.
         - Ability to filter Calendar View?
 
-- The feedback you got from the tester
-    - 
+    - The feedback you got from the tester
+        -  SUMMARIZE NOTES?
 
 - Notes on how to revise your testing procedure for the next user
     - Ensure we are not talking over test user when they are providing feedback
