@@ -2,6 +2,63 @@
 
 ## Testing
 
+### Mentor MockRun Destany Best
+#### When 2/21/2025
+
+- A narrative describing the test.
+    - 
+
+- What roles did each team member play during the test?
+    - almond was the Computer
+    - Anthony was the Note Taker
+    - Ellie, Ethan, Budhil and Michael were Facilitators
+
+- Which user stories were activated?
+    - TO DO
+
+- Additional notes describing the session, e.g. observations of the test user's behavior.
+    - TO DO
+
+- Notes taken from session
+    - Events
+        - Favorite button on each event 
+    - Calendar View
+        - How does she know what timeframe she is in?
+        - Add remaining Icons to the bottom bar
+    - Event Creation
+        - Repeat on the right side of date (swap them)
+        - How would she change the location? 
+            - Search with a drop down
+        - Restrict contact person?
+        - Upload success?
+            - Successfully posted
+        - No Fight club card
+    - General Notes
+        - Add Groups /  Friends section
+        - Create something on calendar or profile settings instead of in likes
+        - She wouldn’t have looked at likes to make the events
+        - + in the calendar (maybe right side of the search bar)
+        - Instead of contacts (Collaborators)
+        - Where is time in the event creation?
+        - Location Hidden or not?
+        - Post an attachment upload
+            - Where is the picture shown for an event?
+        - Transparent tags
+        - Add Switch Profile 
+            - In the profile section
+            - Circle Arrow
+        - “Presented by” for events
+        - Display name
+        - Brand name / logo should be included
+        - GetGrinnected on Sign-in
+
+- The feedback you got from the tester
+    -  SUMMARIZE NOTES?
+
+- Notes on how to revise your testing procedure for the next user 
+    - A little more prepartion on how our flows opperate.
+    - If we allow a sandbox format for the test run (we can't assume we know what they are going to do so prepare to use alternate flows).
+
 ### Classmate Ella Berman
 #### When: 2/21/2025
 
