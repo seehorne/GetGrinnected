@@ -147,7 +147,7 @@ Hope this looks okay. Had to use HTML `<img>`-s so I could control the width and
 
 - Calendar:
     - Before: <img src="images/ellie_IMG_3351.jpg" width="25%"> <img src="images/ellie_IMG_3352.jpg" width="25%"> <img src="images/ellie_IMG_3353.jpg" width="25%"> <img src="images/ellie_IMG_3354.jpg" width="25%"> <img src="images/ellie_IMG_3355.jpg" width="25%"> <img src="images/ellie_IMG_3356.jpg" width="25%"> 
-    - TO DO: Can we get after photos?
+    - After: <img src= "images/ellie_new_view_filters.JPG" width = "25%"> <img src= "images/ellie_scrolling.JPG" width = "75%">
 
 - Event Creation:
     - Before: <img src="images/Budhil_Draft_Before_Original.jpg" width="25%"><img src="images/Budhil_Event_Creation_1.jpg" width="25%"><img src="images/Budhil_Favorites_1.jpg" width="25%">
