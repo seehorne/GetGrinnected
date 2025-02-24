@@ -127,7 +127,11 @@ TO DO: Others?
 ####  Changes to prototype
 
 Based on user feedback:
-- Update calendar to meet a few areas. TO DO: ELLIE, CAN YOU FILL THIS OUT?
+- Update calendar to meet a few areas.
+    - This involved changing the verbiage on the time view button from "time: day/month/year" to "view: day/month/year" to make it clearer it was switchable, to address confusion around how to switch between day, week, and month views
+        - This also involved making the button for this in color rather than pencil, so it was more clearly interactable
+    - Similarly, made the filter button colorable to show it is interactable, made a list of tags, and made some example screens with filters turned on to show what a filtered calendar might look like
+    - Made additional screens for week and day views to simulate side scrolling to access the next time period, as this was an intutitive way the user tried to navigate in the calendar.
 - User profile: Add account switcher, area for the orgs you follow.
 - TO DO: Are there others?
 
