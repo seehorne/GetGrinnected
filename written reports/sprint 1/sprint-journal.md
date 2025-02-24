@@ -146,8 +146,8 @@ Hope this looks okay. Had to use HTML `<img>`-s so I could control the width and
     - TO DO: Can we get after photos?
 
 - Event Creation:
-    - Before: <img src="images/budhil_IMG_7986.jpg" width="25%">
-    - After: <img src="images/budhil_IMG_7987.jpg" width="25%">
+    - Before: <img src="images/Budhil_Draft_Before_Original" width="25%"><img src="images/Budhil_Event_Creation_1" width="25%"><img src="images/Budhil_Favorites_1" width="25%">
+    - After: <img src="images/Budhil_Draft_2" width="25%"><img src="images/Budhil_Event_Creation_2" width="25%"><img src="images/Budhil_Favorites_2" width="25%">
 
 - Profile and Settings:
     - Before: <img src="images/almond_IMG_01.jpg" width="25%">
