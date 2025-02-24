@@ -253,9 +253,13 @@ invalid password:
 
 **Actor:** A SEPC, Student Org Leader, MLC, MSO, ISO (student group leader of some form) who wants to create a new event for their orginatization. This would be an Event Creator user.
 
-**Goal:** 
+**Goal:** The general overarching goal is to create an event to get their organization or group out for others to see the events they have planned.
 
-- The general overarching goal is to create an event to get their organization or group out for others to see the events they have planned (this aligns with Jack, Ochen, Abduhl and Ji-ho) 
+- This aligns with the following User Stories
+  - Jack
+  - Ochen
+  - Abduhl
+  - Ji-ho
 
 **Trigger:** The user clicks the "plus sign" on the calendar screen of the app (which only appears if they are an event creator user)
 
@@ -286,7 +290,7 @@ invalid password:
   - "Save to Drafts" button
   - "Post Event" button
   In our case for our user we will press the "Post Event" button.
-5. They will then recieve an event successfully posted notification.
+5. They will then recieve a successfully posted event notification.
 
 
 **Alternative flows:**
@@ -301,6 +305,23 @@ connection error:
 1. The app displays an error message: "Error connecting to resources. Try again later, or contact the developers."
   - This can be customized based on what resource could not be reached
 2. Return to the main flow of whatever step caused this alternate flow.
+
+## Use Case 3: 
+
+**Actor:**
+
+**Goal:** 
+
+**Trigger:** 
+
+**Preconditions:** 
+
+**Postconditions:** 
+
+**Flow:**
+
+
+**Alternative flows:**
 
 # Citations
 
