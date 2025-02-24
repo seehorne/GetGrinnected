@@ -249,6 +249,59 @@ invalid password:
 2. The password box is cleared, and a new password can be typed.
 3. Return to the main flow of whatever step caused this alternate flow.
 
+## Use Case 2: Creating an Event
+
+**Actor:** A SEPC, Student Org Leader, MLC, MSO, ISO (student group leader of some form) who wants to create a new event for their orginatization. This would be an Event Creator user.
+
+**Goal:** 
+
+- The general overarching goal is to create an event to get their organization or group out for others to see the events they have planned (this aligns with Jack, Ochen, Abduhl and Ji-ho) 
+
+**Trigger:** The user clicks the "plus sign" on the calendar screen of the app (which only appears if they are an event creator user)
+
+**Preconditions:** Logged in as an Event Creator user and navigated to the calendar screen.
+
+**Postconditions:** New event is created and stored in the database and posted on the calendar screen, searchable, etc.
+
+**Flow:**
+
+1. The user presses the "plus sign" button
+2. They are then navigated to the event creation page.
+3. They are asked to fill in the following information:
+  - Title
+  - Event Description
+  - Date of Event
+    - Calendar to select date
+  - Whether it Repeats
+    - Day selection for repetition
+  - Location
+    - Drop down with Grinnell Buildings
+  - Upload an image associated
+  - Hide the event from Public View
+  - Add Tags
+    - Drop down with options
+  - Add Collaborators
+    - Search feature for users
+4. Upon filling in all the necessary information the user is present with two options
+  - "Save to Drafts" button
+  - "Post Event" button
+  In our case for our user we will press the "Post Event" button.
+5. They will then recieve an event successfully posted notification.
+
+
+**Alternative flows:**
+
+Save to Drafts:
+
+1. When the user selects this button instead of posting the event the app stores the information and navigates them to their drafts page, showing the draft they just created as well as the other events they may have in drafts.
+2. From here the user can continue to use the app in any way but can reference back if they decide they are ready to post the event or make edits to the draft.
+
+connection error:
+
+1. The app displays an error message: "Error connecting to resources. Try again later, or contact the developers."
+  - This can be customized based on what resource could not be reached
+2. Return to the main flow of whatever step caused this alternate flow.
+
 # Citations
 
 1. Do, Nam, Brian Goodell, Samantha Chu, Lívia Freitas, Kevin Peng, and Bradley Ramsey. 2024. “GrinSync.” Grin-ArchiTech (blog). December 2024. <https://softarchitech.cs.grinnell.edu/grinsync/>.
