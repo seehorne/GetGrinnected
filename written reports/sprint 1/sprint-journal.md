@@ -62,50 +62,97 @@
 ### Classmate Ella Berman
 #### When: 2/21/2025
 
-- A narrative describing the test.
-    -TO DO
+#### Narrative describing the test
 
-- What roles did each team member play during the test?
-    - almond was the Computer
-    - Anthony was the Note Taker
-    - Ellie, Ethan, Budhil and Michael were Facilitators
+What roles did each team member play during the test?
+- almond was the Computer
+- Anthony was the Note Taker
+- Ellie, Ethan, Budhil and Michael were Facilitators
 
-- Which user stories were activated?
-    - TO DO
+Which user stories were activated?
+- We focused on user stories about being a non-power user, interacting with the parts of the UI that 
 
-- Additional notes describing the session, e.g. observations of the test user's behavior.
-    - TO DO
+Additional notes describing the session, e.g. observations of the test user's behavior.
+- TO DO
 
-- Notes Taken From Session
-    - Signup and Login
-        - Update to add real password requirements
-    - Homepage
-        - Scrolling capability?
-    - Calendar
-        - How do I get to different views of calendar?
-            - Might need to make this more pronounced
-    - Favorited Event
-        - Recurring events how do I know?
-    - General Notes
-        - Implement Follow orgs
-        - View orgs that are a part of the app
-        - Search of orgs and or events
-        - Are tags Preset?
-            - Yes, No custom tags
-        - Only future Dates?
-            - Yes
-        - Date acts as a filter
-        - Separate Week view From Month view
-            - Rather see a week than a month
-        - Settings to set default calendar view
-        - Week view scrollable
-        - Ability to set recurring events!
-        - Favorite view was to see what was overlapping.
-        - Ability to filter Calendar View?
+#### Feedback from tester
 
-    - The feedback you got from the tester
-        -  SUMMARIZE NOTES?
+Calendar: How do I get to different views? (It needs to be more obvious how to change)
 
-- Notes on how to revise your testing procedure for the next user
-    - Ensure we are not talking over test user when they are providing feedback
-        - It is great to have ideas to fix or solve a problem, but very important to fully hear out the test user. Their thought process is crucial! (Proposing possible ideas for solutions after they have provided their full thoughts is a great idea!).
+Calendar: A month view as the default is overwhelming, maybe a week view or a day view would be better.
+
+Calendar: When in week view, can you swipe and/or press a button to change what week you are viewing? This would be good to add, intuitive way to want to interact.
+
+Calendar: The day view where events are shown as overlapping is good.
+
+Events: How do I know if an event is recurring?
+
+Events: When I am creating event, how do I mark it as recurring? [After some explanation] Maybe that could be done differently to be more intutitive.
+
+TO DO: Others?
+
+#### Notes Taken From Session
+
+- Signup and Login
+    - Update to add real password requirements
+- Homepage
+    - Scrolling capability?
+- Calendar
+    - How do I get to different views of calendar?
+        - Might need to make this more pronounced
+- Favorited Event
+    - Recurring events how do I know?
+- General Notes
+    - Implement Follow orgs
+    - View orgs that are a part of the app
+    - Search of orgs and or events
+    - Are tags Preset?
+        - Yes, No custom tags
+    - Only future Dates?
+        - Yes
+    - Date acts as a filter
+    - Separate Week view From Month view
+        - Rather see a week than a month
+    - Settings to set default calendar view
+    - Week view scrollable
+    - Ability to set recurring events!
+    - Favorite view was to see what was overlapping.
+    - Ability to filter Calendar View?
+
+#### Notes on how to revise your testing procedure for the next user
+
+- Ensure we are not talking over test user when they are providing feedback
+    - It is great to have ideas to fix or solve a problem, but very important to fully hear out the test user. Their thought process is crucial! (Proposing possible ideas for solutions after they have provided their full thoughts is a great idea!).
+
+####  Changes to prototype
+
+Based on user feedback:
+- Update calendar to meet a few areas. TO DO: ELLIE, CAN YOU FILL THIS OUT?
+- User profile: Add account switcher, area for the orgs you follow.
+- TO DO: Are there others?
+
+From our own thoughts and ideas:
+- TO DO
+
+Not based on the testing session:
+- TO DO
+
+Photos of before and after:
+
+Hope this looks okay. Had to use HTML `<img>`-s so I could control the width and stop these taking up like 12 pages.
+
+- Calendar:
+    - Before: <img src="images/ellie_IMG_3351.jpg" width="25%"> <img src="images/ellie_IMG_3352.jpg" width="25%"> <img src="images/ellie_IMG_3353.jpg" width="25%"> <img src="images/ellie_IMG_3354.jpg" width="25%"> <img src="images/ellie_IMG_3355.jpg" width="25%"> <img src="images/ellie_IMG_3356.jpg" width="25%"> 
+    - TO DO: Can we get after photos?
+
+- Event Creation:
+    - Before: <img src="images/budhil_IMG_7986.jpg" width="25%">
+    - After: <img src="images/budhil_IMG_7987.jpg" width="25%">
+
+- Profile and Settings:
+    - Before: <img src="images/almond_IMG_01.jpg" width="25%">
+    - After: <img src="images/almond_IMG_02.jpg" width="25%"> <img src="images/almond_IMG_03.jpg" width="25%">
+
+- Homepage:
+    - Before: <img src="images/ethan_IMG_8351.jpg" width="50%">
+    - TO DO: Is this being changed?
