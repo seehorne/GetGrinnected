@@ -297,8 +297,9 @@ invalid password:
 
 Save to Drafts:
 
-1. When the user selects this button instead of posting the event the app stores the information and navigates them to their drafts page, showing the draft they just created as well as the other events they may have in drafts.
-2. From here the user can continue to use the app in any way but can reference back if they decide they are ready to post the event or make edits to the draft.
+1. When the user selects this button instead of posting the event the app stores the information
+2. Navigates them to their drafts page, showing the draft they just created as well as the other events they may have in drafts.
+3. From here the user can continue to use the app in any way but can reference back if they decide they are ready to post the event or make edits to the draft.
 
 connection error:
 
@@ -306,22 +307,43 @@ connection error:
   - This can be customized based on what resource could not be reached
 2. Return to the main flow of whatever step caused this alternate flow.
 
-## Use Case 3: 
+## Use Case 3: Finding an Event
 
-**Actor:**
+**Actor:** Any user to this app. They can really have any user role.
 
-**Goal:** 
+**Goal:** Search for an event of interest.
 
-**Trigger:** 
+- This aligns with the following user stories:
+  - Abby
 
-**Preconditions:** 
+**Trigger:** A user opens the app and presses the search bar. (While we have many features for organizing/filtering events for this case we will use the search bar).
 
-**Postconditions:** 
+**Preconditions:** User is Logged in and on the homepage.
+
+**Postconditions:** User has new event in their favorites tab.
 
 **Flow:**
-
+1. The users presses the search bar.
+2. The user enters the name for an event they are interested in.
+3. The screen filters out events that don't match the the information the user specified.
+4. The user presses on one of the events left on their page
+5. The event gets larger providing the following information:
+  - Name
+  - Description
+  - Time
+  - Location
+  - Tags
+6. The user presses the "heart" button.
+7. The event has been added to their favorites tab. 
 
 **Alternative flows:**
+
+no event found:
+
+1. At step 2 of the use case the user provides a name for an event that doesn't exist.
+2. The screen filters out all events (since none match the event name).
+3. The home screen is left blank saying no events found.
+4. To return to flow the user enters a different name into search. (Returning to flow at step 3)
 
 # Citations
 
