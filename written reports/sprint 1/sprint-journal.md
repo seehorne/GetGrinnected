@@ -127,7 +127,11 @@ TO DO: Others?
 ####  Changes to prototype
 
 Based on user feedback:
-- Update calendar to meet a few areas. TO DO: ELLIE, CAN YOU FILL THIS OUT?
+- Update calendar to meet a few areas.
+    - This involved changing the verbiage on the time view button from "time: day/month/year" to "view: day/month/year" to make it clearer it was switchable, to address confusion around how to switch between day, week, and month views
+        - This also involved making the button for this in color rather than pencil, so it was more clearly interactable
+    - Similarly, made the filter button colorable to show it is interactable, made a list of tags, and made some example screens with filters turned on to show what a filtered calendar might look like
+    - Made additional screens for week and day views to simulate side scrolling to access the next time period, as this was an intutitive way the user tried to navigate in the calendar.
 - User profile: Add account switcher, area for the orgs you follow.
 - TO DO: Are there others?
 
@@ -143,11 +147,11 @@ Hope this looks okay. Had to use HTML `<img>`-s so I could control the width and
 
 - Calendar:
     - Before: <img src="images/ellie_IMG_3351.jpg" width="25%"> <img src="images/ellie_IMG_3352.jpg" width="25%"> <img src="images/ellie_IMG_3353.jpg" width="25%"> <img src="images/ellie_IMG_3354.jpg" width="25%"> <img src="images/ellie_IMG_3355.jpg" width="25%"> <img src="images/ellie_IMG_3356.jpg" width="25%"> 
-    - TO DO: Can we get after photos?
+    - After: <img src= "images/ellie_new_view_filters.JPG" width = "25%"> <img src= "images/ellie_scrolling.JPG" width = "75%">
 
 - Event Creation:
-    - Before: <img src="images/budhil_IMG_7986.jpg" width="25%">
-    - After: <img src="images/budhil_IMG_7987.jpg" width="25%">
+    - Before: <img src="images/Budhil_Draft_Before_Original.jpg" width="25%"><img src="images/Budhil_Event_Creation_1.jpg" width="25%"><img src="images/Budhil_Favorites_1.jpg" width="25%">
+    - After: <img src="images/Budhil_Draft_2.jpg" width="25%"><img src="images/Budhil_Event_Creation_2.jpg" width="25%"><img src="images/Budhil_Favorites_2.jpg" width="25%">
 
 - Profile and Settings:
     - Before: <img src="images/almond_IMG_01.jpg" width="25%">
