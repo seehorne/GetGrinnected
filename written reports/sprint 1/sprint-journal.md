@@ -89,8 +89,6 @@ Events: How do I know if an event is recurring?
 
 Events: When I am creating event, how do I mark it as recurring? [After some explanation] Maybe that could be done differently to be more intutitive.
 
-TO DO: Others?
-
 #### Notes Taken From Session
 
 - Signup and Login
@@ -133,17 +131,14 @@ Based on user feedback:
     - Similarly, made the filter button colorable to show it is interactable, made a list of tags, and made some example screens with filters turned on to show what a filtered calendar might look like
     - Made additional screens for week and day views to simulate side scrolling to access the next time period, as this was an intutitive way the user tried to navigate in the calendar.
 - User profile: Add account switcher, area for the orgs you follow.
-- TO DO: Are there others?
 
 From our own thoughts and ideas:
-- TO DO
+- Make the user profile image change no longer a button
 
 Not based on the testing session:
-- TO DO
+- None for this category
 
 Photos of before and after:
-
-Hope this looks okay. Had to use HTML `<img>`-s so I could control the width and stop these taking up like 12 pages.
 
 - Calendar:
     - Before: <img src="images/ellie_IMG_3351.jpg" width="25%"> <img src="images/ellie_IMG_3352.jpg" width="25%"> <img src="images/ellie_IMG_3353.jpg" width="25%"> <img src="images/ellie_IMG_3354.jpg" width="25%"> <img src="images/ellie_IMG_3355.jpg" width="25%"> <img src="images/ellie_IMG_3356.jpg" width="25%"> 
