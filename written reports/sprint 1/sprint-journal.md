@@ -189,6 +189,7 @@ This is a cleaned-up version of the notes taken live during the session, only th
     - Not familiar with the bottom bar layout
     - Don't dismiss this as "she's doing it wrong" -- this is useful feedback!
 - **joke testimonial** (she really did say this): "The first rule of fight club is to put it on GetGrinnected"
+- She tried clicking on the tags to see other things with that tag, which seems like something pretty intuitive and good to have.
 
 #### Feedback from the tester
 
@@ -222,3 +223,13 @@ Question for her: Did any parts of the interaction feel less intuitive?
     - The actual procedure we are trying to follow with them
         - For future user tests, they are going to be power users / event creators so this will be part of the testing we make sure to do with them. Include this.
 - Let's continue mixing up the roles so different people get different experiences.
+
+### Revisions after meeting with Lily
+
+Changes we agreed to make after the meeting on Feb 24:
+
+- almond: Add a bubble or other element to the profile picture to make it clear clicking it will let you change photos
+- Ethan: Make a flow for when you click on a tag, to view other things with that tag.
+- Ellie: Make sure that all pages have the same icons on the bottom bar
+
+TO DO: List any others we have here. I feel like we should have more revisions between these two parts.
