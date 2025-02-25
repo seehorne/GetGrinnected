@@ -115,7 +115,7 @@ Rosy’s Grinnell email uses their deadname.
 Sarah is a 4th year involved in multiple student organizations and interested in trying new ones.
 
 - As Sarah, I need something to do on Thursday afternoons, so that I don't get bored in my dorm.
-- As Sarah, I need to do get updated on any time changes to event so that I don't miss my regular activities
+- As Sarah, I need to do get updated on any time changes or cancellations to events so that I don't miss my regular activities
 
 Zach is a shy 2nd year who wants to make new friends.
 
@@ -172,6 +172,8 @@ Microtransactions or pay functions
 # Use Cases
 
 ## Use Case 1: Signing Up
+
+TODO (almond): FIX THIS AREA WITH LEAH'S NEW INSTRUCTIONS
 
 **Actor:** A new user to the app. They have no user role yet.
 

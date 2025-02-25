@@ -156,3 +156,70 @@ Hope this looks okay. Had to use HTML `<img>`-s so I could control the width and
 - Homepage:
     - Before: <img src="images/ethan_IMG_8351.jpg" width="50%">
     - TO DO: Is this being changed?
+
+### Stakeholder Review: Lily
+
+**Who:** Lily
+- Lily is a naive user of this product
+- Not an org leader, just a normal user.
+
+**When:** 2/24/2025
+
+#### Narrative
+
+We started off by introducing Lily to the general idea of what we were working on and why we were asking for her for help. Then we started at the login screen of the app and had her log in, then navigate the app towards what interested her. We finished up the session by asking her some closing questions, than thanked her for her help.
+
+#### Team roles
+
+Ethan and Ellie were facilitators, Michael was the computer, and Anthony and almond took notes as we went. Budhil couldn't be at this meeting due to scheduling.
+
+#### User stories activated
+
+Here are some that seem the most relevant.
+
+- See upcoming events as a first year (Jessica)
+- See only events that are relevant to you (Abby)
+- Get updated on event time changes and cancellations (Sarah)
+
+#### Session notes
+
+This is a cleaned-up version of the notes taken live during the session, only the stuff that feels relevant to what this assignment is asking for.
+
+- Use case: She wants to use her phone to check when stuff is going on (the Grinnell website doesn't satisfy this), but doesn't like getting news through Instagram.
+- A question that came up multiple times: "How do I get back?"
+    - Not familiar with the bottom bar layout
+    - Don't dismiss this as "she's doing it wrong" -- this is useful feedback!
+- **joke testimonial** (she really did say this): "The first rule of fight club is to put it on GetGrinnected"
+
+#### Feedback from the tester
+
+Also taken from session notes.
+
+- When I tap on a day on the calendar, does it go to that day? Or the event my finger touched?
+    - The size of actual phones compared to the prototype is very relevant here. (Similar to Leah's feedback from class today)
+- Wants to see if a lot of people have also favorited an event.
+- Why would I want to have more than one account?
+    - Shows what this looks like from a non org leader perspective, doesn't really make sense.
+- There should be a clearer indication that clicking on the photo in your profile will change it.
+- It's good to have tags when viewing an event. 
+- When an event gets cancelled, does the app notify me?
+    - It probably should if you are subscribed to it, good to be thinking about now.
+
+Question for her: What features might you want in an app like this?
+
+- Pictures on the events.
+- Social part is nice, but she doesn't feel it's necessary.
+    - Discussion afterwards: Highlight this may not be true for all users, Ellie says Lily tends to care less about social features like this one.
+
+Question for her: Did any parts of the interaction feel less intuitive?
+
+- Home bar confusing, seems like it doesn't read well to her
+- Scroll bar currently doesn't make sense
+
+#### Changes to test procedure for next user
+
+- She asked "is there something I'm missing?" when she was done looking around the prototype, for next user let's make our intro a little bit longer so it includes:
+    - We are doing this at a very early stage of design, your feedback is vital
+    - The actual procedure we are trying to follow with them
+        - For future user tests, they are going to be power users / event creators so this will be part of the testing we make sure to do with them. Include this.
+- Let's continue mixing up the roles so different people get different experiences.
