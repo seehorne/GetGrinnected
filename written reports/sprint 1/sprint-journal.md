@@ -6,7 +6,7 @@
 #### When 2/21/2025
 
 - A narrative describing the test.
-    - 
+    - We followed a sandbox approach in our testing beginning as though she was starting the app for the first time. We had Destany go through the app at her own pace to attempt to see what features she would figure out or find that might be missing. Towards the end we made Destany an event creator user to test out our Event Creation features. After the demo we asked Destany for her general feedback, prompting with questions and asking for suggestions.
 
 - What roles did each team member play during the test?
     - almond was the Computer
@@ -233,3 +233,79 @@ Changes we agreed to make after the meeting on Feb 24:
 - Ellie: Make sure that all pages have the same icons on the bottom bar
 
 TO DO: List any others we have here. I feel like we should have more revisions between these two parts.
+
+### Stakeholder Review: Regan
+
+**Who:** Regan
+- Regan has heard of our product
+- SEPC Member, Event creator user.
+
+**When:** 2/26/2025
+
+#### Narrative
+
+#### Team roles
+
+#### User stories activated
+
+#### Session notes
+
+#### Feedback from the tester
+
+#### Changes to test procedure for next user
+
+### Revisions after meeting with Regan
+
+
+### Stakeholder Review: Yuina
+
+**Who:** Yuina
+- Yuina is a naive user of our product.
+- Event creator user.
+
+**When:** 2/27/2025
+
+#### Narrative
+
+#### Team roles
+
+#### User stories activated
+
+#### Session notes
+
+#### Feedback from the tester
+
+#### Changes to test procedure for next user
+
+### Revisions after meeting with Yuina
+
+
+### CIDER Lab
+
+#### Critique
+
+- What assumptions about users were identified during the critique stage?
+    - Light mode display was best for all users.
+    - Ability to read smaller text on displays.
+    - Some degree of knowledge of the UI.
+
+#### Imagine
+
+- Which assumption(s) did you choose to expand on for this phase?
+    - Light mode
+    - Ability to read smaller text
+- How might that assumption exclude users?
+    - Light Mode
+        - This could exclude individuals who are overstimulated by the bright display.
+        - This could exclude individuals who try to avoid bright displays towards night time.
+    - Ability to read smaller text
+        - Those with sight impairments may struggle to read the information.
+
+#### Design
+
+- What are your ideas for redesigning your product based on critique?
+    - Light Mode
+        - We can offer a customization of display colors (Light/Dark Mode, custom colors, etc.)
+    - Sight Impaired
+        - An ability to set text size.
+        - Potentially a way to zoom in on information.
