@@ -160,6 +160,7 @@ Photos of before and after:
 
 **Who:** Lily
 - Lily is a naive user of this product
+- 2nd year
 - Not an org leader, just a normal user.
 
 **When:** 2/24/2025
@@ -238,6 +239,7 @@ TO DO: List any others we have here. I feel like we should have more revisions b
 
 **Who:** Regan
 - Regan has heard of our product
+- 3rd year
 - SEPC Member, Event creator user.
 
 **When:** 2/26/2025
@@ -245,6 +247,11 @@ TO DO: List any others we have here. I feel like we should have more revisions b
 #### Narrative
 
 #### Team roles
+ - Budhil (Computer)
+ - Anthony (Facilitator)
+ - Michael (Facilitator)
+ - Ellie (Notetaker)
+ - Ethan (Notetaker)
 
 #### User stories activated
 
@@ -261,6 +268,7 @@ TO DO: List any others we have here. I feel like we should have more revisions b
 
 **Who:** Yuina
 - Yuina is a naive user of our product.
+- 4th year
 - Event creator user.
 
 **When:** 2/27/2025
@@ -309,3 +317,6 @@ TO DO: List any others we have here. I feel like we should have more revisions b
     - Sight Impaired
         - An ability to set text size.
         - Potentially a way to zoom in on information.
+
+
+- 
