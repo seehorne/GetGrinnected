@@ -366,6 +366,7 @@ TODO: FILL IN
 **Who:** Yuina
 
 - Naive user
+- 4th year
 - Org leader (president of ISO: International Student Organization)
 
 **When:** 2/27/2025
