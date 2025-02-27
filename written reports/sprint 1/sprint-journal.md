@@ -233,3 +233,160 @@ Changes we agreed to make after the meeting on Feb 24:
 - Ellie: Make sure that all pages have the same icons on the bottom bar
 
 TO DO: List any others we have here. I feel like we should have more revisions between these two parts.
+### Stakeholder Review: Yuina
+
+**Who:** Yuina
+
+- Naive user
+- Org leader (president of ISO: International Student Organization)
+
+**When:** 2/27/2025
+
+#### Narrative
+
+We decided not to give a full explanation of the app to Yuina, instead asking her what she thought an app called "GetGrinnected" would do. Then, we had her go though the app as she saw fit, mostly not providing direct guidance on what different buttons did.
+
+When it came to some of the org leader role specific things (creating and saving events) we did provide pointers for where to click such as clicking on the "+" button on the calendar.
+
+#### Team roles
+- Ellie was computer
+- Budhil and Anthony were facilitators
+- almond and Michael were note takers
+- Ethan could not attend due to scheduling
+
+#### User stories activated
+
+- Connect wih other SEPCs (orgs) to collaborate on a larger scale event (Ji-Ho)
+- Students easily be able to contact the SEPC (org) (Ji-Ho)
+- Distribute tickets so event's don't overfill (Ochen)
+- Send notifications to an org mailing list (Ochen)
+- Save events of interest (Jessica)
+
+#### Session notes
+
+##### Pre-testing questions
+
+What do you think an app called "GetGrinnected" would do, knowing nothing else about it?
+- Help get connected with other Grinnellians?
+
+##### Testing: Personal account
+
+Cleaned-up version of live meeting notes.
+
+---
+
+Decided to skip the intro survey, since it was optional.
+- When asked afterwards, said this was because she didn't think it would be necessary at that point.
+
+Went straight to the tags selector, could be because she saw the tags view by mistake but this is still worth noting
+
+Then clicks the date filter, but decides not to do it after seeing the menu.
+
+Favorites an event, after checking that she can do that.
+
+Not sure what calendar button is on the home screen
+- Agrees the icon on other screens is easier to understand. This specific instance is just not.
+    - Seems to be an issue of drawing style. Calendar should be more grid, less lines, pictorally
+
+In settings, clicks on find orgs and taps AAA. That pulls up the info box for AAA, and she hearts it.
+- It takes a few layers of taps to get back to the settings page.
+
+**EXTRA IMPORTANT**: "Is there more to see for the orgs, what events they have and stuff?"
+- Feature request for being able to somehow see org-specific events *from this page*
+
+##### Testing: Student Org account
+
+Switches from personal to student org account, it seems like that UI element reads well. Although she seems very quick at understanding all sorts of UI stuff, which not all testers have been--so take this with a grain of salt.
+
+We pretend she already registered an org account, skipping those steps for now
+
+Now, in calendar view, we direct her to the plus button to create an event. She clicks it and goes over the event creation screen.
+
+- "Can I make my own tags?" -> has been asked before. Our answer is no, but we've been wanting to reach out to orgs and ask them what tags they want.
+
+Uploads the poster for the event.
+
+Asks if she can also add the time, the answer to this is yes.
+
+Decides to post the event immediately when it's done.
+
+On the favorites screen:
+- "Does this show the stuff I've favoritied? Like the org and the event" 
+    - What would make sense to you? -> "Only showing the events"
+- "Can I filter the favorites by org?"
+- "How can you tell it is popular?" -> lots of people liked it
+    - "Can you see how many people have liked it in the actual UI?"
+
+- "What does add collaborator do?"
+
+#### Feedback from the tester
+
+Unexpected positive things?
+- Really likes the calendar, you can see when everything is.
+    - Prefers month view to the scrolling view on the homepage
+    - Likes how it's filterable
+
+Negative things?
+- If there is a graphic for an event, can it show in the background?
+    - After meeting we made sure to talk a bit about the accessibility implications on this. It would need to be a compromise.
+- If you open the org page, graphics for that org could also be shown
+
+Why'd you skip the survey? What might encourage you to actually do it?
+- Skipped because felt unnecessary
+- Fewer questions might help
+- It could also ask about what orgs you wanna learn about, rather than what major you are.
+
+If we did a "would you like to take a short survey? y/n" would you be more likely to do that?
+- No, the format we use now would be more compelling
+
+Anything particularly intuitive or unintuitive in the UI?
+- Favorites view is good, does what she expects.
+- Wasn't sure what the calendar icon was
+- Didn't really know what the home button would do
+
+Looking ahead, you mentioned you wanted to create tags. Were there any in particular you had in mind?
+- International
+- Cost
+- If as an org you could make tags, she'd make an "ISO" tag.
+- Food is a good tag to have
+
+How was the experience between using the personal and student org account?
+- Very straightforward.
+
+What priveleges would you expect a student org account to have?
+- Security concern: You can only access student org email if your personal is linked, and this doesn’t seem to require that.
+
+General experience w/ event creation?
+- It would be nice if it showed on calendar as a draft when you save as a draft.
+
+How could the process of event creation be made more accessible?
+- Honestly, seems good as it is.
+- She doesn't have anything else she'd wanna see.
+
+If someone added your org as a collaborator, what would you expect that to look like?
+- If open events, should show up in there. But events on homepage & elsewhere don’t say what org it is. It could show the collaborating orgs.
+
+Thoughts on receiving notifications if an event is updated?
+- Very common for location or time to change. Would be nice.
+
+How do you believe this app would impact your day to day planning for org events?
+- Currently looks at 25live to do that
+- If this becomes a thing, it would be easier to access than that.
+- Tend to avoid similar events on the same day, this would be useful for that.
+
+As a leader of an MLC, are there any things your org needs that we don’t seem to offer or that general student orgs wouldn’t need?
+- An event they held last sem was a collab with almost all the international MLCS (ISO + 10 MLCs + other international cohorts). In terms of representing “rare birds”, would be nice to have them added even though they are not an org with the college.
+- If that could be seen visually, it would be nice. To show it’s a huge collaboration.
+
+Who should we reach out to about this to get the word out?
+- Probably not ITS
+- Vrinda Varia
+- Athletic departments
+
+#### Changes to test procedure for next user
+
+There is no next user we are testing with. If we did more paper prototyping, we would make these changes to the testing procedure.
+
+- Give slightly more background on our goals with the app
+
+Other than that, we're pretty happy with how our testing procedure went today.
