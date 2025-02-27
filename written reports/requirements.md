@@ -118,7 +118,7 @@ Sarah is a 4th year involved in multiple student organizations and interested in
 
 - As Sarah, I need something to do on Thursday afternoons, so that I don't get bored in my dorm.
 - As Sarah, I need to do get updated on any time changes or cancellations to events so that I don't miss my regular activities
-- As Sarah
+- As Sarah, I need to be able to distinguish between different types of events so that I can easily determine which ones match the interests I have my current orgs don't meet
 
 Zach is a shy 2nd year who wants to make new friends.
 
