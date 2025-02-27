@@ -5,59 +5,74 @@
 ### Mentor MockRun Destany Best
 #### When 2/21/2025
 
-- A narrative describing the test.
-    - We followed a sandbox approach in our testing beginning as though she was starting the app for the first time. We had Destany go through the app at her own pace to attempt to see what features she would figure out or find that might be missing. Towards the end we made Destany an event creator user to test out our Event Creation features. After the demo we asked Destany for her general feedback, prompting with questions and asking for suggestions.
+#### A narrative describing the test.
+- We followed a sandbox approach in our testing beginning as though she was starting the app for the first time. We had Destany go through the app at her own pace to attempt to see what features she would figure out or find that might be missing. Towards the end we made Destany an event creator user to test out our Event Creation features. After the demo we asked Destany for her general feedback, prompting with questions and asking for suggestions.
 
-- What roles did each team member play during the test?
-    - almond was the Computer
-    - Anthony was the Note Taker
-    - Ellie, Ethan, Budhil and Michael were Facilitators
+#### What roles did each team member play during the test?
+- almond was the Computer
+- Anthony was the Note Taker
+- Ellie, Ethan, Budhil and Michael were Facilitators
 
-- Which user stories were activated?
-    - TO DO
+#### Which user stories were activated?
+- TO DO
 
-- Additional notes describing the session, e.g. observations of the test user's behavior.
-    - TO DO
+#### Additional notes describing the session, e.g. observations of the test user's behavior.
+- TO DO
 
-- Notes taken from session
-    - Events
-        - Favorite button on each event 
-    - Calendar View
-        - How does she know what timeframe she is in?
-        - Add remaining Icons to the bottom bar
-    - Event Creation
-        - Repeat on the right side of date (swap them)
-        - How would she change the location? 
-            - Search with a drop down
-        - Restrict contact person?
-        - Upload success?
-            - Successfully posted
-        - No Fight club card
-    - General Notes
-        - Add Groups /  Friends section
-        - Create something on calendar or profile settings instead of in likes
-        - She wouldn’t have looked at likes to make the events
-        - + in the calendar (maybe right side of the search bar)
-        - Instead of contacts (Collaborators)
-        - Where is time in the event creation?
-        - Location Hidden or not?
-        - Post an attachment upload
-            - Where is the picture shown for an event?
-        - Transparent tags
-        - Add Switch Profile 
-            - In the profile section
-            - Circle Arrow
-        - “Presented by” for events
-        - Display name
-        - Brand name / logo should be included
-        - GetGrinnected on Sign-in
+#### The feedback you got from the tester
 
-- The feedback you got from the tester
-    -  SUMMARIZE NOTES?
+Events: A way to favorite a given event.
 
-- Notes on how to revise your testing procedure for the next user 
-    - A little more prepartion on how our flows opperate.
-    - If we allow a sandbox format for the test run (we can't assume we know what they are going to do so prepare to use alternate flows).
+Calendar: How does she know what timeframe she is in?
+
+Calendar: Add remaining bottom bar Icons
+
+Event Creation: Location of repeat option
+
+Event Creation: What does a successful event post look like?
+
+Event Creation: What does setting the location look like?
+
+
+
+#### Notes taken from session
+- Events
+    - Favorite button on each event 
+- Calendar View
+    - How does she know what timeframe she is in?
+    - Add remaining Icons to the bottom bar
+- Event Creation
+    - Repeat on the right side of date (swap them)
+    - How would she change the location? 
+        - Search with a drop down
+    - Restrict contact person?
+    - Upload success?
+        - Successfully posted
+    - No Fight club card
+- General Notes
+    - Add Groups /  Friends section
+    - Create something on calendar or profile settings instead of in likes
+    - She wouldn’t have looked at likes to make the events
+    - + in the calendar (maybe right side of the search bar)
+    - Instead of contacts (Collaborators)
+    - Where is time in the event creation?
+    - Location Hidden or not?
+    - Post an attachment upload
+        - Where is the picture shown for an event?
+    - Transparent tags
+    - Add Switch Profile 
+        - In the profile section
+        - Circle Arrow
+    - “Presented by” for events
+    - Display name
+    - Brand name / logo should be included
+    - GetGrinnected on Sign-in
+
+#### Notes on how to revise your testing procedure for the next user 
+- A little more prepartion on how our flows opperate.
+- If we allow a sandbox format for the test run (we can't assume we know what they are going to do so prepare to use alternate flows).
+
+####  Changes to prototype
 
 ### Classmate Ella Berman
 #### When: 2/21/2025
@@ -131,6 +146,7 @@ Based on user feedback:
     - Similarly, made the filter button colorable to show it is interactable, made a list of tags, and made some example screens with filters turned on to show what a filtered calendar might look like
     - Made additional screens for week and day views to simulate side scrolling to access the next time period, as this was an intutitive way the user tried to navigate in the calendar.
 - User profile: Add account switcher, area for the orgs you follow.
+- Login/Signup: Add the specific password criteria.
 
 From our own thoughts and ideas:
 - Make the user profile image change no longer a button
@@ -246,6 +262,8 @@ TO DO: List any others we have here. I feel like we should have more revisions b
 
 #### Narrative
 
+We started off introducing the general idea of our product to Regan, asking questions like "what would you expect to be able to do in said product? As an SEPC Leader what would you want from event creation?" Next we followed a sandbox approach where we let Regan try any path she felt, guiding her in the end to a few final unexplored features. After the completion of the demo we asked her a handful of questions and for her general feedback.
+
 #### Team roles
  - Budhil (Computer)
  - Anthony (Facilitator)
@@ -261,7 +279,14 @@ TO DO: List any others we have here. I feel like we should have more revisions b
 
 #### Changes to test procedure for next user
 
+- Ensure we are giving our total attention to the stakeholder and respecting them and the time they are giving us.
+- Do not shut down a stakeholder's idea infront of them (Take the note, not the fix).
+- General disputes over how we can resolve a problem proposed by a stakeholder can be discussed after our time with the stakeholder.
+
 ### Revisions after meeting with Regan
+
+- Changes we agreed to make after the meeting on Feb 26:
+    - Anthony: Add a forgot password path.
 
 
 ### Stakeholder Review: Yuina
