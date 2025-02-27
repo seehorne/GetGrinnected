@@ -66,6 +66,7 @@ Ji-ho is a 4th year and the leader of the Anthro SEPC.
 - As Ji-ho, I need to connect with other SEPCs to collaborate on a larger scale event, so that we can pool our funds and break down barriers between majors.
 - As Ji-ho, I need to communicate with professors about our events, so that they know what events we have and what we have planned for the semester.
 - As Ji-ho, I need students to be able to easily contact us (the SEPC) in case they have any complaints about professors, classes, or the major organizations, so that we as the SEPC can fulfill our duty to be there for students.
+- As Ji-ho, I need to be able to advertise events that are hosted outside standard academic buildings, so that I can facilitate SEPC activities in all the locations that are relevant to the department—such as CERA
 
 Ochen is the ISO president and a 4th year.
 
@@ -88,6 +89,7 @@ Sampson has colorblindness and only access to a computer.
 Jessica is a 1st year and wants to learn what events are happening on campus
 
 - As Jessica, I need to be able to see upcoming events so that I can attend them and get involved.
+- As Jessica, I need to be able to save events I'm interested in so that I can remember they exist
 
 Megan is a 2nd year trying to figure out what major they want to declare.
 
@@ -116,6 +118,7 @@ Sarah is a 4th year involved in multiple student organizations and interested in
 
 - As Sarah, I need something to do on Thursday afternoons, so that I don't get bored in my dorm.
 - As Sarah, I need to do get updated on any time changes or cancellations to events so that I don't miss my regular activities
+- As Sarah
 
 Zach is a shy 2nd year who wants to make new friends.
 

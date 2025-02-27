@@ -196,8 +196,10 @@ Photos of before and after:
 We started off by introducing Lily to the general idea of what we were working on and why we were asking for her for help. Then we started at the login screen of the app and had her log in, then navigate the app towards what interested her. We finished up the session by asking her some closing questions, than thanked her for her help.
 
 #### Team roles
-
-Ethan and Ellie were facilitators, Michael was the computer, and Anthony and almond took notes as we went. Budhil couldn't be at this meeting due to scheduling.
+- Michael was the computer
+- Ethan and Ellie were facilitators
+- almond and Anthony took notes
+- Budhil could not attend due to scheduling
 
 #### User stories activated
 
@@ -206,6 +208,7 @@ Here are some that seem the most relevant.
 - See upcoming events as a first year (Jessica)
 - See only events that are relevant to you (Abby)
 - Get updated on event time changes and cancellations (Sarah)
+- Save events of interest (Jessica)
 
 #### Session notes
 
@@ -326,30 +329,7 @@ Final Thoughts: It will be nice to have a central place to disseminate informati
 
 ### Revisions after meeting with Regan
 
-
-### Stakeholder Review: Yuina
-
-**Who:** Yuina
-- Yuina is a naive user of our product.
-- 4th year
-- Event creator user.
-
-**When:** 2/27/2025
-
-#### Narrative
-
-#### Team roles
-
-#### User stories activated
-
-#### Session notes
-
-#### Feedback from the tester
-
-#### Changes to test procedure for next user
-
-### Revisions after meeting with Yuina
-
+TODO: FILL IN
 
 ### CIDER Lab
 
@@ -380,8 +360,6 @@ Final Thoughts: It will be nice to have a central place to disseminate informati
     - Sight Impaired
         - An ability to set text size.
         - Potentially a way to zoom in on information.
-
-
 - 
 ### Stakeholder Review: Yuina
 
