@@ -172,6 +172,118 @@ Parties or personal get togethers
 Normal users creating their own events
 Microtransactions or pay functions
 
+# Comprehensive list of Requirements
+* Sign-in/Sign up
+	* sign in:
+		* ask for username and password
+		* forgot password option
+		* forgot username option
+	* sign-up:
+		* power-account vs normal user account distinction (how will this work?)
+			* verify the authority to ensure security and privacy
+		* ask for grinnell email
+		* ask for create-password
+			* list requirements for password
+			* if requirements are not met, shows that it's not met
+		* verify email with verification
+			* send email to email automatically, with a code that is available for a 60 second time limit
+* Post-Sign-up survey
+	* begin survey with questions regarding interests
+	* ask user to pick subjects and concentrations to show in your interest scope
+	* power organizations: ask about potential tags an organization would like to use
+	* ask user: what organizations would you like to stay updated with? 
+	* create tags for creating an event?
+* "home" page
+	* lists events that are automatically sorted by popularity and by the tags that user filled out during survey
+	* includes links to: includes navigation bar (including calendar, create event, profile page, and favorite events), profile page, search
+	* a filter button to filter according to organization, RSVP only, food, and other tags.
+	* A sort button to sort based on popularity, alphabetically, by organization (grouping organizations)
+* calendar
+	* ability to see drafted event in calendar
+	* ability to toggle between public calendar and personal (liked events + drafts) calendar
+	* ability to click on a specific day, to get the day of an event, and able to click on a specific event to get the **event card** associated with that event
+	* ability to toggle from day, to week to month view, intuitively
+	* ability to filter events
+	* contains links to: navigation bar, search, profile page, many events
+	* ability to distinguish among normal events and featured event, for very large events to be featured
+* create event
+	* privileged to:
+		* name title of event
+		* RSVP toggle
+			* maximum headcount
+			* link to RSVP page
+		* upload images/posters to event
+		* customize **event card**
+		* add time to event
+		* add date to event
+		* toggle repeat
+			* select days of week/select days of month to repeat
+		* post public or private (limited to those who follow you) calendar
+		* select location 
+			* modified search for location
+		* add collaborator organizations
+		* save event to **drafts**/post directly to **events page/calendar**
+	* after uploading event, update users for events
+* Event cards
+	* contains information on:
+		* if event repeats
+		* if RSVP, max headcount and current number
+		* how many people liked events
+		* tags
+		* description
+		* organizations and collaborating organizations
+	* able to add to **favorites**
+	* able to see **organization** and follow organizations
+* Search function
+	* "robust" searching, to include misspellings and find tags that were incorrectly inputted
+	* events and organizations show up when search
+	* when no search found, "no results" pop-up, prompting user to reduce filters or change search
+	* speech-to-text option
+* favorite/liked events
+	* for each liked event:
+		* contains event card, in addition to..l
+		* toggle notification
+		* remove from liked, and prompt users to confirm
+	* "?" - gives information about current page
+	* able to filter by organization, etc. 
+	* able to sort by popularity, achieved by counting how many people have liked an event, etc.
+	* make notification icon more intuitive
+	* ability to remove all liked events
+	* potential feature creep:
+		* if liking an event that conflicts with another event, notify you with popup (? this requirement is to be debated upon)
+		* (? - this requirement is to be debated upon) After event is done, provide ratings and feedback for events?
+		* when notifying user, in settings, able to set how the notification is sent to user (? this requirement is to be debated upon)
+* profile page
+	* able to change profile picture
+	* able to change username (should there be limit?)
+	* able to change account to other organization accounts a user has
+	* able to sign out of current account
+	* contains list of followed organizations:
+		* if no organizations to be found, "FIND organizations" button
+	* Include settings page:
+		* change text-size for the application
+		* light-dark/other colored themes, for better visibility
+* organizations list
+	* sort organizations by popularity, alphabet, etc. 
+	* able to see **organization card** through organization list
+	* able to follow an organization through **organization card**
+	* not-yet-implemented/to be discussed:
+		* able to see the events an organization is hosting (instead of an organization description, an organization page?), perhaps able to host links and resources for that specific organization
+		* (?) consider facilitation of collaboration through the application
+		* to see an organizations' events through the organizations list
+		* (?) more security for an event
+		* to  follow an organization, will it be a request-to-follow feature? How do we deal with exclusivity(?)
+* followed organization list
+	* able to see organizations' page/user pages(?)
+* Social aspect: to be spoken about after the sprint
+	* collaborations with organizations 
+* additional features:
+	* collaborations with organizations 
+		* facilitation of collaboration
+	* resources:
+		* include resources for student handbook for RSOs
+ 
+    
 # Use Cases
 
 ## Use Case 1: Signing Up
