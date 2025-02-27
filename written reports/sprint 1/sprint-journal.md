@@ -283,9 +283,40 @@ We started off introducing the general idea of our product to Regan, asking ques
 
 #### User stories activated
 
+- Still need TO DO
+
 #### Session notes
 
+This is a condensed list of the notes taken during our session.
+
+- Survey should include the ability to add majors and concentrations
+- How many following tags should we have in the survey?
+- Why would you want a private event?
+    - How would seeing it work?
+- What does following an Org do? How does it change the view of the rest of the app?
+- Going from favorite events into draft feels unintuitive.
+- What filters would we have for the favorite events tab?
+- Can we create tags?
+    - General consensus no.
+- What does the link for RSVP mean?
+    - Link to external source to track RSVPs.
+- Should clicking on an event in week view of calendar take you to the event or to a week view?
+
 #### Feedback from the tester
+
+Survey: A lot of tags you have to click?
+
+Event Creation: What if the location I want to host at is not included in the drop down?
+
+Event Creation: How do private events work on our app? How would someone be able to see a private event?
+
+General: We need a signout option / flow
+
+General: What does a comprehensive list of possible event tags look like? How would we establish this list?
+
+What was useful: Filters, Calendar, Favorites, Notifications
+
+Final Thoughts: It will be nice to have a central place to disseminate information. Not just boards in buildings to advertise events.  
 
 #### Changes to test procedure for next user
 
