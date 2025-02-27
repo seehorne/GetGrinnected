@@ -14,10 +14,9 @@
 - Ellie, Ethan, Budhil and Michael were Facilitators
 
 #### Which user stories were activated?
-- TO DO
 
-#### Additional notes describing the session, e.g. observations of the test user's behavior.
-- TO DO
+- Jessica makes sense as for knowing what events are coming up.
+- Jack makes sense for advertising to whole campus vs. established members.
 
 #### The feedback you got from the tester
 
@@ -33,7 +32,17 @@ Event Creation: What does a successful event post look like?
 
 Event Creation: What does setting the location look like?
 
+Event Creation: Where we create events is unintuitive.
 
+Event Creation: Is there a way to upload an image with an event?
+
+Profile: A way to switch between profiles?
+
+Profile: Display Name vs. Username
+
+General: Add an Orgs / Friends feature section.
+
+General: Inclusion of logo places as well as GetGrinnected.
 
 #### Notes taken from session
 - Events
@@ -74,21 +83,22 @@ Event Creation: What does setting the location look like?
 
 ####  Changes to prototype
 
+No changes made prior to demo with Ella. (Was completed in the same class period).
+
 ### Classmate Ella Berman
 #### When: 2/21/2025
 
 #### Narrative describing the test
 
-What roles did each team member play during the test?
+#### What roles did each team member play during the test?
+
 - almond was the Computer
 - Anthony was the Note Taker
 - Ellie, Ethan, Budhil and Michael were Facilitators
 
-Which user stories were activated?
-- We focused on user stories about being a non-power user, interacting with the parts of the UI that 
+#### Which user stories were activated?
 
-Additional notes describing the session, e.g. observations of the test user's behavior.
-- TO DO
+We focused on user stories about being a non-power user, interacting with the parts of the UI that 
 
 #### Feedback from tester
 
@@ -280,13 +290,10 @@ We started off introducing the general idea of our product to Regan, asking ques
 #### Changes to test procedure for next user
 
 - Ensure we are giving our total attention to the stakeholder and respecting them and the time they are giving us.
-- Do not shut down a stakeholder's idea infront of them (Take the note, not the fix).
+- Avoid shutting down a stakeholder's idea infront of them (Take the note, not the fix).
 - General disputes over how we can resolve a problem proposed by a stakeholder can be discussed after our time with the stakeholder.
 
 ### Revisions after meeting with Regan
-
-- Changes we agreed to make after the meeting on Feb 26:
-    - Anthony: Add a forgot password path.
 
 
 ### Stakeholder Review: Yuina
