@@ -29,7 +29,7 @@ Milestone:
     - Anthony has one, Reagan from French SEPC. Not a naïve user.
     - Budhil has people from ISO, possible group admin role.
     - Friends on instagram (Budhil)
-    - Eamon (Ethan)
+    - Someone from frisbee team, naive user, not org leader (we found Lily this way) (Ellie)
 - Reach out to the users.
 - Paper prototype
 - Storyboard
@@ -64,12 +64,12 @@ Ellie:
 
 - Work on general familiarity with building apps. BUT NOT OUR APP. (Work with Budhil)
 - Work on paper prototype segment
+- Find a shareholder to test paper prototype
 
 Ethan:
 
 - Make a branch for Kotlin experimentation
 - Work on general familiarity with building apps. BUT NOT OUR APP. (Kotlin)
-- Find a shareholder to test paper prototype
 - Work on paper prototype segment
 
 Michael:

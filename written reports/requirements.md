@@ -66,6 +66,7 @@ Ji-ho is a 4th year and the leader of the Anthro SEPC.
 - As Ji-ho, I need to connect with other SEPCs to collaborate on a larger scale event, so that we can pool our funds and break down barriers between majors.
 - As Ji-ho, I need to communicate with professors about our events, so that they know what events we have and what we have planned for the semester.
 - As Ji-ho, I need students to be able to easily contact us (the SEPC) in case they have any complaints about professors, classes, or the major organizations, so that we as the SEPC can fulfill our duty to be there for students.
+- As Ji-ho, I need to be able to advertise events that are hosted outside standard academic buildings, so that I can facilitate SEPC activities in all the locations that are relevant to the department—such as CERA
 
 Ochen is the ISO president and a 4th year.
 
@@ -88,7 +89,9 @@ Sampson has colorblindness and only access to a computer.
 Jessica is a 1st year and wants to learn what events are happening on campus
 
 - As Jessica, I need to be able to see upcoming events so that I can attend them and get involved.
-
+- As Jessica, I need to be able to save events I'm interested in so that I can remember they exist
+- As Jessica, I need to be able to learn what organizations exist on campus so that I can learn more about campus life and determine how I fit
+  
 Megan is a 2nd year trying to figure out what major they want to declare.
 
 - As Megan, I need to be able to sort events so that I only see those related to majors.
@@ -115,14 +118,16 @@ Rosy’s Grinnell email uses their deadname.
 Sarah is a 4th year involved in multiple student organizations and interested in trying new ones.
 
 - As Sarah, I need something to do on Thursday afternoons, so that I don't get bored in my dorm.
-- As Sarah, I need to do get updated on any time changes to event so that I don't miss my regular activities
+- As Sarah, I need to do get updated on any time changes or cancellations to events so that I don't miss my regular activities
+- As Sarah, I need to be able to distinguish between different types of events so that I can easily determine which ones match the interests I have my current orgs don't meet
 
 Zach is a shy 2nd year who wants to make new friends.
 
 - As Zach, I need motivation to attend events, so that I can go out and make new friends
 - As Zach, I need to know if I know anyone attending an event, so I can select ones where I won’t have to either hang out all alone or approach people I don’t know
 - As Zach, I need to know if an organization is open to new members or people just stopping in so that I know I am welcome to attend
-
+- As Zach, I need to have a way to keep up to date with the events of an org I attended and liked so that I can keep attending and deepen my connections
+  
 almond is an administrator for the tool.
 
 - As almond, I need to be able to delete events which have passed or are not appropriate so that events are up to date and I can remove things that are against the content policy.
@@ -169,9 +174,123 @@ Parties or personal get togethers
 Normal users creating their own events
 Microtransactions or pay functions
 
+# Comprehensive list of Requirements
+* Sign-in/Sign up
+	* sign in:
+		* ask for username and password
+		* forgot password option
+		* forgot username option
+	* sign-up:
+		* power-account vs normal user account distinction (how will this work?)
+			* verify the authority to ensure security and privacy
+		* ask for grinnell email
+		* ask for create-password
+			* list requirements for password
+			* if requirements are not met, shows that it's not met
+		* verify email with verification
+			* send email to email automatically, with a code that is available for a 60 second time limit
+* Post-Sign-up survey
+	* begin survey with questions regarding interests
+	* ask user to pick subjects and concentrations to show in your interest scope
+	* power organizations: ask about potential tags an organization would like to use
+	* ask user: what organizations would you like to stay updated with? 
+	* create tags for creating an event?
+* "home" page
+	* lists events that are automatically sorted by popularity and by the tags that user filled out during survey
+	* includes links to: includes navigation bar (including calendar, create event, profile page, and favorite events), profile page, search
+	* a filter button to filter according to organization, RSVP only, food, and other tags.
+	* A sort button to sort based on popularity, alphabetically, by organization (grouping organizations)
+* calendar
+	* ability to see drafted event in calendar
+	* ability to toggle between public calendar and personal (liked events + drafts) calendar
+	* ability to click on a specific day, to get the day of an event, and able to click on a specific event to get the **event card** associated with that event
+	* ability to toggle from day, to week to month view, intuitively
+	* ability to filter events
+	* contains links to: navigation bar, search, profile page, many events
+	* ability to distinguish among normal events and featured event, for very large events to be featured
+* create event
+	* privileged to:
+		* name title of event
+		* RSVP toggle
+			* maximum headcount
+			* link to RSVP page
+		* upload images/posters to event
+		* customize **event card**
+		* add time to event
+		* add date to event
+		* toggle repeat
+			* select days of week/select days of month to repeat
+		* post public or private (limited to those who follow you) calendar
+		* select location 
+			* modified search for location
+		* add collaborator organizations
+		* save event to **drafts**/post directly to **events page/calendar**
+	* after uploading event, update users for events
+* Event cards
+	* contains information on:
+		* if event repeats
+		* if RSVP, max headcount and current number
+		* how many people liked events
+		* tags
+		* description
+		* organizations and collaborating organizations
+	* able to add to **favorites**
+	* able to see **organization** and follow organizations
+* Search function
+	* "robust" searching, to include misspellings and find tags that were incorrectly inputted
+	* events and organizations show up when search
+	* when no search found, "no results" pop-up, prompting user to reduce filters or change search
+	* speech-to-text option
+* favorite/liked events
+	* for each liked event:
+		* contains event card, in addition to..l
+		* toggle notification
+		* remove from liked, and prompt users to confirm
+	* "?" - gives information about current page
+	* able to filter by organization, etc. 
+	* able to sort by popularity, achieved by counting how many people have liked an event, etc.
+	* make notification icon more intuitive
+	* ability to remove all liked events
+	* potential feature creep:
+		* if liking an event that conflicts with another event, notify you with popup (? this requirement is to be debated upon)
+		* (? - this requirement is to be debated upon) After event is done, provide ratings and feedback for events?
+		* when notifying user, in settings, able to set how the notification is sent to user (? this requirement is to be debated upon)
+* profile page
+	* able to change profile picture
+	* able to change username (should there be limit?)
+	* able to change account to other organization accounts a user has
+	* able to sign out of current account
+	* contains list of followed organizations:
+		* if no organizations to be found, "FIND organizations" button
+	* Include settings page:
+		* change text-size for the application
+		* light-dark/other colored themes, for better visibility
+* organizations list
+	* sort organizations by popularity, alphabet, etc. 
+	* able to see **organization card** through organization list
+	* able to follow an organization through **organization card**
+	* not-yet-implemented/to be discussed:
+		* able to see the events an organization is hosting (instead of an organization description, an organization page?), perhaps able to host links and resources for that specific organization
+		* (?) consider facilitation of collaboration through the application
+		* to see an organizations' events through the organizations list
+		* (?) more security for an event
+		* to  follow an organization, will it be a request-to-follow feature? How do we deal with exclusivity(?)
+* followed organization list
+	* able to see organizations' page/user pages(?)
+* Social aspect: to be spoken about after the sprint
+	* collaborations with organizations 
+* additional features:
+	* collaborations with organizations 
+		* facilitation of collaboration
+	* resources:
+		* include resources for student handbook for RSOs
+ 
+    
 # Use Cases
 
 ## Use Case 1: Signing Up
+
+TODO (almond): FIX THIS AREA WITH LEAH'S NEW INSTRUCTIONS
 
 **Actor:** A new user to the app. They have no user role yet.
 
@@ -248,6 +367,146 @@ invalid password:
   - Can specify what needs to be fixed.
 2. The password box is cleared, and a new password can be typed.
 3. Return to the main flow of whatever step caused this alternate flow.
+
+## Use Case 2: Creating an Event
+
+**Actor:** A SEPC, Student Org Leader, MLC, MSO, ISO (student group leader of some form) who wants to create a new event for their orginatization. This would be an Event Creator user.
+
+**Goal:** The general overarching goal is to create an event to get their organization or group out for others to see the events they have planned.
+
+- This aligns with the following User Stories
+  - Jack
+  - Ochen
+  - Abduhl
+  - Ji-ho
+
+**Trigger:** The user clicks the "plus sign" on the calendar screen of the app (which only appears if they are an event creator user)
+
+**Preconditions:** Logged in as an Event Creator user and navigated to the calendar screen.
+
+**Postconditions:** New event is created and stored in the database and posted on the calendar screen, searchable, etc.
+
+**Flow:**
+
+1. The user presses the "plus sign" button
+2. They are then navigated to the event creation page.
+3. They are asked to fill in the following information:
+  - Title
+  - Event Description
+  - Date of Event
+    - Calendar to select date
+  - Whether it Repeats
+    - Day selection for repetition
+  - Location
+    - Drop down with Grinnell Buildings
+  - Upload an image associated
+  - Hide the event from Public View
+  - Add Tags
+    - Drop down with options
+  - Add Collaborators
+    - Search feature for users
+4. Upon filling in all the necessary information the user is present with two options
+  - "Save to Drafts" button
+  - "Post Event" button
+  In our case for our user we will press the "Post Event" button.
+5. They will then recieve a successfully posted event notification.
+
+
+**Alternative flows:**
+
+Save to Drafts:
+
+1. When the user selects this button instead of posting the event the app stores the information
+2. Navigates them to their drafts page, showing the draft they just created as well as the other events they may have in drafts.
+3. From here the user can continue to use the app in any way but can reference back if they decide they are ready to post the event or make edits to the draft.
+
+connection error:
+
+1. The app displays an error message: "Error connecting to resources. Try again later, or contact the developers."
+  - This can be customized based on what resource could not be reached
+2. Return to the main flow of whatever step caused this alternate flow.
+
+## Use Case 3: Finding an Event
+
+**Actor:** Any user to this app. They can really have any user role.
+
+**Goal:** Search for an event of interest.
+
+- This aligns with the following user stories:
+  - Abby
+
+**Trigger:** A user opens the app and presses the search bar. (While we have many features for organizing/filtering events for this case we will use the search bar).
+
+**Preconditions:** User is Logged in and on the homepage.
+
+**Postconditions:** User has new event in their favorites tab.
+
+**Flow:**
+1. The users presses the search bar.
+2. The user enters the name for an event they are interested in.
+3. The screen filters out events that don't match the the information the user specified.
+4. The user presses on one of the events left on their page
+5. The event gets larger providing the following information:
+  - Name
+  - Description
+  - Time
+  - Location
+  - Tags
+6. The user presses the "heart" button.
+7. The event has been added to their favorites tab. 
+
+**Alternative flows:**
+
+no event found:
+
+1. At step 2 of the use case the user provides a name for an event that doesn't exist.
+2. The screen filters out all events (since none match the event name).
+3. The home screen is left blank saying no events found.
+4. To return to flow the user enters a different name into search. (Returning to flow at step 3)
+
+## Use Case 4: Following an organization
+
+**Actor:** Any user to this app. They can really have any user role.
+
+**Goal:** Connect with an org whose events you are consistently interested in
+
+- This aligns with the following user stories:
+  - Jessica
+  - Zach
+
+**Trigger:** A user opens the app, goes to their profile, and clicks "find orgs to follow"
+
+**Preconditions:** User is logged in and on the profile page.
+
+**Postconditions:** User is subscribed to a different number of organizations than they were originally.
+
+**Flow:**
+1. The user presses the button saying "find orgs to follow", which is located below a scrollable list of the orgs they already follow. opening an alphabetized list of registered student organizations
+2. The user scrolls through the list until they find an organization they are interested in
+3. The user clicks on the org's name, revealing more information in a pop up
+4. The user selects the heart icon at the bottom of the pop up, and the org is added to the orgs that they are following
+
+
+**Alternative flows:**
+
+Clicking the wrong org:
+
+1. At step 3 of the flow, the user misclicks and selects an org different than the one they were planning on
+2. They click the x in the top right corner of the pop up, returning to the list of alphabetized organizations
+3. They select the org they origially meant to, and continue from step 4 of the original flow
+
+Filtering by organization category:
+
+1. At step 2 of the original flow, the user is overwhelmed by the quantity of organizations, and wants to see a more tailored list. They click the filter button, revealing a drop down of organization categories
+2. They select a category of organizations to view (such as multicultural, academic, or sports, among others)
+3. Now seeing a more tailored, less overwhelming, list of organizations, the user continues at step 2 of the original flow (except on the filtered version)
+
+Unfollowing an organization:
+
+1. On the profile page, the user scrolls through their list of organizations they follow until they find the one they no longer wish to follow.
+2. They tap the org they no longer want to follow, pulling up its information in a pop up
+3. They deselect the heart icon at the bottom of the pop up
+4. They close the pop up, and the relevant organization is no longer listed in the orgs
 
 # Citations
 
