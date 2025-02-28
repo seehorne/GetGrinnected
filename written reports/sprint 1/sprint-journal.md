@@ -1,6 +1,6 @@
 # Sprint 1 Journal
 
-## First Test (Not sure what to call this section)
+## CSC-324 Class Testing 
 
 ### Mentor MockRun Destany Best
 #### When 2/21/2025
@@ -85,7 +85,6 @@ General: Inclusion of logo places as well as GetGrinnected.
 
 No changes made prior to demo with Ella. (Was completed in the same class period).
 
-## CSC-324 Classmate Testing 
 ### Classmate Ella Berman
 #### When: 2/21/2025
 
