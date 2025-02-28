@@ -1,6 +1,6 @@
 # Sprint 1 Journal
 
-## Testing
+## First Test (Not sure what to call this section)
 
 ### Mentor MockRun Destany Best
 #### When 2/21/2025
@@ -85,6 +85,7 @@ General: Inclusion of logo places as well as GetGrinnected.
 
 No changes made prior to demo with Ella. (Was completed in the same class period).
 
+## CSC-324 Classmate Testing 
 ### Classmate Ella Berman
 #### When: 2/21/2025
 
@@ -182,6 +183,7 @@ Photos of before and after:
     - Before: <img src="images/ethan_IMG_8351.jpg" width="50%">
     - TO DO: Is this being changed?
 
+## Stakeholder Testing
 ### Stakeholder Review: Lily
 
 **Who:** Lily
@@ -331,36 +333,6 @@ Final Thoughts: It will be nice to have a central place to disseminate informati
 
 TODO: FILL IN
 
-### CIDER Lab
-
-#### Critique
-
-- What assumptions about users were identified during the critique stage?
-    - Light mode display was best for all users.
-    - Ability to read smaller text on displays.
-    - Some degree of knowledge of the UI.
-
-#### Imagine
-
-- Which assumption(s) did you choose to expand on for this phase?
-    - Light mode
-    - Ability to read smaller text
-- How might that assumption exclude users?
-    - Light Mode
-        - This could exclude individuals who are overstimulated by the bright display.
-        - This could exclude individuals who try to avoid bright displays towards night time.
-    - Ability to read smaller text
-        - Those with sight impairments may struggle to read the information.
-
-#### Design
-
-- What are your ideas for redesigning your product based on critique?
-    - Light Mode
-        - We can offer a customization of display colors (Light/Dark Mode, custom colors, etc.)
-    - Sight Impaired
-        - An ability to set text size.
-        - Potentially a way to zoom in on information.
-- 
 ### Stakeholder Review: Yuina
 
 **Who:** Yuina
@@ -519,3 +491,33 @@ There is no next user we are testing with. If we did more paper prototyping, we 
 - Give slightly more background on our goals with the app
 
 Other than that, we're pretty happy with how our testing procedure went today.
+
+## CIDER Lab
+
+#### Critique
+
+- What assumptions about users were identified during the critique stage?
+    - Light mode display was best for all users.
+    - Ability to read smaller text on displays.
+    - Some degree of knowledge of the UI.
+
+#### Imagine
+
+- Which assumption(s) did you choose to expand on for this phase?
+    - Light mode
+    - Ability to read smaller text
+- How might that assumption exclude users?
+    - Light Mode
+        - This could exclude individuals who are overstimulated by the bright display.
+        - This could exclude individuals who try to avoid bright displays towards night time.
+    - Ability to read smaller text
+        - Those with sight impairments may struggle to read the information.
+
+#### Design
+
+- What are your ideas for redesigning your product based on critique?
+    - Light Mode
+        - We can offer a customization of display colors (Light/Dark Mode, custom colors, etc.)
+    - Sight Impaired
+        - An ability to set text size.
+        - Potentially a way to zoom in on information.
