@@ -90,7 +90,8 @@ Jessica is a 1st year and wants to learn what events are happening on campus
 
 - As Jessica, I need to be able to see upcoming events so that I can attend them and get involved.
 - As Jessica, I need to be able to save events I'm interested in so that I can remember they exist
-
+- As Jessica, I need to be able to learn what organizations exist on campus so that I can learn more about campus life and determine how I fit
+  
 Megan is a 2nd year trying to figure out what major they want to declare.
 
 - As Megan, I need to be able to sort events so that I only see those related to majors.
@@ -125,7 +126,8 @@ Zach is a shy 2nd year who wants to make new friends.
 - As Zach, I need motivation to attend events, so that I can go out and make new friends
 - As Zach, I need to know if I know anyone attending an event, so I can select ones where I won’t have to either hang out all alone or approach people I don’t know
 - As Zach, I need to know if an organization is open to new members or people just stopping in so that I know I am welcome to attend
-
+- As Zach, I need to have a way to keep up to date with the events of an org I attended and liked so that I can keep attending and deepen my connections
+  
 almond is an administrator for the tool.
 
 - As almond, I need to be able to delete events which have passed or are not appropriate so that events are up to date and I can remove things that are against the content policy.
@@ -461,6 +463,50 @@ no event found:
 2. The screen filters out all events (since none match the event name).
 3. The home screen is left blank saying no events found.
 4. To return to flow the user enters a different name into search. (Returning to flow at step 3)
+
+## Use Case 4: Following an organization
+
+**Actor:** Any user to this app. They can really have any user role.
+
+**Goal:** Connect with an org whose events you are consistently interested in
+
+- This aligns with the following user stories:
+  - Jessica
+  - Zach
+
+**Trigger:** A user opens the app, goes to their profile, and clicks "find orgs to follow"
+
+**Preconditions:** User is logged in and on the profile page.
+
+**Postconditions:** User is subscribed to a different number of organizations than they were originally.
+
+**Flow:**
+1. The user presses the button saying "find orgs to follow", which is located below a scrollable list of the orgs they already follow. opening an alphabetized list of registered student organizations
+2. The user scrolls through the list until they find an organization they are interested in
+3. The user clicks on the org's name, revealing more information in a pop up
+4. The user selects the heart icon at the bottom of the pop up, and the org is added to the orgs that they are following
+
+
+**Alternative flows:**
+
+Clicking the wrong org:
+
+1. At step 3 of the flow, the user misclicks and selects an org different than the one they were planning on
+2. They click the x in the top right corner of the pop up, returning to the list of alphabetized organizations
+3. They select the org they origially meant to, and continue from step 4 of the original flow
+
+Filtering by organization category:
+
+1. At step 2 of the original flow, the user is overwhelmed by the quantity of organizations, and wants to see a more tailored list. They click the filter button, revealing a drop down of organization categories
+2. They select a category of organizations to view (such as multicultural, academic, or sports, among others)
+3. Now seeing a more tailored, less overwhelming, list of organizations, the user continues at step 2 of the original flow (except on the filtered version)
+
+Unfollowing an organization:
+
+1. On the profile page, the user scrolls through their list of organizations they follow until they find the one they no longer wish to follow.
+2. They tap the org they no longer want to follow, pulling up its information in a pop up
+3. They deselect the heart icon at the bottom of the pop up
+4. They close the pop up, and the relevant organization is no longer listed in the orgs
 
 # Citations
 
