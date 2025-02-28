@@ -287,7 +287,9 @@ We started off introducing the general idea of our product to Regan, asking ques
 
 #### User stories activated
 
-- Still need TO DO
+- See only events that are relevant to you 
+- Save events of interest 
+- Event Creation for student org
 
 #### Session notes
 
