@@ -508,6 +508,57 @@ Unfollowing an organization:
 3. They deselect the heart icon at the bottom of the pop up
 4. They close the pop up, and the relevant organization is no longer listed in the orgs
 
+## User Case 5: Following up a Posted Event:
+**Actor:** Power users. Power users who have already created an event. 
+
+**Goal**: Change anything about an event that has already been posted, and notify users who have favorited that event about those changes. 
+
+**This aligns with the following user stories**:
+* Rohit
+* Ochen
+* Jack
+* almond
+
+**Trigger**: A user opens the app, goes to their "My Events," and taps on their event of choice. 
+
+**Preconditions**: The user is logged into their power account. The user has already posted an event. 
+
+**Postconditions**: The user's event has different information on it, and any (normal or otherwise) user that has followed that event gets a notification about this change.
+
+**Flow**:
+1. User navigates to their profile page. 
+2. User switches to their power account. Using the "switch" button.
+3. Power User navigates to their home page. 
+4. Power User presses their "my events" tab. 
+5. Power User selects the event that they wish to change something about. 
+6. Power User edits the details in one of the following fields: (note that Titles cannot be changed)
+	1. Description
+	2. Date
+	3. Location
+	4. Attached Files
+	5. RSVP limit/link
+	6. Tags (no notification)
+	7. Collaborators (no notification)
+7. Power User confirms changes after being prompted to "confirm changes, yes/no"
+
+**Alternative flows:**
+
+Updating Users who have "Favorited" that event with messages: (note, could be just integrated into the description as "update:...")
+1. While in "editing event", selects "Send Update"
+2. Prompted to add a message, Power User ads a message, including any changes made.
+3. After entering message, Power User confirms sending the message and users following the event get notification of this message.
+
+Checking message being sent:
+1. Power user switches out of power user account to personal account
+2. User checks the event page and confirms message has been sent. 
+
+Discarding Changes: 
+1. Power user enters in information up until step 7 from main flow.
+2. Instead of confirming "yes", user confirms "no"
+3. User Exits out of page through "exit page" option, or "home" option
+4. User is prompted, "discard changes?", and selects "yes"
+5. No change is made to the event and no updates were sent out. 
+
 # Citations
 
 1. Do, Nam, Brian Goodell, Samantha Chu, Lívia Freitas, Kevin Peng, and Bradley Ramsey. 2024. “GrinSync.” Grin-ArchiTech (blog). December 2024. <https://softarchitech.cs.grinnell.edu/grinsync/>.
