@@ -274,6 +274,8 @@ Changes we agreed to make after the meeting on Feb 24:
 
 TO DO: List any others we have here. I feel like we should have more revisions between these two parts.
 
+WE MIGHT NEED B/A Pictures here
+
 ### Stakeholder Review: Regan
 
 **Who:** Regan
@@ -341,7 +343,7 @@ Final Thoughts: It will be nice to have a central place to disseminate informati
 
 ### Revisions after meeting with Regan
 
-TODO: FILL IN
+No substantial revisions between Regan and Yuina's testing due to the quick turn around.
 
 ### Stakeholder Review: Yuina
 
@@ -502,6 +504,10 @@ There is no next user we are testing with. If we did more paper prototyping, we 
 
 Other than that, we're pretty happy with how our testing procedure went today.
 
+### Revisions after meeting with Yuina
+
+DO WE HAVE REVISIONS AFTER YUINA?
+
 ## CIDER Lab
 
 #### Critique
@@ -531,3 +537,6 @@ Other than that, we're pretty happy with how our testing procedure went today.
     - Sight Impaired
         - An ability to set text size.
         - Potentially a way to zoom in on information.
+
+## Storyboard
+
