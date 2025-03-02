@@ -83,7 +83,11 @@ General: Inclusion of logo places as well as GetGrinnected.
 
 ####  Changes to prototype
 
-No changes made prior to demo with Ella. (Was completed in the same class period).
+ - Finalize bottom bar capabilities and the four major windows of the app
+ - Circled which element of the botttom bar the user was on.
+ - Changed location of add event
+ - Fleshed out more availabele events that could be clicked
+ - Created a keyboard for realism
 
 ### Classmate Ella Berman
 #### When: 2/21/2025
@@ -159,6 +163,7 @@ Based on user feedback:
     - Made additional screens for week and day views to simulate side scrolling to access the next time period, as this was an intutitive way the user tried to navigate in the calendar.
 - User profile: Add account switcher, area for the orgs you follow.
 - Login/Signup: Add the specific password criteria.
+- Added capability to favorite events and associated UI pop-up  
 
 From our own thoughts and ideas:
 - Make the user profile image change no longer a button
@@ -270,7 +275,8 @@ Changes we agreed to make after the meeting on Feb 24:
 
 - almond: Add a bubble or other element to the profile picture to make it clear clicking it will let you change photos
 - Ethan: Make a flow for when you click on a tag, to view other things with that tag.
-- Ellie: Make sure that all pages have the same icons on the bottom bar
+- Ellie: Make sure that all pages have the same icons on the bottom bar.
+- Budhil: Added an introductory survey to better suit the users interests.
 
 TO DO: List any others we have here. I feel like we should have more revisions between these two parts.
 
