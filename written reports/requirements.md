@@ -299,9 +299,9 @@ TODO (almond): FIX THIS AREA WITH LEAH'S NEW INSTRUCTIONS
 - Since the user doesn't exist yet, you could say either all user roles or no user roles can trigger this case.
 - This wasn't explicitly covered by any of our user stories.
 
-**Trigger:** The user clicks "sign up" on the initial screen of the app (which only appears if they are not already signed in)
+**Trigger:** The user clicks "sign up" on the initial screen of the app (which only appears if they are not already signed in).
 
-**Preconditions:** No existing login data stored for app
+**Preconditions:** No existing login data stored for app.
 
 **Postconditions:** New user created in database, app stores login data locally.
 
@@ -380,7 +380,7 @@ invalid password:
   - Abduhl
   - Ji-ho
 
-**Trigger:** The user clicks the "plus sign" on the calendar screen of the app (which only appears if they are an event creator user)
+**Trigger:** The user clicks the "plus sign" on the calendar screen of the app (which only appears if they are an event creator user).
 
 **Preconditions:** Logged in as an Event Creator user and navigated to the calendar screen.
 
@@ -416,7 +416,7 @@ invalid password:
 
 Save to Drafts:
 
-1. When the user selects this button instead of posting the event the app stores the information
+1. When the user selects this button instead of posting the event the app stores the information.
 2. Navigates them to their drafts page, showing the draft they just created as well as the other events they may have in drafts.
 3. From here the user can continue to use the app in any way but can reference back if they decide they are ready to post the event or make edits to the draft.
 
@@ -445,7 +445,7 @@ connection error:
 1. The users presses the search bar.
 2. The user enters the name for an event they are interested in.
 3. The screen filters out events that don't match the the information the user specified.
-4. The user presses on one of the events left on their page
+4. The user presses on one of the events left on their page.
 5. The event gets larger providing the following information:
   - Name
   - Description
@@ -468,45 +468,45 @@ no event found:
 
 **Actor:** Any user to this app. They can really have any user role.
 
-**Goal:** Connect with an org whose events you are consistently interested in
+**Goal:** Connect with an org whose events you are consistently interested in.
 
 - This aligns with the following user stories:
   - Jessica
   - Zach
 
-**Trigger:** A user opens the app, goes to their profile, and clicks "find orgs to follow"
+**Trigger:** A user opens the app, goes to their profile, and clicks "find orgs to follow".
 
 **Preconditions:** User is logged in and on the profile page.
 
 **Postconditions:** User is subscribed to a different number of organizations than they were originally.
 
 **Flow:**
-1. The user presses the button saying "find orgs to follow", which is located below a scrollable list of the orgs they already follow. opening an alphabetized list of registered student organizations
-2. The user scrolls through the list until they find an organization they are interested in
-3. The user clicks on the org's name, revealing more information in a pop up
-4. The user selects the heart icon at the bottom of the pop up, and the org is added to the orgs that they are following
+1. The user presses the button saying "find orgs to follow", which is located below a scrollable list of the orgs they already follow. opening an alphabetized list of registered student organizations.
+2. The user scrolls through the list until they find an organization they are interested in.
+3. The user clicks on the org's name, revealing more information in a pop up.
+4. The user selects the heart icon at the bottom of the pop up, and the org is added to the orgs that they are following.
 
 
 **Alternative flows:**
 
 Clicking the wrong org:
 
-1. At step 3 of the flow, the user misclicks and selects an org different than the one they were planning on
-2. They click the x in the top right corner of the pop up, returning to the list of alphabetized organizations
-3. They select the org they origially meant to, and continue from step 4 of the original flow
+1. At step 3 of the flow, the user misclicks and selects an org different than the one they were planning on.
+2. They click the x in the top right corner of the pop up, returning to the list of alphabetized organizations.
+3. They select the org they origially meant to, and continue from step 4 of the original flow.
 
 Filtering by organization category:
 
-1. At step 2 of the original flow, the user is overwhelmed by the quantity of organizations, and wants to see a more tailored list. They click the filter button, revealing a drop down of organization categories
-2. They select a category of organizations to view (such as multicultural, academic, or sports, among others)
-3. Now seeing a more tailored, less overwhelming, list of organizations, the user continues at step 2 of the original flow (except on the filtered version)
+1. At step 2 of the original flow, the user is overwhelmed by the quantity of organizations, and wants to see a more tailored list. They click the filter button, revealing a drop down of organization categories.
+2. They select a category of organizations to view (such as multicultural, academic, or sports, among others).
+3. Now seeing a more tailored, less overwhelming, list of organizations, the user continues at step 2 of the original flow (except on the filtered version).
 
 Unfollowing an organization:
 
 1. On the profile page, the user scrolls through their list of organizations they follow until they find the one they no longer wish to follow.
-2. They tap the org they no longer want to follow, pulling up its information in a pop up
-3. They deselect the heart icon at the bottom of the pop up
-4. They close the pop up, and the relevant organization is no longer listed in the orgs
+2. They tap the org they no longer want to follow, pulling up its information in a pop up.
+3. They deselect the heart icon at the bottom of the pop up.
+4. They close the pop up, and the relevant organization is no longer listed in the orgs.
 
 ## User Case 5: Following up a Posted Event:
 **Actor:** Power users. Power users who have already created an event. 
@@ -539,25 +539,72 @@ Unfollowing an organization:
 	5. RSVP limit/link
 	6. Tags (no notification)
 	7. Collaborators (no notification)
-7. Power User confirms changes after being prompted to "confirm changes, yes/no"
+7. Power User confirms changes after being prompted to "confirm changes, yes/no".
 
 **Alternative flows:**
 
 Updating Users who have "Favorited" that event with messages: (note, could be just integrated into the description as "update:...")
-1. While in "editing event", selects "Send Update"
+1. While in "editing event", selects "Send Update".
 2. Prompted to add a message, Power User ads a message, including any changes made.
 3. After entering message, Power User confirms sending the message and users following the event get notification of this message.
 
 Checking message being sent:
-1. Power user switches out of power user account to personal account
+1. Power user switches out of power user account to personal account.
 2. User checks the event page and confirms message has been sent. 
 
 Discarding Changes: 
 1. Power user enters in information up until step 7 from main flow.
-2. Instead of confirming "yes", user confirms "no"
-3. User Exits out of page through "exit page" option, or "home" option
-4. User is prompted, "discard changes?", and selects "yes"
+2. Instead of confirming "yes", user confirms "no".
+3. User Exits out of page through "exit page" option, or "home" option.
+4. User is prompted, "discard changes?", and selects "yes".
 5. No change is made to the event and no updates were sent out. 
+
+## User Case 6: Adding a new account:
+**Actor:** Any user to this app. They can really have any user role.
+
+**Goal**: Adding another personal or organization account to the same device.
+
+**This aligns with the following user stories**:
+* Abdul
+* Ji-Ho
+* Ochen
+* Rūta
+* Jack
+* almond
+
+**Trigger**: A user opens the app, goes to their profile, and taps on the switch account button. 
+
+**Preconditions**: The user is logged into an account.
+
+**Postconditions**: The user has added another account to their device.
+
+**Flow**:
+1. User navigates to their profile page. 
+2. User taps the "switch account" button.
+3. User taps the "add account" button.
+4. User is brought to Log in/Sign up screen. 
+5. User taps "log in" and goes through the log in steps.
+   1. The user is brought to a new page.
+   2. The user enters their account email and password.
+6. The user is now logged into their new account.
+
+**Alternative flows:**
+
+Signing up with a new account:
+1. While on the Log in/Sign up page, the user taps the "sign up" button.
+2. The user goes through the sign up steps in user case 1.
+3. The user is now logged into their new account.
+
+User enters an account that does not exist:
+1. User enters an email that does not have an associated account in the Log in page.
+2. User is told that there is no account is associated with that email.
+3. User is prompted to re-enter the email and password. 
+
+Cancelling adding an account:
+1. User is on the Log in/Sign up page.
+2. Instead of tapping "log in" or "sign up", the user taps "cancel".
+3. The user is brought back to the profile page.
+4. No change to logged in accounts is made.
 
 # Citations
 
