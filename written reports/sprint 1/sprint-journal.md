@@ -90,6 +90,8 @@ No changes made prior to demo with Ella. (Was completed in the same class period
 
 #### Narrative describing the test
 
+We started the test by giving a brief introduction about our general product. We then started Ella on the login/signup page and let her flow through the app like it was her first time openning it (More of a sandbox flow). She would ask questions as we went through and we would provide any answers. Additionally towards the end we prompted paths that had not been taken. In the end we asked a variety of questions to gain feedback and user insights.
+
 #### What roles did each team member play during the test?
 
 - almond was the Computer
@@ -184,6 +186,10 @@ Photos of before and after:
 - Homepage:
     - Before: <img src="images/ethan_IMG_8351.jpg" width="50%">
     - TO DO: Is this being changed?
+
+- Login/Signup pages:
+    - Before: <img src = "images\Anthony Signup Before IMG_2711.jpeg" width= "25%"> <img src = "images\Anthony Verification Before IMG_2710.jpeg" width= "25%">
+    - After: <img src = "images\Anthony Signup After IMG_2714.jpeg" width= "25%"> <img src = "images\Anthony Verification After IMG_2713.jpeg" width= "25%">
 
 ## Stakeholder Testing
 ### Stakeholder Review: Lily
