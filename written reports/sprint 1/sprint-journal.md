@@ -185,7 +185,7 @@ Photos of before and after:
 
 - Homepage:
     - Before: <img src="images/ethan_IMG_8351.jpg" width="50%">
-    - TO DO: Is this being changed?
+    - After: <img src="images/Ethan_HomePage_After.jpg" width="50%">
 
 - Login/Signup pages:
     - Before: <img src = "images\Anthony Signup Before IMG_2711.jpeg" width= "25%"> <img src = "images\Anthony Verification Before IMG_2710.jpeg" width= "25%">
