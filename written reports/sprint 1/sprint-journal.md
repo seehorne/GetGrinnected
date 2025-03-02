@@ -177,6 +177,9 @@ Photos of before and after:
 - Profile and Settings:
     - Before: <img src="images/almond_IMG_01.jpg" width="25%">
     - After: <img src="images/almond_IMG_02.jpg" width="25%"> <img src="images/almond_IMG_03.jpg" width="25%">
+    - Following orgs/finding a big list with info:
+        - Before: Didn't exist, was recommended it be there
+        - After: <img src="images/find_orgs_start.JPG" width="20%"> <img src="images/find_orgs_unfiltered.JPG" width="20%"> <img src="images/find_orgs_filter_menu.JPG" width="20%"> <img src="images/find_orgs_filtered.JPG" width="20%"> <img src="images/find_orgs_org_info.JPG" width="20%">
 
 - Homepage:
     - Before: <img src="images/ethan_IMG_8351.jpg" width="50%">
