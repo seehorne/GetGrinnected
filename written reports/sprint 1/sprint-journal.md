@@ -539,4 +539,4 @@ DO WE HAVE REVISIONS AFTER YUINA?
         - Potentially a way to zoom in on information.
 
 ## Storyboard
-- Storyboard: <img src="images/Ethan_Storyboard.jpg" width="25%">
+<img src="images/Ethan_Storyboard.jpg" width="100%">
