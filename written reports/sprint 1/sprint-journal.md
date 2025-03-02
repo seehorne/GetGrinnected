@@ -539,4 +539,5 @@ DO WE HAVE REVISIONS AFTER YUINA?
         - Potentially a way to zoom in on information.
 
 ## Storyboard
-<img src="images/Ethan_Storyboard.jpg" width="100%">
+<img src="images/Ethan_Storyboard.jpg" width="75%">
+Our Storyboard shows a student walking back to their dorm and longing in their bed looking for something to do. They open GetGrinnected and scroll through some events occurring today. They see that there is a GORP hike that sounds interesting so they click on the event and read more information about it. It sounds like a fun event that they can enjoy so they meet up outside the JRC with other GORP members and have an amazing time. The user is motivated by boredom to find out what's going on around campus. They react with curiosity and interest in the potential events available to them. It ends in interactions in the cummunity as it links the user with opportunities available to meet up and talk to fellow students at the activity. This shows off our app's use in quickly finding events on campus and meeting up with other students to find fun and meaningful ways to engage in the campus community. 
