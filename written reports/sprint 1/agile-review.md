@@ -7,6 +7,4 @@ These visible products are not the only things we have successfully accomplished
 
 ### GIT Diff Link
 
-This diff shows the changes we made to the requirements document over the course of this sprint.
-
-TODO: ONCE MERGED, ADD THIS URL. Format will be like [7c03753..2e239d0](https://github.com/seehorne/GetGrinnected/compare/7c03753..2e239d0#diff-03ea927406b530bc396f4843f974c7047a7643c02be4d56c56150d756ee12f73), but this diff is not of all changes
+This diff shows the changes we made to the requirements document over the course of this sprint: [7c03753..32b826a](https://github.com/seehorne/GetGrinnected/compare/7c03753..32b826a#diff-03ea927406b530bc396f4843f974c7047a7643c02be4d56c56150d756ee12f73).
