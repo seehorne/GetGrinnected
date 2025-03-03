@@ -537,9 +537,9 @@ Ability to add multiple collaborators
 
 Images of Survey
 - before
-    - <img src="images\survey_before.JPG" width="25%">
+    - <img src="images\survey_before.JPG" width="40%">
 - after
-    - <img src="images\survey_after.JPG" width="25%">
+    - <img src="images\survey_after.JPG" width="40%">
 
 ## CIDER Lab
 
