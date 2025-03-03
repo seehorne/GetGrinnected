@@ -66,6 +66,7 @@ Ji-ho is a 4th year and the leader of the Anthro SEPC.
 - As Ji-ho, I need to connect with other SEPCs to collaborate on a larger scale event, so that we can pool our funds and break down barriers between majors.
 - As Ji-ho, I need to communicate with professors about our events, so that they know what events we have and what we have planned for the semester.
 - As Ji-ho, I need students to be able to easily contact us (the SEPC) in case they have any complaints about professors, classes, or the major organizations, so that we as the SEPC can fulfill our duty to be there for students.
+- As Ji-ho, I need to be able to advertise events that are hosted outside standard academic buildings, so that I can facilitate SEPC activities in all the locations that are relevant to the department—such as CERA
 
 Ochen is the ISO president and a 4th year.
 
@@ -88,7 +89,9 @@ Sampson has colorblindness and only access to a computer.
 Jessica is a 1st year and wants to learn what events are happening on campus
 
 - As Jessica, I need to be able to see upcoming events so that I can attend them and get involved.
-
+- As Jessica, I need to be able to save events I'm interested in so that I can remember they exist
+- As Jessica, I need to be able to learn what organizations exist on campus so that I can learn more about campus life and determine how I fit
+  
 Megan is a 2nd year trying to figure out what major they want to declare.
 
 - As Megan, I need to be able to sort events so that I only see those related to majors.
@@ -115,14 +118,16 @@ Rosy’s Grinnell email uses their deadname.
 Sarah is a 4th year involved in multiple student organizations and interested in trying new ones.
 
 - As Sarah, I need something to do on Thursday afternoons, so that I don't get bored in my dorm.
-- As Sarah, I need to do get updated on any time changes to event so that I don't miss my regular activities
+- As Sarah, I need to do get updated on any time changes or cancellations to events so that I don't miss my regular activities
+- As Sarah, I need to be able to distinguish between different types of events so that I can easily determine which ones match the interests I have my current orgs don't meet
 
 Zach is a shy 2nd year who wants to make new friends.
 
 - As Zach, I need motivation to attend events, so that I can go out and make new friends
 - As Zach, I need to know if I know anyone attending an event, so I can select ones where I won’t have to either hang out all alone or approach people I don’t know
 - As Zach, I need to know if an organization is open to new members or people just stopping in so that I know I am welcome to attend
-
+- As Zach, I need to have a way to keep up to date with the events of an org I attended and liked so that I can keep attending and deepen my connections
+  
 almond is an administrator for the tool.
 
 - As almond, I need to be able to delete events which have passed or are not appropriate so that events are up to date and I can remove things that are against the content policy.
@@ -146,32 +151,175 @@ almond is an administrator for the tool.
 
 ## Major Features
 
-Shows all events currently happening at Grinnell (scraping information off of 25 live)
-Create a user account (Grinnell emails only?)
-Allows users to sign up for student organization email lists
-Student Org leaders being able to create events directly on the app
-Allow user accounts to friend each other
-Events sorted by category
+- Shows all events currently happening at Grinnell (scraping information off of 25 live)
+- Create a user account (Grinnell emails only?)
+- Allows users to sign up for student organization email lists
+- Student Org leaders being able to create events directly on the app
+- Allow user accounts to friend each other
+- Events sorted by category
+
+### Updates after stakeholder meetings
+
+- Users Can search for events on Home page and in callender
+- Users Can favorite events to more easily find events they like
+- Event Creators can add images to their events
+- Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events
+- Event descriptions contain images 
+- Event descriptions contain tags 
+- Bottom bar for easy navigation between windows
+- Highlights window you are on in bottom bar
+- Allows for changing between profiles in settings
+- email verification for profile creation 
+- Following an org in profile
+- Org list findable under profile that share information on what student orgs exist and what they do
+- Color system chosen to be accesable to color blindness with options for different types of color blindness
+- Screen reader compatible
 
 ## Stretch Goals
 
-Map and directions to where events are happening
-Puzzle Piece reward system for attending events or add memes
-Click through to get tickets (like for ISO food bazaar and theater stuff)
-Subscribe to events to get notifications
-More private events like MLC’s are only visible to specific groups
-Updates for if an event changes (posted by the organizer)
+- Map and directions to where events are happening
+- Puzzle Piece reward system for attending events or add memes
+- Click through to get tickets (like for ISO food bazaar and theater productions)
+- Subscribe to events to get notifications
+- More private events like MLC’s are only visible to specific groups
+- Updates for if an event changes (posted by the organizer)
+
+### Updates after stakeholder meetings
+
+- Add a zoom feature to help enlarge UI
+- Add a light and dark mode that can be toggled in settings
+- Add a introductory survey to better present events
+- Instructions on how to use the app and navigate the page
+- Reach out to orgs to collect a comprehensive list of tags
+- Logo in top left corner redirects to home page
+- Users Can turn on notifications for events they favorite
+- Tags in event descriptions can be clicked to sort current page  
+
 
 ## Out of Scope
 
-Use of app outside of Grinnell or other colleges
-Parties or personal get togethers
-Normal users creating their own events
-Microtransactions or pay functions
+- Use of app outside of Grinnell or other colleges
+- Parties or personal get togethers
+- Normal users creating their own events
+- Microtransactions or pay functions
 
+### Updates after stakeholder meetings
+
+- Users creating their own tags
+
+# Comprehensive list of Requirements
+
+* Sign-in/Sign up
+	* sign in:
+		* ask for username and password
+		* forgot password option
+		* forgot username option
+	* sign-up:
+		* power-account vs normal user account distinction (how will this work?)
+			* verify the authority to ensure security and privacy
+		* ask for grinnell email
+		* ask for create-password
+			* list requirements for password
+			* if requirements are not met, shows that it's not met
+		* verify email with verification
+			* send email to email automatically, with a code that is available for a 60 second time limit
+* Post-Sign-up survey
+	* begin survey with questions regarding interests
+	* ask user to pick subjects and concentrations to show in your interest scope
+	* power organizations: ask about potential tags an organization would like to use
+	* ask user: what organizations would you like to stay updated with? 
+	* create tags for creating an event?
+* "home" page
+	* lists events for the current day that are automatically sorted by popularity and by the tags that user filled out during survey
+	* Can click on events for more information
+	* Can change the day to look at any point in the next week
+	* Can change the tags to sort events you are viewing
+	* Can use search bar to find specific events
+	* includes navigation bar to calendar favorites and profile page
+	* A sort button to sort based on popularity, alphabetically, by organization (grouping organizations)
+* calendar
+	* ability to see comprehensive view of all upcoming events
+	* ability to toggle from day, to week to month view, intuitively
+	* ability to see drafted event in calendar
+	* ability to toggle between public calendar and personal (liked events + drafts) calendar
+	* ability to click on a specific day, to get the day of an event, and able to click on a specific event to get the **event card** associated with that event
+	* ability to filter events
+	* includes navigation bar to home favorites and profile page
+	* can create events 
+		* privileged to student org accounts
+		* name title of event
+		* RSVP toggle
+			* maximum headcount
+			* link to RSVP page
+		* upload images/posters to event
+		* customize **event card**
+		* add time to event
+		* add date to event
+		* toggle repeat
+			* select days of week/select days of month to repeat
+		* post public or private (limited to those who follow you) calendar
+		* select location 
+			* modified search for location
+		* add collaborator organizations
+		* save event to **drafts**/post directly to **events page/calendar**
+		* after uploading event, update users for events
+* Event cards
+	* Found on Home Page, Callender and Favorites
+	* contains information on:
+		* if event repeats
+		* if RSVP, max headcount and current number
+		* how many people liked events
+		* tags
+		* description
+		* organizations and collaborating organizations
+	* able to add to **favorites**
+	* able to see **organization** and follow organizations
+* Search function
+	* "robust" searching, to include misspellings and find tags that were incorrectly inputted
+	* events and organizations show up when search
+	* when no search found, "no results" pop-up, prompting user to reduce filters or change search
+	* speech-to-text option
+* favorite/liked events
+	* for each liked event:
+		* contains event card, in addition to..l
+		* toggle notification
+		* remove from liked, and prompt users to confirm
+	* "?" - gives information about UI elements on the page
+	* able to filter by organization, etc. 
+	* able to sort by popularity, achieved by counting how many people have liked an event, etc.
+	* make notification icon more intuitive
+	* ability to remove all liked events
+	* potential feature creep:
+		* if liking an event that conflicts with another event, notify you with popup (? this requirement is to be debated upon)
+		* (? - this requirement is to be debated upon) After event is done, provide ratings and feedback for events?
+		* when notifying user, in settings, able to set how the notification is sent to user (? this requirement is to be debated upon)
+* profile page
+	* able to change profile picture
+	* able to change username (to reasonable names)
+	* able to change account to other organization accounts a user has
+	* able to sign out of current account
+	* contains list of followed organizations:
+		* if no organizations to be found, "FIND organizations" button
+	* Include settings page:
+		* change text-size for the application
+		* light-dark/other colored themes, for better visibility
+	* organizations list
+		* sort organizations by popularity, alphabet, etc. 
+		* able to see **organization card** through organization list
+		* able to follow an organization through **organization card**
+		* able to see the events an organization is hosting
+		* to see an organizations' events through the organizations list
+		* to  follow an organization, will it be a request-to-follow feature? How do we deal with exclusivity(?)
+	* followed organization list
+		* able to see organizations' page/user pages(?)
+	* Social aspect: to be spoken about after the sprint
+		* collaborations with organizations  
+    
 # Use Cases
 
 ## Use Case 1: Signing Up
+
+Note: This use case was written before the requirements for use cases were changed, so it has some differences to the template you have now. We've decided not to update this one.
 
 **Actor:** A new user to the app. They have no user role yet.
 
@@ -180,9 +328,9 @@ Microtransactions or pay functions
 - Since the user doesn't exist yet, you could say either all user roles or no user roles can trigger this case.
 - This wasn't explicitly covered by any of our user stories.
 
-**Trigger:** The user clicks "sign up" on the initial screen of the app (which only appears if they are not already signed in)
+**Trigger:** The user clicks "sign up" on the initial screen of the app (which only appears if they are not already signed in).
 
-**Preconditions:** No existing login data stored for app
+**Preconditions:** No existing login data stored for app.
 
 **Postconditions:** New user created in database, app stores login data locally.
 
@@ -248,6 +396,244 @@ invalid password:
   - Can specify what needs to be fixed.
 2. The password box is cleared, and a new password can be typed.
 3. Return to the main flow of whatever step caused this alternate flow.
+
+## Use Case 2: Creating an Event
+
+**Actor:** A SEPC, Student Org Leader, MLC, MSO, ISO (student group leader of some form) who wants to create a new event for their orginatization. This would be an Event Creator user.
+
+**Goal:** The general overarching goal is to create an event to get their organization or group out for others to see the events they have planned.
+
+- This aligns with the following User Stories
+  - Jack
+  - Ochen
+  - Abduhl
+  - Ji-ho
+
+**Trigger:** The user clicks the "plus sign" on the calendar screen of the app (which only appears if they are an event creator user).
+
+**Preconditions:** Logged in as an Event Creator user and navigated to the calendar screen.
+
+**Postconditions:** New event is created and stored in the database and posted on the calendar screen, searchable, etc.
+
+**Flow:**
+
+1. The user presses the "plus sign" button
+2. They are then navigated to the event creation page.
+3. They are asked to fill in the following information:
+  - Title
+  - Event Description
+  - Date of Event
+    - Calendar to select date
+  - Whether it Repeats
+    - Day selection for repetition
+  - Location
+    - Drop down with Grinnell Buildings
+  - Upload an image associated
+  - Hide the event from Public View
+  - Add Tags
+    - Drop down with options
+  - Add Collaborators
+    - Search feature for users
+4. Upon filling in all the necessary information the user is present with two options
+  - "Save to Drafts" button
+  - "Post Event" button
+  In our case for our user we will press the "Post Event" button.
+5. They will then recieve a successfully posted event notification.
+
+
+**Alternative flows:**
+
+Save to Drafts:
+
+1. When the user selects this button instead of posting the event the app stores the information.
+2. Navigates them to their drafts page, showing the draft they just created as well as the other events they may have in drafts.
+3. From here the user can continue to use the app in any way but can reference back if they decide they are ready to post the event or make edits to the draft.
+
+connection error:
+
+1. The app displays an error message: "Error connecting to resources. Try again later, or contact the developers."
+  - This can be customized based on what resource could not be reached
+2. Return to the main flow of whatever step caused this alternate flow.
+
+## Use Case 3: Finding an Event
+
+**Actor:** Any user to this app. They can really have any user role.
+
+**Goal:** Search for an event of interest.
+
+- This aligns with the following user stories:
+  - Abby
+
+**Trigger:** A user opens the app and presses the search bar. (While we have many features for organizing/filtering events for this case we will use the search bar).
+
+**Preconditions:** User is Logged in and on the homepage.
+
+**Postconditions:** User has new event in their favorites tab.
+
+**Flow:**
+1. The users presses the search bar.
+2. The user enters the name for an event they are interested in.
+3. The screen filters out events that don't match the the information the user specified.
+4. The user presses on one of the events left on their page.
+5. The event gets larger providing the following information:
+  - Name
+  - Description
+  - Time
+  - Location
+  - Tags
+6. The user presses the "heart" button.
+7. The event has been added to their favorites tab. 
+
+**Alternative flows:**
+
+no event found:
+
+1. At step 2 of the use case the user provides a name for an event that doesn't exist.
+2. The screen filters out all events (since none match the event name).
+3. The home screen is left blank saying no events found.
+4. To return to flow the user enters a different name into search. (Returning to flow at step 3)
+
+## Use Case 4: Following an organization
+
+**Actor:** Any user to this app. They can really have any user role.
+
+**Goal:** Connect with an org whose events you are consistently interested in.
+
+- This aligns with the following user stories:
+  - Jessica
+  - Zach
+
+**Trigger:** A user opens the app, goes to their profile, and clicks "find orgs to follow".
+
+**Preconditions:** User is logged in and on the profile page.
+
+**Postconditions:** User is subscribed to a different number of organizations than they were originally.
+
+**Flow:**
+1. The user presses the button saying "find orgs to follow", which is located below a scrollable list of the orgs they already follow. opening an alphabetized list of registered student organizations.
+2. The user scrolls through the list until they find an organization they are interested in.
+3. The user clicks on the org's name, revealing more information in a pop up.
+4. The user selects the heart icon at the bottom of the pop up, and the org is added to the orgs that they are following.
+
+
+**Alternative flows:**
+
+Clicking the wrong org:
+
+1. At step 3 of the flow, the user misclicks and selects an org different than the one they were planning on.
+2. They click the x in the top right corner of the pop up, returning to the list of alphabetized organizations.
+3. They select the org they origially meant to, and continue from step 4 of the original flow.
+
+Filtering by organization category:
+
+1. At step 2 of the original flow, the user is overwhelmed by the quantity of organizations, and wants to see a more tailored list. They click the filter button, revealing a drop down of organization categories.
+2. They select a category of organizations to view (such as multicultural, academic, or sports, among others).
+3. Now seeing a more tailored, less overwhelming, list of organizations, the user continues at step 2 of the original flow (except on the filtered version).
+
+Unfollowing an organization:
+
+1. On the profile page, the user scrolls through their list of organizations they follow until they find the one they no longer wish to follow.
+2. They tap the org they no longer want to follow, pulling up its information in a pop up.
+3. They deselect the heart icon at the bottom of the pop up.
+4. They close the pop up, and the relevant organization is no longer listed in the orgs.
+
+## User Case 5: Following up a Posted Event:
+**Actor:** Power users. Power users who have already created an event. 
+
+**Goal**: Change anything about an event that has already been posted, and notify users who have favorited that event about those changes. 
+
+**This aligns with the following user stories**:
+* Rohit
+* Ochen
+* Jack
+* almond
+
+**Trigger**: A user opens the app, goes to their "My Events," and taps on their event of choice. 
+
+**Preconditions**: The user is logged into their power account. The user has already posted an event. 
+
+**Postconditions**: The user's event has different information on it, and any (normal or otherwise) user that has followed that event gets a notification about this change.
+
+**Flow**:
+1. User navigates to their profile page. 
+2. User switches to their power account. Using the "switch" button.
+3. Power User navigates to their home page. 
+4. Power User presses their "my events" tab. 
+5. Power User selects the event that they wish to change something about. 
+6. Power User edits the details in one of the following fields: (note that Titles cannot be changed)
+	1. Description
+	2. Date
+	3. Location
+	4. Attached Files
+	5. RSVP limit/link
+	6. Tags (no notification)
+	7. Collaborators (no notification)
+7. Power User confirms changes after being prompted to "confirm changes, yes/no".
+
+**Alternative flows:**
+
+Updating Users who have "Favorited" that event with messages: (note, could be just integrated into the description as "update:...")
+1. While in "editing event", selects "Send Update".
+2. Prompted to add a message, Power User ads a message, including any changes made.
+3. After entering message, Power User confirms sending the message and users following the event get notification of this message.
+
+Checking message being sent:
+1. Power user switches out of power user account to personal account.
+2. User checks the event page and confirms message has been sent. 
+
+Discarding Changes: 
+1. Power user enters in information up until step 7 from main flow.
+2. Instead of confirming "yes", user confirms "no".
+3. User Exits out of page through "exit page" option, or "home" option.
+4. User is prompted, "discard changes?", and selects "yes".
+5. No change is made to the event and no updates were sent out. 
+
+## User Case 6: Adding a new account:
+**Actor:** Any user to this app. They can really have any user role.
+
+**Goal**: Adding another personal or organization account to the same device.
+
+**This aligns with the following user stories**:
+* Abdul
+* Ji-Ho
+* Ochen
+* Rūta
+* Jack
+* almond
+
+**Trigger**: A user opens the app, goes to their profile, and taps on the switch account button. 
+
+**Preconditions**: The user is logged into an account.
+
+**Postconditions**: The user has added another account to their device.
+
+**Flow**:
+1. User navigates to their profile page. 
+2. User taps the "switch account" button.
+3. User taps the "add account" button.
+4. User is brought to Log in/Sign up screen. 
+5. User taps "log in" and goes through the log in steps.
+   1. The user is brought to a new page.
+   2. The user enters their account email and password.
+6. The user is now logged into their new account.
+
+**Alternative flows:**
+
+Signing up with a new account:
+1. While on the Log in/Sign up page, the user taps the "sign up" button.
+2. The user goes through the sign up steps in user case 1.
+3. The user is now logged into their new account.
+
+User enters an account that does not exist:
+1. User enters an email that does not have an associated account in the Log in page.
+2. User is told that there is no account is associated with that email.
+3. User is prompted to re-enter the email and password. 
+
+Cancelling adding an account:
+1. User is on the Log in/Sign up page.
+2. Instead of tapping "log in" or "sign up", the user taps "cancel".
+3. The user is brought back to the profile page.
+4. No change to logged in accounts is made.
 
 # Citations
 
