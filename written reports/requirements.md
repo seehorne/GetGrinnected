@@ -151,30 +151,64 @@ almond is an administrator for the tool.
 
 ## Major Features
 
-Shows all events currently happening at Grinnell (scraping information off of 25 live)
-Create a user account (Grinnell emails only?)
-Allows users to sign up for student organization email lists
-Student Org leaders being able to create events directly on the app
-Allow user accounts to friend each other
-Events sorted by category
+- Shows all events currently happening at Grinnell (scraping information off of 25 live)
+- Create a user account (Grinnell emails only?)
+- Allows users to sign up for student organization email lists
+- Student Org leaders being able to create events directly on the app
+- Allow user accounts to friend each other
+- Events sorted by category
+
+### Updates after stakeholder meetings
+
+- Users Can search for events on Home page and in callender
+- Users Can favorite events to more easily find events they like
+- Event Creators can add images to their events
+- Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events
+- Event descriptions contain images 
+- Event descriptions contain tags 
+- Bottom bar for easy navigation between windows
+- Highlights window you are on in bottom bar
+- Allows for changing between profiles in settings
+- email verification for profile creation 
+- Following an org in profile
+- Org list findable under profile that share information on what student orgs exist and what they do
+- Color system chosen to be accesable to color blindness with options for different types of color blindness
+- Screen reader compatible
 
 ## Stretch Goals
 
-Map and directions to where events are happening
-Puzzle Piece reward system for attending events or add memes
-Click through to get tickets (like for ISO food bazaar and theater stuff)
-Subscribe to events to get notifications
-More private events like MLC’s are only visible to specific groups
-Updates for if an event changes (posted by the organizer)
+- Map and directions to where events are happening
+- Puzzle Piece reward system for attending events or add memes
+- Click through to get tickets (like for ISO food bazaar and theater productions)
+- Subscribe to events to get notifications
+- More private events like MLC’s are only visible to specific groups
+- Updates for if an event changes (posted by the organizer)
+
+### Updates after stakeholder meetings
+
+- Add a zoom feature to help enlarge UI
+- Add a light and dark mode that can be toggled in settings
+- Add a introductory survey to better present events
+- Instructions on how to use the app and navigate the page
+- Reach out to orgs to collect a comprehensive list of tags
+- Logo in top left corner redirects to home page
+- Users Can turn on notifications for events they favorite
+- Tags in event descriptions can be clicked to sort current page  
+
 
 ## Out of Scope
 
-Use of app outside of Grinnell or other colleges
-Parties or personal get togethers
-Normal users creating their own events
-Microtransactions or pay functions
+- Use of app outside of Grinnell or other colleges
+- Parties or personal get togethers
+- Normal users creating their own events
+- Microtransactions or pay functions
+
+### Updates after stakeholder meetings
+
+- Users creating their own tags
 
 # Comprehensive list of Requirements
+
 * Sign-in/Sign up
 	* sign in:
 		* ask for username and password
@@ -196,20 +230,23 @@ Microtransactions or pay functions
 	* ask user: what organizations would you like to stay updated with? 
 	* create tags for creating an event?
 * "home" page
-	* lists events that are automatically sorted by popularity and by the tags that user filled out during survey
-	* includes links to: includes navigation bar (including calendar, create event, profile page, and favorite events), profile page, search
-	* a filter button to filter according to organization, RSVP only, food, and other tags.
+	* lists events for the current day that are automatically sorted by popularity and by the tags that user filled out during survey
+	* Can click on events for more information
+	* Can change the day to look at any point in the next week
+	* Can change the tags to sort events you are viewing
+	* Can use search bar to find specific events
+	* includes navigation bar to calendar favorites and profile page
 	* A sort button to sort based on popularity, alphabetically, by organization (grouping organizations)
 * calendar
+	* ability to see comprehensive view of all upcoming events
+	* ability to toggle from day, to week to month view, intuitively
 	* ability to see drafted event in calendar
 	* ability to toggle between public calendar and personal (liked events + drafts) calendar
 	* ability to click on a specific day, to get the day of an event, and able to click on a specific event to get the **event card** associated with that event
-	* ability to toggle from day, to week to month view, intuitively
 	* ability to filter events
-	* contains links to: navigation bar, search, profile page, many events
-	* ability to distinguish among normal events and featured event, for very large events to be featured
-* create event
-	* privileged to:
+	* includes navigation bar to home favorites and profile page
+	* can create events 
+		* privileged to student org accounts
 		* name title of event
 		* RSVP toggle
 			* maximum headcount
@@ -225,8 +262,9 @@ Microtransactions or pay functions
 			* modified search for location
 		* add collaborator organizations
 		* save event to **drafts**/post directly to **events page/calendar**
-	* after uploading event, update users for events
+		* after uploading event, update users for events
 * Event cards
+	* Found on Home Page, Callender and Favorites
 	* contains information on:
 		* if event repeats
 		* if RSVP, max headcount and current number
@@ -246,7 +284,7 @@ Microtransactions or pay functions
 		* contains event card, in addition to..l
 		* toggle notification
 		* remove from liked, and prompt users to confirm
-	* "?" - gives information about current page
+	* "?" - gives information about UI elements on the page
 	* able to filter by organization, etc. 
 	* able to sort by popularity, achieved by counting how many people have liked an event, etc.
 	* make notification icon more intuitive
@@ -257,7 +295,7 @@ Microtransactions or pay functions
 		* when notifying user, in settings, able to set how the notification is sent to user (? this requirement is to be debated upon)
 * profile page
 	* able to change profile picture
-	* able to change username (should there be limit?)
+	* able to change username (to reasonable names)
 	* able to change account to other organization accounts a user has
 	* able to sign out of current account
 	* contains list of followed organizations:
@@ -265,32 +303,23 @@ Microtransactions or pay functions
 	* Include settings page:
 		* change text-size for the application
 		* light-dark/other colored themes, for better visibility
-* organizations list
-	* sort organizations by popularity, alphabet, etc. 
-	* able to see **organization card** through organization list
-	* able to follow an organization through **organization card**
-	* not-yet-implemented/to be discussed:
-		* able to see the events an organization is hosting (instead of an organization description, an organization page?), perhaps able to host links and resources for that specific organization
-		* (?) consider facilitation of collaboration through the application
+	* organizations list
+		* sort organizations by popularity, alphabet, etc. 
+		* able to see **organization card** through organization list
+		* able to follow an organization through **organization card**
+		* able to see the events an organization is hosting
 		* to see an organizations' events through the organizations list
-		* (?) more security for an event
 		* to  follow an organization, will it be a request-to-follow feature? How do we deal with exclusivity(?)
-* followed organization list
-	* able to see organizations' page/user pages(?)
-* Social aspect: to be spoken about after the sprint
-	* collaborations with organizations 
-* additional features:
-	* collaborations with organizations 
-		* facilitation of collaboration
-	* resources:
-		* include resources for student handbook for RSOs
- 
+	* followed organization list
+		* able to see organizations' page/user pages(?)
+	* Social aspect: to be spoken about after the sprint
+		* collaborations with organizations  
     
 # Use Cases
 
 ## Use Case 1: Signing Up
 
-TODO (almond): FIX THIS AREA WITH LEAH'S NEW INSTRUCTIONS
+Note: This use case was written before the requirements for use cases were changed, so it has some differences to the template you have now. We've decided not to update this one.
 
 **Actor:** A new user to the app. They have no user role yet.
 

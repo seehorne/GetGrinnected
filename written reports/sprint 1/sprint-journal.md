@@ -182,11 +182,8 @@ Photos of before and after:
     - After: <img src="images/Budhil_Draft_2.jpg" width="25%"><img src="images/Budhil_Event_Creation_2.jpg" width="25%"><img src="images/Budhil_Favorites_2.jpg" width="25%">
 
 - Profile and Settings:
-    - Before: <img src="images/almond_IMG_01.jpg" width="25%">
-    - After: <img src="images/almond_IMG_02.jpg" width="25%"> <img src="images/almond_IMG_03.jpg" width="25%">
-    - Following orgs/finding a big list with info:
-        - Before: Didn't exist, was recommended it be there
-        - After: <img src="images/find_orgs_start.JPG" width="20%"> <img src="images/find_orgs_unfiltered.JPG" width="20%"> <img src="images/find_orgs_filter_menu.JPG" width="20%"> <img src="images/find_orgs_filtered.JPG" width="20%"> <img src="images/find_orgs_org_info.JPG" width="20%">
+    - Before: <img src="images/almond_profile_before.jpg" width="50%">
+    - After: <img src="images/almond_profile_after.jpg" width="50%">
 
 - Homepage:
     - Before: <img src="images/ethan_IMG_8351.jpg" width="50%">
@@ -269,18 +266,23 @@ Question for her: Did any parts of the interaction feel less intuitive?
         - For future user tests, they are going to be power users / event creators so this will be part of the testing we make sure to do with them. Include this.
 - Let's continue mixing up the roles so different people get different experiences.
 
+#### Changes to prototype
+
+Profile Page:
+- Before: <img src="images/almond_profile_orgs_before.jpg" width="25%">
+- After: <img src="images/almond_profile_orgs_after_1.jpg" width="25%"> <img src="images/almond_profile_orgs_after_2.jpg" width="25%">
+    - Now also includes a place to find a list of all student orgs with info, and follow those of interest
+    - <img src="images/find_orgs_start.JPG" width="20%"> <img src="images/find_orgs_unfiltered.JPG" width="20%"> <img src="images/find_orgs_filter_menu.JPG" width="20%"> <img src="images/find_orgs_filtered.JPG" width="20%"> <img src="images/find_orgs_org_info.JPG" width="20%">
+
 ### Revisions after meeting with Lily
 
-Changes we agreed to make after the meeting on Feb 24:
+Changes we agreed to make after the meeting on Feb 24 (these also may include feedback we recieved from our test session with Leah):
 
 - almond: Add a bubble or other element to the profile picture to make it clear clicking it will let you change photos
 - Ethan: Make a flow for when you click on a tag, to view other things with that tag.
 - Ellie: Make sure that all pages have the same icons on the bottom bar.
+- Ellie and Ethan: Added a way to view a list of organizations + follow ones of interest
 - Budhil: Added an introductory survey to better suit the users interests.
-
-TO DO: List any others we have here. I feel like we should have more revisions between these two parts.
-
-WE MIGHT NEED B/A Pictures here
 
 ### Stakeholder Review: Regan
 
@@ -506,13 +508,38 @@ Who should we reach out to about this to get the word out?
 
 There is no next user we are testing with. If we did more paper prototyping, we would make these changes to the testing procedure.
 
-- Give slightly more background on our goals with the app
+- Give slightly more background on our goals with the app.
 
 Other than that, we're pretty happy with how our testing procedure went today.
 
 ### Revisions after meeting with Yuina
 
-DO WE HAVE REVISIONS AFTER YUINA?
+- Place to display image for an event.
+- A way for image associated with event to display in-app in a way that is previewable to org
+- We reordered the order of questions for the survey. 
+
+Images of changes:
+
+Images of event display in app
+- before
+    - <img src="images\org_no_photo.JPG" width="25%">
+- after
+    -  <img src="images\Image added IMG_8365.jpg" width="25%"> 
+
+Searching multiple orgs / Collaborators
+- <img src="images\Multiple Collaborators IMG_8362.jpg" width="25%">
+
+Ability to add multiple collaborators
+- before
+    - <img src="images\add_collab_before.JPG" width="25%">
+- after
+    - <img src="images\Add more collaborators IMG_8363.jpg" width="25%">
+
+Images of Survey
+- before
+    - <img src="images\survey_before.JPG" width="25%">
+- after
+    - <img src="images\survey_after.JPG" width="25%">
 
 ## CIDER Lab
 
@@ -546,4 +573,5 @@ DO WE HAVE REVISIONS AFTER YUINA?
 
 ## Storyboard
 <img src="images/Ethan_Storyboard.jpg" width="75%">
+
 Our Storyboard shows a student walking back to their dorm and longing in their bed looking for something to do. They open GetGrinnected and scroll through some events occurring today. They see that there is a GORP hike that sounds interesting so they click on the event and read more information about it. It sounds like a fun event that they can enjoy so they meet up outside the JRC with other GORP members and have an amazing time. The user is motivated by boredom to find out what's going on around campus. They react with curiosity and interest in the potential events available to them. It ends in interactions in the cummunity as it links the user with opportunities available to meet up and talk to fellow students at the activity. This shows off our app's use in quickly finding events on campus and meeting up with other students to find fun and meaningful ways to engage in the campus community. 
