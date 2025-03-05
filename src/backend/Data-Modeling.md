@@ -22,7 +22,9 @@ Events Table
 - Date: The dd/mm/yy of the event
 - Time: When the event is occuring
 - Tags: list of tags associated with the event
-- Private?: A binary value associated with wehter the event is private
+- Private?: A binary value associated with whether the event is private.
+- Repeats?: A binary value associated with whether the event repeats.
+- Image: Potential image file associated with the event.
 
 Users Table
 - <ins>Username</ins>: The username associated with the account selected at creation
