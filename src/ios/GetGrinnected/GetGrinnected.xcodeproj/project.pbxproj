@@ -14,6 +14,10 @@
 		0CBBC3DA2D77AB9B002E482E /* GetGrinnectedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3D92D77AB9B002E482E /* GetGrinnectedTests.swift */; };
 		0CBBC3E42D77AB9B002E482E /* GetGrinnectedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3E32D77AB9B002E482E /* GetGrinnectedUITests.swift */; };
 		0CBBC3E62D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3E52D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift */; };
+		0CBBC3F52D77DA60002E482E /* HomescreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3F42D77DA60002E482E /* HomescreenView.swift */; };
+		0CBBC3F72D77DABC002E482E /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3F62D77DABC002E482E /* CalendarView.swift */; };
+		0CBBC3F92D77DB12002E482E /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3F82D77DB12002E482E /* FavoritesView.swift */; };
+		0CBBC3FB2D77DD0B002E482E /* EventCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,10 @@
 		0CBBC3DF2D77AB9B002E482E /* GetGrinnectedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CBBC3E32D77AB9B002E482E /* GetGrinnectedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGrinnectedUITests.swift; sourceTree = "<group>"; };
 		0CBBC3E52D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGrinnectedUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		0CBBC3F42D77DA60002E482E /* HomescreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenView.swift; sourceTree = "<group>"; };
+		0CBBC3F62D77DABC002E482E /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		0CBBC3F82D77DB12002E482E /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +104,10 @@
 			children = (
 				0CBBC3C82D77AB95002E482E /* GetGrinnectedApp.swift */,
 				0CBBC3CA2D77AB95002E482E /* ContentView.swift */,
+				0CBBC3F42D77DA60002E482E /* HomescreenView.swift */,
+				0CBBC3F62D77DABC002E482E /* CalendarView.swift */,
+				0CBBC3F82D77DB12002E482E /* FavoritesView.swift */,
+				0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */,
 				0CBBC3CC2D77AB9A002E482E /* Assets.xcassets */,
 				0CBBC3CE2D77AB9A002E482E /* Preview Content */,
 			);
@@ -257,8 +269,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CBBC3FB2D77DD0B002E482E /* EventCreationView.swift in Sources */,
+				0CBBC3F92D77DB12002E482E /* FavoritesView.swift in Sources */,
 				0CBBC3CB2D77AB95002E482E /* ContentView.swift in Sources */,
 				0CBBC3C92D77AB95002E482E /* GetGrinnectedApp.swift in Sources */,
+				0CBBC3F72D77DABC002E482E /* CalendarView.swift in Sources */,
+				0CBBC3F52D77DA60002E482E /* HomescreenView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
