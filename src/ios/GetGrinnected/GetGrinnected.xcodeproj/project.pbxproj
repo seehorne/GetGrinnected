@@ -18,6 +18,8 @@
 		0CBBC3F72D77DABC002E482E /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3F62D77DABC002E482E /* CalendarView.swift */; };
 		0CBBC3F92D77DB12002E482E /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3F82D77DB12002E482E /* FavoritesView.swift */; };
 		0CBBC3FB2D77DD0B002E482E /* EventCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */; };
+		0CBBC3FD2D77E2A2002E482E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */; };
+		0CBBC4012D77E62B002E482E /* MainNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC4002D77E62B002E482E /* MainNavView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		0CBBC3F62D77DABC002E482E /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		0CBBC3F82D77DB12002E482E /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationView.swift; sourceTree = "<group>"; };
+		0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		0CBBC4002D77E62B002E482E /* MainNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 				0CBBC3C82D77AB95002E482E /* GetGrinnectedApp.swift */,
 				0CBBC3CA2D77AB95002E482E /* ContentView.swift */,
 				0CBBC3F42D77DA60002E482E /* HomescreenView.swift */,
+				0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */,
+				0CBBC4002D77E62B002E482E /* MainNavView.swift */,
 				0CBBC3F62D77DABC002E482E /* CalendarView.swift */,
 				0CBBC3F82D77DB12002E482E /* FavoritesView.swift */,
 				0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */,
@@ -270,10 +276,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CBBC3FB2D77DD0B002E482E /* EventCreationView.swift in Sources */,
+				0CBBC4012D77E62B002E482E /* MainNavView.swift in Sources */,
 				0CBBC3F92D77DB12002E482E /* FavoritesView.swift in Sources */,
 				0CBBC3CB2D77AB95002E482E /* ContentView.swift in Sources */,
 				0CBBC3C92D77AB95002E482E /* GetGrinnectedApp.swift in Sources */,
 				0CBBC3F72D77DABC002E482E /* CalendarView.swift in Sources */,
+				0CBBC3FD2D77E2A2002E482E /* ProfileView.swift in Sources */,
 				0CBBC3F52D77DA60002E482E /* HomescreenView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
