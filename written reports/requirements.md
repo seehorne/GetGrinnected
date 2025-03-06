@@ -689,6 +689,7 @@ We will manage the creation, storage, manipulation and retrieval of this informa
 - Description: <*String*> of the Description associated with the Org.
 - Org?: <*Binary*> associated with whether or not the account is an Org.
 
+Additionally, we hope to allow seamless switching from accounts (without the need to log back in every time). In order to accomplish this we intend to store information as to what Accounts the user has logged into on the client locally to avoid unintended account sharing.
 
 ## Database Schema
 
