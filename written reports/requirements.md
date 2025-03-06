@@ -647,6 +647,53 @@ Here is a diagram specifying more of the architecture described above. It focuse
 
 ![Architecture Diagram](sprint%202/images/architecture.png)
 
+# Data Modeling
+
+## Written Explanation
+For the data we will be handling in this project it will come from 2 sources:
+
+- 25Live
+    - Will only include event information
+- User Input
+    - User information
+    - Org information
+    - Event information
+
+We will manage the creation, storage, manipulation and retrieval of this information via a database in our backend utilizing MySQL in conjunction with Node.js. The database will be composed of the following tables (with their corresponding information):
+
+### Events Table
+- <ins>EventID</ins>: <*Unique Integer*> generated at the creation or addition of a new Event.
+- Name: <*String*> containing the Name of the Event.
+- Description: <*String*> containing the Description of the Event.
+- Location: <*String*> containing the Location of the Event.
+- Organizations: <*List of Strings*> containing the name/s of the Orgs associated with the event.
+- RSVP?: <*Binary*> associated with whether the event requires RSVPing.
+- Date: <*Date Value*> containing the dd/mm/yyyy of the Event.
+- Time: <*Time Value*> containing the hh/mm of the Event.
+- Tags: <*List of Strings*> containing tags associated with the Event.
+- Private?: <*Binary*> associated with whether the event is private.
+- Repeats?: <*Binary*> associated with whether the event repeats.
+- Image: <*String*> containing the image file (FORMAT NOT DECIDED YET).
+
+### Accounts Table
+- <ins>Username</ins>: <*Unique String*> containing the name for the account.
+- <ins>AccountID</ins>: <*Unique Integer*> generated at the creation of a new Account.
+- <ins>Email</ins>: <*Unique String*> containing the email associated with the account.
+- Password: <*String*> containing the hashed and salted version of the account's password.
+- Salt: <*String*> containing the characters added to salt the input password.
+- Profile Picture: <*String*> containing the image file (FORMAT NOT DECIDED YET).
+- Favorited Events: <*List of Integers*> containing the EventIDs of favorited Events.
+- Favorited Orgs: <*List of Integers*> containing the AccountIDs of favorited Orgs.
+- Drafted Events: <*List of Integers*> containing the EventIDs of drafted Events.
+- Favorited Tags: <*List of Strings*> containing favorited tags.
+- Description: <*String*> of the Description associated with the Org.
+- Org?: <*Binary*> associated with whether or not the account is an Org.
+
+
+## Database Schema
+
+![Database Diagram](TO DO)
+
 # Citations
 
 1. Do, Nam, Brian Goodell, Samantha Chu, Lívia Freitas, Kevin Peng, and Bradley Ramsey. 2024. “GrinSync.” Grin-ArchiTech (blog). December 2024. <https://softarchitech.cs.grinnell.edu/grinsync/>.
