@@ -635,6 +635,18 @@ Cancelling adding an account:
 3. The user is brought back to the profile page.
 4. No change to logged in accounts is made.
 
+# Software Architecture
+
+These are the major components of this software:
+
+- A **server** that manages the base truth of what events are shown to users. It must store events and communicate with clients, which can add and view events.
+- Two **client apps** for iOS and Android, which provide a user view into events.
+- A **event finder** component which collects events from official Grinnell sources and populates the database with them.
+
+Here is a diagram specifying more of the architecture described above. It focuses on the server stack because the server is where most computational work will take place. We are choosing to do this in order to minimize duplicated code between clients for iOS and Android.
+
+![Architecture Diagram](sprint%202/images/architecture.png)
+
 # Citations
 
 1. Do, Nam, Brian Goodell, Samantha Chu, Lívia Freitas, Kevin Peng, and Bradley Ramsey. 2024. “GrinSync.” Grin-ArchiTech (blog). December 2024. <https://softarchitech.cs.grinnell.edu/grinsync/>.
