@@ -7,7 +7,6 @@ app.listen(port, () => {
 });
 
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 // TODO: goofy ass secret key
 const secretKey = 'your-secret-key';
