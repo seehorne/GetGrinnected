@@ -38,9 +38,9 @@ To briefly discuss our plans for a technical implementation, we hope to build fr
 
 ## User Roles/Permissions
 
-- Normal user: Can view events
-- Event creator: Can create and edit events for the group they manage
-- System admin: Can edit or delete events as needed, content moderation?
+- **Individual:** Can view events
+- **Org:** Can create and edit events for the org they are part of
+- **Admin:** Can edit or delete events as needed, regargless of the creator
 
 # User Personas and User Stories
 
@@ -687,13 +687,26 @@ We will manage the creation, storage, manipulation and retrieval of this informa
 - Drafted Events: <*List of Integers*> containing the EventIDs of drafted Events.
 - Favorited Tags: <*List of Strings*> containing favorited tags.
 - Description: <*String*> of the Description associated with the Org.
-- Org?: <*Binary*> associated with whether or not the account is an Org.
+- Role: <*Enum*> associated with what role the user has: Individual, Org, or Admin.
+  - If something similar to an enum is not reasonable, this could be simplified to two boolean values for isOrg and isAdmin. They would be exclusive fields.
 
 Additionally, we hope to allow seamless switching from accounts (without the need to log back in every time). In order to accomplish this we intend to store information as to what Accounts the user has logged into on the client locally to avoid unintended account sharing.
 
 ## Database Schema
 
 ![Database Diagram](TO DO)
+
+## Documentation Plan
+
+One big part of our documentation will be a wiki that gives an overview of what users can do with the app. This would include these categories:
+
+- What different pages do (e.g. the Calendar page)
+- What different user roles can do
+- Guides to doing common tasks (e.g. Making an event)
+
+The wiki would be linked through some part of the app (likely the Profile page), and also publically accessible through our website.
+
+We also plan to have help menus available in the app, that let you figure out stuff like "wait what's this button do?" This would provide a more immediate source of clarification, and doesn't require exploring on your own.
 
 # Citations
 
