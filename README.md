@@ -30,7 +30,25 @@ The structure of our Repository is as follows:
 
 [Trello](https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected)
 
-# Developer guidelines
+# Developer Guidelines
+
+## Branching and Merging
 
 - Make a new branch for each feature
 - `main` branch is protected, and you need 2 approvals to merge
+
+## Testing
+
+You are expected to add unit tests where relevant to your code. Review to the sections below for instructions on adding tests for each language used.
+
+**TODO: HOW TO ADD A NEW TEST TO THE CODE BASE. PAINNNN**
+
+### Kotlin
+### Node.js
+### Swift
+
+## Continuous Integration
+
+When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
+
+Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
