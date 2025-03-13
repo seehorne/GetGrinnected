@@ -13,11 +13,14 @@
   "license": "MIT",
   "author": "almond Heil",
   "main": "api.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": [],
   "dependencies": {
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [],
+  "type": "commonjs"
 }
