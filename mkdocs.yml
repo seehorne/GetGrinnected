@@ -1,0 +1,7 @@
+site_name: GetGrinnected Docs
+
+nav:
+  - Home: index.md
+
+theme:
+  name: material
