@@ -22,7 +22,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        path: docs/_site/
+        path: _site
         if-no-files-found: error
 
   # TODO: deploy step that deploys to the actual website
