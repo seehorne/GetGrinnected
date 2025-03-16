@@ -1,2 +1,5 @@
 # IntelliJ IDEA config
 .idea
+
+# MkDocs build dir
+/site/
