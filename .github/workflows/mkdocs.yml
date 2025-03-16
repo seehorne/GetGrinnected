@@ -34,8 +34,13 @@ jobs:
         # -r       : Recurse into directories
         # --delete : Delete files that are at the destination but not the source
         switches: -vzr --delete
-        path: _site
+
+        # the trailing slash on `path` ensures we copy the contents, not the dir itself.
+        # so we end up with `.../docs/index.html` not `.../docs/_site/index.html`
+        path: _site/
         remote_path: /home/heilalmond/getgrinnected.sites.grinnell.edu/docs
+
+        # ssh connection details
         remote_host: ${{ vars.SITES_SSH_HOSTNAME }}
         remote_port: ${{ vars.SITES_SSH_PORT }}
         remote_user: ${{ vars.SITES_SSH_USER }}
