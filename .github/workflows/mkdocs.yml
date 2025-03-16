@@ -1,4 +1,4 @@
-name: Build MkDocs
+name: Build and Deploy MkDocs
 
 on:
   # Run on pushes to specified branches.
@@ -13,20 +13,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
+    # Build into _site dir
     - name: Build with MkDocs
       uses: romw314/mkdocs-action@v9
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    # Upload to server directory
+    - name: Deploy
+      uses: burnett01/rsync-deployments@7.0.2
       with:
-        name: docs-dir
+        switches: -avzr --delete
         path: _site
-        if-no-files-found: error
-
-  # TODO: deploy job that deploys to the actual website through SSH
+        remote_path: /home/heilalmond/getgrinnected.sites.grinnell.edu/docs
+        remote_host: ${{ vars.SITES_SSH_HOSTNAME }}
+        remote_port: ${{ vars.SITES_SSH_PORT }}
+        remote_user: ${{ vars.SITES_SSH_USER }}
+        remote_key: ${{ secrets.SSH_PRIVKEY }}
