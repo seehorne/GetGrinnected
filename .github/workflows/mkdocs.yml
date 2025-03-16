@@ -23,11 +23,17 @@ jobs:
     - name: Build with MkDocs
       uses: romw314/mkdocs-action@v9
 
+    # TODO: UPLOAD ARTIFACT HERE IF NEEDED, BUT MAY NOT BE NEEDED
+
     # Upload to server directory
     - name: Deploy
       uses: burnett01/rsync-deployments@7.0.2
       with:
-        switches: -avzr --delete
+        # -v       : Verbose, print all transfers
+        # -z       : Compress files during transfer to save on bandwidth
+        # -r       : Recurse into directories
+        # --delete : Delete files that are at the destination but not the source
+        switches: -vzr --delete
         path: _site
         remote_path: /home/heilalmond/getgrinnected.sites.grinnell.edu/docs
         remote_host: ${{ vars.SITES_SSH_HOSTNAME }}
