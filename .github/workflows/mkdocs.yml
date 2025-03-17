@@ -2,9 +2,8 @@ name: Build and Deploy MkDocs
 
 on:
   # Run on pushes to specified branches.
-  # TODO: Temp value of `create-docs` to test, but should become only $default-branch before switching to main
   push:
-    branches: [ $default-branch, create-docs ]
+    branches: [$default-branch]
     paths:
       - docs/**
       - mkdocs.yml
