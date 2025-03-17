@@ -23,8 +23,6 @@ jobs:
     - name: Build with MkDocs
       uses: romw314/mkdocs-action@v9
 
-    # TODO: UPLOAD ARTIFACT HERE IF NEEDED, BUT MAY NOT BE NEEDED
-
     # Upload to server directory
     - name: Deploy
       uses: burnett01/rsync-deployments@7.0.2
