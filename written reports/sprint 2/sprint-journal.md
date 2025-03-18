@@ -59,6 +59,6 @@ One of the big reasons we're using it is (once again) the fact that it's built i
 
 Additionally, GitHub Actions has a marketplace of CI actions that do things we need to do. For instance, there's one that runs JUnit tests and makes a report of them whenever you're merging new changes.
 
-GitHub Actions also supports a feature that our multi-language and mutli-platform code requires: Only running when specific code is changed. Since we have several different directories, we likely don't want to retest them all on a Merge Request that only changes Node.js files. To assist with this, we plan to take advantage of [the `paths` and `paths_ignore` filters](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore).
+GitHub Actions also supports a feature that our multi-language and mutli-platform code requires: Only running when specific code is changed. Since we have several different directories, we likely don't want to retest them all on a Pull Request that only changes Node.js files. To assist with this, we plan to take advantage of [the `paths` and `paths_ignore` filters](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore).
 
 # Part 7: Test Automation and Continuous Integration Setup
