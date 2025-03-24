@@ -153,7 +153,7 @@ almond is an administrator for the tool.
 
 - Shows all events currently happening at Grinnell (scraping information off of 25 live)
 - Create a user account (Grinnell emails only?)
-- Allows users to sign up for student organization email lists
+- ~Allows users to sign up for student organization email lists~
 - ~Student Org leaders being able to create events directly on the app~
 - ~Allow user accounts to friend each other~
 - Events sorted by category
@@ -161,10 +161,10 @@ almond is an administrator for the tool.
 ### Updates after stakeholder meetings
 
 - Users Can search for events on Home page and in callender
-- Users Can favorite events to more easily find events they like
+- ~Users Can favorite events to more easily find events they like~
 - ~Event Creators can add images to their events~
 - ~Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events~
-- ~Event descriptions contain images ~
+- ~Event descriptions contain images~
 - Event descriptions contain tags 
 - Bottom bar for easy navigation between windows
 - Highlights window you are on in bottom bar
@@ -204,6 +204,8 @@ almond is an administrator for the tool.
 - Allows for changing between profiles in settings
 - Following an org in profile
 - Org list findable under profile that share information on what student orgs exist and what they do
+- Allows users to sign up for student organization email lists
+- Users Can favorite events to more easily find events they like
 
 ## Out of Scope
 
