@@ -50,16 +50,16 @@ There should be an easy way to see what is happening on campus so that students 
 - Brock is a 3rd year club organizer and wants people to attend their new organization
     - As Brock, I need to advertise my events and engage interested students
 #### Product Requirements:
-Easily display upcoming events this week
-Updates daily to ensure accurate events
-Can be sorted to help students find events of interest
-Events have location time and description
+- Easily display upcoming events this week
+- Updates daily to ensure accurate events
+- Can be sorted to help students find events of interest
+- Events have location time and description
 #### Technical Requirements:
-Scrape data from 25 live
-Format data into easily understood format
-Run on IOS and android systems
-Loads quickly 
-Updates daily 
+- Scrape data from 25 live
+- Format data into easily understood format
+- Run on IOS and android systems
+- Loads quickly 
+- Updates daily 
 #### Feedback:
 - Destiny - Mentor
     - Mentioned favorite button for events
@@ -71,8 +71,8 @@ Updates daily
 - Regan - SEPC leader
     - Need a comprehensive list of tags
 #### Metrics:
-Easy to use
-Accessible to everyone
+- Easy to use
+- Accessible to everyone
 
 
 ## 5.3: Product Roadmap
