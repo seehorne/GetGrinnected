@@ -674,6 +674,7 @@ We will manage the creation, storage, manipulation and retrieval of this informa
 - Private?: <*Binary*> associated with whether the event is private.
 - Repeats?: <*Binary*> associated with whether the event repeats.
 - Image: <*String*> containing the image file (FORMAT NOT DECIDED YET).
+- Draft?: <*Binary*> associated with whether the event is a draft.
 
 ### Accounts Table
 - <ins>Username</ins>: <*Unique String*> containing the name for the account.
@@ -694,7 +695,7 @@ Additionally, we hope to allow seamless switching from accounts (without the nee
 
 ## Database Schema
 
-![Database Diagram](TO DO)
+<img src= "sprint%202\images\Database_Diagram.jpeg" width="100%">
 
 ## Documentation Plan
 
