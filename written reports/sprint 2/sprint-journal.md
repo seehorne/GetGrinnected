@@ -26,6 +26,56 @@ We decided to classify the event finder component on the same layer as the user 
 # Part 5: Process Description
 
 ## 5.1: Risk Assessment
+### Risk 1 - 25Live event API is not accessible
+- Likelihood of occurring: <span style="color:orange">medium</span>
+
+- Impact if it occurs: <span style="color:red">high</span>
+
+- Evidence for estimates
+  - We are not sure how to access the API. If we can't access the API we will not be able to scrape any events.
+
+- Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
+  - We are looking for possible alternative event data sources that could be scraped.
+
+- Plan for detecting the problem
+  - We will detect the problem by trying to access the API.
+
+- Mitigation plan should it occur
+  - If we can't access the API we will switch to another data source like events.grinnell.edu.
+
+### Risk 2 - Unable to connect to our database
+- Likelihood of occurring: <span style="color:orange">medium</span>
+
+- Impact if it occurs: <span style="color:red">high</span>
+
+- Evidence for estimates
+  - If we can't access our database, we will not be able to run the app at all. This might happen because we are still learning how to access the database and use it.
+
+- Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
+  - We are testing how to connect and send requests to our database through our site.
+
+- Plan for detecting the problem
+  - We will detect the problem by attempting to send requests to the database.
+
+- Mitigation plan should it occur
+  - If we can't connect to our database we will either find a different way to connect to it or use a different database.
+
+### Risk 3 - 
+- Likelihood of occurring:
+
+- Impact if it occurs:
+
+- Evidence for estimates
+
+
+- Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
+
+
+- Plan for detecting the problem
+
+
+- Mitigation plan should it occur
+
 
 ## 5.2: Epics
 ### Epic 1 - Home Page for Easy daily event aggregation 
