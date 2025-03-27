@@ -125,6 +125,47 @@ There should be an easy way to see what is happening on campus so that students 
 - Accessible to everyone
 
 
+### Epic 2 - Profile Page 
+#### Introduction: 
+The app needs a place to manage your profile 
+#### User Stories:
+- Ji-Ho is a 3rd year SEPC member and runs two student orgs
+    - As Ji-Ho I need to quickly switch between accounts to manage my orgs 
+    - As Ji-Ho I need to set different profile pics to help me differentiate my profiles 
+    - As Ji-Ho I need to know which profile I am on 
+- AJ is a 2nd year who doesnt like leaving accounts signed in and has Blue-Yellow color blindness
+    - As AJ I need a way to log out of my account when I am done using it
+    - As AJ I need a way to switch the color scheme to something I can read easily
+    - As AJ I need my settings to  save so I don't need to navigate and change the settings every time I log in
+- Jess is a first year who plans her days the night before and has trouble reading small text
+    - As Jess I need a darkmode on the app to reduce eye strain when I use it in dark conditions and lowers blue light that wakes you up
+    - As Jess I need a way to increase the text size so I can read it
+#### Product Requirements:
+- Allows user to sign out of their profile
+- Allows user to change between profile
+- Allows users to change their profile image to any image in their photo library
+- Allows you to change settings
+- Settings for text size for accessibility
+- Settings for color schemes compatible with different color blindnesses
+- Setting for light vs dark mode to reduce eye strain 
+#### Technical Requirements:
+- Keeps track of individual users, their accounts, and saved settings 
+- Applies changes in settings across the app on every screen
+- Have multiple color palettes available that address different types of color blindness
+- App has access to users photo library
+#### Feedback:
+- Regan 
+    - Should have a sign out option
+- Yuina 
+    - If you have multiple accounts they should be linked 
+- CIDER Lab
+    - Should have a light and dark mode 
+    - Should have a way to zoom in or increase text size
+#### Metrics:
+- Easy to use
+- Accessible to everyone
+
+
 ## 5.3: Product Roadmap
 
 # Part 6: Continuous Integration Plan
