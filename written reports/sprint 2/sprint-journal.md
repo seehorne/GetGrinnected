@@ -15,13 +15,15 @@ We ended up deciding to make the database an entire layer in order to make switc
 
 ## Decision 2
 
-We decided to classify the event finder component on the same layer as the user clients, rather than at some layer closer to the bottom of the system.
+We decided to classify the scraper component on the same layer as the business logic layer, rather than some other layer.
 
-**Alternative:** We initially considered categorizing the event finder as part of the same layer as "Presentation (API)." This was motivated by the idea that the event finder has higher priveleges than any users do, and is not tied to an account the same way that users are. However, we decided these pros were outweighed by the cons:
+**Alternative:** In particular, one alternative we considered was placing the scraper on the same layer as the clients. That is, it would run unrelated to the server and make API requests.
 
-- If the event finder uses its own method of communication with the server, this will likely involve duplicating code in order to do very similar things to what the API must be capable of (adding, editing, and removing events). This duplication isn't desirable.
-- It's likely less hard than we thought to give the event finder special privileges working through the API, depending on implementation.
-- The event finder doesn't need to interact directly with the business rules layer in order to do its job, so this would be putting it too low for no reason.
+The main reason we were considering this was that it made organizational sense at one point in the process, when allowing users to add events was a central part of the functionality of the app. However, we later decided to scale back that aspect of the scope which would mean the API would require routes only used by the event scraper. This seemed like a bad idea.
+
+Additionally, we decided to classify the scraper as we did because it makes the most sense to run it on Reclaim Cloud with other parts of the app, as opposed to an alternative like running it through Github actions which would use up our CI minutes quickly.
+
+Reversing this decision wouldn't be the simplest thing, but we might decide to do so if we end up letting users post events. This would let it take advantage of existing systems in order to function, and keep it in line with the 'rules' of other parts of the system.
 
 # Part 5: Process Description
 
