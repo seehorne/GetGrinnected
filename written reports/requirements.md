@@ -652,11 +652,13 @@ These are the major components of this software:
 
 - A **server** that manages the base truth of what events are shown to users. It must store events and communicate with clients, which can add and view events.
 - Two **client apps** for iOS and Android, which provide a user view into events.
-- A **event finder** component which collects events from official Grinnell sources and populates the database with them.
+- A **scraper** component which collects events from Grinnell's events page and populates the database with them.
 
 Here is a diagram specifying more of the architecture described above. It focuses on the server stack because the server is where most computational work will take place. We are choosing to do this in order to minimize duplicated code between clients for iOS and Android.
 
-![Architecture Diagram](sprint%202/images/architecture.png)
+The different parts of the server are all going to be written in node.js, but their separation in the diagram is relevant because it shows an organizational choice.
+
+![Architecture Diagram](sprint%202/images/Architecure_Diagram.jpg)
 
 # Data Modeling
 
