@@ -28,56 +28,56 @@ Reversing this decision wouldn't be the simplest thing, but we might decide to d
 # Part 5: Process Description
 
 ## 5.1: Risk Assessment
-### Risk 1 - 25Live event API is not accessible
+### Risk 1 - Unable to link our mySQL database with our GitHub repository.
 - Likelihood of occurring: <span style="color:orange">medium</span>
 
 - Impact if it occurs: <span style="color:red">high</span>
 
 - Evidence for estimates
-  - We are not sure how to access the API. If we can't access the API we will not be able to scrape any events.
+  - We have already had some issues with connecting to our database. If we are not able to connect to our database, we will not be able to automatically update our deployed code.
 
-- Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
-  - We are looking for possible alternative event data sources that could be scraped.
+- Steps to reduce the likelihood or impact, and steps to get better estimates
+  - We will reduce the likelihood by figuring out how to connect our database to our GitHub.
 
 - Plan for detecting the problem
-  - We will detect the problem by trying to access the API.
+  - We will detect this problem by attempting to automatically connect to our database.
 
 - Mitigation plan should it occur
-  - If we can't access the API we will switch to another data source like events.grinnell.edu.
+  - Manually copy our code to our mySQL database when we update the software.
 
-### Risk 2 - Unable to connect to our database
-- Likelihood of occurring: <span style="color:orange">medium</span>
+### Risk 2 - Not enough people using our app.
+- Likelihood of occurring: <span style="color:green">low</span>
+
+- Impact if it occurs: <span style="color:orange">medium</span>
+
+- Evidence for estimates
+  - We have had interest in using the app expressed by all students we have told about it. If we do not have many users it will not be a massive issue because we are not longer using user generated content.
+
+- Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
+  - We are planning to spread knowledge of our app through word of mouth and our connection in the college.
+
+- Plan for detecting the problem
+  - We will monitor the amount of traffic our server gets.
+
+- Mitigation plan should it occur
+  - We will contact people we know at the college to spread word of the app.
+
+### Risk 3 - Unable to finish our app before the end of the semester.
+- Likelihood of occurring: <span style="color:green">low</span>
 
 - Impact if it occurs: <span style="color:red">high</span>
 
 - Evidence for estimates
-  - If we can't access our database, we will not be able to run the app at all. This might happen because we are still learning how to access the database and use it.
+  - We feel that we will be able to finish the app in time since we reduced our features. If we are unable to finish the app, that would be a large issue.
 
 - Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
-  - We are testing how to connect and send requests to our database through our site.
+  - Planning, communication, and teamwork.
 
 - Plan for detecting the problem
-  - We will detect the problem by attempting to send requests to the database.
+  - We will discuss if we feel like we are behind schedule at our weekly meetings.
 
 - Mitigation plan should it occur
-  - If we can't connect to our database we will either find a different way to connect to it or use a different database.
-
-### Risk 3 - 
-- Likelihood of occurring:
-
-- Impact if it occurs:
-
-- Evidence for estimates
-
-
-- Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
-
-
-- Plan for detecting the problem
-
-
-- Mitigation plan should it occur
-
+  - We will reduce our features/scope or change our development schedule.
 
 ## 5.2: Epics
 ### Epic 1 - Home Page for Easy daily event aggregation 
