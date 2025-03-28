@@ -30,7 +30,32 @@ The structure of our Repository is as follows:
 
 [Trello](https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected)
 
-# Developer guidelines
+# Developer Guidelines
 
-- Make a new branch for each feature
-- `main` branch is protected, and you need 2 approvals to merge
+## Commit Messages
+
+This is an example of a good commit message.
+
+```
+Implement a basic homescreen in Swift
+
+Currently, the only buttons on the homescreen are "calendar" and
+"favorites", and they only go to blank pages.
+```
+
+Here are features you should follow in your commit messages.
+
+- First line is a short, easily readable description. Try to keep it below 50 characters.
+- First line uses imperative mode ("Implement", as compared to "Implementing" or  "Implements")
+  - It may be helpful to think of this as answering the question "What does this commit do?"
+- Any other necessary description is written below, separated by one line. (optional)
+
+## Branching and Merging
+
+There are three branches that will always exist:
+
+- `main` - production branch. 2 approvals required to merge.
+- `dev` - development branch
+- `writing` - assignment writing and documentation branch
+
+Feel free to create feature branches for your work, especially if it's more than a single commit or two. Make sure to merge these branches into `dev` or `writing` as relevant before attempting to merge them into `main`.
