@@ -29,7 +29,6 @@ async function scrapeData(url) {
     return response.json();
   })
   .then(async events => {
-    //console.log(events.data);
     existing_events = fs.readFileSync('event_data.json', 'utf-8');
     lines = existing_events.split('\n');
     updatedLines = lines.slice(0, -2); //remove last two lines
@@ -43,6 +42,14 @@ async function scrapeData(url) {
         event_info["Title"] = event.title;
         event_info["Date"] = event.date;
         event_info["Time"] = event.date_time;
+        event_info["StartTimeISO"]= event.date_iso;
+        event_info["EndTimeISO"]= event.date_iso;
+        if (event_info.StartTimeISO===null){
+          event_info["AllDay?"] = true;
+        }
+        else{
+          event_info["AllDay?"] = false;
+        }
         event_info["Location"] = event.location;
         event_info["Description"] = event.description ? event.description.replace(/<[^>]+>/g, '') : 'No description available';
         event_info["Audience"] = event.event_types_audience;
