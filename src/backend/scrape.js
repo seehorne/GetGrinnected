@@ -43,7 +43,7 @@ async function scrapeData(url) {
         event_info["Date"] = event.date;
         event_info["Time"] = event.date_time;
         event_info["StartTimeISO"]= event.date_iso;
-        event_info["EndTimeISO"]= event.date_iso;
+        event_info["EndTimeISO"]= event.date2_iso;
         if (event_info.StartTimeISO===null){
           event_info["AllDay?"] = true;
         }
