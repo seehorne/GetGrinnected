@@ -1,0 +1,14 @@
+# see https://www.mkdocs.org/user-guide/writing-your-docs/#configure-pages-and-navigation
+nav:
+  - Home: index.md
+
+################################################################################
+
+# displayed in the tab bar and as the page title
+site_name: GetGrinnected Docs
+
+# base URL where docs will be hosted. note that the "root" of MkDocs is a subdir of the usual site
+site_url: https://getgrinnected.sites.grinnell.edu/docs/
+
+theme: 
+  name: material

@@ -1,0 +1,26 @@
+{
+  "name": "grinnect_test",
+  "version": "0.0.0",
+  "description": "Testing GetGrinnected backend API",
+  "homepage": "https://github.com/seehorne/GetGrinnected#readme",
+  "bugs": {
+    "url": "https://github.com/seehorne/GetGrinnected/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seehorne/GetGrinnected.git"
+  },
+  "license": "MIT",
+  "author": "almond Heil",
+  "main": "api.js",
+  "scripts": [],
+  "dependencies": {
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [],
+  "type": "commonjs"
+}
