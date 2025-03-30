@@ -28,7 +28,7 @@ Reversing this decision wouldn't be the simplest thing, but we might decide to d
 # Part 5: Process Description
 
 ## 5.1: Risk Assessment
-### Risk 1 - Unable to link our mySQL database with our GitHub repository.
+### Risk 1 - Unable to link our mySQL database with our GitHub repository within timeframe.
 - Likelihood of occurring: <span style="color:orange">medium</span>
 
 - Impact if it occurs: <span style="color:red">high</span>
@@ -40,18 +40,19 @@ Reversing this decision wouldn't be the simplest thing, but we might decide to d
   - We will reduce the likelihood by figuring out how to connect our database to our GitHub.
 
 - Plan for detecting the problem
-  - We will detect this problem by attempting to automatically connect to our database.
+  - We will detect this problem by attempting to automatically connect to our database, and succeeding or failing within our deadlines.
 
 - Mitigation plan should it occur
   - Manually copy our code to our mySQL database when we update the software.
 
 ### Risk 2 - Not enough people using our app.
-- Likelihood of occurring: <span style="color:green">low</span>
+- Likelihood of occurring: <span style="color:orange">medium</span>
 
 - Impact if it occurs: <span style="color:orange">medium</span>
 
 - Evidence for estimates
   - We have had interest in using the app expressed by all students we have told about it. If we do not have many users it will not be a massive issue because we are not longer using user generated content.
+  - That being said, we still cannot be 100% sure of its widespread use, especially if our features are cut short due to time restraints. 
 
 - Steps you are taking to reduce the likelihood or impact, and steps to permit better estimates
   - We are planning to spread knowledge of our app through word of mouth and our connection in the college.
@@ -61,6 +62,7 @@ Reversing this decision wouldn't be the simplest thing, but we might decide to d
 
 - Mitigation plan should it occur
   - We will contact people we know at the college to spread word of the app.
+  - Make a quality app according to our specifications.
 
 ### Risk 3 - Unable to finish our app before the end of the semester.
 - Likelihood of occurring: <span style="color:green">low</span>
@@ -167,6 +169,176 @@ The app needs a place to manage your profile
 - Easy to use
 - Accessible to everyone
 
+### Epic 3: Event Creation, Management, Updates
+#### Introduction: 
+Collaboration, Outreach, Event Creation, Event Management, and Event Updates, for RSO autonomy, popularization of events, and the in-app accuracy of real-world events.
+#### User Stories
+- Abdul (MSA)
+    - As Abdul, I need to notify non-members after my event is finished, in case there is extra food or drinks, so that the food we bought does not go to 
+- Ji-ho (Anthro SEPC)
+    - As Ji-ho, I need to connect with other SEPCs to collaborate on a larger scale event, so that we can pool our funds and break down barriers between majors.
+    - As Ji-ho, I need students to be able to easily contact us (the SEPC) in case they have any complaints about professors, classes, or the major organizations, so that we as the SEPC can fulfill our duty to be there for students.
+    - As Ji-ho, I need to be able to advertise events that are hosted outside standard academic buildings, so that I can facilitate SEPC activities in all the locations that are relevant to the department—such as CERA
+- Ochen (ISO)
+    - As Ochen, I need to receive feedback on larger scale events so that we can improve on our event for future years.
+    - As Ochen, I need to distribute tickets for the food bazaar so that not too many people sign up to our events.
+    - As Ochen, I need to gather volunteers for larger events so that I don’t overextend myself with the event so that I can prioritize my academics.
+    - As Ochen, I need to allow people to be aware of a vote that is ongoing for the next year’s cabinet members, so that we have leadership that is representative of our organization’s student body.
+- Sampson
+    - As Sampson, I need the ability to read the app so that I can use the app
+- Jessica
+    - As Jessica, I need to be able to learn what organizations exist on campus so that I can learn more about campus life and determine how I fit
+- Rūta
+    - As Rūta, I need to coordinate simultaneous events so that I can do my job effectively for multiple departments who may have overlapping events.
+- Jack
+    - As Jack, I need to be able to include students who aren’t formally leadership in my org in event management so they can learn what to do to keep the org running once I graduate.
+    - As Jack, I need to advertise some events to the whole campus community and others to just my orgs existing membership so that we can distinguish our big events from the regular meetings necessary to plan them.
+- Abby
+    - As Abby, I need to only see events that are relevant to me so I’m not overwhelmed with all the options.
+- Sarah
+    - As Sarah, I need to do get updated on any time changes or cancellations to events so that I don't miss my regular activities
+    - As Sarah, I need to be able to distinguish between different types of events so that I can easily determine which ones match the interests I have my current orgs don't meet
+- Zach
+    - As Zach, I need to know if an organization is open to new members or people just stopping in so that I know I am welcome to attend
+- almond
+    - As almond, I need to be able to delete events which have passed or are not appropriate so that events are up to date and I can remove things that are against the content policy.
+    - As almond, I need to control who can edit an event so only people in charge of it can update the details.
+#### Product Requirements: functional and non-functional requirements. How each element of this “what” will be implemented
+-  Event Creation
+    - An event can be created in-app and be posted to the app calendar.
+    - Posters, if any, can be posted and viewed on the Event Card.
+    - Collaborator organizations (or students) can be an option to be added. (Jack)
+    - A event chat with all collaborators for event preparations (stretch or out of scope).
+    - Location options should not be limited to those listed in 25live, or standard academic buildings. (Ji-ho)
+    - Tickets or a link to tickets should be able to distributed; additionally, volunteers can be gathered through the app through a link in the description or qr on the in-app poster. (Ochen)
+    - Special event tags, so that very important events are highlighted in the events tab/home page. For example: cabinet elections for ISO. (Ochen)
+    - While selecting date of event, ability to see the event in relation to other events, while also noting their size—so that many large events don’t clash. (Rūta)
+    - Distinguishing between regular, small, big, and very important events. (Jack)
+    - Compulsory tagging so normal users see “only events that are relevant” to them, or events from organizations they are not following (Abby, Jessica, Sarah).
+    - Distinguish between more open events, and between events that encourage people to “stop by.” (Zach)
+    - During creation or after creation of event, prompt RSO leader to locate on a digital map where the meeting place is. (Abby)
+    - Ability to create tentative schedules on calendar for large events. (An alternative solution to the issue, to allow organizations to post their own timeline to their organizations page)
+- Event Management & Following
+    - Updates should be able to be sent about the update to those who attended.
+    - People who “save” events, can, in their “saved events tab”, be able to opt in or out for notifications about any updates for the event (i.e., “event’s starting!”, detail changes, or any updates) (Sarah)
+    - After saving an event, the option to opt into notifications should be a pop-up so that it’s an explicit decision. (Sarah)
+    - Events should include an in-app link to the organization page so people can discover and follow organizations who host events. (Ji-ho)
+    - People should be able to see events from organizations they do not know. (Ji-ho, Jessica)
+    - Feedback for an event can be easily attained through the updates tab of an event (Ochen)
+    - Ability to share event outside of application.
+- Logistical/Administrative Requirements:
+    - Administrators of the app should be able to delete events.
+    - Users should be able to flag events with problematic descriptions, or text, so the Administrator can see it easily.
+    - Events that have passed should be automatically deleted to save space after a specified time so that feedback can be taken. (almond, Ochen)
+    - Administrators can be able to change who edit event so only people in charge of it can update details.
+#### Technical Requirements: what specs are required on backend; color palette for the values
+- Events: event cards should hold a set amount of information
+- Updates for each event should send notifications to those who have that event’s notifications toggled “on.”
+- Collaborator Chat can include non-organization members (out of scope).
+- We can consider that the color palette be a slightly different color for the creating events/editing events pages to distinguish between day-to-day app usage.
+#### Feedback (from other developers)
+- n/a
+#### Metrics
+- Are the abilities within event creation comprehensive for the RSO?
+- Are events having more average membership per event (according to each size of event?)
+
+### Epic 4: Calendar
+#### Introduction:
+- In order for users and student leadership to determine scheduling logistics, and for a visual representation of time and the business of events, a calendar will be necessary to be implemented.
+#### User Stories:
+- Abdul
+    - As Abdul, I need to notify non-members after my event is finished, in case there is extra food or drinks, so that the food we bought does not go to waste.
+- Ji-ho
+    - As Ji-ho, I need to communicate with professors about our events, so that they know what events we have and what we have planned for the semester.
+    - As Ji-ho, I need to communicate with professors about our events, so that they know what events we have and what we have planned for the semester.
+    - As Ji-ho, I need to be able to advertise events that are hosted outside standard academic buildings, so that I can facilitate SEPC activities in all the locations that are relevant to the department—such as CERA.
+- Ochen
+    - As Ochen, I need to receive feedback on larger scale events so that we can improve on our event for future years. (”feedback needed page?”)
+    - As Ochen, I need to collaborate with other SEPCS so that we can all advertise to our mailing lists. (”collaboration” tag?)
+    - As Ochen, I need to gather volunteers for larger events so that I don’t overextend myself with the event so that I can prioritize my academics. (”volunteers” tag)
+- Sampson
+    - As Sampson, I need the ability to read the app so that I can use the app. (accessibility)
+    - As Sampson, I need access to the app on non cellular devices so that I can use it even without my phone. (a calendar view available on the computer)
+- Jessica
+    - As Jessica, I need to be able to see upcoming events so that I can attend them and get involved.
+    - As Jessica, I need to be able to save events I'm interested in so that I can remember they exist. (save through calendar page easily)
+    - As Jessica, I need to be able to learn what organizations exist on campus so that I can learn more about campus life and determine how I fit. (which organizations hosting/search by category)
+- Megan
+    - As Megan, I need to be able to sort events so that I only see those related to majors.
+    - As Megan, I need to be able to see major related events so that I can attend major presentations and other related events to determine my future major.
+- Rūta
+    - As Rūta, I need to coordinate simultaneous events so that I can do my job effectively for multiple departments who may have overlapping events. (important!)
+- Jack
+    - As Jack, I need to advertise some events to the whole campus community and others to just my orgs existing membership so that we can distinguish our big events from the regular meetings necessary to plan them. (visual distinction between regular meetings and big events)
+- Abby
+    - As Abby, I need to only see events that are relevant to me so I’m not overwhelmed with all the options. (personalized set of tags)
+    - As Abby, I need a visual reference for where events are held so that I can find them even though I don’t know all the building names yet. (on event, a visual guide through a map, perhaps something in event creation which was not in the previous epic)
+- Sarah
+    - As Sarah, I need something to do on Thursday afternoons, so that I don't get bored in my dorm.
+    - As Sarah, I need to do get updated on any time changes or cancellations to events so that I don't miss my regular activities. (opt into notifications on calendar tab?)
+    - As Sarah, I need to be able to distinguish between different types of events so that I can easily determine which ones match the interests I have my current orgs don't meet. (tags system)
+- Zach
+    - As Zach, I need motivation to attend events, so that I can go out and make new friends. (attendance count? think of other ways to incentivize)
+    - As Zach, I need to know if I know anyone attending an event, so I can select ones where I won’t have to either hang out all alone or approach people I don’t know (social aspect).
+    - As Zach, I need to know if an organization is open to new members or people just stopping in so that I know I am welcome to attend. (a possible visual distinction, bust reference the campus policies)
+    - As Zach, I need to have a way to keep up to date with the events of an org I attended and liked so that I can keep attending and deepen my connections. (notifications and updates to the calendar page(?))
+- almond
+    - As almond, I need to be able to delete events which have passed or are not appropriate so that events are up to date and I can remove things that are against the content policy. (through calendar page)
+#### Product Requirements:
+- Event information
+    - expected attendance count
+    - visual location appended to the event card
+    - visual distinction between
+        - Tag System & Visuals
+    - For each of the DWM options, inclusion of tag filters.
+    - For each of the DWM options, inclusion of sorting.
+    - In settings, option to sync with outlook calendar (stretch).
+    - What kinds of tags:
+        - ..for the kind of event
+        - ..for whether a passed event is open for feedback (coded as tag?)
+        - ..for whether an upcoming event is looking for volunteers (coded as tag?, deserves own page? top of the tags?)
+        - ..for whether an upcoming event is RSVP only, and if RSVP capacity is complete, marked differently (or removed) on calendar.
+    - Important tags:
+        - Popularity:
+            - number of people saved for particular event (in-app)
+            - max people capacity
+        - fun
+        - study break
+        - collaboration
+        - large-scale event
+    - Ability to share event outside of application. 
+- Daily view
+    - day-progress bar indication (eg. based on time of day, shows different time)
+    - ability to select other days of the week
+    - ability to switch between weeks
+    - ability to switch between DWM intuitively and easily
+    - ability to select tags
+    - ability to switch to current day
+    - if day is empty, ability to go to “next busy day”
+- Weekly view
+    - highlight current day/switch to current week option
+    - ability to select different weeks
+    - ability to switch between DWM intuitively and easily
+    - ability to select tags
+    - if week has no events, ability to go to “next booked week”
+- Monthlyview
+    - ability to switch months/show current month option
+    - visibility for each of the days (some visual note of how packed a day is)
+    - if week has no events, ability to go to “next booked week”
+    - if no available next events, say “no more events”/”return to current day”
+#### Technical Requirements:
+- A tags dataclass (grouping of sorts)
+- An events dataclass (grouping of sorts)
+- Space management for too old of events
+- Feedback for events (embedded, or a selected option for an event?): some sort of form or flow for getting pages done.
+- Color code same as events homepage
+#### Feedback (for this epic):
+- To do: please let me know what you think!
+- Note-I probably need more in the technical requirements
+#### Metrics:
+- Ease of use through user testing.
+- Success of implementation of calendar.
+- Integration of personal outlook calendar
 
 ## 5.3: Product Roadmap
 
