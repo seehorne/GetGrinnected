@@ -342,47 +342,47 @@ Collaboration, Outreach, Event Creation, Event Management, and Event Updates, fo
 
 ## 5.3: Product Roadmap
 ### Home Page (Epic 1)
-Start Epic 1 3/31/25
-UI Designed in Kotlin 4/2/25
-UI Designed in Swift  4/2/25
-Have data scraping from grinnell Events 4/4/25 
-Have Data managed in a reasonable format 4/7/25
-Data visible in real events on the homepage when app is used 4/9/25
-Final test on Epic 1 for demo 4/9/25
-Finish Epic 1 4/9/25 hard deadline by 4/11/25
+- Start Epic 1 3/31/25
+- UI Designed in Kotlin 4/2/25
+- UI Designed in Swift  4/2/25
+- Have data scraping from grinnell Events 4/4/25 
+- Have Data managed in a reasonable format 4/7/25
+- Data visible in real events on the homepage when app is used 4/9/25
+- Final test on Epic 1 for demo 4/9/25
+- Finish Epic 1 4/9/25 hard deadline by 4/11/25
 
 ### Profile Page (Epic 2)
-Start Epic 2 3/31/25
-UI Designed in Kotlin 4/11/25
-UI Designed in Swift  4/11/25
-Ability to log out of profile 4/14/25
-Ability to change and save profile image 4/16/25
-Profile page saves data to database with unique features tied to account 4/16/25
-Create accessible settings for light dark mode 4/18/25
-Create accessible settings for text size 4/18/25
-Create accessible settings for color blindness paletes 4/18/25
-Accessibility settings save and effect every page 4/21/25
-Finish Epic 2 4/21/25 hard deadline by 4/25/25
+- Start Epic 2 3/31/25
+- UI Designed in Kotlin 4/11/25
+- UI Designed in Swift  4/11/25
+- Ability to log out of profile 4/14/25
+- Ability to change and save profile image 4/16/25
+- Profile page saves data to database with unique features tied to account 4/16/25
+- Create accessible settings for light dark mode 4/18/25
+- Create accessible settings for text size 4/18/25
+- Create accessible settings for color blindness paletes 4/18/25
+- Accessibility settings save and effect every page 4/21/25
+- Finish Epic 2 4/21/25 hard deadline by 4/25/25
 
 ### Event Creation (Epic 3)
-Start Epic 3  4/25/25
-UI Designed in Kotlin 4/28/25
-UI Designed in Swift  4/28/25
-Org leader accounts able to be set up 5/2/25
-Able to create and save event data to our database 5/5/25
-Final Testing of Epic 3 5/7/25
-Finish Epic 3 5/7/25 hard deadline by 5/9/25 
+- Start Epic 3  4/25/25
+- UI Designed in Kotlin 4/28/25
+- UI Designed in Swift  4/28/25
+- Org leader accounts able to be set up 5/2/25
+- Able to create and save event data to our database 5/5/25
+- Final Testing of Epic 3 5/7/25
+- Finish Epic 3 5/7/25 hard deadline by 5/9/25 
 
 ### Calendar (Epic 4) 
-Start Epic 4 3/31/25
-UI Designed in Kotlin 4/4/25
-UI Designed in Swift  4/4/25
-Can switch between day week and month view 4/4/25
-Have data scraping from grinnell Events 4/4/25 
-Have Data managed in a reasonable format 4/7/25
-Data visible in real events on the Calendar 4/9/25
-Final test on Epic 4 for demo 4/9/25
-Finish Epic 4 4/9/25 hard deadline by 4/11/25
+- Start Epic 4 3/31/25
+- UI Designed in Kotlin 4/4/25
+- UI Designed in Swift  4/4/25
+- Can switch between day week and month view 4/4/25
+- Have data scraping from grinnell Events 4/4/25 
+- Have Data managed in a reasonable format 4/7/25
+- Data visible in real events on the Calendar 4/9/25
+- Final test on Epic 4 for demo 4/9/25
+- Finish Epic 4 4/9/25 hard deadline by 4/11/25
 
 # Part 6: Continuous Integration Plan
 
