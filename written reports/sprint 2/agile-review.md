@@ -1,7 +1,7 @@
 # Sprint 2 Review Report
 ## Period 3/3 - 3/30
 
-To preface a majority of the work completed this sprint was documentation/planning/preparations to set our team up for success in the following sprint towards the MVP. 
+To preface a majority of the work completed this sprint was documentation/planning/preparations to set our team up for success in the following sprint towards the MVP. So from a customer perspective most of the work we did is not entirely visable outside the diagrams, drawings/visuals, and written documents listed in the specified files below. 
 
 ### Sprint Requirements
 - We established coding guidelines (See Developer Guidelines)
@@ -12,14 +12,17 @@ To preface a majority of the work completed this sprint was documentation/planni
 - Reevalutated Team Group norms for a smoother and more intentional collaborative work environment.
 - Wrote Epics to structure our work for the following sprints (See sprint-journal.md)
 - Diagramed a Product Roadmap to depict and develop a timeline for our product in the coming sprints (See sprint-journal.md)
-- 
+- Established a documented Continuous Integration Plan (See sprint-journal.md and README.md) 
+- Implemented the start of our testing automation and CI.
 
 ### Additional Tasks Completed
 - Obtained access to a cloud hosting service for deploying/hosting our application and database (Reclaim Cloud Services)
+- Configured Reclaim hosting.
+- Attempted to setup URL to access hosted server.
 - Implemented an event scraper that allows us to scrape event data from the events.grinnell.edu site and store as a json. 
-- (almond describe work they have done, just not entirely sure the best way to word that section could be multiple bullets if necessary).
 - Setup database and table configurations on our hosting service.
 - Implemented a connection process from our Application node to our Database node.
+- Completed Kotlin, Swift and Node tutorials.
 
 ### GIT Diff Link
 This diff shows the changes we made to the requirements document over the course of this sprint: [Starting diff is 32b826a](TO DO).
