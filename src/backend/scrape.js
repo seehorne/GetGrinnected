@@ -3,7 +3,7 @@ const url = 'https://events.grinnell.edu/live/json/events/response_fields/all/pa
 
 function processExisting(){
   try{
-    events = fs.readFileSync('event_data.json', 'utf-8');
+    events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
     current_events = JSON.parse(events)
       existingIDs = new Set();
       if (current_events.data && Array.isArray(current_events.data)){
@@ -81,5 +81,6 @@ async function scrapeData(url) {
   });
 }
 
+module.exports = { processExisting };
 scrapeData(url)
   
