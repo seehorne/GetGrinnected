@@ -20,6 +20,8 @@
 		0CBBC3FB2D77DD0B002E482E /* EventCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */; };
 		0CBBC3FD2D77E2A2002E482E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */; };
 		0CBBC4012D77E62B002E482E /* MainNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC4002D77E62B002E482E /* MainNavView.swift */; };
+		4CD5D1AF2D9A0178001E91BD /* GetGrinnectedCITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD5D1AE2D9A016B001E91BD /* GetGrinnectedCITests.swift */; };
+		4CD5D1B12D9A01B2001E91BD /* GetGrinnectedUICITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD5D1B02D9A0193001E91BD /* GetGrinnectedUICITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationView.swift; sourceTree = "<group>"; };
 		0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		0CBBC4002D77E62B002E482E /* MainNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavView.swift; sourceTree = "<group>"; };
+		4CD5D1AE2D9A016B001E91BD /* GetGrinnectedCITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGrinnectedCITests.swift; sourceTree = "<group>"; };
+		4CD5D1B02D9A0193001E91BD /* GetGrinnectedUICITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGrinnectedUICITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,7 @@
 		0CBBC3D82D77AB9B002E482E /* GetGrinnectedTests */ = {
 			isa = PBXGroup;
 			children = (
+				4CD5D1AE2D9A016B001E91BD /* GetGrinnectedCITests.swift */,
 				0CBBC3D92D77AB9B002E482E /* GetGrinnectedTests.swift */,
 			);
 			path = GetGrinnectedTests;
@@ -139,6 +144,7 @@
 		0CBBC3E22D77AB9B002E482E /* GetGrinnectedUITests */ = {
 			isa = PBXGroup;
 			children = (
+				4CD5D1B02D9A0193001E91BD /* GetGrinnectedUICITests.swift */,
 				0CBBC3E32D77AB9B002E482E /* GetGrinnectedUITests.swift */,
 				0CBBC3E52D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift */,
 			);
@@ -291,6 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CBBC3DA2D77AB9B002E482E /* GetGrinnectedTests.swift in Sources */,
+				4CD5D1AF2D9A0178001E91BD /* GetGrinnectedCITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +307,7 @@
 			files = (
 				0CBBC3E62D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift in Sources */,
 				0CBBC3E42D77AB9B002E482E /* GetGrinnectedUITests.swift in Sources */,
+				4CD5D1B12D9A01B2001E91BD /* GetGrinnectedUICITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
