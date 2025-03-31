@@ -20,4 +20,4 @@ jobs:
       run: swift build -v
     - name: Run tests
       run: swift test -v
-      working-directory: ./src/ios/GetGrinnected/TODO
+      working-directory: ./src/ios/GetGrinnected/MyBuildToolPlugin
