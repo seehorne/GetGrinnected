@@ -38,9 +38,9 @@ To briefly discuss our plans for a technical implementation, we hope to build fr
 
 ## User Roles/Permissions
 
-- Normal user: Can view events
-- Event creator: Can create and edit events for the group they manage
-- System admin: Can edit or delete events as needed, content moderation?
+- **Individual:** Can view events
+- **Org:** Can create and edit events for the org they are part of
+- **Admin:** Can edit or delete events as needed, regargless of the creator
 
 # User Personas and User Stories
 
@@ -153,25 +153,25 @@ almond is an administrator for the tool.
 
 - Shows all events currently happening at Grinnell (scraping information off of 25 live)
 - Create a user account (Grinnell emails only?)
-- Allows users to sign up for student organization email lists
-- Student Org leaders being able to create events directly on the app
-- Allow user accounts to friend each other
+- ~Allows users to sign up for student organization email lists~
+- ~Student Org leaders being able to create events directly on the app~
+- ~Allow user accounts to friend each other~
 - Events sorted by category
 
 ### Updates after stakeholder meetings
 
 - Users Can search for events on Home page and in callender
-- Users Can favorite events to more easily find events they like
-- Event Creators can add images to their events
-- Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events
-- Event descriptions contain images 
+- ~Users Can favorite events to more easily find events they like~
+- ~Event Creators can add images to their events~
+- ~Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events~
+- ~Event descriptions contain images~
 - Event descriptions contain tags 
 - Bottom bar for easy navigation between windows
 - Highlights window you are on in bottom bar
-- Allows for changing between profiles in settings
+- ~Allows for changing between profiles in settings~
 - email verification for profile creation 
-- Following an org in profile
-- Org list findable under profile that share information on what student orgs exist and what they do
+- ~Following an org in profile~
+- ~Org list findable under profile that share information on what student orgs exist and what they do~
 - Color system chosen to be accesable to color blindness with options for different types of color blindness
 - Screen reader compatible
 
@@ -195,6 +195,17 @@ almond is an administrator for the tool.
 - Users Can turn on notifications for events they favorite
 - Tags in event descriptions can be clicked to sort current page  
 
+### Post Break Readjustment 
+- Student Org leaders being able to create events directly on the app
+- Allow user accounts to friend each other
+- Event Creators can add images to their events
+- Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events
+- Event descriptions contain images 
+- Allows for changing between profiles in settings
+- Following an org in profile
+- Org list findable under profile that share information on what student orgs exist and what they do
+- Allows users to sign up for student organization email lists
+- Users Can favorite events to more easily find events they like
 
 ## Out of Scope
 
@@ -634,6 +645,80 @@ Cancelling adding an account:
 2. Instead of tapping "log in" or "sign up", the user taps "cancel".
 3. The user is brought back to the profile page.
 4. No change to logged in accounts is made.
+
+# Software Architecture
+
+These are the major components of this software:
+
+- A **server** that manages the base truth of what events are shown to users. It must store events and communicate with clients, which can add and view events.
+- Two **client apps** for iOS and Android, which provide a user view into events.
+- A **event finder** component which collects events from official Grinnell sources and populates the database with them.
+
+Here is a diagram specifying more of the architecture described above. It focuses on the server stack because the server is where most computational work will take place. We are choosing to do this in order to minimize duplicated code between clients for iOS and Android.
+
+![Architecture Diagram](sprint%202/images/architecture.png)
+
+# Data Modeling
+
+## Written Explanation
+For the data we will be handling in this project it will come from 2 sources:
+
+- 25Live
+    - Will only include event information
+- User Input
+    - User information
+    - Org information
+    - Event information
+
+We will manage the creation, storage, manipulation and retrieval of this information via a database in our backend utilizing MySQL in conjunction with Node.js. The database will be composed of the following tables (with their corresponding information):
+
+### Events Table
+- <ins>EventID</ins>: <*Unique Integer*> generated at the creation or addition of a new Event.
+- Name: <*String*> containing the Name of the Event.
+- Description: <*String*> containing the Description of the Event.
+- Location: <*String*> containing the Location of the Event.
+- Organizations: <*List of Strings*> containing the name/s of the Orgs associated with the event.
+- RSVP?: <*Binary*> associated with whether the event requires RSVPing.
+- Date: <*Date Value*> containing the dd/mm/yyyy of the Event.
+- Time: <*Time Value*> containing the hh/mm of the Event.
+- Tags: <*List of Strings*> containing tags associated with the Event.
+- Private?: <*Binary*> associated with whether the event is private.
+- Repeats?: <*Binary*> associated with whether the event repeats.
+- Image: <*String*> containing the image file (FORMAT NOT DECIDED YET).
+- Draft?: <*Binary*> associated with whether the event is a draft.
+
+### Accounts Table
+- <ins>Username</ins>: <*Unique String*> containing the name for the account.
+- <ins>AccountID</ins>: <*Unique Integer*> generated at the creation of a new Account.
+- <ins>Email</ins>: <*Unique String*> containing the email associated with the account.
+- Password: <*String*> containing the hashed and salted version of the account's password.
+- Salt: <*String*> containing the characters added to salt the input password.
+- Profile Picture: <*String*> containing the image file (FORMAT NOT DECIDED YET).
+- Favorited Events: <*List of Integers*> containing the EventIDs of favorited Events.
+- Favorited Orgs: <*List of Integers*> containing the AccountIDs of favorited Orgs.
+- Drafted Events: <*List of Integers*> containing the EventIDs of drafted Events.
+- Favorited Tags: <*List of Strings*> containing favorited tags.
+- Description: <*String*> of the Description associated with the Org.
+- Role: <*Enum*> associated with what role the user has: Individual, Org, or Admin.
+  - If something similar to an enum is not reasonable, this could be simplified to two boolean values for isOrg and isAdmin. They would be exclusive fields.
+
+Additionally, we hope to allow seamless switching from accounts (without the need to log back in every time). In order to accomplish this we intend to store information as to what Accounts the user has logged into on the client locally to avoid unintended account sharing.
+
+## Database Schema
+
+<img src= "sprint%202\images\Database_Diagram.jpeg" width="100%">
+
+## Documentation Plan
+
+One big part of our documentation will be a wiki that gives an overview of what users can do with the app. This would include these categories:
+
+- What different pages do (e.g. the Calendar page)
+- What different user roles can do
+- Guides to doing common tasks (e.g. Making an event)
+
+The wiki would be linked through some part of the app (likely the Profile page), and also publically accessible through our website.
+
+We also plan to have help menus available in the app, that let you figure out stuff like "wait what's this button do?" This would provide a more immediate source of clarification, and doesn't require exploring on your own.
 
 # Citations
 

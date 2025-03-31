@@ -3,3 +3,6 @@
 
 # MkDocs build dir
 /site/
+
+# Node.js
+node_modules
