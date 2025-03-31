@@ -29,10 +29,10 @@ async function scrapeData(url) {
     return response.json();
   })
   .then(async events => {
-    existing_events = fs.readFileSync('event_data.json', 'utf-8');
+    existing_events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
     lines = existing_events.split('\n');
     updatedLines = lines.slice(0, -2); //remove last two lines
-    fs.writeFileSync('event_data.json', updatedLines.join('\n'));
+    fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'));
     counter = 0;
     if (events.data && Array.isArray(events.data)) {
       events.data.forEach(event => {
@@ -61,7 +61,7 @@ async function scrapeData(url) {
             stringify_event = ',\n'+stringify_event;
         }
         counter++;
-        appendPromises.push(fs.appendFile('event_data.json', stringify_event, function(err){
+        appendPromises.push(fs.appendFile('./src/backend/event_data.json', stringify_event, function(err){
           if(err) throw err;
           console.log('WRITING TO JSON')
           }));
@@ -71,7 +71,7 @@ async function scrapeData(url) {
     }
     await Promise.all(appendPromises);
     const close_file = '\n]\n}'
-    fs.appendFile('event_data.json', close_file, function(err){
+    fs.appendFile('./src/backend/event_data.json', close_file, function(err){
       if(err) throw err;
       console.log('WRITING TO JSON')
       });
@@ -81,6 +81,6 @@ async function scrapeData(url) {
   });
 }
 
-module.exports = { processExisting };
-scrapeData(url)
+module.exports = { processExisting, scrapeData, url};
+//scrapeData(url)
   

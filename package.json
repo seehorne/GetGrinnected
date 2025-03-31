@@ -4,6 +4,5 @@
   },
   "scripts": {
     "tests": "node ./src/backend/test/backend_tests.js"
-  },
-  "type": "module"
+  }
 }
