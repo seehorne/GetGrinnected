@@ -24,5 +24,6 @@ To preface a majority of the work completed this sprint was documentation/planni
 - Implemented a connection process from our Application node to our Database node.
 - Completed Kotlin, Swift and Node tutorials.
 
-### GIT Diff Link
-This diff shows the changes we made to the requirements document over the course of this sprint: [Starting diff is 32b826a](TO DO).
+### Git Diff Link
+
+This diff shows the changes we made to the requirements document over the course of this sprint: <https://github.com/seehorne/GetGrinnected/compare/sprint1..sprint2>
