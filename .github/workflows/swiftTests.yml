@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: xcodebuild -scheme GetGrinnected build -allowProvisioningUpdates 
+      run: xcodebuild -scheme GetGrinnected build CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
       working-directory: ./src/ios/GetGrinnected
     - name: Run tests
       run: swift test -v
