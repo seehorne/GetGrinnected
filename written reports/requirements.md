@@ -627,7 +627,7 @@ The different parts of the server are all going to be written in node.js, but th
 ![Architecture Diagram](sprint%202/images/Architecure_Diagram.jpg)
 
 # Software Design 
-![Software Componets and Responsibilities](sprint%202/images/SoftwareComponents.jpg)
+![Software Componets and Responsibilities](sprint%202/images/SoftwareComponets.jpg)
 ![Software Interfaces](sprint%202/images/SoftwareInterfaces.jpg)
 # Data Modeling
 
