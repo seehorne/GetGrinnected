@@ -15,7 +15,7 @@ on:
 jobs:
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest # also a random hunch, same https://github.com/SORMAS-Foundation/SORMAS-Project/blob/development/.github/workflows/sormas_app_ci.yml
 
     steps:
     - uses: actions/checkout@v4
