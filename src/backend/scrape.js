@@ -1,6 +1,12 @@
 const fs = require("fs");
 const url = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
 
+/**
+ * processExisting
+ * 
+ * Processes already scraped events to create a set of their IDs
+ * @returns Set of IDs associated with pre-existing events
+ */
 function processExisting(){
   try{
     events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
@@ -18,6 +24,13 @@ function processExisting(){
   }
 }
 
+/**
+ * scrapeData
+ * 
+ * Scrapes JSON data of calendar events from specified URL
+ * Repackages relevant data to JSON structure stored in event_data.json
+ * @param {*} url -> url to data to be scraped, assumes JSON data
+ */
 async function scrapeData(url) {
   existingIDs = await processExisting();
   const appendPromises = [];
