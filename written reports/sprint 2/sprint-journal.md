@@ -109,7 +109,7 @@ There should be an easy way to see what is happening on campus so that students 
 - Can be sorted to help students find events of interest
 - Events have location time and description
 #### Technical Requirements:
-- Scrape data from 25 live
+- Scrape data from Grinnell Events
 - Format data into easily understood format
 - Run on IOS and android systems
 - Loads quickly 
@@ -236,8 +236,6 @@ Collaboration, Outreach, Event Creation, Event Management, and Event Updates, fo
 - Updates for each event should send notifications to those who have that event’s notifications toggled “on.”
 - Collaborator Chat can include non-organization members (out of scope).
 - We can consider that the color palette be a slightly different color for the creating events/editing events pages to distinguish between day-to-day app usage.
-#### Feedback (from other developers)
-- n/a
 #### Metrics
 - Are the abilities within event creation comprehensive for the RSO?
 - Are events having more average membership per event (according to each size of event?)
@@ -328,13 +326,10 @@ Collaboration, Outreach, Event Creation, Event Management, and Event Updates, fo
     - if no available next events, say “no more events”/”return to current day”
 #### Technical Requirements:
 - A tags dataclass (grouping of sorts)
-- An events dataclass (grouping of sorts)
+- An ability to search events
 - Space management for too old of events
 - Feedback for events (embedded, or a selected option for an event?): some sort of form or flow for getting pages done.
 - Color code same as events homepage
-#### Feedback (for this epic):
-- To do: please let me know what you think!
-- Note-I probably need more in the technical requirements
 #### Metrics:
 - Ease of use through user testing.
 - Success of implementation of calendar.
