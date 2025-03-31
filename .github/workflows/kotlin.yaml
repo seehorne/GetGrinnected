@@ -27,13 +27,10 @@ jobs:
         sudo udevadm control --reload-rules
         sudo udevadm trigger --name-match=kvm
 
-    - name: Change to android directory
-      run: cd ./src/android/GetGetinnected/MyApplication
-
     # https://github.com/marketplace/actions/android-emulator-runner
     - name: Run tests
-      #working-directory: ./src/android/GetGrinnected/MyApplication
       uses: reactivecircus/android-emulator-runner@v2
       with:
+        working-directory: ./src/android/GetGrinnected/MyApplication
         api-level: 35
         script: ./gradlew connectedAndroidTest
