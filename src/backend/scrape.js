@@ -4,10 +4,10 @@ const url = 'https://events.grinnell.edu/live/json/events/response_fields/all/pa
 function processExisting(){
   try{
     events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
-    current_events = JSON.parse(events)
+    currentEvents = JSON.parse(events)
       existingIDs = new Set();
-      if (current_events.data && Array.isArray(current_events.data)){
-        current_events.data.forEach(event =>{
+      if (currentEvents.data && Array.isArray(currentEvents.data)){
+        currentEvents.data.forEach(event =>{
           existingIDs.add(event.ID);
       });
       return existingIDs;
@@ -29,8 +29,8 @@ async function scrapeData(url) {
     return response.json();
   })
   .then(async events => {
-    existing_events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
-    lines = existing_events.split('\n');
+    existingEvents = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    lines = existingEvents.split('\n');
     updatedLines = lines.slice(0, -2); //remove last two lines
     fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'));
     counter = 0;
@@ -38,40 +38,41 @@ async function scrapeData(url) {
       events.data.forEach(event => {
         if (!existingIDs.has(event.id)){
         existingIDs.add(event.id);
-        event_info = {};
-        event_info["Title"] = event.title;
-        event_info["Date"] = event.date;
-        event_info["Time"] = event.date_time;
-        event_info["StartTimeISO"]= event.date_iso;
-        event_info["EndTimeISO"]= event.date2_iso;
-        if (event_info.StartTimeISO===null){
-          event_info["AllDay?"] = true;
+        eventInfo = {};
+        eventInfo["Title"] = event.title;
+        eventInfo["Date"] = event.date;
+        eventInfo["Time"] = event.date_time;
+        eventInfo["StartTimeISO"]= event.date_iso;
+        eventInfo["EndTimeISO"]= event.date2_iso;
+        if (eventInfo.StartTimeISO===null){
+          eventInfo["AllDay?"] = true;
         }
         else{
-          event_info["AllDay?"] = false;
+          eventInfo["AllDay?"] = false;
         }
-        event_info["Location"] = event.location;
-        event_info["Description"] = event.description ? event.description.replace(/<[^>]+>/g, '') : 'No description available';
-        event_info["Audience"] = event.event_types_audience;
-        event_info["Org"] = event.custom_organization;
-        event_info["Tags"]= event.tags;
-        event_info["ID"]= event.id;
-        stringify_event = JSON.stringify(event_info);
+        eventInfo["Location"] = event.location;
+        eventInfo["Description"] = event.description ? event.description.replace(/<[^>]+>/g, '') : 'No description available';
+        eventInfo["Audience"] = event.event_types_audience;
+        eventInfo["Org"] = event.custom_organization;
+        eventInfo["Tags"]= event.tags;
+        eventInfo["ID"]= event.id;
+        stringifyEvent = JSON.stringify(eventInfo);
         if (counter != 0 || lines.length >= 2){ //not first event to be added ever
-            stringify_event = ',\n'+stringify_event;
+            stringifyEvent = ',\n'+stringifyEvent;
         }
         counter++;
-        appendPromises.push(fs.appendFile('./src/backend/event_data.json', stringify_event, function(err){
-          if(err) throw err;
-          console.log('WRITING TO JSON')
+        appendPromises.push(fs.appendFile('./src/backend/event_data.json', 
+          stringifyEvent, function(err){
+            if(err) throw err;
+            console.log('WRITING TO JSON')
           }));
         }
       }
     );
     }
     await Promise.all(appendPromises);
-    const close_file = '\n]\n}'
-    fs.appendFile('./src/backend/event_data.json', close_file, function(err){
+    const CLOSEFILE = '\n]\n}'
+    fs.appendFile('./src/backend/event_data.json', CLOSEFILE, function(err){
       if(err) throw err;
       console.log('WRITING TO JSON')
       });
