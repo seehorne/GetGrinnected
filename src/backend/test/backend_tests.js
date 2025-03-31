@@ -15,7 +15,8 @@ test('All events are unique by ID', { concurrency: true }, t => {
     assert.strictEqual(numIDs,numEvents)
   });
 
-  test('All events have start time before end time OR marked as all day', { concurrency: false }, t => {
+  test('All events have start time before end time OR marked as all day', 
+    { concurrency: false }, t => {
     events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
     currentEvents = JSON.parse(events);
     numNonCompliant = 0;
@@ -35,7 +36,8 @@ test('All events are unique by ID', { concurrency: true }, t => {
     assert.strictEqual(0,numNonCompliant);
   });
 
-  test('All events have an associated organization', { concurrency: false }, t => {
+  test('All events have an associated organization', { concurrency: false }, 
+    t => {
     events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
     currentEvents = JSON.parse(events);
     numNonCompliant = 0;
@@ -50,7 +52,8 @@ test('All events are unique by ID', { concurrency: true }, t => {
     assert.strictEqual(0,numNonCompliant);
   });
 
-  test('After scraping, there are as many or more events as before (no lost events)', { concurrency: true }, async t => {
+  test('After scraping, there are as many or more events as before (no lost events)',
+    { concurrency: true }, async t => {
     events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
     ogEvents = JSON.parse(events);
     beforeSize = ogEvents.data.length;
