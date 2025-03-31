@@ -1,7 +1,7 @@
 # Sprint 2 Review Report
 ## Period 3/3 - 3/30
 
-To preface a majority of the work completed this sprint was documentation/planning/preparations to set our team up for success in the following sprint towards the MVP. So from a customer perspective most of the work we did is not entirely visable outside the diagrams, drawings/visuals, and written documents listed in the specified files below. 
+To preface a majority of the work completed this sprint was documentation/planning/preparations to set our team up for success in the following sprint towards the MVP. So from a customer perspective most of the work we did is not entirely viable outside the diagrams, drawings/visuals, and written documents listed in the specified files below. 
 
 ### Sprint Requirements
 - We established coding guidelines (See Developer Guidelines)
