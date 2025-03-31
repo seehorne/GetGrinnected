@@ -18,7 +18,7 @@ struct GetGrinnectedTestsCI {
             mainNavView = .init()
         }
         
-        // Tests that
+        // Tests that the main view has started
         @Test("Main navigation view starts") func MainNavViewStarts() throws {
             #expect(mainNavView != nil)
         }
