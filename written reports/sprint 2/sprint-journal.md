@@ -15,7 +15,7 @@ We ended up deciding to make the database an entire layer in order to make switc
 
 ## Decision 2
 
-We decided to classify the scraper component on the same layer as the business logic layer, rather than some other layer.
+We decided to classify the scraper component just above the data access layer, rather than further up.
 
 **Alternative:** In particular, one alternative we considered was placing the scraper on the same layer as the clients. That is, it would run unrelated to the server and make API requests.
 
