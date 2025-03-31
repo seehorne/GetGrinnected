@@ -382,3 +382,7 @@ Collaboration, Outreach, Event Creation, Event Management, and Event Updates, fo
 # Part 6: Continuous Integration Plan
 
 # Part 7: Test Automation and Continuous Integration Setup
+
+Here's a screenshot of the tests running! WOOOOOO!
+
+![](images/tests_succeeding.jpg)
