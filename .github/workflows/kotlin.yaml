@@ -32,5 +32,5 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         working-directory: ./src/android/GetGrinnected/MyApplication
-        api-level: 35
+        api-level: 28 # TODO: TESTING BASED ON https://github.com/SORMAS-Foundation/SORMAS-Project/blob/development/.github/workflows/sormas_app_ci.yml
         script: ./gradlew connectedAndroidTest
