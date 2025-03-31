@@ -383,6 +383,10 @@ Collaboration, Outreach, Event Creation, Event Management, and Event Updates, fo
 
 # Part 7: Test Automation and Continuous Integration Setup
 
-Here's a screenshot of the tests running! WOOOOOO!
+Here's a screenshot of the Node tests running! WOOOOOO!
 
 ![](images/tests_succeeding.jpg)
+
+And the Kotlin tests.
+
+![](images/kotlin_test_run.png)
