@@ -3,11 +3,15 @@
 
 name: Node.js CI
 
+# run on pull requests targeting main
 on:
-  push:
-    branches: [ "main", "node-workflow" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ $default-branch ]
+    paths:
+      - src/ios/**
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   test:
