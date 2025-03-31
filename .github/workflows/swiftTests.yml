@@ -20,4 +20,4 @@ jobs:
       run: xcodebuild -scheme GetGrinnected -destination 'platform=iOS Simulator,name=iPhone 15' build
     - name: Run tests
       run: swift test -v
-      working-directory: ./src/ios/GetGrinnected/MyBuildToolPlugin
+      working-directory: ./src/ios/GetGrinnected
