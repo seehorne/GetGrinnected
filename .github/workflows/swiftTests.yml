@@ -21,6 +21,6 @@ jobs:
       working-directory: ./src/ios/GetGrinnected
     - name: Run tests
       run: |
-        xcrun simctl boot "iPhone 15 Pro"
-        xcodebuild -scheme GetGrinnected -destination "platform=iOS Simulator,OS=17.5,name=iPhone 15 Plus" test CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        xcrun simctl boot "iPhone 16"
+        xcodebuild -scheme GetGrinnected -destination "platform=iOS Simulator,OS=18.2,name=iPhone 16" test CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
       working-directory: ./src/ios/GetGrinnected
