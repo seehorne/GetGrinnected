@@ -66,3 +66,40 @@ Now you can add tests to your testing file using this site <https://developer.ap
 When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
 
 Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
+
+## Commit Messages
+
+This is an example of a good commit message.
+
+```
+Implement a basic homescreen in Swift
+
+Currently, the only buttons on the homescreen are "calendar" and
+"favorites", and they only go to blank pages.
+```
+
+Here are features you should follow in your commit messages.
+
+- First line is a short, easily readable description. Try to keep it below 50 characters.
+- First line uses imperative mode ("Implement", as compared to "Implementing" or  "Implements")
+  - It may be helpful to think of this as answering the question "What does this commit do?"
+- Any other necessary description is written below, separated by one line. (optional)
+
+## Branching and Merging
+
+There are three branches that will always exist:
+
+- `main` - production branch. 2 approvals required to merge.
+- `dev` - development branch
+- `writing` - assignment writing and documentation branch
+
+Feel free to create feature branches for your work, especially if it's more than a single commit or two. Make sure to merge these branches into `dev` or `writing` as relevant before attempting to merge them into `main`.
+
+## Kotlin Guidelines <https://developer.android.com/kotlin/style-guide>
+We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability.  
+
+## Swift Guidelines <https://google.github.io/swift/>
+We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability. 
+
+## Node Guidelines <https://github.com/felixge/node-style-guide>
+We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability. 
