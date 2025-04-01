@@ -26,6 +26,9 @@ The structure of our Repository is as follows:
     - `backend` - Node.js (back-end)
 - `image-utils` - images/visual elements app will use
 
+- `mkdocs.yml` - MKDocs configuration file
+- `docs/` - Documentation pages
+
 # Issue Tracking
 
 [Trello](https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected)
