@@ -1,14 +1,21 @@
+#
 # IntelliJ IDEA config
+#
 .idea
 
+#
 # Swift
-src/ios/.DS_Store
-src/.DS_Store
-src/ios/GetGrinnected/.DS_Store
+#
 .DS_Store
+# user data for each person who opens xcode
+xcuserdata/**
 
+#
 # MkDocs build dir
+#
 /site/
 
+#
 # Node.js
+#
 node_modules
