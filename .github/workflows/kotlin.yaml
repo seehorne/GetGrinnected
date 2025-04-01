@@ -2,8 +2,6 @@ name: Kotlin CI
 
 # run on pull requests targeting main
 on:
-  push:
-    branches: [ 'Kotlin-workflow' ] # TODO: DELETE TEMP
   pull_request:
     branches: [ $default-branch ]
     paths:
