@@ -44,10 +44,13 @@ async function scrapeData(url) {
   .then(async events => {
     existingEvents = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
     lines = existingEvents.split('\n');
+    console.log(lines.length);
+    anyExistingEvents = lines.length > 4;
+    zeroEventsNotCorrupt = lines.length === 4;
     updatedLines = lines.slice(0, -2); //remove last two lines
     fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'));
-    counter = 0;
     if (events.data && Array.isArray(events.data)) {
+      counter = 0;
       events.data.forEach(event => {
         if (!existingIDs.has(event.id)){
         existingIDs.add(event.id);
@@ -70,16 +73,19 @@ async function scrapeData(url) {
         eventInfo["Tags"]= event.tags;
         eventInfo["ID"]= event.id;
         stringifyEvent = JSON.stringify(eventInfo);
-        if (counter != 0 || lines.length >= 2){ //not first event to be added ever
-            stringifyEvent = ',\n'+stringifyEvent;
+        if (anyExistingEvents||counter !=0){ //not first event to be added ever
+          stringifyEvent = ',\n'+stringifyEvent;
         }
-        counter++;
-        appendPromises.push(fs.appendFile('./src/backend/event_data.json', 
+        else if (zeroEventsNotCorrupt){
+          stringifyEvent = '\n'+stringifyEvent;
+        }
+        appendPromises.push(fs.appendFileSync('./src/backend/event_data.json', 
           stringifyEvent, function(err){
             if(err) throw err;
             console.log('WRITING TO JSON')
           }));
         }
+        counter++;
       }
     );
     }
