@@ -27,6 +27,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * A composable function that represents the Login screen of our application.
+ *
+ * This screen includes input fields for username and password (That are both Strings),
+ * along with a Login button (To navigate to the homepage/complete account creation)
+ * and a sign up navigation option for users who need to create an account.
+ *
+ * @param onLoginClick A lambda function that is triggered when the "Login" button is clicked used
+ * by our navigation flow.
+ * @param onSignupClick A lambda function that is triggered when the "Sign up" button is clicked used
+ * by our navigation flow.
+ */
+
 @Composable
 fun LoginScreen(onLoginClick: () -> Unit, onSignupClick: () -> Unit) {
     var username by remember { mutableStateOf("") }

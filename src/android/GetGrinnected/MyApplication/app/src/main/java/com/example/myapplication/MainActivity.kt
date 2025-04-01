@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.ui.Alignment
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 
-
+/**
+ * Our main used to run and create our app. Currently utilizes the AppNavigator function at
+ * creation.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +25,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * A composable function used to navigate based on the currentScreen. (This utilizes the lambda function
+ * parameters we made for the login, welcome and signup screens).
+ */
 
 @Composable
 fun AppNavigator() {

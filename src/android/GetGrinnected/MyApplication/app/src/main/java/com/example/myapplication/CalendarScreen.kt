@@ -7,7 +7,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalOf
+
+/**
+ * A composable function that represents the Calendar screen of our app. (More to come)
+ *
+ * @param modifier Modifier to be applied to the screen layout.
+ */
 
 @Composable
 fun CalendarScreen (modifier: Modifier = Modifier){

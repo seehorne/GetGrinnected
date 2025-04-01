@@ -19,6 +19,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
+/**
+ * A composable function that displays the main page of the app with a bottom navbar.
+ *
+ * It sets up the primary UI for our logged in app experience (Navigation between Homepage,
+ * Calendar, Favorites and Settings)
+ *
+ * @param modifier Modifier to be applied to the root layout.
+ *
+ */
+
 @Composable
 fun MainPage(modifier: Modifier = Modifier){
 
@@ -54,6 +64,12 @@ fun MainPage(modifier: Modifier = Modifier){
     }
 }
 
+/**
+ * A composable function used to display the currently selected screen based on the selectedIndex.
+ *
+ * @param modifier The Modifier to be applied to the screen layout.
+ * @param selectedIndex The index of the currently selected navItem.
+ */
 @Composable
 fun ContentScreen(modifier: Modifier = Modifier, selectedIndex : Int){
     when(selectedIndex){

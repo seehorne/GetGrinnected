@@ -8,6 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+/**
+ * A composable function that represents the Favorites screen of our app. (More to come)
+ *
+ * @param modifier Modifier to be applied to the screen layout.
+ */
+
 @Composable
 fun FavoritesScreen (modifier: Modifier = Modifier){
     Column(

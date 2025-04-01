@@ -22,9 +22,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * A composable function that represents the Signup screen of our application.
+ *
+ * This screen includes input fields for username, email, and password (That are all Strings),
+ * along with a sign-up button (To navigate to the homepage/complete account creation)
+ * and a sign in navigation option for users who already have an account.
+ *
+ * @param onSignInClick A lambda function that is triggered when the "Sign in" button is clicked used
+ * by our navigation flow.
+ * @param onSignupClick A lambda function that is triggered when the "Sign up" button is clicked used
+ * by our navigation flow.
+ */
 
 @Composable
 fun SignupScreen(onSignInClick: () -> Unit, onSignupClick: () -> Unit) {
@@ -76,6 +89,7 @@ fun SignupScreen(onSignInClick: () -> Unit, onSignupClick: () -> Unit) {
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation()
         )
 
         Spacer(modifier = Modifier.height(16.dp))

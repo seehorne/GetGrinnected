@@ -8,6 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+
+/**
+ * A composable function that represents the Home screen of our app. (More to come)
+ *
+ * @param modifier Modifier to be applied to the screen layout.
+ */
+
 @Composable
 fun HomeScreen (modifier: Modifier = Modifier){
     Column(
