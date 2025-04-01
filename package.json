@@ -3,6 +3,7 @@
     "fs": "^0.0.1-security"
   },
   "scripts": {
-    "tests": "node ./src/backend/test/backend_tests.js"
+    "tests": "node ./src/backend/test/backend_tests.js",
+    "get_events":"node ./src/backend/fetch_events.js"
   }
 }
