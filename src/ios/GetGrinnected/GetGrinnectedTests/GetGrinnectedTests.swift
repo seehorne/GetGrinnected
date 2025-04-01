@@ -6,7 +6,6 @@
 //
 
 import XCTest
-@testable import GetGrinnected
 
 final class GetGrinnectedTests: XCTestCase {
 
