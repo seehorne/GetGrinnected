@@ -32,6 +32,41 @@ The structure of our Repository is as follows:
 
 # Developer Guidelines
 
+## Branching and Merging
+
+- Make a new branch for each feature
+- `main` branch is protected, and you need 2 approvals to merge
+
+## Testing
+
+You are expected to add unit tests where relevant to your code. Review to the sections below for instructions on adding tests for each language used.
+
+### Kotlin
+
+Add tests to a file named matching the class you are testing. For instance, to test the class `com.example.getgrinnected` which has its class file located at the path `app/src/main/java/com/example/getgrinnected/MainActivity.kt` you would create a new test under the path `app/src/test/java/com/example/getgrinnected/MainActivityTest.kt`.
+
+In Android Studio, if you right-click a function name you can choose "Generate > Test" in the menu that it brings up. Default settings should work, but do make sure the test gets generated in the right location.
+
+### Node.js
+
+Add tests under the `test` directory in a `.js` or `.mjs` file as preferred. Note that some official resources such as <https://nodejs.org/en/learn/test-runner/using-test-runner> use `.mjs` files.
+
+There should be exactly one test file per code file, and the naming should be `test_COMPONENT`. For instance, `api.js` is tested by `test/test_api.js`.
+
+When it makes sense to do so, create test suites to group tests by using `describe` imported from `node:test`.
+
+### Swift
+
+Add a new test bundle by going to file > new > target and then searching "test". You will then select Unit Testing Bundle and choose Swift as the language and Swift Testing as the testing system. Set your other settings how you want and click finish. Now go to your test file and import your project.
+
+Now you can add tests to your testing file using this site <https://developer.apple.com/documentation/testing/definingtests> as documentation.
+
+## Continuous Integration
+
+When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
+
+Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
+
 ## Commit Messages
 
 This is an example of a good commit message.

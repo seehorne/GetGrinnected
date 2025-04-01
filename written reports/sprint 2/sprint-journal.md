@@ -379,7 +379,35 @@ Collaboration, Outreach, Event Creation, Event Management, and Event Updates, fo
 - Final test on Epic 4 for demo 4/9/25
 - Finish Epic 4 4/9/25 hard deadline by 4/11/25
 
-# Part 6: Continuous Integration Plan
+# Part 6: Continuous Integration (CI) Plan
+
+## Test Libraries
+
+There are a few different languages in our tech stack, and each of them is going to need a different testing library.
+
+- **Swift:**: Swift Testing framework
+  - This framework is cross-platform and built for CI tasks, unlike some other Swift testing tools built into XCode.
+  - <https://developer.apple.com/xcode/swift-testing/>
+- **Kotlin:**: JUnit
+  - Widely supported, both for different IDEs and CI services.
+  - <https://kotlinlang.org/docs/jvm-test-using-junit.html#add-dependencies> (assumes you are using IntelliJ IDEA)
+  - <https://developer.android.com/training/testing/local-tests> (assumes you are using Android Studio)
+- **Node.js**: Builtin test runner (`node:test`)
+  - Builtin is nice, because no extra dependencies!
+  - Other runners claim higher speed or more advanced features, but from what we know now our project won't need these.
+  - <https://nodejs.org/en/learn/test-runner/using-test-runner>
+
+There are other parts of the project that need to be tested, but this is not part of CI.
+
+## CI Service
+
+We are choosing to use GitHub Actions as our CI service. It's directly linked to the project repo, and doesn't require any additional setup to use besides creating the CI config files.
+
+One of the big reasons we're using it is (once again) the fact that it's built in and well-supported by GitHub. We want to avoid reinventing the wheel when we can, because there's lots to get done and CI is only a small part of it.
+
+Additionally, GitHub Actions has a marketplace of CI actions that do things we need to do. For instance, there's one that runs JUnit tests and makes a report of them whenever you're merging new changes.
+
+GitHub Actions also supports a feature that our multi-language and mutli-platform code requires: Only running when specific code is changed. Since we have several different directories, we likely don't want to retest them all on a Pull Request that only changes Node.js files. To assist with this, we plan to take advantage of [the `paths` and `paths_ignore` filters](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore).
 
 # Part 7: Test Automation and Continuous Integration Setup
 
