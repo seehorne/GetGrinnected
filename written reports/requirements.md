@@ -1,6 +1,151 @@
+This is a living document, it will be updated as we complete different milestones and sprints.
+
 # Requirements
 
-This is a living document, it will be updated as we complete different milestones and sprints.
+## Major Features
+
+- Shows all events currently happening at Grinnell (scraping information off of 25 live)
+- Create a user account (Grinnell emails only?)
+  - Sign in:
+    - Ask for username and password
+    - Forgot password option
+    - Forgot username option
+  - sign up:
+    - Power-account vs normal user account distinction (how will this work?)
+      - Verify the authority to ensure security and privacy
+    - Ask for grinnell email
+    - Ask for create-password
+      - List requirements for password
+      - If requirements are not met, shows that it's not met
+    - Verify email with verification
+      - Send email to email automatically, with a code that is available for a 60 second time limit
+- Events sorted by category
+- Users Can search for events on Home page and in callender
+  - "robust" searching, to include misspellings and find tags that were incorrectly inputted
+  - events and organizations show up when search
+  - when no search found, "no results" pop-up, prompting user to reduce filters or change search
+  - speech-to-text option
+- Event cards
+  - Found on Home Page + Calendar
+  - contains information on:
+    - if event repeats
+    - if RSVP, max headcount and current number
+    - how many people liked events
+    - tags
+    - description
+    - organizations and collaborating organizations
+  - able to see **organization** and follow organizations
+- Bottom bar for easy navigation between windows
+- Highlights window you are on in bottom bar
+- Email verification for profile creation 
+- Color system chosen to be accesable to color blindness with options for different types of color blindness
+- Screen reader compatible
+- Home page
+  - Lists events for the current day that are automatically sorted by popularity and by the tags that user filled out during survey
+  - Can click on events for more information
+  - Can change the day to look at any point in the next week
+  - Can change the tags to sort events you are viewing
+  - Includes navigation bar to calendar and profile page
+  - A sort button to sort based on popularity, alphabetically, by organization (grouping organizations)
+- Calendar
+  - Ability to see comprehensive view of all upcoming events
+  - Ability to toggle from day, to week to month view, intuitively
+  - Ability to see drafted event in calendar
+  - Ability to toggle between public calendar and personal (liked events + drafts) calendar
+  - Ability to click on a specific day, to get the day of an event, and able to click on a specific event to get the **event card** associated with that event
+  - Ability to filter events
+  - Includes navigation bar to home and profile page
+- Profile page
+  - Able to change profile picture
+  - Able to change username (to reasonable names)
+  - Able to change account to other organization accounts a user has
+  - Able to sign out of current account
+  - Contains list of followed organizations:
+    - if no organizations to be found, "FIND organizations" button
+  - Include settings page:
+    - change text-size for the application
+    - light-dark/other colored themes, for better visibility
+  - Organizations list
+    - sort organizations by popularity, alphabet, etc. 
+    - able to see **organization card** through organization list
+    - able to follow an organization through **organization card**
+    - able to see the events an organization is hosting
+    - to see an organizations' events through the organizations list
+    - to  follow an organization, will it be a request-to-follow feature? How do we deal with exclusivity(?)
+  - Followed organization list
+    - able to see organizations' page/user pages(?)
+  - Social aspect: to be spoken about after the sprint
+    - collaborations with organizations  
+
+## Stretch Goals
+
+- Map and directions to where events are happening
+- Puzzle Piece reward system for attending events or add memes
+- Click through to get tickets (like for ISO food bazaar and theater productions)
+- Subscribe to events to get notifications
+- More private events like MLC’s are only visible to specific groups
+- Updates for if an event changes (posted by the organizer)
+- Add a zoom feature to help enlarge UI
+- Add a light and dark mode that can be toggled in settings
+- Add a introductory survey to better present events
+  - begin survey with questions regarding interests
+  - ask user to pick subjects and concentrations to show in your interest scope
+  - power organizations: ask about potential tags an organization would like to use
+  - ask user: what organizations would you like to stay updated with? 
+  - create tags for creating an event?
+- Instructions on how to use the app and navigate the page
+- Reach out to orgs to collect a comprehensive list of tags
+- Logo in top left corner redirects to home page
+- Tags in event descriptions can be clicked to sort current page  
+- Student Org leaders being able to create events directly on the app
+- Allow user accounts to friend each other
+- Event Creators can add images to their events
+- Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events
+- Event descriptions contain images 
+- Allows for changing between profiles in settings
+- Following an org in profile
+- Org list findable under profile that share information on what student orgs exist and what they do
+- Allows users to sign up for student organization email lists
+- Favorite events
+  - Turn on notifications for events they favorite
+  - for each liked event:
+    - contains event card, in addition to..l
+    - toggle notification
+    - remove from liked, and prompt users to confirm
+  - "?" - gives information about UI elements on the page
+  - able to filter by organization, etc. 
+  - able to sort by popularity, achieved by counting how many people have liked an event, etc.
+  - make notification icon more intuitive
+  - ability to remove all liked events
+    - if liking an event that conflicts with another event, notify you with popup (? this requirement is to be debated upon)
+    - (? - this requirement is to be debated upon) After event is done, provide ratings and feedback for events?
+    - when notifying user, in settings, able to set how the notification is sent to user (? this requirement is to be debated upon)
+- Event creation from the app
+  - privileged to student org accounts
+  - name title of event
+  - RSVP toggle
+    - maximum headcount
+    - link to RSVP page
+  - upload images/posters to event
+  - customize **event card**
+  - add time to event
+  - add date to event
+  - toggle repeat
+    - select days of week/select days of month to repeat
+  - post public or private (limited to those who follow you) calendar
+  - select location 
+    - modified search for location
+  - add collaborator organizations
+  - save event to **drafts**/post directly to **events page/calendar**
+  - after uploading event, update users for events
+
+## Out of Scope
+
+- Use of app outside of Grinnell or other colleges
+- Parties or personal get togethers
+- Normal users creating their own events
+- Microtransactions or pay functions
+- Users creating their own tags
 
 # Product Descriptions with User Roles
 
@@ -146,186 +291,7 @@ almond is an administrator for the tool.
 - Will try and get it on the app store for both iOS and Android. We probably won't get it on the apple app store so we will try and get a beta version available through testflight
 - Making our software buildable by users will mean having good documentation of both the frontend and backend (such as the requirements for the backend server).
 - Our scope is scalable as we go on. Our starting minimum viable product should be accomplishable and we have solid stretch goals to expand our scope if we move faster than expected.
-
-# Scope and Feature List
-
-## Major Features
-
-- Shows all events currently happening at Grinnell (scraping information off of 25 live)
-- Create a user account (Grinnell emails only?)
-- ~Allows users to sign up for student organization email lists~
-- ~Student Org leaders being able to create events directly on the app~
-- ~Allow user accounts to friend each other~
-- Events sorted by category
-
-### Updates after stakeholder meetings
-
-- Users Can search for events on Home page and in callender
-- ~Users Can favorite events to more easily find events they like~
-- ~Event Creators can add images to their events~
-- ~Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events~
-- ~Event descriptions contain images~
-- Event descriptions contain tags 
-- Bottom bar for easy navigation between windows
-- Highlights window you are on in bottom bar
-- ~Allows for changing between profiles in settings~
-- email verification for profile creation 
-- ~Following an org in profile~
-- ~Org list findable under profile that share information on what student orgs exist and what they do~
-- Color system chosen to be accesable to color blindness with options for different types of color blindness
-- Screen reader compatible
-
-## Stretch Goals
-
-- Map and directions to where events are happening
-- Puzzle Piece reward system for attending events or add memes
-- Click through to get tickets (like for ISO food bazaar and theater productions)
-- Subscribe to events to get notifications
-- More private events like MLC’s are only visible to specific groups
-- Updates for if an event changes (posted by the organizer)
-
-### Updates after stakeholder meetings
-
-- Add a zoom feature to help enlarge UI
-- Add a light and dark mode that can be toggled in settings
-- Add a introductory survey to better present events
-- Instructions on how to use the app and navigate the page
-- Reach out to orgs to collect a comprehensive list of tags
-- Logo in top left corner redirects to home page
-- Users Can turn on notifications for events they favorite
-- Tags in event descriptions can be clicked to sort current page  
-
-### Post Break Readjustment 
-- Student Org leaders being able to create events directly on the app
-- Allow user accounts to friend each other
-- Event Creators can add images to their events
-- Event Creators can add collaborating organizations to allow multiple org leaders to work on event creation and be tied to published events
-- Event descriptions contain images 
-- Allows for changing between profiles in settings
-- Following an org in profile
-- Org list findable under profile that share information on what student orgs exist and what they do
-- Allows users to sign up for student organization email lists
-- Users Can favorite events to more easily find events they like
-
-## Out of Scope
-
-- Use of app outside of Grinnell or other colleges
-- Parties or personal get togethers
-- Normal users creating their own events
-- Microtransactions or pay functions
-
-### Updates after stakeholder meetings
-
-- Users creating their own tags
-
-# Comprehensive list of Requirements
-
-* Sign-in/Sign up
-	* sign in:
-		* ask for username and password
-		* forgot password option
-		* forgot username option
-	* sign-up:
-		* power-account vs normal user account distinction (how will this work?)
-			* verify the authority to ensure security and privacy
-		* ask for grinnell email
-		* ask for create-password
-			* list requirements for password
-			* if requirements are not met, shows that it's not met
-		* verify email with verification
-			* send email to email automatically, with a code that is available for a 60 second time limit
-* Post-Sign-up survey
-	* begin survey with questions regarding interests
-	* ask user to pick subjects and concentrations to show in your interest scope
-	* power organizations: ask about potential tags an organization would like to use
-	* ask user: what organizations would you like to stay updated with? 
-	* create tags for creating an event?
-* "home" page
-	* lists events for the current day that are automatically sorted by popularity and by the tags that user filled out during survey
-	* Can click on events for more information
-	* Can change the day to look at any point in the next week
-	* Can change the tags to sort events you are viewing
-	* Can use search bar to find specific events
-	* includes navigation bar to calendar favorites and profile page
-	* A sort button to sort based on popularity, alphabetically, by organization (grouping organizations)
-* calendar
-	* ability to see comprehensive view of all upcoming events
-	* ability to toggle from day, to week to month view, intuitively
-	* ability to see drafted event in calendar
-	* ability to toggle between public calendar and personal (liked events + drafts) calendar
-	* ability to click on a specific day, to get the day of an event, and able to click on a specific event to get the **event card** associated with that event
-	* ability to filter events
-	* includes navigation bar to home favorites and profile page
-	* can create events 
-		* privileged to student org accounts
-		* name title of event
-		* RSVP toggle
-			* maximum headcount
-			* link to RSVP page
-		* upload images/posters to event
-		* customize **event card**
-		* add time to event
-		* add date to event
-		* toggle repeat
-			* select days of week/select days of month to repeat
-		* post public or private (limited to those who follow you) calendar
-		* select location 
-			* modified search for location
-		* add collaborator organizations
-		* save event to **drafts**/post directly to **events page/calendar**
-		* after uploading event, update users for events
-* Event cards
-	* Found on Home Page, Callender and Favorites
-	* contains information on:
-		* if event repeats
-		* if RSVP, max headcount and current number
-		* how many people liked events
-		* tags
-		* description
-		* organizations and collaborating organizations
-	* able to add to **favorites**
-	* able to see **organization** and follow organizations
-* Search function
-	* "robust" searching, to include misspellings and find tags that were incorrectly inputted
-	* events and organizations show up when search
-	* when no search found, "no results" pop-up, prompting user to reduce filters or change search
-	* speech-to-text option
-* favorite/liked events
-	* for each liked event:
-		* contains event card, in addition to..l
-		* toggle notification
-		* remove from liked, and prompt users to confirm
-	* "?" - gives information about UI elements on the page
-	* able to filter by organization, etc. 
-	* able to sort by popularity, achieved by counting how many people have liked an event, etc.
-	* make notification icon more intuitive
-	* ability to remove all liked events
-	* potential feature creep:
-		* if liking an event that conflicts with another event, notify you with popup (? this requirement is to be debated upon)
-		* (? - this requirement is to be debated upon) After event is done, provide ratings and feedback for events?
-		* when notifying user, in settings, able to set how the notification is sent to user (? this requirement is to be debated upon)
-* profile page
-	* able to change profile picture
-	* able to change username (to reasonable names)
-	* able to change account to other organization accounts a user has
-	* able to sign out of current account
-	* contains list of followed organizations:
-		* if no organizations to be found, "FIND organizations" button
-	* Include settings page:
-		* change text-size for the application
-		* light-dark/other colored themes, for better visibility
-	* organizations list
-		* sort organizations by popularity, alphabet, etc. 
-		* able to see **organization card** through organization list
-		* able to follow an organization through **organization card**
-		* able to see the events an organization is hosting
-		* to see an organizations' events through the organizations list
-		* to  follow an organization, will it be a request-to-follow feature? How do we deal with exclusivity(?)
-	* followed organization list
-		* able to see organizations' page/user pages(?)
-	* Social aspect: to be spoken about after the sprint
-		* collaborations with organizations  
-    
+ 
 # Use Cases
 
 ## Use Case 1: Signing Up
@@ -652,12 +618,17 @@ These are the major components of this software:
 
 - A **server** that manages the base truth of what events are shown to users. It must store events and communicate with clients, which can add and view events.
 - Two **client apps** for iOS and Android, which provide a user view into events.
-- A **event finder** component which collects events from official Grinnell sources and populates the database with them.
+- A **scraper** component which collects events from Grinnell's events page and populates the database with them.
 
 Here is a diagram specifying more of the architecture described above. It focuses on the server stack because the server is where most computational work will take place. We are choosing to do this in order to minimize duplicated code between clients for iOS and Android.
 
-![Architecture Diagram](sprint%202/images/architecture.png)
+The different parts of the server are all going to be written in node.js, but their separation in the diagram is relevant because it shows an organizational choice.
 
+![Architecture Diagram](sprint%202/images/Architecure_Diagram.jpg)
+
+# Software Design 
+![Software Componets and Responsibilities](sprint%202/images/SoftwareComponets.jpg)
+![Software Interfaces](sprint%202/images/SoftwareInterfaces.jpg)
 # Data Modeling
 
 ## Written Explanation

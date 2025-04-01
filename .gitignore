@@ -2,10 +2,8 @@
 .idea
 
 # Swift
-src/ios/.DS_Store
-src/.DS_Store
-src/ios/GetGrinnected/.DS_Store
 .DS_Store
+xcuserdata/**
 
 # MkDocs build dir
 /site/
