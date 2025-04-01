@@ -57,7 +57,9 @@ When it makes sense to do so, create test suites to group tests by using `descri
 
 ### Swift
 
-**TODO: WE NEED SOMEONE FROM SWIFT TEAM TO TALK ABOUT ADDING TESTS.**
+Add a new test bundle by going to file > new > target and then searching "test". You will then select Unit Testing Bundle and choose Swift as the language and Swift Testing as the testing system. Set your other settings how you want and click finish. Now go to your test file and import your project.
+
+Now you can add tests to your testing file using this site <https://developer.apple.com/documentation/testing/definingtests> as documentation.
 
 ## Continuous Integration
 

@@ -1,2 +1,4 @@
 # IntelliJ IDEA config
 .idea
+.DS_Store
+src/ios/GetGrinnected/GetGrinnected.xcodeproj/project.xcworkspace/xcuserdata/michael.xcuserdatad/UserInterfaceState.xcuserstate
