@@ -17,6 +17,8 @@
 		0CAF15202D9ACC9E001E61D1 /* MainNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAF15162D9ACC9E001E61D1 /* MainNavView.swift */; };
 		0CAF15212D9ACC9E001E61D1 /* GetGrinnectedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAF15142D9ACC9E001E61D1 /* GetGrinnectedApp.swift */; };
 		0CAF15222D9ACC9E001E61D1 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAF15172D9ACC9E001E61D1 /* ProfileView.swift */; };
+		0CAF15252D9B6862001E61D1 /* Testing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CAF15242D9B6861001E61D1 /* Testing.framework */; platformFilter = ios; };
+		0CAF15262D9B68C1001E61D1 /* GetGrinnected.app in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3C52D77AB95002E482E /* GetGrinnected.app */; };
 		0CBBC3DA2D77AB9B002E482E /* GetGrinnectedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3D92D77AB9B002E482E /* GetGrinnectedTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +57,7 @@
 		0CAF15152D9ACC9E001E61D1 /* HomescreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenView.swift; sourceTree = "<group>"; };
 		0CAF15162D9ACC9E001E61D1 /* MainNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavView.swift; sourceTree = "<group>"; };
 		0CAF15172D9ACC9E001E61D1 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		0CAF15242D9B6861001E61D1 /* Testing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Testing.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/Testing.framework; sourceTree = DEVELOPER_DIR; };
 		0CBBC3C52D77AB95002E482E /* GetGrinnected.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetGrinnected.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CBBC3D52D77AB9B002E482E /* GetGrinnectedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CBBC3D92D77AB9B002E482E /* GetGrinnectedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGrinnectedTests.swift; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CAF15252D9B6862001E61D1 /* Testing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,12 +127,21 @@
 			path = GetGrinnected;
 			sourceTree = "<group>";
 		};
+		0CAF15232D9B6861001E61D1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0CAF15242D9B6861001E61D1 /* Testing.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		0CBBC3BC2D77AB95002E482E = {
 			isa = PBXGroup;
 			children = (
 				0CAF15182D9ACC9E001E61D1 /* GetGrinnected */,
 				0CBBC3D82D77AB9B002E482E /* GetGrinnectedTests */,
 				4CD5D1B72D9A119D001E91BD /* GetGrinnectedTestsCI */,
+				0CAF15232D9B6861001E61D1 /* Frameworks */,
 				0CBBC3C62D77AB95002E482E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -339,6 +352,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CAF15262D9B68C1001E61D1 /* GetGrinnected.app in Sources */,
 				0CAF151B2D9ACC9E001E61D1 /* ContentView.swift in Sources */,
 				0CAF151C2D9ACC9E001E61D1 /* HomescreenView.swift in Sources */,
 				0CAF151D2D9ACC9E001E61D1 /* FavoritesView.swift in Sources */,
