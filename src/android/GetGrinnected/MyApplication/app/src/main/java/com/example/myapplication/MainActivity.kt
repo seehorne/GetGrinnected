@@ -5,13 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 
@@ -21,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
-                    MainPage()
+                    AppNavigator()
             }
         }
     }
@@ -35,22 +32,20 @@ fun AppNavigator() {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (currentScreen != "welcome") {
-            Button(
-                onClick = { currentScreen = "welcome" },
-                modifier = Modifier.align(Alignment.Start).padding(8.dp)
-            ) {
-                Text("Back")
-            }
-        }
 
         when (currentScreen) {
             "welcome" -> WelcomeScreen(
                 onLoginClick = { currentScreen = "login" },
                 onSignupClick = { currentScreen = "signup" }
             )
-            "login" -> LoginScreen { _, _ -> }
-            "signup" -> SignupScreen { _, _, _ -> }
+            "signup" -> SignupScreen(
+                onSignInClick = { currentScreen = "login"},
+                onSignupClick = {currentScreen = "mainpage"}
+            )
+            "login" -> LoginScreen(
+                onLoginClick = { currentScreen = "mainpage"},
+                onSignupClick = {currentScreen = "signup"})
+            "mainpage" -> MainPage()
         }
     }
 }
