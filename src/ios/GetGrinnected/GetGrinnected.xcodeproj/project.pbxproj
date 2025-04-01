@@ -20,6 +20,8 @@
 		0CBBC3FB2D77DD0B002E482E /* EventCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */; };
 		0CBBC3FD2D77E2A2002E482E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */; };
 		0CBBC4012D77E62B002E482E /* MainNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC4002D77E62B002E482E /* MainNavView.swift */; };
+		CA51F02A2D9A0F85002B94C6 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA51F0292D9A0F7D002B94C6 /* ColorTheme.swift */; };
+		CA51F02C2D9A0FDB002B94C6 /* EventModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA51F02B2D9A0FD8002B94C6 /* EventModal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,8 @@
 		0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationView.swift; sourceTree = "<group>"; };
 		0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		0CBBC4002D77E62B002E482E /* MainNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavView.swift; sourceTree = "<group>"; };
+		CA51F0292D9A0F7D002B94C6 /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
+		CA51F02B2D9A0FD8002B94C6 /* EventModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModal.swift; sourceTree = "<group>"; };
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -129,13 +133,15 @@
 			children = (
 				0CBBC3C82D77AB95002E482E /* GetGrinnectedApp.swift */,
 				0CBBC3CA2D77AB95002E482E /* ContentView.swift */,
+				CA51F0292D9A0F7D002B94C6 /* ColorTheme.swift */,
+				CA51F02B2D9A0FD8002B94C6 /* EventModal.swift */,
 				0CBBC3F42D77DA60002E482E /* HomescreenView.swift */,
 				0CBBC3FC2D77E2A2002E482E /* ProfileView.swift */,
 				0CBBC4002D77E62B002E482E /* MainNavView.swift */,
 				0CBBC3F62D77DABC002E482E /* CalendarView.swift */,
-				0CBBC3F82D77DB12002E482E /* FavoritesView.swift */,
 				0CBBC3FA2D77DD0B002E482E /* EventCreationView.swift */,
 				0CBBC3CC2D77AB9A002E482E /* Assets.xcassets */,
+				0CBBC3F82D77DB12002E482E /* FavoritesView.swift */,
 				0CBBC3CE2D77AB9A002E482E /* Preview Content */,
 			);
 			path = GetGrinnected;
@@ -331,6 +337,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA51F02C2D9A0FDB002B94C6 /* EventModal.swift in Sources */,
+				CA51F02A2D9A0F85002B94C6 /* ColorTheme.swift in Sources */,
 				0CBBC3FB2D77DD0B002E482E /* EventCreationView.swift in Sources */,
 				0CBBC4012D77E62B002E482E /* MainNavView.swift in Sources */,
 				0CBBC3F92D77DB12002E482E /* FavoritesView.swift in Sources */,

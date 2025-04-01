@@ -1,12 +1,21 @@
+#
 # IntelliJ IDEA config
+#
 .idea
 
+#
 # Swift
+#
 .DS_Store
+# user data for each person who opens xcode
 xcuserdata/**
 
+#
 # MkDocs build dir
+#
 /site/
 
+#
 # Node.js
+#
 node_modules
