@@ -60,7 +60,7 @@ class UserProfile: ObservableObject {
     /*Validation functino for the email, username, and password*/
     
     private func validateEmail(_  email: String) -> Bool {
-        if !emailText.contains("@grinnell.edu") {
+        if !email.contains("@grinnell.edu") {
             print("Invalid email format! Must include @grinnell.edu!")
             return false
         }
@@ -74,12 +74,12 @@ class UserProfile: ObservableObject {
         }
         return true
     }
-    
-    static var exampleUser = UserProfile()
-    let emailSuccess = exampleUser.setEmail("thijmbud@grinnell.edu")
-    let passwordSuccess = exampleUser.setPassword("Password123")
-    
-    
-    
-    
+
+
 }
+
+
+let exampleUser = UserProfile()
+let emailSuccess = exampleUser.setEmail("thijmbud@grinnell.edu")
+let passwordSuccess = exampleUser.setPassword("Password123")
+

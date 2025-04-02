@@ -27,8 +27,6 @@ struct MainNavView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person.fill")
                 }
-            //to be deleted, just testing
-            //to be deleted, just testing
         }
     }
 }
