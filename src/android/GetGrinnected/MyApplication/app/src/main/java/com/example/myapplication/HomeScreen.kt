@@ -2,6 +2,10 @@ package com.example.myapplication
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -41,19 +46,19 @@ fun HomeScreen (modifier: Modifier = Modifier){
     Column1(
         modifier = Modifier
             .background(gradient)
-            .size(800.dp)
             .padding(horizontal = 8.dp)
+            .fillMaxSize()
             .verticalScroll(state),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
 
-    ){
+    ){Spacer(modifier = Modifier.height(150.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
-                .padding(horizontal = 16.dp)
+                .size(width = 300.dp, height = 100.dp)
 
         ) {
             Text(
@@ -65,12 +70,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
             textAlign = TextAlign.Center,
         )
     }
+        Spacer(modifier = Modifier.height(8.dp))
             Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
         modifier = Modifier
-            .size(width = 240.dp, height = 100.dp)
+            .size(width = 300.dp, height = 100.dp)
 
     ) {
             Text(
@@ -82,12 +88,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -99,12 +106,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -116,12 +124,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -133,12 +142,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -150,12 +160,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -167,12 +178,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -184,12 +196,13 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -201,6 +214,16 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(120.dp))
+    }
+    Column1(
+        modifier = Modifier
+            .background(Color.Black)
+            .size(width = 450.dp, height = 100.dp)
+            .padding(horizontal = 8.dp),
+        verticalArrangement = Arrangement.Top,)
+    {
+        Text(text = "Please Please Please")
     }
 }
 
@@ -208,21 +231,45 @@ fun HomeScreen (modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun HomeScreenPreview (modifier: Modifier = Modifier){
+    val gradient =
+        Brush.verticalGradient(
+            listOf(Color.Red, Color.Blue, Color.Green),
+            0.0f,
+            10000.0f,
+            TileMode.Repeated
+        )
     val state = rememberScrollState()
+    var cardnum = 1
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
-
     Column1(
         modifier = Modifier
-            .background(Color.LightGray)
-            .size(100.dp)
+            .background(gradient)
+            .size(800.dp)
             .padding(horizontal = 8.dp)
-            .verticalScroll(state)
-    ) {
-        repeat(10) {
-            Text("Item $it", modifier = Modifier.padding(2.dp))
+            .verticalScroll(state),
+        verticalArrangement = Arrangement.Center,
+
+        ){
+        repeat(cardnum) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                ),
+                modifier = Modifier
+                    .size(width = 240.dp, height = 100.dp)
+
+            ) {
+                Text(
+                    text = "Event " + cardnum,
+                    modifier = Modifier
+                        .padding(16.dp),
+                    textAlign = TextAlign.Center,
+                )
+            }
+            cardnum += 1
         }
     }
-    }
+}
 
 
 
