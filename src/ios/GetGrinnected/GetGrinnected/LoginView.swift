@@ -13,6 +13,7 @@ struct LoginView: View {
     
     @State private var email = ""
     @State private var password = ""
+    @State private var errorMessage = ""
     
     var body: some View {
         
@@ -34,7 +35,15 @@ struct LoginView: View {
                 
                 // Button
                 Button {
-                    print("Log user in..")
+                    //logic that checks if user exists and password is correct
+//                    if UserProfile.checkUser(email, password, errorMessage){
+//                        print("Log in success!")
+                            isLoggedIn = true
+//                    } else{
+//                        print("\(errorMessage)")
+//                    }
+                    
+                    
                     //once successfully logged in, jump to main viewport
                 } label: {
                     HStack {
@@ -55,12 +64,12 @@ struct LoginView: View {
                     SignUpView(isLoggedIn: $isLoggedIn)
                 } label : {
                     Text("Don't have an account?")
-                        .foregroundColor(Color.appPink)
+                        .foregroundColor(Color.appTextSecondary)
                         .padding(.top, 4)
                 }//
                 
                 //signin button
-                Text("Hello, Grinnellian!")
+                
             }
             .padding()
         } //navigation

@@ -26,7 +26,7 @@ struct SignUpView: View{
             /** input fields*/
             //Username
             InputView(text: $username,
-                      title: "name",
+                      title: "Name",
                       placeholder: "Enter your name..")
             
             
@@ -55,9 +55,14 @@ struct SignUpView: View{
                 attemptSignUp()
             } label: {
                 HStack{
-                    Text("sign up")
+                    Text("SIGN UP")
                         .fontWeight(.light)
+                        .padding()
+                        .foregroundColor(Color.white)
                     Image(systemName: "arrow.right")
+                        .padding()
+                        .foregroundColor(Color.white)
+                    
                 }//Hstack
             }//button
             .background(Color.appBorder)
@@ -115,3 +120,4 @@ struct SignUpView: View{
         SignUpView(isLoggedIn: .constant(false))
     }
 }
+
