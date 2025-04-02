@@ -4,6 +4,7 @@
   },
   "scripts": {
     "tests": "node ./src/backend/test/backend_tests.js",
-    "get_events":"node ./src/backend/fetch_events.js"
+    "get_events":"node ./src/backend/fetch_events.js",
+    "drop":"node ./src/backend/drop_expired.js"
   }
 }

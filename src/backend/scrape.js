@@ -101,6 +101,53 @@ async function scrapeData(url) {
   });
 }
 
-module.exports = { processExisting, scrapeData, url};
+function dropPastEvents(){
+  now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+  console.log(now)
+  events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+  storedEvents = JSON.parse(events);
+  lines = events.split('\n');
+  if (lines.length <= 4){
+    return; //this implies there are no events even there
+  }
+  expiredEvents = 0;
+  //how many with start and end times to remove
+  for (let i = 0; i < storedEvents.data.length; i++) {
+    let event = storedEvents.data[i];
+    if (!event.allDay) {
+        let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
+        console.log(diff);
+        console.log(event.Title);
+        if (diff < 0) {
+            expiredEvents++;
+        }
+        if (diff > 0) {
+            break; // Exits the loop early, they're in time sorted order
+        }
+        //if the event end time is exactly now, it can stay, its not that deep
+    }
+  }
+  //all day events. still time sorted so it should fill in if it needs to
+  for (let i = 0; i < storedEvents.data.length; i++) {
+    let event = storedEvents.data[i];
+    if (event.allDay) {
+        diff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now.setHours(0, 0, 0, 0);
+        if (diff < 0) {
+            expiredEvents++;
+        }
+        if (diff > 0) {
+            break; // Exits the loop early, they're in time sorted order
+        }
+        //if the event is exactly today, it can stay its not that deep
+    }
+  }
+  firstExpiredEventLine = 3; //this is the line right past the openers
+  lastExpiredEventLine = firstExpiredEventLine + expiredEvents;
+  updatedLines = lines.filter((_, index) => 
+    index < firstExpiredEventLine - 1 || index >= lastExpiredEventLine - 1);
+  fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'), 'utf-8');
+}
+
+module.exports = { processExisting, scrapeData, url, dropPastEvents};
 //scrapeData(url)
   
