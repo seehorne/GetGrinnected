@@ -5,18 +5,25 @@
 //  Created by Ellie Seehorn on 3/4/25.
 //
 
+import Foundation
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isLoggedIn = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if isLoggedIn {
+                MainNavView()
+            } else{
+                LoginView(isLoggedIn: $isLoggedIn)
+            }
         }
-        .padding()
-    }
+    }//body
+}
+
+class AuthManager: ObservableObject {
+    @Published var isLoggedIn = false
 }
 
 #Preview {
