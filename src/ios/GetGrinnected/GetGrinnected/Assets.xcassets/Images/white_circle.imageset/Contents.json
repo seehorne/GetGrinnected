@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "GG_Logo_2_NoBG.png",
+      "filename" : "white-circle-hi.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "GG_Logo_2_NoBG 1.png",
+      "filename" : "white-circle-hi 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "GG_Logo_2_NoBG 2.png",
+      "filename" : "white-circle-hi 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

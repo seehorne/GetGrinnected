@@ -19,12 +19,21 @@ struct LoginView: View {
         
         NavigationStack{
             VStack {
-                //image
-                Image("gglogo_nt")
+                //image logo with overlaid circle underneath
+                Image("white_circle")
                     .resizable()
                     .scaledToFill()
                     .frame(width: 100, height: 100)
                     .padding(.vertical, 32)
+                    .opacity(0.7)
+                    .overlay(
+                        Image("gglogo_nt")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .padding(.vertical, 32)
+                    )
+                
                 
                 //Signin Email Text Field
                 InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
