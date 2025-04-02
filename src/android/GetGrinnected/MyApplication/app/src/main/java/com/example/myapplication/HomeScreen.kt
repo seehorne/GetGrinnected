@@ -41,7 +41,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
     Column1(
         modifier = Modifier
             .background(gradient)
-            .size(800.dp)
+            .size(width = 450.dp, height = 820.dp)
             .padding(horizontal = 8.dp)
             .verticalScroll(state),
         verticalArrangement = Arrangement.Center,
@@ -52,8 +52,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
-                .padding(horizontal = 16.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -70,7 +69,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
         modifier = Modifier
-            .size(width = 240.dp, height = 100.dp)
+            .size(width = 380.dp, height = 100.dp)
 
     ) {
             Text(
@@ -87,7 +86,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -104,7 +103,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -121,7 +120,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -138,7 +137,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -155,7 +154,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -172,7 +171,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -189,7 +188,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 240.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -208,21 +207,45 @@ fun HomeScreen (modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun HomeScreenPreview (modifier: Modifier = Modifier){
+    val gradient =
+        Brush.verticalGradient(
+            listOf(Color.Red, Color.Blue, Color.Green),
+            0.0f,
+            10000.0f,
+            TileMode.Repeated
+        )
     val state = rememberScrollState()
+    var cardnum = 1
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
-
     Column1(
         modifier = Modifier
-            .background(Color.LightGray)
-            .size(100.dp)
+            .background(gradient)
+            .size(800.dp)
             .padding(horizontal = 8.dp)
-            .verticalScroll(state)
-    ) {
+            .verticalScroll(state),
+        verticalArrangement = Arrangement.Center,
+
+        ){
         repeat(10) {
-            Text("Item $it", modifier = Modifier.padding(2.dp))
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                ),
+                modifier = Modifier
+                    .size(width = 240.dp, height = 100.dp)
+
+            ) {
+                Text(
+                    text = "Event " + cardnum,
+                    modifier = Modifier
+                        .padding(16.dp),
+                    textAlign = TextAlign.Center,
+                )
+            }
+            cardnum += 1
         }
     }
-    }
+}
 
 
 
