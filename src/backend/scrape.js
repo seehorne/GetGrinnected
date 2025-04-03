@@ -134,9 +134,7 @@ function dropPastEvents(path){
         expiredEvents++;
         expiredIDs.add(event.ID);
         expiredIndices.add(i);
-        console.log("expired, remove, day");
     } else if (!event.allDay && dayDiff === 0) {//event is today, may or may not be over
-        console.log("condition 3");
         let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
         console.log(diff);
         console.log(event.Title);
@@ -144,7 +142,6 @@ function dropPastEvents(path){
             expiredEvents++;
             expiredIDs.add(event.ID);
             expiredIndices.add(i);
-            console.log("expired, remove, time");
         }
     } else if(dayDiff > 0){//event is after today
       break;//since they're time sorted, no need to look further once on tomorrow
