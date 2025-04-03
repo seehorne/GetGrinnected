@@ -9,7 +9,7 @@ const fs = require ('fs');
 dotenv.config();
 
 const pool = mysql.createPool({
-    hostname: process.env.MYSQL_HOST,
+    host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
@@ -18,7 +18,7 @@ const pool = mysql.createPool({
 async function insertEventsFromScrape(){
 
     try{
-        const file_data =  fs.readFileSync('src\\backend\\event_data.json')
+        const file_data =  fs.readFileSync('event_data.json')
         const parsing = JSON.parse(file_data);
         const events = parsing.data;
 
@@ -60,8 +60,8 @@ async function insertEventsFromScrape(){
 function combineTags(event){
     // Used a ternary to avoid null since that is what they give instead of an empty array.
     // If it would look nicer or be more legible as an if statement please say the word.
-    const tags = Array.isArray(events.tags) ? event.tags : []; 
-    const Audience = Array.isArray(events.Audience) ? event.Audience : [];
+    const tags = Array.isArray(event.tags) ? event.tags : []; 
+    const Audience = Array.isArray(event.Audience) ? event.Audience : [];
     const combined_tags = tags.concat(Audience);
     return combined_tags
 }
