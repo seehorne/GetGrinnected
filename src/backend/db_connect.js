@@ -75,6 +75,24 @@ async function getEvents(){
     return events;
 }
 
+/**
+ * Query the database for all events that have every tag in a list.
+ *
+ * \param tags  List of strings.
+ * \returns     A list of all events that contain every tag in `tags`.
+ */
+async function getEventsWithAllTags(tags){
+    // build up a query for all items that have tag1 AND tag2 AND ... AND tagN
+    // the query looks like JSON_CONTAINS(tags, '"tag1"', '$') AND JSON_CONTAINS(tags, '"tag2"', '$') ...
+    const containsPieces = tags.map((t) => `JSON_CONTAINS(tags, '"` + t + `"', '$')`);
+    const containsAllTags = containsPieces.join(' AND ');
+    const query = 'SELECT * FROM events WHERE ' + containsAllTags;
+
+    // actually make that query and return all matching events
+    const [events] = await pool.query(query);
+    return events;
+}
+
 async function getAccount(username){
     const [account] = await pool.query(`
        SELECT * 
@@ -142,7 +160,6 @@ async function verifyLogin(username, password){
     }
 }
 
-insertEventsFromScrape();
 
 // Testing on Server
 
@@ -153,6 +170,8 @@ insertEventsFromScrape();
 
 //createAccount("test1", "email@email.com", "password");
 
+// TODO: these should become actual tests. I think that's doable!
+// TODO: lol no it isn't! github has no FUCKING CLUE what the database is.
 async function testLogins() {
     console.log("Legal Login");
     const log1 = await verifyLogin("test1", "password");
@@ -167,4 +186,13 @@ async function testLogins() {
     console.log(log3);
 }
 
-testLogins();
+if (require.main === module) {
+    // File is being used as a script. Run it.
+    insertEventsFromScrape();
+    testLogins(); // TODO: move to different test? unknown if possible.
+} else {
+    // File is being used as a module. Export it.
+    module.exports = { getEvents, getEventsWithAllTags };
+}
+
+
