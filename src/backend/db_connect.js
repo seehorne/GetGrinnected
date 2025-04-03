@@ -24,7 +24,7 @@ async function insertEventsFromScrape(){
         const events = parsing.data;
 
         const sql = `
-        INSERT INTO events (
+        INSERT IGNORE INTO events (
             eventid, event_name, event_description, event_location, organizations, rsvp, 
             event_date, event_time, event_all_day, event_start_time, event_end_time, 
             tags, event_private, repeats, event_image, is_draft
@@ -108,11 +108,13 @@ async function createAccount(username, email, password){
 
 async function dropExpiredEvents(eventIds){
 
+    const eventIds_array = [...eventIds];
+
     // Maps the number of event ids to corresponding ?s for prepared statement setup
-    const placeholders = eventIds.map(() => "?").join(", ");
+    const placeholders = eventIds_array.map(() => "?").join(", ");
     const query = `DELETE FROM events WHERE eventid IN (${placeholders})`;
 
-    const result = await pool.query(query, eventIds);
+    const result = await pool.query(query, eventIds_array);
     return result;
 }
 
