@@ -124,10 +124,10 @@ function dropPastEvents(path){
   }
   expiredEvents = 0;
   //how many with start and end times to remove
+  now_midnight = new Date(now).setHours(0, 0, 0, 0);
   for (let i = 0; i < storedEvents.data.length; i++) {
     console.log(i);
     let event = storedEvents.data[i];
-    now_midnight = new Date(now).setHours(0, 0, 0, 0);
     dayDiff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now_midnight;
     console.log(dayDiff);
     if (dayDiff < 0) {//event is on day that has passed
