@@ -112,55 +112,49 @@ async function scrapeData(url, path) {
  */
 function dropPastEvents(path){
   expiredIDs = new Set();
+  expiredIndices = new Set();
   now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
   console.log(now)
   events = fs.readFileSync(path, 'utf-8');
   storedEvents = JSON.parse(events);
   lines = events.split('\n');
+  console.log(lines.length);
   if (lines.length <= 4){
     return; //this implies there are no events even there
   }
   expiredEvents = 0;
   //how many with start and end times to remove
   for (let i = 0; i < storedEvents.data.length; i++) {
+    console.log(i);
     let event = storedEvents.data[i];
-    if (!event.allDay) {
+    now_midnight = new Date(now).setHours(0, 0, 0, 0);
+    dayDiff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now_midnight;
+    console.log(dayDiff);
+    if (dayDiff < 0) {//event is on day that has passed
+        expiredEvents++;
+        expiredIDs.add(event.ID);
+        expiredIndices.add(i);
+        console.log("expired, remove, day");
+    } else if (!event.allDay && dayDiff === 0) {//event is today, may or may not be over
+        console.log("condition 3");
         let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
         console.log(diff);
         console.log(event.Title);
         if (diff < 0) {
             expiredEvents++;
             expiredIDs.add(event.ID);
+            expiredIndices.add(i);
+            console.log("expired, remove, time");
         }
-        if (diff > 0) {
-            break; // Exits the loop early, they're in time sorted order
-        }
-        //if the event end time is exactly now, it can stay, its not that deep
+    } else if(dayDiff > 0){//event is after today
+      break;//since they're time sorted, no need to look further once on tomorrow
     }
   }
-  //all day events. still time sorted so it should fill in if it needs to
-  for (let i = 0; i < storedEvents.data.length; i++) {
-    let event = storedEvents.data[i];
-    if (event.allDay) {
-        diff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now.setHours(0, 0, 0, 0);
-        if (diff < 0) {
-            expiredEvents++;
-            expiredIDs.add(event.ID);
-        }
-        if (diff > 0) {
-            break; // Exits the loop early, they're in time sorted order
-        }
-        //if the event is exactly today, it can stay its not that deep
-    }
-  }
-  firstExpiredEventLine = 3; //this is the line right past the openers
-  lastExpiredEventLine = firstExpiredEventLine + expiredEvents;
-  updatedLines = lines.filter((_, index) => 
-    index < firstExpiredEventLine - 1 || index >= lastExpiredEventLine - 1);
+  // minus 2 so we don't remove the brackets at the top but rather actual events
+  updatedLines = lines.filter((_, i) => !expiredIndices.has(i-2));
   fs.writeFileSync(path, updatedLines.join('\n'), 'utf-8');
   return expiredIDs;
 }
 
 module.exports = { processExisting, scrapeData, URL, dropPastEvents, CIPATH, TRUEPATH};
 //scrapeData(url)
-  

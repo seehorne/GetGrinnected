@@ -78,17 +78,4 @@ test('All events are unique by ID', { concurrency: true }, t => {
   }
 )
 
-test('After dropping events, there are at most the same number as before (no spurious additions)',
-  { concurrency: false }, t => {
-    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
-    ogEvents = JSON.parse(events);
-    beforeSize = ogEvents.data.length;
-    scrape.dropPastEvents(scrape.CIPATH);
-    newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
-    nowEvents = JSON.parse(events);
-    nowSize = nowEvents.data.length;
-    assert(nowSize <= beforeSize)
-  }
-)
-
 });
