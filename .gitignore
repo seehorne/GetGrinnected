@@ -24,3 +24,8 @@ node_modules
 # Enviornment Variables for database confidential information
 #
 .env
+
+#
+# Things that should live exclusively server side
+#
+./src/backend/event_data.json
