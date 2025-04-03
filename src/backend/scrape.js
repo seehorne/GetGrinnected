@@ -128,7 +128,7 @@ function dropPastEvents(){
         console.log(event.Title);
         if (diff < 0) {
             expiredEvents++;
-            expiredEvents.add(event.ID);
+            expiredIDs.add(event.ID);
         }
         if (diff > 0) {
             break; // Exits the loop early, they're in time sorted order
@@ -143,7 +143,7 @@ function dropPastEvents(){
         diff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now.setHours(0, 0, 0, 0);
         if (diff < 0) {
             expiredEvents++;
-            expiredEvents.add(event.ID);
+            expiredIDs.add(event.ID);
         }
         if (diff > 0) {
             break; // Exits the loop early, they're in time sorted order
