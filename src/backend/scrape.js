@@ -101,7 +101,15 @@ async function scrapeData(url) {
   });
 }
 
+/**
+ * dropPastEvents
+ * 
+ * removes elapsed events from JSON of events to be in app 
+ * 
+ * @returns Set() containing the IDs of all expired events
+ */
 function dropPastEvents(){
+  expiredIDs = new Set();
   now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
   console.log(now)
   events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
@@ -120,6 +128,7 @@ function dropPastEvents(){
         console.log(event.Title);
         if (diff < 0) {
             expiredEvents++;
+            expiredEvents.add(event.ID);
         }
         if (diff > 0) {
             break; // Exits the loop early, they're in time sorted order
@@ -134,6 +143,7 @@ function dropPastEvents(){
         diff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now.setHours(0, 0, 0, 0);
         if (diff < 0) {
             expiredEvents++;
+            expiredEvents.add(event.ID);
         }
         if (diff > 0) {
             break; // Exits the loop early, they're in time sorted order
@@ -146,6 +156,7 @@ function dropPastEvents(){
   updatedLines = lines.filter((_, index) => 
     index < firstExpiredEventLine - 1 || index >= lastExpiredEventLine - 1);
   fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'), 'utf-8');
+  return expiredIDs;
 }
 
 module.exports = { processExisting, scrapeData, url, dropPastEvents};
