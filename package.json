@@ -1,10 +1,12 @@
 {
   "dependencies": {
-    "fs": "^0.0.1-security"
+    "dotenv": "^16.4.7",
+    "fs": "^0.0.1-security",
+    "mysql2": "^3.14.0"
   },
   "scripts": {
     "tests": "node ./src/backend/test/backend_tests.js",
-    "get_events":"node ./src/backend/fetch_events.js",
-    "drop":"node ./src/backend/drop_expired.js"
+    "get_events": "node ./src/backend/fetch_events.js",
+    "drop": "node ./src/backend/drop_expired.js"
   }
 }

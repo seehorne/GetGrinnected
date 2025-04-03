@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS getgrinnecteddb;
+CREATE DATABASE IF NOT EXISTS GetGrinnected;
 
 CREATE TABLE IF NOT EXISTS events (
     eventid INT AUTO_INCREMENT PRIMARY KEY,
@@ -8,7 +8,10 @@ CREATE TABLE IF NOT EXISTS events (
     organizations JSON,
     rsvp INT,
     event_date DATE,
-    event_time TIME,
+    event_time TEXT,
+    event_all_day INT,
+    event_start_time TIME,
+    event_end_time TIME,
     tags JSON,
     event_private INT,
     repeats INT,

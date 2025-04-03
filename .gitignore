@@ -19,3 +19,8 @@ xcuserdata/**
 # Node.js
 #
 node_modules
+
+#
+# Enviornment Variables for database confidential information
+#
+.env
