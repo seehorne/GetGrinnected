@@ -38,13 +38,16 @@ async function insertEventsFromScrape(){
                 const tags = combineTags(event);
 
                 // This is to parse multiple orgs out of an org field (also account for events that don't have orgs)
-                const orgs = event.Org ? event.split(",") : [];
+                const orgs = event.Org ? event.Org.split(",") : [];
+
+                const startTimeISO = new Date(event.StartTimeISO);
+                const endTimeISO = new Date(event.EndTimeISO);
 
                 // Executes the prepared statement with the event values and fills in with defaul values
                 // where the scraper didn't get information.
                 await pool.query(sql, [event.ID, event.Title, event.Description, event.Location,
-                    JSON.stringify(orgs), 0, event.Date, event.Time, isAllDay, event.StartTimeISO,
-                    event.EndTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]);
+                    JSON.stringify(orgs), 0, event.Date, event.Time, isAllDay, startTimeISO,
+                    endTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]);
 
             } catch (eventError) {
                 console.error(`Error inserting event: ${event.Title}`, eventError);
@@ -65,5 +68,7 @@ function combineTags(event){
     const combined_tags = tags.concat(Audience);
     return combined_tags
 }
+
+
 
 insertEventsFromScrape();
