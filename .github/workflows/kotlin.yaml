@@ -1,9 +1,13 @@
 name: Kotlin CI
 
-# run on pull requests targeting main
+# run on pull requests targeting main and pushes to development
 on:
   pull_request:
     branches: [ $default-branch ]
+    paths:
+      - src/android/**
+  push:
+    branches: [ "development" ]
     paths:
       - src/android/**
 
