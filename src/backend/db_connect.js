@@ -114,7 +114,7 @@ async function dropExpiredEvents(eventIds){
     const placeholders = eventIds_array.map(() => "?").join(", ");
     const query = `DELETE FROM events WHERE eventid IN (${placeholders})`;
 
-    const result = await pool.query(query, eventIds_array);
+    const [result] = await pool.query(query, eventIds_array);
     return result;
 }
 
@@ -126,14 +126,19 @@ async function verifyLogin(username, password){
         return false; // No user found case
     }
 
-    const salt = await pool.query(`
+    const [salt] = await pool.query(`
         SELECT salt
         FROM accounts
-        WHERE username = ?`, [username]);
+        WHERE account_name = ?`, [username]);
 
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const [db_password] = await pool.query(`
+        SELECT password
+        FROM accounts
+        WHERE account_name = ?`, [username]);
 
-    const isMatch = await bcrypt.compare(password, hashedPassword);
+    const hashedPassword = await bcrypt.hash(password, salt[0]);
+
+    const isMatch = await bcrypt.compare(db_password, hashedPassword[0]);
     
     // These returns are subject to change depending on what would be most usefully returned
 
@@ -148,16 +153,16 @@ insertEventsFromScrape();
 
 // Testing on Server
 
-const setEvents = new Set([25625, 30582, 27740]);
-dropExpiredEvents(setEvents);
+//const setEvents = new Set([25625, 30582, 27740]);
+//dropExpiredEvents(setEvents);
 
-console.log(getEvents());
+//getEvents().then(console.log)
 
-createAccount("test1", "email@email.com", "password");
+//createAccount("test1", "email@email.com", "password");
 
 console.log("Legal Login");
-console.log(verifyLogin("test1", "password"));
+verifyLogin("test1", "password").then(console.log)
 console.log("Illegal Login (password)");
-console.log(verifyLogin("test1", "passwod"));
+verifyLogin("test1", "passwrd").then(console.log)
 console.log("Illegal Login (username)");
-console.log(verifyLogin("test", "password"));
+verifyLogin("test", "password").then(console.log)
