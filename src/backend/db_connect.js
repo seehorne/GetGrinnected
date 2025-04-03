@@ -37,8 +37,8 @@ async function insertEventsFromScrape(){
                 const isAllDay = event["AllDay?"] ? 1 : 0;
                 const tags = combineTags(event);
 
-                // This is to parse multiple orgs out of an org field
-                const orgs = event.Org.split(",");
+                // This is to parse multiple orgs out of an org field (also account for events that don't have orgs)
+                const orgs = event.Org ? event.split(",") : [];
 
                 // Executes the prepared statement with the event values and fills in with defaul values
                 // where the scraper didn't get information.
