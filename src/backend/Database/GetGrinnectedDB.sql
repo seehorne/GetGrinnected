@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS events (
     event_location TEXT,
     organizations JSON,
     rsvp INT,
-    event_date TIME,
+    event_date TEXT,
     event_time TEXT,
     event_all_day INT,
     event_start_time DATETIME,
