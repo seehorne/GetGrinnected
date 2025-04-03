@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS accounts(
     account_name TEXT,
     email TEXT,
     password TEXT,
-    salt TEXT,
     profile_picture LONGBLOB,
     favorited_events JSON,
     favorited_orgs JSON,

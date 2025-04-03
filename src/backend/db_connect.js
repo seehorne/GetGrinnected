@@ -100,8 +100,8 @@ async function createAccount(username, email, password){
 
     const result = await pool.query(`
         INSERT INTO
-        accounts (account_name, email, password, salt)
-        VALUES (?, ?, ?, ?)`, [username, email, hashedPassword, salt]);
+        accounts (account_name, email, password)
+        VALUES (?, ?, ?, ?)`, [username, email, hashedPassword]);
     
         return result;
 }
@@ -126,19 +126,12 @@ async function verifyLogin(username, password){
         return false; // No user found case
     }
 
-    const [salt] = await pool.query(`
-        SELECT salt
-        FROM accounts
-        WHERE account_name = ?`, [username]);
-
     const [db_password] = await pool.query(`
         SELECT password
         FROM accounts
         WHERE account_name = ?`, [username]);
 
-    const hashedPassword = await bcrypt.hash(password, salt[0]);
-
-    const isMatch = await bcrypt.compare(db_password, hashedPassword[0]);
+    const isMatch = await bcrypt.compare(password, db_password[0].password);
     
     // These returns are subject to change depending on what would be most usefully returned
 
@@ -160,9 +153,18 @@ insertEventsFromScrape();
 
 //createAccount("test1", "email@email.com", "password");
 
-console.log("Legal Login");
-verifyLogin("test1", "password").then(console.log)
-console.log("Illegal Login (password)");
-verifyLogin("test1", "passwrd").then(console.log)
-console.log("Illegal Login (username)");
-verifyLogin("test", "password").then(console.log)
+async function testLogins() {
+    console.log("Legal Login");
+    const log1 = await verifyLogin("test1", "password");
+    console.log(log1);
+
+    console.log("Illegal Login (password)");
+    const log2 = await verifyLogin("test1", "passwrd");
+    console.log(log2);
+
+    console.log("Illegal Login (username)");
+    const log3 = await verifyLogin("test", "password");
+    console.log(log3);
+}
+
+testLogins();
