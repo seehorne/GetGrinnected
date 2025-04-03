@@ -7,9 +7,9 @@ const scrape = require('../scrape.js');
 
 describe('Web Scrape Output Unit Tests', () => {
 test('All events are unique by ID', { concurrency: true }, t => {
-    events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
     currentEvents = JSON.parse(events);
-    IDSet = scrape.processExisting();
+    IDSet = scrape.processExisting(scrape.CIPATH);
     numIDs = IDSet.size;
     numEvents = currentEvents.data.length;
     assert.strictEqual(numIDs,numEvents)
@@ -17,7 +17,7 @@ test('All events are unique by ID', { concurrency: true }, t => {
 
   test('All events have start time before end time OR marked as all day', 
     { concurrency: false }, t => {
-    events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
     currentEvents = JSON.parse(events);
     numNonCompliant = 0;
     if (events.data && Array.isArray(events.data)) {
@@ -38,7 +38,7 @@ test('All events are unique by ID', { concurrency: true }, t => {
 
   test('All events have an associated organization', { concurrency: false }, 
     t => {
-    events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
     currentEvents = JSON.parse(events);
     numNonCompliant = 0;
     if (events.data && Array.isArray(events.data)) {
@@ -54,14 +54,41 @@ test('All events are unique by ID', { concurrency: true }, t => {
 
   test('After scraping, there are as many or more events as before (no lost events)',
     { concurrency: true }, async t => {
-    events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
     ogEvents = JSON.parse(events);
     beforeSize = ogEvents.data.length;
-    await scrape.scrapeData(scrape.url);
-    newEvents = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    await scrape.scrapeData(scrape.URL, scrape.CIPATH);
+    newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
     nowEvents = JSON.parse(events);
     nowSize = nowEvents.data.length;
     assert(nowSize >= beforeSize)
   }
   )
+
+  test('After dropping events, there are at most the same number as before (no spurious additions)',
+  { concurrency: false }, t => {
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    ogEvents = JSON.parse(events);
+    beforeSize = ogEvents.data.length;
+    scrape.dropPastEvents(scrape.CIPATH);
+    newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    nowEvents = JSON.parse(events);
+    nowSize = nowEvents.data.length;
+    assert(nowSize <= beforeSize)
+  }
+)
+
+test('After dropping events, there are at most the same number as before (no spurious additions)',
+  { concurrency: false }, t => {
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    ogEvents = JSON.parse(events);
+    beforeSize = ogEvents.data.length;
+    scrape.dropPastEvents(scrape.CIPATH);
+    newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    nowEvents = JSON.parse(events);
+    nowSize = nowEvents.data.length;
+    assert(nowSize <= beforeSize)
+  }
+)
+
 });

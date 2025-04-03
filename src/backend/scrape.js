@@ -1,5 +1,7 @@
 const fs = require("fs");
-const url = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
+const URL = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
+const CIPATH = './src/backend/ci_events.json'
+const TRUEPATH = './src/backend/event_data.json'
 
 /**
  * processExisting
@@ -7,9 +9,9 @@ const url = 'https://events.grinnell.edu/live/json/events/response_fields/all/pa
  * Processes already scraped events to create a set of their IDs
  * @returns Set of IDs associated with pre-existing events
  */
-function processExisting(){
+function processExisting(path){
   try{
-    events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    events = fs.readFileSync(path, 'utf-8');
     currentEvents = JSON.parse(events)
       existingIDs = new Set();
       if (currentEvents.data && Array.isArray(currentEvents.data)){
@@ -31,8 +33,8 @@ function processExisting(){
  * Repackages relevant data to JSON structure stored in event_data.json
  * @param {*} url -> url to data to be scraped, assumes JSON data
  */
-async function scrapeData(url) {
-  existingIDs = await processExisting();
+async function scrapeData(url, path) {
+  existingIDs = await processExisting(path);
   const appendPromises = [];
   fetch(url)
   .then(response => {
@@ -42,13 +44,13 @@ async function scrapeData(url) {
     return response.json();
   })
   .then(async events => {
-    existingEvents = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    existingEvents = fs.readFileSync(path, 'utf-8');
     lines = existingEvents.split('\n');
     console.log(lines.length);
     anyExistingEvents = lines.length > 4;
     zeroEventsNotCorrupt = lines.length === 4;
     updatedLines = lines.slice(0, -2); //remove last two lines
-    fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'));
+    fs.writeFileSync(path, updatedLines.join('\n'));
     if (events.data && Array.isArray(events.data)) {
       counter = 0;
       events.data.forEach(event => {
@@ -79,7 +81,7 @@ async function scrapeData(url) {
         else if (zeroEventsNotCorrupt){
           stringifyEvent = '\n'+stringifyEvent;
         }
-        appendPromises.push(fs.appendFileSync('./src/backend/event_data.json', 
+        appendPromises.push(fs.appendFileSync(path, 
           stringifyEvent, function(err){
             if(err) throw err;
             console.log('WRITING TO JSON')
@@ -91,7 +93,7 @@ async function scrapeData(url) {
     }
     await Promise.all(appendPromises);
     const CLOSEFILE = '\n]\n}'
-    fs.appendFile('./src/backend/event_data.json', CLOSEFILE, function(err){
+    fs.appendFile(path, CLOSEFILE, function(err){
       if(err) throw err;
       console.log('WRITING TO JSON')
       });
@@ -108,11 +110,11 @@ async function scrapeData(url) {
  * 
  * @returns Set() containing the IDs of all expired events
  */
-function dropPastEvents(){
+function dropPastEvents(path){
   expiredIDs = new Set();
   now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
   console.log(now)
-  events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+  events = fs.readFileSync(path, 'utf-8');
   storedEvents = JSON.parse(events);
   lines = events.split('\n');
   if (lines.length <= 4){
@@ -155,10 +157,10 @@ function dropPastEvents(){
   lastExpiredEventLine = firstExpiredEventLine + expiredEvents;
   updatedLines = lines.filter((_, index) => 
     index < firstExpiredEventLine - 1 || index >= lastExpiredEventLine - 1);
-  fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'), 'utf-8');
+  fs.writeFileSync(path, updatedLines.join('\n'), 'utf-8');
   return expiredIDs;
 }
 
-module.exports = { processExisting, scrapeData, url, dropPastEvents};
+module.exports = { processExisting, scrapeData, URL, dropPastEvents, CIPATH, TRUEPATH};
 //scrapeData(url)
   

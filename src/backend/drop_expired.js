@@ -1,4 +1,4 @@
 const scrape = require('./scrape.js');
 const fs = require("fs");
 
-scrape.dropPastEvents();
+scrape.dropPastEvents(scrape.TRUEPATH);
