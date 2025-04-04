@@ -1,8 +1,16 @@
 {
   "dependencies": {
-    "fs": "^0.0.1-security"
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "fs": "^0.0.1-security",
+    "mysql2": "^3.14.0"
   },
   "scripts": {
-    "tests": "node ./src/backend/test/backend_tests.js"
+    "test": "node --test",
+    "tests": "node --test",
+    "get_events": "node ./src/backend/fetch_events.js",
+    "add_to_db": "node ./src/backend/database_add.js",
+    "drop": "node ./src/backend/drop_expired.js"
   }
 }

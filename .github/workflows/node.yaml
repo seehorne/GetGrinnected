@@ -3,10 +3,14 @@
 
 name: Node.js CI
 
-# run on pull requests targeting main
+# run on pull requests targeting main and pushes to development
 on:
   pull_request:
     branches: [ $default-branch ]
+    paths:
+      - src/backend/**
+  push:
+    branches: [ "development" ]
     paths:
       - src/backend/**
 
