@@ -65,7 +65,7 @@ async function insertEventsFromScrape(){
 function combineTags(event){
     // Used a ternary to avoid null since that is what they give instead of an empty array.
     // If it would look nicer or be more legible as an if statement please say the word.
-    const tags = Array.isArray(event.tags) ? event.tags : []; 
+    const tags = Array.isArray(event.Tags) ? event.Tags : []; 
     const Audience = Array.isArray(event.Audience) ? event.Audience : [];
     const combined_tags = tags.concat(Audience);
     return combined_tags;
