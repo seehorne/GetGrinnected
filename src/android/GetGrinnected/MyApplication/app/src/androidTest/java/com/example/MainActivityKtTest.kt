@@ -19,7 +19,7 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigator() }
 
   composeTestRule.onNodeWithText("Login").performClick()
-  composeTestRule.onNodeWithText("Login to you account").assertIsDisplayed()
+  composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
  }
 
  @Test
