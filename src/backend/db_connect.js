@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const fs = require ('fs');
 const bcrypt = require('bcrypt');
+const scrape = require('./scrape.js');
 
 /* Important note a .env file needs to exist on any machine hoping to run this with the necessary 
 *  information in its contents (this isn't hard but will need to be added on the server side)
@@ -19,7 +20,7 @@ const pool = mysql.createPool({
 async function insertEventsFromScrape(){
 
     try{
-        const file_data =  fs.readFileSync('event_data.json')
+        const file_data =  fs.readFileSync(scrape.TRUEPATH)
         const parsing = JSON.parse(file_data);
         const events = parsing.data;
 
