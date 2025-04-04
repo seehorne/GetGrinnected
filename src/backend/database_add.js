@@ -1,4 +1,4 @@
-const db = require('./db_connect.js');
-const fs = require("fs");
+const db = import('./db_connect.js');
+const fs = import("fs");
 
 await db.insertEventsFromScrape();

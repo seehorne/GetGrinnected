@@ -13,5 +13,5 @@
     "add_to_db": "node ./src/backend/database_add.js",
     "drop": "node ./src/backend/drop_expired.js"
   },
-  "type":"commonjs"
+  "type":"module"
 }
