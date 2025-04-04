@@ -9,20 +9,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
-/**
- * Creates 
- */
-
 @Composable
-fun EventCard(event: Event, modifier: Modifier) {
+fun EventCardExpanded(event: Event, modifier: Modifier){
     Card(
         modifier = modifier
             .size(width = 300.dp, height = 100.dp)
     ) {
         Text(
-            text = "Event Location, " +
-                    "Event Time, " +
-                    "Event Description",
+            text = "${event.title}, " +
+                    "${event.time}, " +
+                    "${event.location}, " +
+                    "${event.description}, " +
+                    "${event.organizations}" +
+                    "${event.tags}",
             modifier = modifier
                 .padding(16.dp),
             textAlign = TextAlign.Center,
