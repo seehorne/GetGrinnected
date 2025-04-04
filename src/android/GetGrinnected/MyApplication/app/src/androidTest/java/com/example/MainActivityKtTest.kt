@@ -19,7 +19,7 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigator() }
 
   composeTestRule.onNodeWithText("Login").performClick()
-  composeTestRule.onNodeWithText("Login Page").assertIsDisplayed()
+  composeTestRule.onNodeWithText("Login to you account").assertIsDisplayed()
  }
 
  @Test
@@ -27,15 +27,24 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigator() }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
-  composeTestRule.onNodeWithText("Sign Up Page").assertIsDisplayed()
+  composeTestRule.onNodeWithText("Create a free account").assertIsDisplayed()
  }
 
  @Test
- fun backButton_NavigatesCorrectly() {
+ fun signupScreen_SigninButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigator() }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
-  composeTestRule.onNodeWithText("Back").performClick()
-  composeTestRule.onNodeWithText("Welcome to GetGrinnected").assertIsDisplayed()
+  composeTestRule.onNodeWithText("Sign in").performClick()
+  composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
+ }
+
+ @Test
+ fun loginScreen_SignupButton_NavigatesCorrectly() {
+  composeTestRule.setContent { AppNavigator() }
+
+  composeTestRule.onNodeWithText("Login").performClick()
+  composeTestRule.onNodeWithText("Join now").performClick()
+  composeTestRule.onNodeWithText("Create a free account").assertIsDisplayed()
  }
 }
