@@ -192,7 +192,5 @@ if (require.main === module) {
     testLogins(); // TODO: move to different test? unknown if possible.
 } else {
     // File is being used as a module. Export it.
-    module.exports = { getEvents, getEventsWithAllTags };
+    module.exports = { getEvents, getEventsWithAllTags, insertEventsFromScrape, dropExpiredEvents };
 }
-
-

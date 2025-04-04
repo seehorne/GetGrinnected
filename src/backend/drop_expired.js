@@ -1,4 +1,5 @@
 const scrape = require('./scrape.js');
+const db = require('./db.js');
 const fs = require("fs");
 
-scrape.dropPastEvents(scrape.TRUEPATH);
+db.dropExpiredEvents(scrape.dropPastEvents(scrape.TRUEPATH));
