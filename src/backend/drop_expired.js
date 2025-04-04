@@ -1,5 +1,5 @@
 const scrape = require('./scrape.js');
-const db = import('./db_connect.js');
+const db = require('./db_connect.js');
 const fs = require("fs");
 
 let dropTags = scrape.dropPastEvents(scrape.TRUEPATH);
