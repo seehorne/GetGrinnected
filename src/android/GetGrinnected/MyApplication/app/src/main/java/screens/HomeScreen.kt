@@ -1,7 +1,12 @@
 package screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -9,8 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +32,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Column as Column1
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 
 /**
  * A composable function that represents the Home screen of our app. (More to come)
@@ -31,8 +49,16 @@ import androidx.compose.foundation.layout.Column as Column1
  * @param modifier Modifier to be applied to the screen layout.
  */
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen (modifier: Modifier = Modifier){
+    var selectedView by remember { mutableIntStateOf(2) }
+    val expanded = remember { mutableStateOf(false) }
+    val today = LocalDate.now()
+    val tomorrow = today.plusDays(1)
+    val twodays = today.plusDays(2)
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
     val gradient =
         Brush.verticalGradient(
             listOf(Color.Red, Color.Blue, Color.Green),
@@ -222,7 +248,39 @@ fun HomeScreen (modifier: Modifier = Modifier){
             .padding(horizontal = 8.dp),
         verticalArrangement = Arrangement.Top,)
     {
-        Text(text = "Please Please Please")
+        Box(modifier = Modifier
+            .padding(30.dp)) {
+            Row {
+                Button (onClick = { expanded.value = true }) {
+                    if (selectedView == 0){
+                        Text(today.format(formatter))
+                    } else if (selectedView == 1){
+                        Text(tomorrow.format(formatter))
+                    } else {
+                        Text(twodays.format(formatter))
+                    }
+                }
+            }
+            DropdownMenu (expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
+                DropdownMenuItem(text = { Text(today.format(formatter)) }, onClick = {
+                    selectedView = 0
+                    expanded.value = false
+                })
+                DropdownMenuItem(text = { Text(tomorrow.format(formatter)) }, onClick = {
+                    selectedView = 1
+                    expanded.value = false
+                })
+                DropdownMenuItem(text = { Text(twodays.format(formatter)) }, onClick = {
+                    selectedView = 2
+                    expanded.value = false
+                })
+            }
+        }
+        when (selectedView) {
+            0 -> DayViewScreen(Modifier)
+            1 -> WeekViewScreen(Modifier)
+            2 -> MonthViewScreen(Modifier)
+        }
     }
 }
 
@@ -249,13 +307,15 @@ fun HomeScreenPreview (modifier: Modifier = Modifier){
         verticalArrangement = Arrangement.Center,
 
         ){
-        repeat(cardnum) {
+        repeat(20) {
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 ),
                 modifier = Modifier
-                    .size(width = 240.dp, height = 100.dp)
+                    .size(width = 380.dp, height = 100.dp)
+                    .background(Color.White)
+                    .border(2.dp, Color.Black)
 
             ) {
                 Text(
@@ -265,6 +325,8 @@ fun HomeScreenPreview (modifier: Modifier = Modifier){
                     textAlign = TextAlign.Center,
                 )
             }
+            Spacer(modifier = Modifier.height(8.dp))
+
             cardnum += 1
         }
     }
