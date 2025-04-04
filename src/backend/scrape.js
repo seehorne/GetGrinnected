@@ -1,3 +1,6 @@
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+//https://stackoverflow.com/questions/69099763/referenceerror-require-is-not-defined-in-es-module-scope-you-can-use-import-in
 const fs = require("fs");
 const URL = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
 const CIPATH = './src/backend/ci_events.json'
