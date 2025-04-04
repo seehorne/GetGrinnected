@@ -12,11 +12,15 @@ app.listen(port, () => {
 // Middleware to parse JSON requests
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('API online!');
+});
+
 // GET all events
 // TODO: we want to be able to filter events, likely using queries.
 // TODO: for all these methods, we need to figure out some system of authorization or authentication. I forget which.
-app.get('/events', (req, res) => {
-  const events = db.getEvents();
+app.get('/events', async function(req, res, next) {
+  const events = await db.getEvents();
   res.json(events);
 });
 
