@@ -96,21 +96,18 @@ Here are features you should follow in your commit messages.
   - It may be helpful to think of this as answering the question "What does this commit do?"
 - Any other necessary description is written below, separated by one line. (optional)
 
-## Branching and Merging
+## Style Guidelines
 
-There are three branches that will always exist:
+Make sure to follow style guidelines relevant to the code you are writing. Style will be reviewed as part of the merge process.
 
-- `main` - production branch. 2 approvals required to merge.
-- `dev` - development branch
-- `writing` - assignment writing and documentation branch
+Kotlin:
+- <https://developer.android.com/kotlin/style-guide>
+- We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability.  
 
-Feel free to create feature branches for your work, especially if it's more than a single commit or two. Make sure to merge these branches into `dev` or `writing` as relevant before attempting to merge them into `main`.
+Swift:
+- <https://google.github.io/swift/>
+- We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability. 
 
-## Kotlin Guidelines <https://developer.android.com/kotlin/style-guide>
-We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability.  
-
-## Swift Guidelines <https://google.github.io/swift/>
-We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability. 
-
-## Node Guidelines <https://github.com/felixge/node-style-guide>
-We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability. 
+Node:
+- <https://github.com/felixge/node-style-guide>
+- We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability. 
