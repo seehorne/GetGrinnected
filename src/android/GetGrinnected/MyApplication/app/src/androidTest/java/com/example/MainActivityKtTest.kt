@@ -42,7 +42,10 @@ class MainActivityKtTest {
  fun signupScreen_SigninButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation() }
 
-  composeTestRule.onNodeWithText("Sign Up").performClick()
+  composeTestRule.waitUntil(timeoutMillis = 5_000) {
+   composeTestRule.onAllNodesWithText("Sign up").fetchSemanticsNodes().isNotEmpty()
+  }
+  composeTestRule.onNodeWithText("Sign up").assertExists().performClick()
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
    composeTestRule.onAllNodesWithText("Sign in").fetchSemanticsNodes().isNotEmpty()
