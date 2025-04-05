@@ -2,10 +2,13 @@ package screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,24 +26,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Column as Column1
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import java.text.SimpleDateFormat
-import java.util.Date
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Vertical
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import androidx.compose.foundation.layout.Column as Column1
 
 
 /**
@@ -49,6 +53,7 @@ import java.time.format.DateTimeFormatter
  * @param modifier Modifier to be applied to the screen layout.
  */
 
+@OptIn(ExperimentalLayoutApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen (modifier: Modifier = Modifier){
@@ -245,75 +250,80 @@ fun HomeScreen (modifier: Modifier = Modifier){
         }
         Spacer(modifier = Modifier.height(120.dp))
     }
-    Column1(
+    Box(
         modifier = Modifier
             .background(Color.Black)
             .size(width = 450.dp, height = 100.dp)
             .padding(horizontal = 8.dp),
-        verticalArrangement = Arrangement.Top,)
+
+    )
     {
-        Box(modifier = Modifier
-            .padding(30.dp)) {
-            Row {
-                Button (onClick = { expanded.value = true }) {
-                    if (selectedView == 0){
+
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp))
+        {
+            Image(
+            painter = painterResource(id = R.drawable.gg_logo_2),
+            contentDescription = "App Logo",
+            modifier = Modifier
+                .padding (25.dp)
+                .size (50.dp))
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End) {
+                Button(onClick = { expanded.value = true }) {
+                    if (selectedView == 0) {
                         Text(today.format(formatter))
-                    } else if (selectedView == 1){
+                    } else if (selectedView == 1) {
                         Text(tomorrow.format(formatter))
-                    }
-                    else if (selectedView == 2){
+                    } else if (selectedView == 2) {
                         Text(twodays.format(formatter))
-                    }
-                    else if (selectedView == 3){
+                    } else if (selectedView == 3) {
                         Text(threedays.format(formatter))
-                    }
-                    else if (selectedView == 4){
+                    } else if (selectedView == 4) {
                         Text(fourdays.format(formatter))
-                    }
-                    else if (selectedView == 5){
+                    } else if (selectedView == 5) {
                         Text(fivedays.format(formatter))
-                    }
-                    else {
+                    } else {
                         Text(sixdays.format(formatter))
                     }
                 }
-            }
-            DropdownMenu (expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
-                DropdownMenuItem(text = { Text(today.format(formatter)) }, onClick = {
-                    selectedView = 0
-                    expanded.value = false
-                })
-                DropdownMenuItem(text = { Text(tomorrow.format(formatter)) }, onClick = {
-                    selectedView = 1
-                    expanded.value = false
-                })
-                DropdownMenuItem(text = { Text(twodays.format(formatter)) }, onClick = {
-                    selectedView = 2
-                    expanded.value = false
-                })
-                DropdownMenuItem(text = { Text(threedays.format(formatter)) }, onClick = {
-                    selectedView = 3
-                    expanded.value = false
-                })
-                DropdownMenuItem(text = { Text(fourdays.format(formatter)) }, onClick = {
-                    selectedView = 4
-                    expanded.value = false
-                })
-                DropdownMenuItem(text = { Text(fivedays.format(formatter)) }, onClick = {
-                    selectedView = 5
-                    expanded.value = false
-                })
-                DropdownMenuItem(text = { Text(sixdays.format(formatter)) }, onClick = {
-                    selectedView = 6
-                    expanded.value = false
-                })
+                DropdownMenu(
+                    expanded = expanded.value,
+                    onDismissRequest = { expanded.value = false }) {
+                    DropdownMenuItem(text = { Text(today.format(formatter)) }, onClick = {
+                        selectedView = 0
+                        expanded.value = false
+                    })
+                    DropdownMenuItem(text = { Text(tomorrow.format(formatter)) }, onClick = {
+                        selectedView = 1
+                        expanded.value = false
+                    })
+                    DropdownMenuItem(text = { Text(twodays.format(formatter)) }, onClick = {
+                        selectedView = 2
+                        expanded.value = false
+                    })
+                    DropdownMenuItem(text = { Text(threedays.format(formatter)) }, onClick = {
+                        selectedView = 3
+                        expanded.value = false
+                    })
+                    DropdownMenuItem(text = { Text(fourdays.format(formatter)) }, onClick = {
+                        selectedView = 4
+                        expanded.value = false
+                    })
+                    DropdownMenuItem(text = { Text(fivedays.format(formatter)) }, onClick = {
+                        selectedView = 5
+                        expanded.value = false
+                    })
+                    DropdownMenuItem(text = { Text(sixdays.format(formatter)) }, onClick = {
+                        selectedView = 6
+                        expanded.value = false
+                    })
+                }
             }
         }
-        when (selectedView) {
-            0 -> DayViewScreen(Modifier)
-            1 -> WeekViewScreen(Modifier)
-            2 -> MonthViewScreen(Modifier)
-        }
+
     }
 }
 
