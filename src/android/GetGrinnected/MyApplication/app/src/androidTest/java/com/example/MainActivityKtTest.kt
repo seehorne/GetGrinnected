@@ -43,9 +43,9 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigation() }
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
-   composeTestRule.onAllNodesWithText("Sign up").fetchSemanticsNodes().isNotEmpty()
+   composeTestRule.onAllNodesWithText("Sign Up").fetchSemanticsNodes().isNotEmpty()
   }
-  composeTestRule.onNodeWithText("Sign up").assertExists().performClick()
+  composeTestRule.onNodeWithText("Sign Up").assertExists().performClick()
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
    composeTestRule.onAllNodesWithText("Sign in").fetchSemanticsNodes().isNotEmpty()
