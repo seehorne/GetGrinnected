@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.myapplication.R
 
 /**
@@ -45,14 +46,12 @@ import com.example.myapplication.R
  * along with a Login button (To navigate to the homepage/complete account creation)
  * and a sign up navigation option for users who need to create an account.
  *
- * @param onLoginClick A lambda function that is triggered when the "Login" button is clicked used
- * by our navigation flow.
- * @param onSignupClick A lambda function that is triggered when the "Sign up" button is clicked used
- * by our navigation flow.
+ *  @param modifier modifier applied to the screen layout
+ *  @param navController used to move through the app
  */
 
 @Composable
-fun LoginScreen(onLoginClick: () -> Unit, onSignupClick: () -> Unit) {
+fun LoginScreen(modifier: Modifier, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -117,7 +116,10 @@ fun LoginScreen(onLoginClick: () -> Unit, onSignupClick: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = onLoginClick) {
+        Button(onClick = {navController.navigate("main"){
+            popUpTo(0){inclusive = true}
+            launchSingleTop = true
+        } }) {
             Text("Login")
         }
 
@@ -130,7 +132,7 @@ fun LoginScreen(onLoginClick: () -> Unit, onSignupClick: () -> Unit) {
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
             Text(text = "New to GetGrinnected?")
-            TextButton(onClick = onSignupClick) { Text(text = "Join now")}
+            TextButton(onClick = {navController.navigate("signup")}) { Text(text = "Join now")}
         }
         Spacer(modifier = Modifier.height(200.dp))
     }

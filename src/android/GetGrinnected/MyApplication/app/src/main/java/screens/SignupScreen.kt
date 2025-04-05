@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.myapplication.R
 
 /**
@@ -44,14 +45,12 @@ import com.example.myapplication.R
  * along with a sign-up button (To navigate to the homepage/complete account creation)
  * and a sign in navigation option for users who already have an account.
  *
- * @param onSignInClick A lambda function that is triggered when the "Sign in" button is clicked used
- * by our navigation flow.
- * @param onSignupClick A lambda function that is triggered when the "Sign up" button is clicked used
- * by our navigation flow.
+ * @param modifier modifier applied to the screen layout
+ * @param navController used to move through the app
  */
 
 @Composable
-fun SignupScreen(onSignInClick: () -> Unit, onSignupClick: () -> Unit) {
+fun SignupScreen(modifier: Modifier, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -132,7 +131,11 @@ fun SignupScreen(onSignInClick: () -> Unit, onSignupClick: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick =  onSignupClick) {
+        Button(onClick =  {
+            navController.navigate("main"){
+                popUpTo(0){inclusive = true}
+                launchSingleTop = true
+        } }) {
             Text("Sign up")
         }
 
@@ -141,7 +144,7 @@ fun SignupScreen(onSignInClick: () -> Unit, onSignupClick: () -> Unit) {
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
             Text(text = "Already on GetGrinnected?")
-            TextButton(onClick = onSignInClick){
+            TextButton(onClick = {navController.navigate("login")}){
                 Text(text = "Sign in")
             }
         }

@@ -6,7 +6,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.myapplication.AppNavigator
+import com.example.myapplication.AppNavigation
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityKtTest {
@@ -16,7 +16,7 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_LoginButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigator() }
+  composeTestRule.setContent { AppNavigation() }
 
   composeTestRule.onNodeWithText("Login").performClick()
   composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
@@ -24,7 +24,7 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_SignUpButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigator() }
+  composeTestRule.setContent { AppNavigation() }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
   composeTestRule.onNodeWithText("Create a free account").assertIsDisplayed()
@@ -32,7 +32,7 @@ class MainActivityKtTest {
 
  @Test
  fun signupScreen_SigninButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigator() }
+  composeTestRule.setContent { AppNavigation() }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
   composeTestRule.onNodeWithText("Sign in").performClick()
@@ -41,7 +41,7 @@ class MainActivityKtTest {
 
  @Test
  fun loginScreen_SignupButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigator() }
+  composeTestRule.setContent { AppNavigation() }
 
   composeTestRule.onNodeWithText("Login").performClick()
   composeTestRule.onNodeWithText("Join now").performClick()
