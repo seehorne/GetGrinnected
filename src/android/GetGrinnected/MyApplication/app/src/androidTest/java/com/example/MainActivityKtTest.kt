@@ -41,7 +41,6 @@ class MainActivityKtTest {
  @Test
  fun signupScreen_SigninButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation() }
-  composeTestRule.waitForIdle()
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
    composeTestRule.onAllNodesWithText("Sign Up").fetchSemanticsNodes().isNotEmpty()
@@ -62,7 +61,6 @@ class MainActivityKtTest {
  @Test
  fun loginScreen_SignupButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation() }
-  composeTestRule.waitForIdle()
 
   composeTestRule.onNodeWithText("Login").performClick()
 
