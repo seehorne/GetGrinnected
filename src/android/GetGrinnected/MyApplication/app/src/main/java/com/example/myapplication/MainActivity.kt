@@ -42,7 +42,6 @@ fun AppNavigator() {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         when (currentScreen) {
             "welcome" -> WelcomeScreen(
                 onLoginClick = { currentScreen = "login" },
