@@ -39,4 +39,4 @@ jobs:
         target: default
         arch: x86_64
         # TODO: does not run ./gradlew test for unit tests. we need to fix
-        script: ./gradlew connectedAndroidTest
+        script: ./gradlew connectedCheck
