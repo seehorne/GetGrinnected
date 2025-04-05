@@ -43,7 +43,15 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigation() }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
-  composeTestRule.onNodeWithText("Sign in").performClick()
+
+  composeTestRule.waitUntil(timeoutMillis = 5_000) {
+   composeTestRule.onAllNodesWithText("Sign in").fetchSemanticsNodes().isNotEmpty()
+  }
+  composeTestRule.onNodeWithText("Sign in").assertExists().performClick()
+
+  composeTestRule.waitUntil(timeoutMillis = 5_000) {
+   composeTestRule.onAllNodesWithText("Login to your account").fetchSemanticsNodes().isNotEmpty()
+  }
   composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
  }
 
