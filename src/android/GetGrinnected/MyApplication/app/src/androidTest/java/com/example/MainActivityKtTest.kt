@@ -31,20 +31,20 @@ class MainActivityKtTest {
  }
 
  @Test
- fun signupScreen_SigninButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
-
-  composeTestRule.onNodeWithText("Sign Up").performClick()
-  composeTestRule.onNodeWithText("Sign in").performClick()
-  composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
- }
-
- @Test
  fun loginScreen_SignupButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation() }
 
   composeTestRule.onNodeWithText("Login").performClick()
   composeTestRule.onNodeWithText("Join now").performClick()
   composeTestRule.onNodeWithText("Create a free account").assertIsDisplayed()
+ }
+ 
+ @Test
+ fun signupScreen_SigninButton_NavigatesCorrectly() {
+  composeTestRule.setContent { AppNavigation() }
+
+  composeTestRule.onNodeWithText("Sign Up").performClick()
+  composeTestRule.onNodeWithText("Sign in").performClick()
+  composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
  }
 }
