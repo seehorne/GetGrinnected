@@ -1,15 +1,16 @@
 name: Kotlin CI
 
-# run on pull requests targeting main and pushes to development
+# run on pull requests targeting main and pushes to any branch
 on:
   pull_request:
     branches: [ $default-branch ]
     paths:
       - src/android/**
+      - .github/workflows/kotlin.yaml
   push:
-    branches: [ "development" ]
     paths:
       - src/android/**
+      - .github/workflows/kotlin.yaml
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
