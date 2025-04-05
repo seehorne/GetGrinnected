@@ -1,11 +1,13 @@
 package com.example.myapplication
 
+import android.os.Build
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -19,43 +21,13 @@ import androidx.compose.runtime.*
  * creation.
  */
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
-                    AppNavigator()
+                    AppNavigation()
             }
-        }
-    }
-}
-
-/**
- * A composable function used to navigate based on the currentScreen. (This utilizes the lambda function
- * parameters we made for the login, welcome and signup screens).
- */
-
-@Composable
-fun AppNavigator() {
-    var currentScreen by remember { mutableStateOf("welcome") }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        when (currentScreen) {
-            "welcome" -> WelcomeScreen(
-                onLoginClick = { currentScreen = "login" },
-                onSignupClick = { currentScreen = "signup" }
-            )
-            "signup" -> SignupScreen(
-                onSignInClick = { currentScreen = "login"},
-                onSignupClick = {currentScreen = "mainpage"}
-            )
-            "login" -> LoginScreen(
-                onLoginClick = { currentScreen = "mainpage"},
-                onSignupClick = {currentScreen = "signup"})
-            "mainpage" -> MainPage()
         }
     }
 }
