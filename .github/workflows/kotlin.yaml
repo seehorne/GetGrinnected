@@ -35,7 +35,7 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         working-directory: ./src/android/GetGrinnected/MyApplication
-        api-level: 35
+        api-level: 33
         target: default
         arch: x86_64
         # TODO: does not run ./gradlew test for unit tests. we need to fix
