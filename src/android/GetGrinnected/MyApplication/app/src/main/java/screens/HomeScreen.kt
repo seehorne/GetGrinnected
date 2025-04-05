@@ -57,6 +57,10 @@ fun HomeScreen (modifier: Modifier = Modifier){
     val today = LocalDate.now()
     val tomorrow = today.plusDays(1)
     val twodays = today.plusDays(2)
+    val threedays = today.plusDays(3)
+    val fourdays = today.plusDays(4)
+    val fivedays = today.plusDays(5)
+    val sixdays = today.plusDays(6)
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     val gradient =
@@ -83,7 +87,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
             modifier = Modifier
-                .size(width = 300.dp, height = 100.dp)
+                .size(width = 380.dp, height = 100.dp)
 
         ) {
             Text(
@@ -101,7 +105,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
             ),
         modifier = Modifier
-            .size(width = 300.dp, height = 100.dp)
+            .size(width = 380.dp, height = 100.dp)
 
     ) {
             Text(
@@ -256,8 +260,21 @@ fun HomeScreen (modifier: Modifier = Modifier){
                         Text(today.format(formatter))
                     } else if (selectedView == 1){
                         Text(tomorrow.format(formatter))
-                    } else {
+                    }
+                    else if (selectedView == 2){
                         Text(twodays.format(formatter))
+                    }
+                    else if (selectedView == 3){
+                        Text(threedays.format(formatter))
+                    }
+                    else if (selectedView == 4){
+                        Text(fourdays.format(formatter))
+                    }
+                    else if (selectedView == 5){
+                        Text(fivedays.format(formatter))
+                    }
+                    else {
+                        Text(sixdays.format(formatter))
                     }
                 }
             }
@@ -272,6 +289,22 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 })
                 DropdownMenuItem(text = { Text(twodays.format(formatter)) }, onClick = {
                     selectedView = 2
+                    expanded.value = false
+                })
+                DropdownMenuItem(text = { Text(threedays.format(formatter)) }, onClick = {
+                    selectedView = 3
+                    expanded.value = false
+                })
+                DropdownMenuItem(text = { Text(fourdays.format(formatter)) }, onClick = {
+                    selectedView = 4
+                    expanded.value = false
+                })
+                DropdownMenuItem(text = { Text(fivedays.format(formatter)) }, onClick = {
+                    selectedView = 5
+                    expanded.value = false
+                })
+                DropdownMenuItem(text = { Text(sixdays.format(formatter)) }, onClick = {
+                    selectedView = 6
                     expanded.value = false
                 })
             }
