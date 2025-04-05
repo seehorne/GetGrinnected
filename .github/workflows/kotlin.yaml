@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-connected-kotlin:
 
     runs-on: ubuntu-latest
 
@@ -34,5 +34,6 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         working-directory: ./src/android/GetGrinnected/MyApplication
-        api-level: 28 # https://github.com/SORMAS-Foundation/SORMAS-Project/blob/development/.github/workflows/sormas_app_ci.yml#L32
+        api-level: 35
+        # TODO: does not run ./gradlew test for unit tests. we need to fix
         script: ./gradlew connectedAndroidTest
