@@ -35,10 +35,16 @@ The structure of our Repository is as follows:
 
 # Developer Guidelines
 
+These guidelines are here to make development easier and make sure we meet class requirements and standards.
+
 ## Branching and Merging
 
-- Make a new branch for each feature
-- `main` branch is protected, and you need 2 approvals to merge
+This is the pattern you should follow when you are developing a new code feature.
+
+1. Change to the main branch, and pull any new changes.
+2. Create a new branch for your feature. It should be named according to the pattern `<NAME>/<FEATURE>`, such as `almond/deploy-api`.
+3. Work on that branch, committing and pushing as needed.
+4. When you are done with your feature, create a Pull Request to merge it into main. You will need approval to merge.
 
 ## Testing
 
@@ -69,6 +75,8 @@ Now you can add tests to your testing file using this site <https://developer.ap
 When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
 
 Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
+
+Pipelines run when pushing to any feature branch, as well as before merging to main.
 
 ## Commit Messages
 
