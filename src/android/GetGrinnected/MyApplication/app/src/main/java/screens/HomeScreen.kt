@@ -8,7 +8,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Vertical
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -67,7 +65,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
     val fivedays = today.plusDays(5)
     val sixdays = today.plusDays(6)
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
+    var cardnum = 1
     val gradient =
         Brush.verticalGradient(
             listOf(Color.Red, Color.Blue, Color.Green),
@@ -84,170 +82,30 @@ fun HomeScreen (modifier: Modifier = Modifier){
             .fillMaxSize()
             .verticalScroll(state),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally)
+    {
+        Spacer(modifier = Modifier.height(150.dp))
 
-    ){Spacer(modifier = Modifier.height(150.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
-
-        ) {
-            Text(
-            text = "Event Location, " +
-                    "Event Time, " +
-                    "Event Description",
-            modifier = Modifier
-                .padding(16.dp),
-            textAlign = TextAlign.Center,
-        )
-    }
-        Spacer(modifier = Modifier.height(8.dp))
+        repeat(20) {
             Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-        modifier = Modifier
-            .size(width = 380.dp, height = 100.dp)
-
-    ) {
-            Text(
-                text = "Event Location2, " +
-                        "Event Time2, " +
-                        "Event Description2",
                 modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
+                    .size(width = 380.dp, height = 100.dp)
+                    .background(Color.White)
+                    .border(2.dp, Color.Black)
 
-        ) {
-            Text(
-                text = "Event Location3, " +
-                        "Event Time3, " +
-                        "Event Description3",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
+            ) {
+                Text(
+                    text = "Event " + cardnum,
+                    modifier = Modifier
+                        .padding(16.dp),
+                    textAlign = TextAlign.Center,
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
 
-        ) {
-            Text(
-                text = "Event Location4, " +
-                        "Event Time4, " +
-                        "Event Description4",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
+            cardnum += 1
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
 
-        ) {
-            Text(
-                text = "Event Location5, " +
-                        "Event Time5, " +
-                        "Event Description5",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
-
-        ) {
-            Text(
-                text = "Event Location6, " +
-                        "Event Time6, " +
-                        "Event Description6",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
-
-        ) {
-            Text(
-                text = "Event Location7, " +
-                        "Event Time7, " +
-                        "Event Description7",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
-
-        ) {
-            Text(
-                text = "Event Location8, " +
-                        "Event Time8, " +
-                        "Event Description8",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            ),
-            modifier = Modifier
-                .size(width = 380.dp, height = 100.dp)
-
-        ) {
-            Text(
-                text = "Event Location9, " +
-                        "Event Time9, " +
-                        "Event Description9",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-            )
-        }
         Spacer(modifier = Modifier.height(120.dp))
     }
     Box(
