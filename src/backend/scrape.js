@@ -138,6 +138,7 @@ function dropPastEvents(path){
         expiredEvents++;
         expiredIDs.add(event.ID);
         expiredIndices.add(i);
+        console.log("DROPPING"+ event.Title);
         idString = idString+event.ID+'\n';
         eventInfo["ID"] = event.ID;
         eventStr = "";
@@ -154,6 +155,7 @@ function dropPastEvents(path){
         console.log(diff);
         console.log(event.Title);
         if (diff < 0) {
+          console.log("DROPPING"+ event.Title);
             expiredEvents++;
             expiredIDs.add(event.ID);
             expiredIndices.add(i);
