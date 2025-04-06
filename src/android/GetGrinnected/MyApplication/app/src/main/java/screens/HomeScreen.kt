@@ -44,6 +44,8 @@ import androidx.compose.foundation.layout.Column as Column1
 
 
 /**
+ * Anthony Schwindt, Ethan Hughes
+ *
  * A composable function that represents the Home screen of our app. (More to come)
  *
  * @param modifier Modifier to be applied to the screen layout.
@@ -53,8 +55,12 @@ import androidx.compose.foundation.layout.Column as Column1
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen (modifier: Modifier = Modifier) {
+    // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(2) }
+    // holds whether the dropdown menu's are up or down
     val expanded = remember { mutableStateOf(false) }
+    val expanded2 = remember { mutableStateOf(false) }
+    // holds dates for the current view dropdown
     val today = LocalDate.now()
     val tomorrow = today.plusDays(1)
     val twodays = today.plusDays(2)
@@ -62,8 +68,11 @@ fun HomeScreen (modifier: Modifier = Modifier) {
     val fourdays = today.plusDays(4)
     val fivedays = today.plusDays(5)
     val sixdays = today.plusDays(6)
+    // formats the date view
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    // currently for numbering events will get rid of with real events
     var cardnum = 1
+    // background color for the page
     val gradient =
         Brush.verticalGradient(
             listOf(Color.Red, Color.Blue, Color.Green),
@@ -71,24 +80,30 @@ fun HomeScreen (modifier: Modifier = Modifier) {
             10000.0f,
             TileMode.Repeated
         )
+    // remembers where we are scrolled to
     val state = rememberScrollState()
-    val expanded2 = remember { mutableStateOf(false) }
+    // stores whether checkboxes for tags are checked
     val check1 = remember { mutableStateOf(false)}
     val check2 = remember { mutableStateOf(false)}
     val check3 = remember { mutableStateOf(false)}
+    // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
+    // creates the UI field for the events
     Column1(
         modifier = Modifier
+            // sets the color of the background
             .background(gradient)
-            .padding(horizontal = 8.dp)
             .fillMaxSize()
             .verticalScroll(state),
+        // centers the event cards
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
+        // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
 
+        // populates the page with model cards
         repeat(20) {
             Card(
                 modifier = Modifier
@@ -104,27 +119,29 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center,
                 )
             }
+            // creates space between cards
             Spacer(modifier = Modifier.height(8.dp))
-
+            // currently helps number model events - remove later
             cardnum += 1
         }
-
+        // creates a space at the bottom for visual appeal
         Spacer(modifier = Modifier.height(120.dp))
     }
+    // creates the top bar for the home page (I think might be erroneous with the row below
     Box(
         modifier = Modifier
             .background(Color.Black)
             .size(width = 450.dp, height = 100.dp)
             .padding(horizontal = 8.dp),
-
         )
     {
-
+        //creates a row to align the logo and buttons on the home page
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         )
         {
+            // adds the logo to the top
             Image(
                 painter = painterResource(id = R.drawable.gg_logo_2),
                 contentDescription = "App Logo",
@@ -132,11 +149,14 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                     .padding(25.dp)
                     .size(50.dp)
             )
+            // centers the bottons
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
+                // creates day menu
                 Button(onClick = { expanded.value = true }) {
+                    // displays selected day on the button
                     if (selectedView == 0) {
                         Text(today.format(formatter))
                     } else if (selectedView == 1) {
@@ -153,6 +173,7 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                         Text(sixdays.format(formatter))
                     }
                 }
+                // creates dropdown menu when button is clicked
                 DropdownMenu(
                     expanded = expanded.value,
                     onDismissRequest = { expanded.value = false }) {
@@ -185,11 +206,13 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                         expanded.value = false
                     })
                 }}
+                // I don't know why this is necessary but wan needed to properly space tag menu
                 Row(modifier = Modifier
                     .padding(25.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
                 ) {
+                    // creates tags menu
                     Button(onClick = { expanded2.value = true }) {
                         Text("Tags")
                     }
@@ -197,43 +220,53 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
                         DropdownMenuItem(text = {
-                        Row(modifier = Modifier,
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.End,){
-                            Checkbox(
-                                checked = check1.value,
-                                onCheckedChange = {
-                                    if (check1.value) {
-                                        check1.value = false }
-                                    else { check1.value = true}
-                                })
-
-                            Text ("Student Activity")}},
+                            // formats checkbox and text on same line
+                            Row(modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,)
+                            {
+                                //creates a checkbox
+                                Checkbox(
+                                    checked = check1.value,
+                                    onCheckedChange = {
+                                        if (check1.value) {
+                                            check1.value = false }
+                                        else { check1.value = true}
+                                    })
+                                // checkbox 1 label
+                                Text ("Student Activity")}},
                             onClick = {
-                            selectedView = 0
-                            expanded2.value = false
+                                selectedView = 0
+                                expanded2.value = false
                         })
-                        DropdownMenuItem(text = {Row(modifier = Modifier,
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.End,){
-                            Checkbox(
-                                checked = check2.value,
-                                onCheckedChange = {
-                                    if (check2.value) {
-                                        check2.value = false }
-                                    else { check2.value = true}
+                        DropdownMenuItem(text = {
+                            // formats checkbox and text on same line
+                            Row(modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,)
+                            {
+                                //creates a checkbox
+                                Checkbox(
+                                    checked = check2.value,
+                                    onCheckedChange = {
+                                        if (check2.value) {
+                                            check2.value = false }
+                                        else { check2.value = true}
                                 })
-
-                            Text("CLS") }},
+                                // checkbox 2 label
+                                Text("CLS") }},
                             onClick = {
-                            selectedView = 1
-                            expanded2.value = false
+                                selectedView = 1
+                                expanded2.value = false
                             })
 
                         DropdownMenuItem(text = {
+                            // formats checkbox and text on same line
                             Row(modifier = Modifier,
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,){
+                                horizontalArrangement = Arrangement.End,)
+                            {
+                                //creates a checkbox
                                 Checkbox(
                                     checked = check3.value,
                                     onCheckedChange = {
@@ -241,11 +274,11 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                                             check3.value = false }
                                         else { check3.value = true}
                                     })
-
+                                // checkbox 3 label
                                 Text("Misc") }},
                             onClick = {
-                            selectedView = 2
-                            expanded2.value = false
+                                selectedView = 2
+                                expanded2.value = false
                         })
                     }
                 }
