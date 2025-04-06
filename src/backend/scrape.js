@@ -2,7 +2,7 @@ const fs = require("fs");
 const URL = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
 const CIPATH = './src/backend/ci_events.json'
 const TRUEPATH = './src/backend/event_data.json'
-const DROPPATH = './src/backend/drop_ids.txt'
+const DROPPATH = './src/backend/drop_ids.json'
 
 /**
  * processExisting
@@ -120,6 +120,7 @@ function dropPastEvents(path){
   storedEvents = JSON.parse(events);
   lines = events.split('\n');
   console.log(lines.length);
+  fs.writeFileSync(DROPPATH, "{\n\"data\" : [\n");
   if (lines.length <= 4){
     return; //this implies there are no events even there
   }
@@ -132,11 +133,22 @@ function dropPastEvents(path){
     let event = storedEvents.data[i];
     dayDiff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now_midnight;
     console.log(dayDiff);
+    eventInfo = {};
     if (dayDiff < 0) {//event is on day that has passed
         expiredEvents++;
         expiredIDs.add(event.ID);
         expiredIndices.add(i);
         idString = idString+event.ID+'\n';
+        eventInfo["ID"] = event.ID;
+        eventStr = "";
+            if (expiredEvents!==1){
+              eventStr = ",\n"
+            }
+            eventStr = eventStr + JSON.stringify(eventInfo);
+        fs.appendFileSync(DROPPATH, eventStr, function(err){
+          if(err) throw err;
+          console.log('WRITING TO JSON')
+        });
     } else if (!event.allDay && dayDiff === 0) {//event is today, may or may not be over
         let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
         console.log(diff);
@@ -146,6 +158,16 @@ function dropPastEvents(path){
             expiredIDs.add(event.ID);
             expiredIndices.add(i);
             idString = idString+event.ID+'\n';
+            eventInfo["ID"] = event.ID;
+            eventStr = "";
+            if (expiredEvents!==1){
+              eventStr = ",\n"
+            }
+            eventStr = eventStr + JSON.stringify(eventInfo);
+            fs.appendFileSync(DROPPATH, eventStr, function(err){
+              if(err) throw err;
+              console.log('WRITING TO JSON')
+            });
         }
     } else if(dayDiff > 0){//event is after today
       break;//since they're time sorted, no need to look further once on tomorrow
@@ -154,7 +176,12 @@ function dropPastEvents(path){
   // minus 2 so we don't remove the brackets at the top but rather actual events
   updatedLines = lines.filter((_, i) => !expiredIndices.has(i-2));
   fs.writeFileSync(path, updatedLines.join('\n'), 'utf-8');
-  fs.writeFileSync(DROPPATH, idString, 'utf8');//write it to a file
+  //fs.writeFileSync(DROPPATH, idString, 'utf8');//write it to a file
+  const CLOSEFILE = '\n]\n}'
+  fs.appendFileSync(DROPPATH, CLOSEFILE, function(err){
+    if(err) throw err;
+    console.log('WRITING TO JSON')
+    });
   return expiredIDs;
 }
 
