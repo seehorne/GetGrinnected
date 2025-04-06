@@ -54,7 +54,7 @@ import androidx.compose.foundation.layout.Column as Column1
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen (modifier: Modifier = Modifier){
+fun HomeScreen (modifier: Modifier = Modifier) {
     var selectedView by remember { mutableIntStateOf(2) }
     val expanded = remember { mutableStateOf(false) }
     val today = LocalDate.now()
@@ -74,6 +74,7 @@ fun HomeScreen (modifier: Modifier = Modifier){
             TileMode.Repeated
         )
     val state = rememberScrollState()
+    var expanded2 = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     Column1(
         modifier = Modifier
@@ -82,7 +83,8 @@ fun HomeScreen (modifier: Modifier = Modifier){
             .fillMaxSize()
             .verticalScroll(state),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally)
+        horizontalAlignment = Alignment.CenterHorizontally
+    )
     {
         Spacer(modifier = Modifier.height(150.dp))
 
@@ -114,22 +116,25 @@ fun HomeScreen (modifier: Modifier = Modifier){
             .size(width = 450.dp, height = 100.dp)
             .padding(horizontal = 8.dp),
 
-    )
+        )
     {
 
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp))
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        )
         {
             Image(
-            painter = painterResource(id = R.drawable.gg_logo_2),
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .padding (25.dp)
-                .size (50.dp))
-            Row (
+                painter = painterResource(id = R.drawable.gg_logo_2),
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .padding(25.dp)
+                    .size(50.dp)
+            )
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End) {
+                horizontalArrangement = Arrangement.End
+            ) {
                 Button(onClick = { expanded.value = true }) {
                     if (selectedView == 0) {
                         Text(today.format(formatter))
@@ -178,60 +183,84 @@ fun HomeScreen (modifier: Modifier = Modifier){
                         selectedView = 6
                         expanded.value = false
                     })
+                }}
+                Row(modifier = Modifier
+                    .padding(25.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    Button(onClick = { expanded2.value = true }) {
+                        Text("Tags")
+                    }
+                    DropdownMenu(
+                        expanded = expanded2.value,
+                        onDismissRequest = { expanded2.value = false }) {
+                        DropdownMenuItem(text = { Text("Student Activity") }, onClick = {
+                            selectedView = 0
+                            expanded2.value = false
+                        })
+                        DropdownMenuItem(text = { Text("CLS") }, onClick = {
+                            selectedView = 1
+                            expanded2.value = false
+                        })
+                        DropdownMenuItem(text = { Text("Misc") }, onClick = {
+                            selectedView = 2
+                            expanded2.value = false
+                        })
+                    }
                 }
             }
+
         }
-
     }
-}
 
 
-@Preview
-@Composable
-fun HomeScreenPreview (modifier: Modifier = Modifier){
-    val gradient =
-        Brush.verticalGradient(
-            listOf(Color.Red, Color.Blue, Color.Green),
-            0.0f,
-            10000.0f,
-            TileMode.Repeated
-        )
-    val state = rememberScrollState()
-    var cardnum = 1
-    LaunchedEffect(Unit) { state.animateScrollTo(100) }
-    Column1(
-        modifier = Modifier
-            .background(gradient)
-            .size(800.dp)
-            .padding(horizontal = 8.dp)
-            .verticalScroll(state),
-        verticalArrangement = Arrangement.Center,
-
-        ){
-        repeat(20) {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                ),
-                modifier = Modifier
-                    .size(width = 380.dp, height = 100.dp)
-                    .background(Color.White)
-                    .border(2.dp, Color.Black)
+    @Preview
+    @Composable
+    fun HomeScreenPreview(modifier: Modifier = Modifier) {
+        val gradient =
+            Brush.verticalGradient(
+                listOf(Color.Red, Color.Blue, Color.Green),
+                0.0f,
+                10000.0f,
+                TileMode.Repeated
+            )
+        val state = rememberScrollState()
+        var cardnum = 1
+        LaunchedEffect(Unit) { state.animateScrollTo(100) }
+        Column1(
+            modifier = Modifier
+                .background(gradient)
+                .size(800.dp)
+                .padding(horizontal = 8.dp)
+                .verticalScroll(state),
+            verticalArrangement = Arrangement.Center,
 
             ) {
-                Text(
-                    text = "Event " + cardnum,
+            repeat(20) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    ),
                     modifier = Modifier
-                        .padding(16.dp),
-                    textAlign = TextAlign.Center,
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+                        .size(width = 380.dp, height = 100.dp)
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
 
-            cardnum += 1
+                ) {
+                    Text(
+                        text = "Event " + cardnum,
+                        modifier = Modifier
+                            .padding(16.dp),
+                        textAlign = TextAlign.Center,
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                cardnum += 1
+            }
         }
     }
-}
 
 
 
