@@ -77,19 +77,72 @@ async function getEvents(){
 }
 
 /**
+ * Construct a part of a query that selects for all tags.
+ *
+ * \param tags  List of string tags
+ * \returns     A string that serves as a SQL selector for all those tags
+ */
+function queryAllTags(tags) {
+    // escape the tag so that we will get a string query containing '\"tagnamne\"', for valid search
+    const pieces = tags.map((t) => `JSON_CONTAINS(tags, ${pool.escape(t)}, '$')`);
+    const piecesAndTogether = pieces.join(' AND ');
+    return '(' + piecesAndTogether + ')';
+}
+
+/**
+ * Construct a part of a query that selects for events between a start and end time.
+ *
+ * \param start  Start time in Unix time
+ * \param end    End time in Unix time
+ * \returns      A string that serves as a SQL selector for those dates
+ */
+function queryBetweenDates(start, end) {
+    // events where the start and end times are set
+    // TODO: comparisons seem to not be working. need more work
+    const event_time_between = `(event_start_time < FROM_UNIXTIME(${pool.escape(start)}) AND event_end_time > FROM_UNIXTIME(${pool.escape(end)}))`
+
+    // TODO: handle events that are marked all day and therefore don't have a start time and end time
+    // could it be done when scraping, maybe? this will SUCK to do in mysql.
+
+    return event_time_between;
+}
+
+/**
  * Query the database for all events that have every tag in a list.
  *
  * \param tags  List of strings.
  * \returns     A list of all events that contain every tag in `tags`.
  */
-async function getEventsWithAllTags(tags){
-    // build up a query for all items that have tag1 AND tag2 AND ... AND tagN
-    // the query looks like JSON_CONTAINS(tags, '"tag1"', '$') AND JSON_CONTAINS(tags, '"tag2"', '$') ...
-    const containsPieces = tags.map((t) => `JSON_CONTAINS(tags, '"` + t + `"', '$')`);
-    const containsAllTags = containsPieces.join(' AND ');
-    const query = 'SELECT * FROM events WHERE ' + containsAllTags;
+async function getEventsWithTags(tags) {
+    const query = 'SELECT * FROM events WHERE ' + queryAllTags(tags);
+    const [events] = await pool.query(query);
+    return events;
+}
 
-    // actually make that query and return all matching events
+/**
+ * Query the database for events between two dates.
+ *
+ * \param start  Start date in unix time
+ * \param end    End date in unix time
+ * \returns      A list of all events between those dates
+ */
+async function getEventsBetween(start, end) {
+    const query = 'SELECT * FROM events WHERE ' + queryBetweenDates(start, end);
+    const [events] = await pool.query(query);
+    return events;
+}
+
+/**
+ * Query the database for events between two dates, that also have certain tags.
+ *
+ * \param start  Start date in unix time
+ * \param end    End date in unix time
+ * \param tags   List of tags that are required
+ * \returns      A list of all events between those dates that also have every tag
+ */
+async function getEventsBetweenWithTags(start, end, tags) {
+    const query = 'SELECT * FROM events WHERE ' + queryBetweenDates(start, end)
+        + ' AND ' + queryContainsAllTags(tags);
     const [events] = await pool.query(query);
     return events;
 }
@@ -161,7 +214,6 @@ async function verifyLogin(username, password){
     }
 }
 
-
 // Testing on Server
 
 //const setEvents = new Set([25625, 30582, 27740]);
@@ -193,5 +245,12 @@ if (require.main === module) {
     testLogins(); // TODO: move to different test? unknown if possible.
 } else {
     // File is being used as a module. Export it.
-    module.exports = { getEvents, getEventsWithAllTags, insertEventsFromScrape, dropExpiredEvents };
+    module.exports = {
+        dropExpiredEvents,
+        getEvents,
+        getEventsBetween,
+        getEventsBetweenWithTags,
+        getEventsWithTags,
+        insertEventsFromScrape,
+    };
 }
