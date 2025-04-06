@@ -124,8 +124,7 @@ async function getEventsBetween(req, res, next) {
     return;
   }
 
-  // TODO: this split is already gross, and adding more things we can filter on would make it worse.
-  // we will want a better solution.
+  // If tags have been provided query the db for them.
   const events = await db.getEventsBetweenWithTags(start, end, tags);
   if (!events) {
     res.status(404).json({ 'message': 'No events found with tags', 'tags': tags });
