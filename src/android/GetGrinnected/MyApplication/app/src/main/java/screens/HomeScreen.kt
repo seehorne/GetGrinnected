@@ -102,7 +102,6 @@ fun HomeScreen (modifier: Modifier = Modifier) {
     {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
-
         // populates the page with model cards
         repeat(20) {
             Card(
@@ -110,7 +109,6 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                     .size(width = 380.dp, height = 100.dp)
                     .background(Color.White)
                     .border(2.dp, Color.Black)
-
             ) {
                 Text(
                     text = "Event $cardnum",
@@ -259,7 +257,6 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                                 selectedView = 1
                                 expanded2.value = false
                             })
-
                         DropdownMenuItem(text = {
                             // formats checkbox and text on same line
                             Row(modifier = Modifier,
@@ -283,14 +280,5 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                     }
                 }
             }
-
         }
     }
-
-
-
-
-
-
-
-
