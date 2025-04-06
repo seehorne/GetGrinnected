@@ -19,10 +19,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -50,6 +46,16 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
         NavItem("Calendar", Icons.Default.DateRange),
         NavItem("Favorites", Icons.Default.Favorite),
         NavItem("Settings", Icons.Default.AccountCircle),
+    )
+    val sampleEvents = listOf(
+        Event("Concert Night", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
+        Event("Crafternoon", "Lots of fun arts and crafts", listOf("NAMI"), "2025-05-01", "6:30 PM", "Younker Lounge", false, listOf("art, fun"), false),
+        Event("Concert Night2", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
+        Event("Concert Night3", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
+        Event("Concert Night4", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
+        Event("Concert Night5", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
+        Event("Concert Night6", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
+        Event("Concert Night7", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
     )
 
     Scaffold(
@@ -83,7 +89,7 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
         ) {
             composable("Home") { HomeScreen() }
             composable("Calendar") { CalendarScreen() }
-            composable("Favorites") { FavoritesScreen() }
+            composable("Favorites") { FavoritesScreen(events = sampleEvents) }
             composable("Settings") { SettingsScreen() }
         }
     }
