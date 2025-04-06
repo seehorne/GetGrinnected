@@ -148,20 +148,33 @@ async function getEventsBetween(req, res, next) {
  * \returns Unix time equivalent if parseable, NaN if not.
  */
 function parseParamDate(paramDate) {
-  // if time unspecified, assume Grinnell at midnight.
-  const regexTimezoneAtEnd = /[+-]\d\d\d\d$/
-  if (!paramDate.includes("T")) {
-    paramDate = paramDate.concat('T00:00:00-0500');
+  // these are the three features we care about in our date format
+  const validDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d"
+  const validTime = "T\\d\\d:\\d\\d:\\d\\d"
+  const validTimeZone = "[+-]\\d\\d\\d\\d"
+
+  // If all features are specified, use that and respect the date and timezone provided
+  const allFeaturesRegex = new RegExp('^' + validDate + validTime + validTimeZone + '$');
+  if (allFeaturesRegex.test(paramDate)) {
+    return Date.parse(paramDate);
   }
 
-  // if time is specified but there is no timezone, assume Grinnell time.
-  // timezones are either +#### or -####, thus the regex
-  else if (!regexTimezoneAtEnd.test(paramDate)) {
+  // If no timezone is specified, assume they mean Grinnell time (UTC-5)
+  const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
+  if (dateTimeRegex.test(paramDate)) {
     paramDate = paramDate.concat('-0500');
+    return Date.parse(paramDate);
   }
 
-  // let the date library parse the time now it is processed
-  return Date.parse(paramDate);
+  // If no timezone OR time is specified, assume they mean midnight at grinnell time
+  const dateOnlyRegex = new RegExp('^' + validDate + '$');
+  if (dateOnlyRegex.test(paramDate)) {
+    paramDate = paramDate.concat('T00:00:00-0500');
+    return Date.parse(paramDate);
+  }
+
+  // If none of those attempts to figure out the format worked, bypass Date.parse and return failure.
+  return NaN;
 }
 
 /**

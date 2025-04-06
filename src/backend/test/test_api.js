@@ -61,21 +61,21 @@ describe('parseParamDate', () => {
     });
 
     it('should accept ISO-8601 time', () => {
-        const input = '2025-04-05T22:19-0500';
+        const input = '2025-04-05T22:19:00-0500';
         const expected = 1743909540000;
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
     });
 
     it('should respect ISO-8601 timezone', () => {
-        const input = '2022-03-12T10:32+1000';
+        const input = '2022-03-12T10:32:00+1000';
         const expected = 1647045120000;
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
     });
 
     it('should assume Grinnell time if timezone unspecified', () => {
-        const input = '2025-04-05T22:19';
+        const input = '2025-04-05T22:19:00';
         const expected = 1743909540000;
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
@@ -104,6 +104,13 @@ describe('parseParamDate', () => {
 
     it('should not accept Unix time', () => {
         const input = '1743909495';
+        const expected = NaN;
+        const actual = api.parseParamDate(input);
+        assert.strictEqual(expected, actual);
+    });
+
+    it('should not accept natural language formatted dates', () => {
+        const input = 'March 3, 2002';
         const expected = NaN;
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
