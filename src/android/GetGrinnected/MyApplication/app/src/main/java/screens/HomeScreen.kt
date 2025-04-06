@@ -18,11 +18,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,13 +36,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.compose.foundation.layout.Column as Column1
-import com.example.myapplication.assets.
 
 
 /**
@@ -76,11 +72,10 @@ fun HomeScreen (modifier: Modifier = Modifier) {
             TileMode.Repeated
         )
     val state = rememberScrollState()
-    var expanded2 = remember { mutableStateOf(false) }
-    var check1 = remember { mutableStateOf(false)}
-    var check2 = remember { mutableStateOf(false)}
-    var check3 = remember { mutableStateOf(false)}
-    ReadJSONFromAssets(baseContext, test.json)
+    val expanded2 = remember { mutableStateOf(false) }
+    val check1 = remember { mutableStateOf(false)}
+    val check2 = remember { mutableStateOf(false)}
+    val check3 = remember { mutableStateOf(false)}
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     Column1(
         modifier = Modifier
@@ -103,7 +98,7 @@ fun HomeScreen (modifier: Modifier = Modifier) {
 
             ) {
                 Text(
-                    text = "Event " + cardnum,
+                    text = "Event $cardnum",
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,
@@ -208,7 +203,7 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                             Checkbox(
                                 checked = check1.value,
                                 onCheckedChange = {
-                                    if (check1.value == true) {
+                                    if (check1.value) {
                                         check1.value = false }
                                     else { check1.value = true}
                                 })
@@ -224,7 +219,7 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                             Checkbox(
                                 checked = check2.value,
                                 onCheckedChange = {
-                                    if (check2.value == true) {
+                                    if (check2.value) {
                                         check2.value = false }
                                     else { check2.value = true}
                                 })
@@ -242,7 +237,7 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                                 Checkbox(
                                     checked = check3.value,
                                     onCheckedChange = {
-                                        if (check3.value == true) {
+                                        if (check3.value) {
                                             check3.value = false }
                                         else { check3.value = true}
                                     })
@@ -260,52 +255,6 @@ fun HomeScreen (modifier: Modifier = Modifier) {
     }
 
 
-    @Preview
-    @Composable
-    fun HomeScreenPreview(modifier: Modifier = Modifier) {
-        val gradient =
-            Brush.verticalGradient(
-                listOf(Color.Red, Color.Blue, Color.Green),
-                0.0f,
-                10000.0f,
-                TileMode.Repeated
-            )
-        val state = rememberScrollState()
-        var cardnum = 1
-        LaunchedEffect(Unit) { state.animateScrollTo(100) }
-        Column1(
-            modifier = Modifier
-                .background(gradient)
-                .size(800.dp)
-                .padding(horizontal = 8.dp)
-                .verticalScroll(state),
-            verticalArrangement = Arrangement.Center,
-
-            ) {
-            repeat(20) {
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    ),
-                    modifier = Modifier
-                        .size(width = 380.dp, height = 100.dp)
-                        .background(Color.White)
-                        .border(2.dp, Color.Black)
-
-                ) {
-                    Text(
-                        text = "Event " + cardnum,
-                        modifier = Modifier
-                            .padding(16.dp),
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-
-                cardnum += 1
-            }
-        }
-    }
 
 
 
