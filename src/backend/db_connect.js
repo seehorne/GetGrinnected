@@ -83,7 +83,7 @@ async function getEvents(){
  * \returns     A string that serves as a SQL selector for all those tags
  */
 function queryAllTags(tags) {
-    const pieces = tags.map((t) => `JSON_CONTAINS(tags, '"` + t + `"', '$')`);
+    const pieces = tags.map((t) => `JSON_CONTAINS(tags, '"` + pool.escape(t) + `"', '$')`);
     const piecesAndTogether = pieces.join(' AND ');
     return '(' + piecesAndTogether + ')';
 }
@@ -98,7 +98,7 @@ function queryAllTags(tags) {
 function queryBetweenDates(start, end) {
     // events where the start and end times are set
     // TODO: comparisons seem to not be working. need more work
-    const event_time_between = `(event_start_time < FROM_UNIXTIME(${start}) AND event_end_time > FROM_UNIXTIME(${end}))`
+    const event_time_between = `(event_start_time < FROM_UNIXTIME(${pool.escape(start)}) AND event_end_time > FROM_UNIXTIME(${pool.escape(end)}))`
 
     // TODO: handle events that are marked all day and therefore don't have a start time and end time
     // could it be done when scraping, maybe? this will SUCK to do in mysql.
