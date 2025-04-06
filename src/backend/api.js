@@ -23,8 +23,10 @@ function run() {
   // Basic GET route just to show the API is up.
   app.get('/', getAPIOnline);
 
-  // Event GETs
+  // GET all events
   app.get('/events', getEvents);
+
+  // GET events between dates
   app.get('/events/between/:start/:end', getEventsBetween);
 }
 
@@ -64,18 +66,22 @@ async function getEvents(req, res, next) {
   console.log(`tags is ${JSON.stringify(tags)}`);
   if (tags == null) {
     console.log("we don't need no tags");
-    const events = await db.getEvents();
+    // const events = await db.getEvents();
+    const events = { 'name': 'fake event', 'desc': 'db get events' };
     res.json(events);
+    return;
   }
 
   // If they do request tags, query the DB for them
   // TODO: going here when not supposed to. fuckkkk
-  const events = await db.getEventsWithTags(tags);
+  // const events = await db.getEventsWithTags(tags);
+  const events = { 'name': 'fake event', 'desc': 'db get events with tags', 'tags': tags };
   if (!events) {
     res.status(404).json({ 
       'message': 'No events found with tags',
       'got': tags
     });
+    return;
   }
   res.json(events);
 }
@@ -90,33 +96,48 @@ async function getEvents(req, res, next) {
  */
 async function getEventsBetween(req, res, next) {
   // Try to parse the start and end times, fail if it does not work.
-  const start = parseParamTime(req.params.start);
-  const end = parseParamTime(req.params.end);
+  const start = parseParamDate(req.params.start);
+  const end = parseParamDate(req.params.end);
   if (isNaN(start)) {
     res.status(400).json({
-      'message': 'Expected time to match format YYYY-MM-DD(THH:MM:SS(z))',
-      'got': req.params.start
+      'message': 'Expected start time to match format YYYY-MM-DD(THH:MM:SS(z))',
+      'start': req.params.start,
     });
-  } else if (isNan(end)) {
+    return;
+  } else if (isNaN(end)) {
     res.status(400).json({
-      'message': 'Expected time to match format YYYY-MM-DD(THH:MM:SS(z))',
-      'got': req.params.end
+      'message': 'Expected end time to match format YYYY-MM-DD(THH:MM:SS(z))',
+      'end': req.params.end,
     });
+    return;
+  } else if (start >= end) {
+    res.status(400).json({
+      'message': 'Start time must be before end time',
+      'start': req.params.start,
+      'end': req.params.end,
+      'start-parsed': start,
+      'end-parsed': end
+    });
+    return;
   }
 
   // If tags are not requested, simply query db.
   const tags = parseQueryTags(req.query.tag);
   if (tags == null) { 
-    const events = { 'name': 'fake event', 'desc': 'db get events between' }; //await db.getEventsBetween(start, end); // TODO: implement in DB
+    // const events = await db.getEventsBetween(start, end); // TODO: implement in DB
+    const events = { 'name': 'fake event', 'desc': 'db get events between' };
     res.json(events);
+    return;
   }
 
   // TODO: this split is already gross, and adding more things we can filter on would make it worse.
   // we will want a better solution.
-  const events = { 'name': 'fake event', 'desc': 'db get events between with tags' }; // await db.getEventsBetweenWithTags(start, end, tags); // TODO: implement in DB
+  // const events = await db.getEventsBetweenWithTags(start, end, tags); // TODO: implement in DB
+  const events = { 'name': 'fake event', 'desc': 'db get events between with tags', 'tags': tags };
   if (!events) {
     res.status(404).json({ 'message': 'No events found with tags', 'got': tags });
-  }
+    return;
+  } 
   res.json(events);
 }
 
@@ -175,7 +196,6 @@ if (require.main === module) {
 } else {
   module.exports = {
     close,
-    getAPIOnline,
     getEvents,
     getEventsBetween,
     parseParamDate,
