@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.androidx.ui.test.junit4.android)
     implementation(libs.androidx.fragment.ktx)
     implementation ("androidx.navigation:navigation-compose:2.7.6")
+    implementation(libs.androidx.room.ktx)
+    implementation("com.android.volley:volley:1.2.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
@@ -61,4 +63,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.ui.test.manifest)
+
 }

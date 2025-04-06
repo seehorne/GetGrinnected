@@ -1,33 +1,50 @@
 package screens
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,26 +52,48 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.DiskBasedCache
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
 import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.compose.foundation.layout.Column as Column1
+import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
+
+fun test(){
+    val url = "http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events"
+
+    val jsonObjectRequest = JsonArrayRequest(
+        Request.Method.GET, url, null,
+        { response ->
+            println("Response: %s".format(response.toString()))
+        },
+        { error ->
+            println("Response: %s".format(error.toString()))
+        }
+    )
+}
 
 
 /**
  * Anthony Schwindt, Ethan Hughes
  *
  * A composable function that represents the Home screen of our app. (More to come)
- *
- * @param modifier Modifier to be applied to the screen layout.
  */
 
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen (modifier: Modifier = Modifier) {
+fun HomeScreen() {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(2) }
     // holds whether the dropdown menu's are up or down
@@ -86,6 +125,13 @@ fun HomeScreen (modifier: Modifier = Modifier) {
     val check1 = remember { mutableStateOf(false)}
     val check2 = remember { mutableStateOf(false)}
     val check3 = remember { mutableStateOf(false)}
+    // path to API data
+    // val path = (URL("http://node16049-csc324--spring2025.us.reclaim.cloud:11014/"))
+
+    
+    
+    
+    
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     // creates the UI field for the events
@@ -205,8 +251,9 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                     })
                 }}
                 // I don't know why this is necessary but wan needed to properly space tag menu
-                Row(modifier = Modifier
-                    .padding(25.dp),
+                Row(
+                    modifier = Modifier
+                        .padding(25.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
                 ) {
@@ -219,9 +266,11 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                         onDismissRequest = { expanded2.value = false }) {
                         DropdownMenuItem(text = {
                             // formats checkbox and text on same line
-                            Row(modifier = Modifier,
+                            Row(
+                                modifier = Modifier,
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,)
+                                horizontalArrangement = Arrangement.End,
+                            )
                             {
                                 //creates a checkbox
                                 Checkbox(
@@ -239,9 +288,11 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                         })
                         DropdownMenuItem(text = {
                             // formats checkbox and text on same line
-                            Row(modifier = Modifier,
+                            Row(
+                                modifier = Modifier,
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,)
+                                horizontalArrangement = Arrangement.End,
+                            )
                             {
                                 //creates a checkbox
                                 Checkbox(
@@ -259,9 +310,11 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                             })
                         DropdownMenuItem(text = {
                             // formats checkbox and text on same line
-                            Row(modifier = Modifier,
+                            Row(
+                                modifier = Modifier,
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,)
+                                horizontalArrangement = Arrangement.End,
+                            )
                             {
                                 //creates a checkbox
                                 Checkbox(
@@ -282,3 +335,134 @@ fun HomeScreen (modifier: Modifier = Modifier) {
             }
         }
     }
+
+/*
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+
+fun CustomizableSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    searchResults: List<String>,
+    onResultClick: (String) -> Unit,
+    // Customization options
+    placeholder: @Composable () -> Unit = { Text("Search") },
+    leadingIcon: @Composable (() -> Unit)? = { Icon(Icons.Default.Search, contentDescription = "Search") },
+    trailingIcon: @Composable (() -> Unit)? = null,
+    supportingContent: (@Composable (String) -> Unit)? = null,
+    leadingContent: (@Composable () -> Unit)? = null,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+) {
+    // Track expanded state of search bar
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    Box(
+        modifier
+            .fillMaxSize()
+            .semantics { isTraversalGroup = true }
+    ) {
+        SearchBar(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .semantics { traversalIndex = 0f },
+            inputField = {
+                // Customizable input field implementation
+                SearchBarDefaults.InputField(
+                    query = query,
+                    onQueryChange = onQueryChange,
+                    onSearch = {
+                        onSearch(query)
+                        expanded = false
+                    },
+                    expanded = expanded,
+                    onExpandedChange = { expanded = it },
+                    placeholder = placeholder,
+                    leadingIcon = leadingIcon,
+                    trailingIcon = trailingIcon
+                )
+            },
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+        ) {
+            // Show search results in a lazy column for better performance
+            LazyColumn {
+                items(count = searchResults.size) { index ->
+                    val resultText = searchResults[index]
+                    ListItem(
+                        headlineContent = { Text(resultText) },
+                        supportingContent = supportingContent?.let { { it(resultText) } },
+                        leadingContent = leadingContent,
+                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                        modifier = Modifier
+                            .clickable {
+                                onResultClick(resultText)
+                                expanded = false
+                            }
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+// [END android_compose_components_customizable_searchbar]
+
+@Preview(showBackground = true)
+@Composable
+fun CustomizableSearchBarExample() {
+    // Manage query state
+    var query by rememberSaveable { mutableStateOf("") }
+    val items = listOf(
+        "Cupcake", "Donut", "Eclair", "Froyo", "Gingerbread", "Honeycomb",
+        "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow",
+        "Nougat", "Oreo", "Pie"
+    )
+
+    // Filter items based on query
+    val filteredItems by remember {
+        derivedStateOf {
+            if (query.isEmpty()) {
+                items
+            } else {
+                items.filter { it.contains(query, ignoreCase = true) }
+            }
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        CustomizableSearchBar(
+            query = query,
+            onQueryChange = { query = it },
+            onSearch = { /* Handle search submission */ },
+            searchResults = filteredItems,
+            onResultClick = { query = it },
+            // Customize appearance with optional parameters
+            placeholder = { Text("Search desserts") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+            trailingIcon = { Icon(Icons.Default.MoreVert, contentDescription = "More options") },
+            supportingContent = { Text("Android dessert") },
+            leadingContent = { Icon(Icons.Filled.Star, contentDescription = "Starred item") }
+        )
+
+        // Display the filtered list below the search bar
+        LazyColumn(
+            contentPadding = PaddingValues(
+                start = 16.dp,
+                top = 72.dp, // Provides space for the search bar
+                end = 16.dp,
+                bottom = 16.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.semantics {
+                traversalIndex = 1f
+            },
+        ) {
+            items(count = filteredItems.size) {
+                Text(text = filteredItems[it])
+            }
+        }
+    }
+}
+*/
