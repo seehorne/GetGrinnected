@@ -77,7 +77,9 @@ fun HomeScreen (modifier: Modifier = Modifier) {
         )
     val state = rememberScrollState()
     var expanded2 = remember { mutableStateOf(false) }
-    var check = remember { mutableStateOf(false)}
+    var check1 = remember { mutableStateOf(false)}
+    var check2 = remember { mutableStateOf(false)}
+    var check3 = remember { mutableStateOf(false)}
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     Column1(
         modifier = Modifier
@@ -199,22 +201,53 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
                         DropdownMenuItem(text = {
-                        Checkbox(
-                            checked = check.value,
-                            onCheckedChange = { if (check.value == true){ check.value = false }
-                        else{ check.value = true}
-                                    })
+                        Row(modifier = Modifier,
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End,){
+                            Checkbox(
+                                checked = check1.value,
+                                onCheckedChange = {
+                                    if (check1.value == true){
+                                        check1.value = false }
+                                    else{ check1.value = true}
+                                })
 
-                            Text ("Student Activity")
-                                                }, onClick = {
+                            Text ("Student Activity")}},
+                            onClick = {
                             selectedView = 0
                             expanded2.value = false
                         })
-                        DropdownMenuItem(text = { Text("CLS") }, onClick = {
+                        DropdownMenuItem(text = {Row(modifier = Modifier,
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End,){
+                            Checkbox(
+                                checked = check2.value,
+                                onCheckedChange = {
+                                    if (check2.value == true){
+                                        check2.value = false }
+                                    else{ check2.value = true}
+                                })
+
+                            Text("CLS") }},
+                            onClick = {
                             selectedView = 1
                             expanded2.value = false
-                        })
-                        DropdownMenuItem(text = { Text("Misc") }, onClick = {
+                            })
+
+                        DropdownMenuItem(text = {
+                            Row(modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End,){
+                                Checkbox(
+                                    checked = check3.value,
+                                    onCheckedChange = {
+                                        if (check3.value == true){
+                                            check3.value = false }
+                                        else{ check3.value = true}
+                                    })
+
+                                Text("Misc") }},
+                            onClick = {
                             selectedView = 2
                             expanded2.value = false
                         })
