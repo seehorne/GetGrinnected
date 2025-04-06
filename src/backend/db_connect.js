@@ -8,6 +8,8 @@ const scrape = require('./scrape.js');
 *  information in its contents (this isn't hard but will need to be added on the server side)
 */
 
+const DROPPATH = './src/backend/drop_ids.txt'
+
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -178,9 +180,11 @@ async function createAccount(username, email, password){
         return result;
 }
 
-async function dropExpiredEvents(eventIds){
+async function dropExpiredEvents(){
 
-    const eventIds_array = [...eventIds];
+    const file_data =  fs.readFileSync(scrape.DROPPATH)
+
+    const eventIds_array = file_data.split('\n')
 
     // Maps the number of event ids to corresponding ?s for prepared statement setup
     const placeholders = eventIds_array.map(() => "?").join(", ");
