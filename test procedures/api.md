@@ -39,10 +39,13 @@ For these steps, open a second terminal not connected to the server.
 
 ## Ensure API online
 
-1. Perform this curl request.
+1. Perform a curl request on the `/` route of the server.
    ```
    curl 'http://node16049-csc324--spring2025.us.reclaim.cloud:11014/'
    ```
+   
+   > This will request the server load its default page, and then send the data back to you.
+   > It prints the server's response to your screen by default.
 
 2. Ensure the output says "API online!"
 
@@ -52,6 +55,9 @@ For these steps, open a second terminal not connected to the server.
    ```
    curl 'http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events' | jq
    ```
+
+   > By piping the response of the server into `jq`, it will organize the JSON the server
+   > sends back to make it print prettily. Otherwise, it'll just be a block of text.
 
 2. Confirm that the output shows multiple events.
 
@@ -84,6 +90,9 @@ For these steps, open a second terminal not connected to the server.
 ## Compare get output lengths
 
 1. In sequence, repeat the three `curl` commands you did before. Instead of piping them into `jq`, pipe them into `wc -c`.
+
+   > By piping into `wc -c` instead of `jq`, your computer will count how many characters are in each
+   > output rather than printing the whole text to the screen. This gives an easy-to-read summary.
 
 2. Say the sizes are s1, s2, and s3 in order of the curl commands. Make sure that s1 > s2 > s3.
 
