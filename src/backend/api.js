@@ -12,9 +12,8 @@ function run() {
   // Listen on port 5844 by default
   const app = express();
   const port = process.env.PORT || 5844;
-  server = app.listen(port);
-  app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+  server = app.listen(port, () => {
+    console.log(`server listening on port ${port}`);
   });
 
   // Middleware to parse JSON requests
@@ -23,21 +22,24 @@ function run() {
   // Basic GET route just to show the API is up.
   app.get('/', getAPIOnline);
 
-  // GET all events
+  // GET events
   app.get('/events', getEvents);
-
-  // GET events between dates
   app.get('/events/between/:start/:end', getEventsBetween);
 }
 
 /**
- * Stop running the API.
+ * Stop running the API. Uses the global `server` var set by run()
  */
 function close() {
+  if (server == null) {
+    return;
+  }
+
   server.close((err) => {
-    console.log('server closed')
     if (err) {
-      process.exit(err);
+      console.log(`server closed with status ${err}`)
+    } else {
+      console.log('server closed with no error')
     }
   });
 }
@@ -63,23 +65,18 @@ function getAPIOnline(req, res) {
 async function getEvents(req, res, next) {
   // If they don't request tags, return all known events
   const tags = parseQueryTags(req.query.tag);
-  console.log(`tags is ${JSON.stringify(tags)}`);
   if (tags == null) {
-    console.log("we don't need no tags");
-    // const events = await db.getEvents();
-    const events = { 'name': 'fake event', 'desc': 'db get events' };
+    const events = await db.getEvents();
     res.json(events);
     return;
   }
 
   // If they do request tags, query the DB for them
-  // TODO: going here when not supposed to. fuckkkk
-  // const events = await db.getEventsWithTags(tags);
-  const events = { 'name': 'fake event', 'desc': 'db get events with tags', 'tags': tags };
+  const events = await db.getEventsWithTags(tags);
   if (!events) {
     res.status(404).json({ 
       'message': 'No events found with tags',
-      'got': tags
+      'tags': tags
     });
     return;
   }
@@ -115,8 +112,6 @@ async function getEventsBetween(req, res, next) {
       'message': 'Start time must be before end time',
       'start': req.params.start,
       'end': req.params.end,
-      'start-parsed': start,
-      'end-parsed': end
     });
     return;
   }
@@ -124,18 +119,16 @@ async function getEventsBetween(req, res, next) {
   // If tags are not requested, simply query db.
   const tags = parseQueryTags(req.query.tag);
   if (tags == null) { 
-    // const events = await db.getEventsBetween(start, end); // TODO: implement in DB
-    const events = { 'name': 'fake event', 'desc': 'db get events between' };
+    const events = await db.getEventsBetween(start, end);
     res.json(events);
     return;
   }
 
   // TODO: this split is already gross, and adding more things we can filter on would make it worse.
   // we will want a better solution.
-  // const events = await db.getEventsBetweenWithTags(start, end, tags); // TODO: implement in DB
-  const events = { 'name': 'fake event', 'desc': 'db get events between with tags', 'tags': tags };
+  const events = await db.getEventsBetweenWithTags(start, end, tags);
   if (!events) {
-    res.status(404).json({ 'message': 'No events found with tags', 'got': tags });
+    res.status(404).json({ 'message': 'No events found with tags', 'tags': tags });
     return;
   } 
   res.json(events);
