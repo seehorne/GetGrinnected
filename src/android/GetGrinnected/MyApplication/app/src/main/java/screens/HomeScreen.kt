@@ -2,6 +2,7 @@ package screens
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -62,13 +63,17 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.android.volley.toolbox.Volley.*
 import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.compose.foundation.layout.Column as Column1
 import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
+import com.android.volley.toolbox.Volley.newRequestQueue as newRequestQueue1
 
+/*
 fun test(){
     val url = "http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events"
 
@@ -83,7 +88,23 @@ fun test(){
     )
 }
 
+fun test2(): StringRequest {
+// ...
 
+// Instantiate the RequestQueue.
+    val url = "http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events"
+
+// Request a string response from the provided URL.
+    val stringRequest = StringRequest(Request.Method.GET, url,
+        { response ->
+            // Display the first 500 characters of the response string.
+            ( "Response is: ${response.substring(0, 500)}")
+        },
+        { ("That didn't work!" ) })
+// Add the request to the RequestQueue.
+    return(stringRequest)
+}
+*/
 /**
  * Anthony Schwindt, Ethan Hughes
  *
@@ -157,7 +178,8 @@ fun HomeScreen() {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text = "Event $cardnum",
+                    text =  "fine",
+                            //test2().toString(),
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,
