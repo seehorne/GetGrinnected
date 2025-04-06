@@ -100,13 +100,13 @@ async function getEventsBetween(req, res, next) {
   const end = parseParamDate(req.params.end);
   if (isNaN(start)) {
     res.status(400).json({
-      'message': 'Expected start time to match format YYYY-MM-DD(THH:MM:SS(z))',
+      'message': 'Expected start time to match format YYYY-MM-DD(THH:MM(z))',
       'start': req.params.start,
     });
     return;
   } else if (isNaN(end)) {
     res.status(400).json({
-      'message': 'Expected end time to match format YYYY-MM-DD(THH:MM:SS(z))',
+      'message': 'Expected end time to match format YYYY-MM-DD(THH:MM(z))',
       'end': req.params.end,
     });
     return;
@@ -149,9 +149,9 @@ async function getEventsBetween(req, res, next) {
  */
 function parseParamDate(paramDate) {
   // these are the three features we care about in our date format
-  const validDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d"
-  const validTime = "T\\d\\d:\\d\\d:\\d\\d"
-  const validTimeZone = "[+-]\\d\\d\\d\\d"
+  const validDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d"  // YYYY-MM-DD
+  const validTime = "T\\d\\d:\\d\\d"              // THH:MM, no seconds
+  const validTimeZone = "[+-]\\d\\d\\d\\d"        // Timezone, eg -0500 or +1230
 
   // If all features are specified, use that and respect the date and timezone provided
   const allFeaturesRegex = new RegExp('^' + validDate + validTime + validTimeZone + '$');
@@ -169,7 +169,7 @@ function parseParamDate(paramDate) {
   // If no timezone OR time is specified, assume they mean midnight at grinnell time
   const dateOnlyRegex = new RegExp('^' + validDate + '$');
   if (dateOnlyRegex.test(paramDate)) {
-    paramDate = paramDate.concat('T00:00:00-0500');
+    paramDate = paramDate.concat('T00:00-0500');
     return Date.parse(paramDate);
   }
 
