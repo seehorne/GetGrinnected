@@ -182,9 +182,16 @@ async function createAccount(username, email, password){
 
 async function dropExpiredEvents(){
 
-    const file_data =  fs.readFileSync(scrape.DROPPATH)
+    const file_data =  fs.readFileSync(scrape.DROPPATH, 'utf-8')
 
-    const eventIds_array = file_data.split('\n')
+    const json = JSON.parse(file_data);
+
+    const eventIds_array = json.data.map(item => item.ID).filter(id => id);
+
+    if (eventIds_array.length === 0) {
+        console.log("No events to delete.");
+        return;
+    }
 
     // Maps the number of event ids to corresponding ?s for prepared statement setup
     const placeholders = eventIds_array.map(() => "?").join(", ");
