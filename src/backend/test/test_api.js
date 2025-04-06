@@ -1,14 +1,21 @@
-const { it, describe, mock, before, beforeEach, after } = require('node:test');
+// testing funcs
+const { it, describe, mock, before, after } = require('node:test');
 const assert = require('node:assert/strict');
-const request = require("supertest");
-const _ = require('lodash');
+const request = require('supertest');
+const sinon = require('sinon');
 
-// require the file to be tested
+// lodash specific functions
+const isEqual = require('lodash/isEqual');
+const isEmpty = require('lodash/isEmpty');
+const arrayXOR = require('lodash/xor');
+
+// local files
 const api = require('../api');
+const db = require('../db_connect'); // so we can mock it
 
 // return true if the arrays have all the same elements
 function arraysEqual(array1, array2) {
-    return _.isEmpty(_.xor(array1, array2));
+    return isEmpty(arrayXOR(array1, array2));
 }
 
 describe('Test API', () => {
@@ -29,23 +36,140 @@ describe('Test API', () => {
         });
     });
 
-    /*
     describe('GET /events', () => {
-        it('should work with no tags', async () => {
+        // Create fake DB methods
+        before(() => {
+            sinon.stub(db, 'getEvents').callsFake(async () => {
+                return { 'name': 'fake db.getEvents' };
+            });
+
+            sinon.stub(db, 'getEventsWithTags').callsFake(async (tags) => {
+                // Check which tag the user provided, pretend we have only that event
+                if (arraysEqual(tags, ['exists'])) {
+                    return {'name': 'fake db.getEventsWithTags'};
+                } else {
+                    return undefined; 
+                }
+            });
+        });
+
+        it('should call getEvents when no tags provided', async () => {
             const req = request('localhost:5844');
             const res = await req.get('/events');
             assert.strictEqual(res.statusCode, 200);
-            console.log(JSON.stringify(res));
-            //assert.strictEqual(res.text, 'API online!');
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({'name': 'fake db.getEvents'})
+            );
         });
 
-        it('should work with existing tags', async () => {
+        it('should call getEventsWithTags when tags are provided', async () => {
+            const req = request('localhost:5844');
+            const res = await req.get('/events?tag=exists');
+            assert.strictEqual(res.statusCode, 200);
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({'name': 'fake db.getEventsWithTags'})
+            );
         });
 
-        it('should return error with nonexistent tags', async () => {
+        it('should fail to get tags when they do not exist', async () => {
+            const req = request('localhost:5844');
+            const res = await req.get('/events?tag=notexists');
+            assert.strictEqual(res.statusCode, 404);
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({
+                    'message': 'No events found with tags',
+                    'tags': ['notexists']
+                })
+            );
         });
     });
 
+    describe('GET /events/between', () => {
+        // Create fake DB methods
+        before(() => {
+            sinon.stub(db, 'getEventsBetween').callsFake(async (start, end) => {
+                return { 'name': 'fake db.getEventsBetween' };
+            });
+
+            sinon.stub(db, 'getEventsBetweenWithTags').callsFake(async (start, end, tags) => {
+                // Check which tag the user provided, pretend we have only that event
+                if (arraysEqual(tags, ['exists'])) {
+                    return {'name': 'fake db.getEventsBetweenWithTags'};
+                } else {
+                    return undefined; 
+                }
+            });
+        });
+
+        it('should work with valid dates', async () => {
+            const req = request('localhost:5844');
+            const res = await req.get('/events/between/2021-03-04/2021-03-06');
+            assert.strictEqual(res.statusCode, 200);
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({'name': 'fake db.getEventsBetween'})
+            );
+        });
+
+        it('should work with valid dates and tags', async () => {
+            const req = request('localhost:5844');
+            const res = await req.get('/events/between/2021-03-04/2021-03-06?tag=exists');
+            assert.strictEqual(res.statusCode, 200);
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({'name': 'fake db.getEventsBetweenWithTags'})
+            );
+        });
+
+        it('should fail with invalid start date', async () => {
+            const req = request('localhost:5844');
+            const res = await req.get('/events/between/20210304/2021-03-06');
+            assert.strictEqual(res.statusCode, 400);
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({
+                    'message': 'Expected start time to match format YYYY-MM-DD(THH:MM(z))',
+                    'start': '20210304'
+                })
+            );
+        });
+
+        it('should fail with invalid end date', async () => {
+            const req = request('localhost:5844');
+            const res = await req.get('/events/between/2021-03-06/2021-03-04');
+            assert.strictEqual(res.statusCode, 400);
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({
+                    'message': 'Start time must be before end time',
+                    'start': '2021-03-06',
+                    'end': '2021-03-04',
+                })
+            );
+        });
+
+        it('should fail with start date after end date', async () => {
+        });
+
+        it('should fail with valid dates but invalid tags', async () => {
+            const req = request('localhost:5844');
+            const res = await req.get('/events/between/2021-03-04/2021-03-06?tag=notexist');
+            assert.strictEqual(res.statusCode, 404);
+            assert.strictEqual(
+                res.text,
+                JSON.stringify({ 
+                    'message': 'No events found with tags', 
+                    'tags': ['notexist'] 
+                })
+            );
+        });
+
+    });
+
+    /*
     describe('GET /events/between', () => {
 
     });

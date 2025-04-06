@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "lodash": "^4.17.21",
+    "sinon": "^20.0.0",
     "supertest": "^7.1.0"
   }
 }
