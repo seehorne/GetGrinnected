@@ -12,5 +12,9 @@
     "get_events": "node ./src/backend/fetch_events.js",
     "add_to_db": "node ./src/backend/database_add.js",
     "drop": "node ./src/backend/drop_expired.js"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.21",
+    "supertest": "^7.1.0"
   }
 }
