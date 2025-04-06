@@ -83,7 +83,8 @@ async function getEvents(){
  * \returns     A string that serves as a SQL selector for all those tags
  */
 function queryAllTags(tags) {
-    const pieces = tags.map((t) => `JSON_CONTAINS(tags, '"` + pool.escape(t) + `"', '$')`);
+    // escape the tag so that we will get a string query containing '\"tagnamne\"', for valid search
+    const pieces = tags.map((t) => `JSON_CONTAINS(tags, ${pool.escape(t)}, '$')`);
     const piecesAndTogether = pieces.join(' AND ');
     return '(' + piecesAndTogether + ')';
 }
