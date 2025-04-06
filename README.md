@@ -9,6 +9,8 @@ Our tools: We use google docs as a staging area for many of these textual descri
 
 The structure of our Repository is as follows: 
 
+## Writeups
+
 - `written reports/` - Markdown write-ups for class milestones
   - `requirements.md` - Living requirements document
   - `sprint #/` - directory containing writeups for a specific sprint
@@ -16,18 +18,30 @@ The structure of our Repository is as follows:
     - `agile-review.md` - Agile review (goal: show what has been completed)
     - `sprint-journal.md` - Sprint journal (goal: store written work not belonging to an agile component)
 
-- `LICENSE` - MIT license for all content in the repo
+## Repo Details
 
+- `LICENSE` - MIT license for all content in the repo
 - `README.md` - The file you're reading, explaining the repo
+
+## Source Code
 
 - `src/` - Directory for all code
     - `android` - Kotlin (front-end)
     - `ios` - Swift (front-end)
     - `backend` - Node.js (back-end)
+- `package.json` and `package-lock.json` - npm packages and lockfile
 - `image-utils` - images/visual elements app will use
+
+## Docs
 
 - `mkdocs.yml` - MKDocs configuration file
 - `docs/` - Documentation pages
+
+## Test Procedures
+
+- `test procedures/` - Manual test procedures we are keeping.
+  - `[COMPONENT].md` - Test procedure to run for a particular COMPONENT.
+
 
 # Issue Tracking
 
