@@ -1,21 +1,22 @@
 name: Kotlin CI
 
-# run on pull requests targeting main and pushes to development
+# run on pull requests targeting main and pushes to any branch
 on:
   pull_request:
     branches: [ $default-branch ]
     paths:
       - src/android/**
+      - .github/workflows/kotlin.yaml
   push:
-    branches: [ "development" ]
     paths:
       - src/android/**
+      - .github/workflows/kotlin.yaml
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  test:
+  test-connected-kotlin:
 
     runs-on: ubuntu-latest
 
@@ -34,5 +35,9 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         working-directory: ./src/android/GetGrinnected/MyApplication
-        api-level: 28 # https://github.com/SORMAS-Foundation/SORMAS-Project/blob/development/.github/workflows/sormas_app_ci.yml#L32
-        script: ./gradlew connectedAndroidTest
+        api-level: 35
+        target: default
+        arch: x86_64
+        disable-animations: true
+        # TODO: does not run ./gradlew test for unit tests. we need to fix
+        script: ./gradlew connectedCheck

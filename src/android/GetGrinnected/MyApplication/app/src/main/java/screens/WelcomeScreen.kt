@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.myapplication.R
 
 /**
@@ -26,14 +27,12 @@ import com.example.myapplication.R
  * This screen includes a sign-up button (To navigate to account creation) and
  * a login button (To navigate to account login).
  *
- * @param onLoginClick A lambda function that is triggered when the "Login" button is clicked used
- * by our navigation flow.
- * @param onSignupClick A lambda function that is triggered when the "Sign up" button is clicked used
- * by our navigation flow.
+ *  @param modifier modifier applied to the screen layout
+ *  @param navController used to move through the app
  */
 
 @Composable
-fun WelcomeScreen(onLoginClick: () -> Unit, onSignupClick: () -> Unit) {
+fun WelcomeScreen(modifier: Modifier, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -53,10 +52,14 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onSignupClick: () -> Unit) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Button(onClick = onLoginClick) {
+            Button(onClick = {navController.navigate("login"){
+                popUpTo("welcome"){inclusive = true}
+            } }) {
                 Text("Login")
             }
-            Button(onClick = onSignupClick) {
+            Button(onClick = {navController.navigate("signup"){
+                popUpTo("welcome"){inclusive = true}
+            } }) {
                 Text("Sign Up")
             }
         }

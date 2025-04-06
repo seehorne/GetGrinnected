@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import screens.CalendarScreen
 import screens.FavoritesScreen
 import screens.HomeScreen
@@ -22,6 +24,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 /**
  * A composable function that displays the main page of the app with a bottom navbar.
@@ -33,53 +40,51 @@ import androidx.compose.ui.Modifier
  *
  */
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainPage(modifier: Modifier = Modifier){
+fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
+    val bottomNavController = rememberNavController()
 
     val navItemList = listOf(
         NavItem("Home", Icons.Default.Home),
         NavItem("Calendar", Icons.Default.DateRange),
         NavItem("Favorites", Icons.Default.Favorite),
-        NavItem("Profile", Icons.Default.AccountCircle),
+        NavItem("Settings", Icons.Default.AccountCircle),
     )
 
-    var selectedIndex by remember { mutableIntStateOf(0) }
-
-    Scaffold (modifier = Modifier.fillMaxSize(),
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
-                navItemList.forEachIndexed { index, navItem ->
+                val currentDestination = bottomNavController.currentBackStackEntryAsState().value?.destination?.route
+                navItemList.forEach { navItem ->
                     NavigationBarItem(
-                        selected = selectedIndex == index,
-                        onClick = { selectedIndex = index},
-                        icon = {
-                            Icon(imageVector = navItem.icon, contentDescription = "Icon" )
+                        selected = currentDestination == navItem.label,
+                        onClick = {
+                            bottomNavController.navigate(navItem.label) {
+                                popUpTo(bottomNavController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         },
-                        label = {
-                            Text(text = navItem.label)
-                        }
+                        icon = { Icon(navItem.icon, contentDescription = navItem.label) },
+                        label = { Text(navItem.label) }
                     )
                 }
             }
         }
-        )
-    { innerPadding ->
-        ContentScreen(modifier = Modifier.padding(innerPadding), selectedIndex)
-    }
-}
-
-/**
- * A composable function used to display the currently selected screen based on the selectedIndex.
- *
- * @param modifier The Modifier to be applied to the screen layout.
- * @param selectedIndex The index of the currently selected navItem.
- */
-@Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex : Int){
-    when(selectedIndex){
-        0 -> HomeScreen()
-        1 -> CalendarScreen()
-        2 -> FavoritesScreen()
-        3 -> SettingsScreen()
+    ) { innerPadding ->
+        NavHost(
+            navController = bottomNavController,
+            startDestination = "home",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("Home") { HomeScreen() }
+            composable("Calendar") { CalendarScreen() }
+            composable("Favorites") { FavoritesScreen() }
+            composable("Settings") { SettingsScreen() }
+        }
     }
 }
