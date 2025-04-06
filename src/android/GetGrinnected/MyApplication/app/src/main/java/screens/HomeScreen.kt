@@ -207,9 +207,9 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                             Checkbox(
                                 checked = check1.value,
                                 onCheckedChange = {
-                                    if (check1.value == true){
+                                    if (check1.value == true) {
                                         check1.value = false }
-                                    else{ check1.value = true}
+                                    else { check1.value = true}
                                 })
 
                             Text ("Student Activity")}},
@@ -223,9 +223,9 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                             Checkbox(
                                 checked = check2.value,
                                 onCheckedChange = {
-                                    if (check2.value == true){
+                                    if (check2.value == true) {
                                         check2.value = false }
-                                    else{ check2.value = true}
+                                    else { check2.value = true}
                                 })
 
                             Text("CLS") }},
@@ -241,9 +241,9 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                                 Checkbox(
                                     checked = check3.value,
                                     onCheckedChange = {
-                                        if (check3.value == true){
+                                        if (check3.value == true) {
                                             check3.value = false }
-                                        else{ check3.value = true}
+                                        else { check3.value = true}
                                     })
 
                                 Text("Misc") }},
