@@ -37,7 +37,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Checkbox
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +44,7 @@ import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.compose.foundation.layout.Column as Column1
+import com.example.myapplication.assets.
 
 
 /**
@@ -80,6 +80,7 @@ fun HomeScreen (modifier: Modifier = Modifier) {
     var check1 = remember { mutableStateOf(false)}
     var check2 = remember { mutableStateOf(false)}
     var check3 = remember { mutableStateOf(false)}
+    ReadJSONFromAssets(baseContext, test.json)
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     Column1(
         modifier = Modifier
