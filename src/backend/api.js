@@ -62,7 +62,7 @@ async function getEvents(req, res, next) {
   // If they don't request tags, return all known events
   const tags = parseQueryTags(req.query.tag);
   console.log(`tags is ${JSON.stringify(tags)}`);
-  if (!tags) {
+  if (tags == null) {
     console.log("we don't need no tags");
     const events = await db.getEvents();
     res.json(events);
@@ -72,7 +72,10 @@ async function getEvents(req, res, next) {
   // TODO: going here when not supposed to. fuckkkk
   const events = await db.getEventsWithTags(tags);
   if (!events) {
-    res.status(404).json({ 'message': 'No events found with tags', 'got': tags });
+    res.status(404).json({ 
+      'message': 'No events found with tags',
+      'got': tags
+    });
   }
   res.json(events);
 }
@@ -89,15 +92,21 @@ async function getEventsBetween(req, res, next) {
   // Try to parse the start and end times, fail if it does not work.
   const start = parseParamTime(req.params.start);
   const end = parseParamTime(req.params.end);
-  if (!start) {
-    res.status(400).json({ 'message': 'Time must follow YYYY-MM-DD, or YYYY-MM-DDTHH:MM:SS+ZZZZ format', 'got': req.params.start });
-  } else if (!end) {
-    res.status(400).json({ 'message': 'Time must follow YYYY-MM-DD, or YYYY-MM-DDTHH:MM:SS+ZZZZ format', 'got': req.params.end });
+  if (isNaN(start)) {
+    res.status(400).json({
+      'message': 'Expected time to match format YYYY-MM-DD(THH:MM:SS(z))',
+      'got': req.params.start
+    });
+  } else if (isNan(end)) {
+    res.status(400).json({
+      'message': 'Expected time to match format YYYY-MM-DD(THH:MM:SS(z))',
+      'got': req.params.end
+    });
   }
 
   // If tags are not requested, simply query db.
   const tags = parseQueryTags(req.query.tag);
-  if (!tags) { 
+  if (tags == null) { 
     const events = { 'name': 'fake event', 'desc': 'db get events between' }; //await db.getEventsBetween(start, end); // TODO: implement in DB
     res.json(events);
   }
@@ -135,16 +144,17 @@ function parseParamDate(paramDate) {
 }
 
 /**
- * Parse from a query tag object to a well-formed list of individual tags. Tags with commas
- * will be split to support queries like `?tag=a,b,c,d`.
+ * Parse from a query tag object to a well-formed list of individual tags. Tags
+ * with commas will be split to support queries like `?tag=a,b,c,d`.
  *
- * \param queryTags a query tag object, which can be either a list of strings or a string.
- * \returns an array containing each tag.
+ * \param queryTags a query tag object, which can be
+ *                  either a list of strings or a string.
+ * \returns an array containing each tag, or null if no tags were found.
  */
 function parseQueryTags(queryTags) {
   // Don't try parse zero-like tags
   if (!queryTags) {
-    return [];
+    return null;
   }
 
   // If there is only one tag, it will not get put in a list. fix that.

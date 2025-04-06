@@ -54,7 +54,8 @@ describe('Test API', () => {
 
 
 describe('parseParamDate', () => {
-    // Before any tests run, set our timezone to UTC so the Grinnell time will actually be tested.
+    // Before any tests run, set our timezone to UTC so 
+    // Grinnell time will actually be tested.
     before(() => {
         process.env.TZ = 'UTC';
     });
@@ -114,34 +115,49 @@ describe('parseQueryTags', () => {
         const input = null;
         const expected = [];
         const actual = api.parseQueryTags(input);
-        assert.ok(arraysEqual(expected, actual), `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        assert.ok(
+            arraysEqual(expected, actual), 
+            `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
+        );
     });
 
     it('should accept one tag', () => {
         const input = 'a';
         const expected = ['a'];
         const actual = api.parseQueryTags(input);
-        assert.ok(arraysEqual(expected, actual), `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        assert.ok(
+            arraysEqual(expected, actual), 
+            `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
+        );
     });
 
     it('should split one tag, comma separated', () => {
         const input = 'a,b,c';
         const expected = ['a', 'b', 'c'];
         const actual = api.parseQueryTags(input);
-        assert.ok(arraysEqual(expected, actual), `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        assert.ok(
+            arraysEqual(expected, actual), 
+            `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
+        );
     });
 
     it('should accept multiple tags, in a list', () => {
         const input = ['a', 'b', 'c'];
         const expected = ['a', 'b', 'c'];
         const actual = api.parseQueryTags(input);
-        assert.ok(arraysEqual(expected, actual), `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        assert.ok(
+            arraysEqual(expected, actual), 
+            `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
+        );
     });
 
     it('should split a mix of list and comma-separated tags', () => {
         const input = ['a', 'b,c', 'd'];
         const expected = ['a', 'b', 'c', 'd'];
         const actual = api.parseQueryTags(input);
-        assert.ok(arraysEqual(expected, actual), `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        assert.ok(
+            arraysEqual(expected, actual), 
+            `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
+        );
     });
 });
