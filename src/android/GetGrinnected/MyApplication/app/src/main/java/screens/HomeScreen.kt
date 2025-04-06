@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Checkbox
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -75,6 +77,7 @@ fun HomeScreen (modifier: Modifier = Modifier) {
         )
     val state = rememberScrollState()
     var expanded2 = remember { mutableStateOf(false) }
+    var check = remember { mutableStateOf(false)}
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     Column1(
         modifier = Modifier
@@ -195,7 +198,15 @@ fun HomeScreen (modifier: Modifier = Modifier) {
                     DropdownMenu(
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
-                        DropdownMenuItem(text = { Text("Student Activity") }, onClick = {
+                        DropdownMenuItem(text = {
+                        Checkbox(
+                            checked = check.value,
+                            onCheckedChange = { if (check.value == true){ check.value = false }
+                        else{ check.value = true}
+                                    })
+
+                            Text ("Student Activity")
+                                                }, onClick = {
                             selectedView = 0
                             expanded2.value = false
                         })
