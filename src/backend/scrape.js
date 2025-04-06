@@ -2,6 +2,7 @@ const fs = require("fs");
 const URL = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
 const CIPATH = './src/backend/ci_events.json'
 const TRUEPATH = './src/backend/event_data.json'
+const DROPPATH = './src/backend/drop_ids.txt'
 
 /**
  * processExisting
@@ -125,6 +126,7 @@ function dropPastEvents(path){
   expiredEvents = 0;
   //how many with start and end times to remove
   now_midnight = new Date(now).setHours(0, 0, 0, 0);
+  idString = "";
   for (let i = 0; i < storedEvents.data.length; i++) {
     console.log(i);
     let event = storedEvents.data[i];
@@ -134,6 +136,7 @@ function dropPastEvents(path){
         expiredEvents++;
         expiredIDs.add(event.ID);
         expiredIndices.add(i);
+        idString = idString+event.ID+'\n';
     } else if (!event.allDay && dayDiff === 0) {//event is today, may or may not be over
         let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
         console.log(diff);
@@ -142,6 +145,7 @@ function dropPastEvents(path){
             expiredEvents++;
             expiredIDs.add(event.ID);
             expiredIndices.add(i);
+            idString = idString+event.ID+'\n';
         }
     } else if(dayDiff > 0){//event is after today
       break;//since they're time sorted, no need to look further once on tomorrow
@@ -150,8 +154,9 @@ function dropPastEvents(path){
   // minus 2 so we don't remove the brackets at the top but rather actual events
   updatedLines = lines.filter((_, i) => !expiredIndices.has(i-2));
   fs.writeFileSync(path, updatedLines.join('\n'), 'utf-8');
+  fs.writeFileSync(DROPPATH, idString, 'utf8');//write it to a file
   return expiredIDs;
 }
 
-module.exports = { processExisting, scrapeData, URL, dropPastEvents, CIPATH, TRUEPATH};
+module.exports = { processExisting, scrapeData, URL, dropPastEvents, CIPATH, TRUEPATH, DROPPATH};
 //scrapeData(url)
