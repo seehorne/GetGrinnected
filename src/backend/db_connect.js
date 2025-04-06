@@ -82,7 +82,7 @@ async function getEvents(){
  * \param tags  List of strings.
  * \returns     A list of all events that contain every tag in `tags`.
  */
-async function getEventsWithAllTags(tags){
+async function getEventsWithTags(tags){
     // build up a query for all items that have tag1 AND tag2 AND ... AND tagN
     // the query looks like JSON_CONTAINS(tags, '"tag1"', '$') AND JSON_CONTAINS(tags, '"tag2"', '$') ...
     const containsPieces = tags.map((t) => `JSON_CONTAINS(tags, '"` + t + `"', '$')`);
@@ -193,5 +193,5 @@ if (require.main === module) {
     testLogins(); // TODO: move to different test? unknown if possible.
 } else {
     // File is being used as a module. Export it.
-    module.exports = { getEvents, getEventsWithAllTags, insertEventsFromScrape, dropExpiredEvents };
+    module.exports = { getEvents, getEventsWithTags, insertEventsFromScrape, dropExpiredEvents };
 }
