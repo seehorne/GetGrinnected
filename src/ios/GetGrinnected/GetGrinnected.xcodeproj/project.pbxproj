@@ -26,6 +26,8 @@
 		CACCD4612DA31696001D31C0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4502DA31696001D31C0 /* LoginView.swift */; };
 		CACCD4622DA31696001D31C0 /* HomescreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44F2DA31696001D31C0 /* HomescreenView.swift */; };
 		CACCD4632DA31696001D31C0 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4462DA31696001D31C0 /* UserProfile.swift */; };
+		CACCD4652DA318F3001D31C0 /* EventCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4642DA318EE001D31C0 /* EventCards.swift */; };
+		CACCD4672DA349E4001D31C0 /* TesterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4662DA349DF001D31C0 /* TesterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,8 @@
 		CACCD4512DA31696001D31C0 /* MainNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavView.swift; sourceTree = "<group>"; };
 		CACCD4522DA31696001D31C0 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		CACCD4532DA31696001D31C0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		CACCD4642DA318EE001D31C0 /* EventCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCards.swift; sourceTree = "<group>"; };
+		CACCD4662DA349DF001D31C0 /* TesterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TesterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -141,6 +145,7 @@
 		0CBBC3C72D77AB95002E482E /* GetGrinnected */ = {
 			isa = PBXGroup;
 			children = (
+				CACCD4662DA349DF001D31C0 /* TesterView.swift */,
 				0CBBC3C82D77AB95002E482E /* GetGrinnectedApp.swift */,
 				CACCD4472DA31696001D31C0 /* Classes */,
 				CACCD44A2DA31696001D31C0 /* Components */,
@@ -198,6 +203,7 @@
 		CACCD44A2DA31696001D31C0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				CACCD4642DA318EE001D31C0 /* EventCards.swift */,
 				CACCD4482DA31696001D31C0 /* ColorTheme.swift */,
 				CACCD4492DA31696001D31C0 /* InputField.swift */,
 			);
@@ -387,6 +393,7 @@
 			files = (
 				CACCD4432DA31688001D31C0 /* EventData.swift in Sources */,
 				CACCD4562DA31696001D31C0 /* SignUpView.swift in Sources */,
+				CACCD4672DA349E4001D31C0 /* TesterView.swift in Sources */,
 				CACCD4572DA31696001D31C0 /* FavoritesView.swift in Sources */,
 				CACCD4592DA31696001D31C0 /* ColorTheme.swift in Sources */,
 				CACCD45A2DA31696001D31C0 /* CalendarView.swift in Sources */,
@@ -395,6 +402,7 @@
 				CACCD45D2DA31696001D31C0 /* EventCreationView.swift in Sources */,
 				CACCD45E2DA31696001D31C0 /* InputField.swift in Sources */,
 				CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */,
+				CACCD4652DA318F3001D31C0 /* EventCards.swift in Sources */,
 				CACCD4612DA31696001D31C0 /* LoginView.swift in Sources */,
 				CACCD4622DA31696001D31C0 /* HomescreenView.swift in Sources */,
 				CACCD4632DA31696001D31C0 /* UserProfile.swift in Sources */,
