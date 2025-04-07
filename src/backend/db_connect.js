@@ -65,9 +65,7 @@ async function insertEventsFromScrape(){
 
     } catch (error) {
         console.error('Error processing events:', error);
-    } finally{
-        pool.end()
-    }
+    } 
 }
 
 // This is to combine the tags and audience to use audience as an additional tag
