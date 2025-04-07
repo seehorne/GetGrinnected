@@ -125,6 +125,7 @@ function dropPastEvents(path){
     return; //this implies there are no events even there
   }
   expiredEvents = 0;
+  expiredIndices = new Set();
   //how many with start and end times to remove
   now_midnight = new Date(now).setHours(0, 0, 0, 0);
   idString = "";
@@ -136,6 +137,7 @@ function dropPastEvents(path){
     eventInfo = {}; //set up JSON entry
     if (dayDiff < 0) {//event is on day that has passed
         expiredEvents++;
+        expiredIndices.add(i);
         console.log("DROPPING"+ event.Title);
         eventInfo["ID"] = event.ID;
         eventStr = "";
@@ -154,6 +156,7 @@ function dropPastEvents(path){
         if (diff < 0) {
           console.log("DROPPING"+ event.Title);
             expiredEvents++;
+            expiredIndices.add(i);
             eventInfo["ID"] = event.ID;
             eventStr = "";
             if (expiredEvents!==1){
