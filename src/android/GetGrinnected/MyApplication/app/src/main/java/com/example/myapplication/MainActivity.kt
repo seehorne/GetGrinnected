@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import androidx.compose.runtime.*
 
 /**
  * Our main used to run and create our app. Currently utilizes the AppNavigator function at

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Event
-import com.example.myapplication.EventCardPreview
+import com.example.myapplication.EventCard
 
 /**
  * A composable function that represents the Favorites screen of our app. (More to come)
@@ -52,11 +53,14 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
             Text("You haven't favorited any events yet.", modifier = Modifier.padding(16.dp))
         } else {
             favoritedEvents.forEach { event ->
-                EventCardPreview(event = event, modifier = Modifier.padding(vertical = 8.dp))
+                EventCard(event = event, modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 8.dp))
             }
         }
     }
 }
+
 
 
 /**
@@ -66,7 +70,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
 @Composable
 fun FavoritesPreview() {
     val sampleEvents = listOf(
-        Event(1, "Concert Night", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0, 0,"h", 0,true),
+        Event(1, "Concert Night", "Live music and fun really long description to really push the sizing as far as I can to see waht it would look like if you did this and had a longer description for an event just in general for any normal event!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0, 0,"h", 0,true),
         Event(2, "Crafternoon", "Lots of fun arts and crafts", "Downtown Theater",listOf("NAMI"), 0,"2025-05-01", "6:30 PM", 0,"8:00 PM", "8:00 PM", listOf("art, fun"), 0,0,"h", 0),
         Event(3, "Concert Night2", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
         Event(4, "Concert Night3", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
