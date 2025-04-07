@@ -19,6 +19,11 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+/**
+ * insertEventsFromScrape
+ * 
+ * uses scraped json file to fill events into database
+ */
 async function insertEventsFromScrape(){
 
     try{
@@ -192,7 +197,6 @@ async function dropExpiredEvents(){
         console.log("No events to delete.");
         return;
     }
-
     // Maps the number of event ids to corresponding ?s for prepared statement setup
     const placeholders = eventIds_array.map(() => "?").join(", ");
     const query = `DELETE FROM events WHERE eventid IN (${placeholders})`;
