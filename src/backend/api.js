@@ -12,19 +12,21 @@ var https_server = null;
  * Run the API.
  */
 function run() {
+  // Load environment vars from .env file
+  require('dotenv').config()
+
   // Create the app that we will serve
   const app = express();
   app.use(express.json());
 
   // Create a regular HTTP server.
   // Default to 8080 so non-root users can run it.
-  const http_port = process.env.HTTP_PORT || 8080;
+  const http_port = Number(process.env.HTTP_PORT) || 8080;
   http_server = http.createServer(app).listen(http_port, () => {
     console.log(`http server listening on port  ${http_port}`);
   });
 
   // Read SSL credentials from their system files
-  require('dotenv').config()
   const credentials = {
     key: process.env.SSL_KEY,
     ca: process.env.SSL_CA,
@@ -33,7 +35,7 @@ function run() {
 
   // Create an HTTPS server serving the application.
   // Default to 4443 so non-root users can run it.
-  const https_port = process.env.HTTPS_PORT || 4443;
+  const https_port = Number(process.env.HTTPS_PORT) || 4443;
   https_server = https
     .createServer(credentials, app)
     .listen(https_port, () => {
