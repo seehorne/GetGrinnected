@@ -1,6 +1,7 @@
 # see https://www.mkdocs.org/user-guide/writing-your-docs/#configure-pages-and-navigation
 nav:
   - Home: index.md
+  - API: api.md
 
 ################################################################################
 
