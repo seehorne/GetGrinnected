@@ -29,7 +29,7 @@ describe('Test API', () => {
 
     describe('GET /', () => {
         it('should return online text', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/');
             assert.strictEqual(res.statusCode, 200);
             assert.strictEqual(res.text, 'API online!');
@@ -54,7 +54,7 @@ describe('Test API', () => {
         });
 
         it('should call getEvents when no tags provided', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events');
             assert.strictEqual(res.statusCode, 200);
             assert.strictEqual(
@@ -64,7 +64,7 @@ describe('Test API', () => {
         });
 
         it('should call getEventsWithTags when tags are provided', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events?tag=exists');
             assert.strictEqual(res.statusCode, 200);
             assert.strictEqual(
@@ -74,7 +74,7 @@ describe('Test API', () => {
         });
 
         it('should fail to get tags when they do not exist', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events?tag=notexists');
             assert.strictEqual(res.statusCode, 404);
             assert.strictEqual(
@@ -105,7 +105,7 @@ describe('Test API', () => {
         });
 
         it('should work with valid dates', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events/between/2021-03-04/2021-03-06');
             assert.strictEqual(res.statusCode, 200);
             assert.strictEqual(
@@ -115,7 +115,7 @@ describe('Test API', () => {
         });
 
         it('should work with valid dates and tags', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events/between/2021-03-04/2021-03-06?tag=exists');
             assert.strictEqual(res.statusCode, 200);
             assert.strictEqual(
@@ -125,7 +125,7 @@ describe('Test API', () => {
         });
 
         it('should fail with invalid start date', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events/between/20210304/2021-03-06');
             assert.strictEqual(res.statusCode, 400);
             assert.strictEqual(
@@ -138,7 +138,7 @@ describe('Test API', () => {
         });
 
         it('should fail with invalid end date', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events/between/2021-03-06/2021-03-04');
             assert.strictEqual(res.statusCode, 400);
             assert.strictEqual(
@@ -155,7 +155,7 @@ describe('Test API', () => {
         });
 
         it('should fail with valid dates but invalid tags', async () => {
-            const req = request('localhost:5844');
+            const req = request('http://localhost:8080');
             const res = await req.get('/events/between/2021-03-04/2021-03-06?tag=notexist');
             assert.strictEqual(res.statusCode, 404);
             assert.strictEqual(

@@ -52,17 +52,27 @@ function run() {
  * Stop running the API. Uses the global `server` var set by run()
  */
 function close() {
-  if (server == null) {
-    return;
+  // close http server
+  if (http_server != null) {
+    http_server.close((err) => {
+      if (err) {
+        console.log(`http server closed with status ${err}`);
+      } else {
+        console.log(`http server closed with no error`);
+      }
+    });
   }
 
-  server.close((err) => {
-    if (err) {
-      console.log(`server closed with status ${err}`)
-    } else {
-      console.log('server closed with no error')
-    }
-  });
+  // close https server
+  if (https_server != null) {
+    https_server.close((err) => {
+      if (err) {
+        console.log(`https server closed with status ${err}`);
+      } else {
+        console.log(`https server closed with no error`);
+      }
+    });
+  }
 }
 
 /**
