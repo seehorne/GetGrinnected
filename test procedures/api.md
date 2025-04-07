@@ -30,7 +30,7 @@ To set up the test, do the following steps.
 6. Run the API from your checked-out directory
    ```
    npm ci
-   node src/backend/api.js
+   sudo node src/backend/api.js
    ```
 
 # What to test
@@ -41,7 +41,7 @@ For these steps, open a second terminal not connected to the server.
 
 1. Perform a curl request on the `/` route of the server.
    ```
-   curl 'http://node16049-csc324--spring2025.us.reclaim.cloud:11014/'
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/'
    ```
    
    > This will request the server load its default page, and then send the data back to you.
@@ -53,7 +53,7 @@ For these steps, open a second terminal not connected to the server.
 
 1. Perform this curl request.
    ```
-   curl 'http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events' | jq
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events' | jq
    ```
 
    > By piping the response of the server into `jq`, it will organize the JSON the server
@@ -69,7 +69,7 @@ For these steps, open a second terminal not connected to the server.
 
    Make sure to HTML escape it, such as by replacing spaces with `%20`.
    ```
-   curl 'http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events?tag="TAGNAME"' | jq
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="TAGNAME"' | jq
    ```
 
 2. Confirm that all events shown in the output have the tag you copied.
@@ -82,7 +82,7 @@ For these steps, open a second terminal not connected to the server.
 
    Make sure to HTML escape them, such as by replacing spaces with `%20`.
    ```
-   curl 'http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events?tag="TAG1"&tag="TAG2"' | jq
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="TAG1"&tag="TAG2"' | jq
    ```
 
 2. Confirm that all events shown have both of the tags you specified.
@@ -100,7 +100,7 @@ For these steps, open a second terminal not connected to the server.
 
 1. Perform this curl request.
    ```
-   curl 'http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events?tag="doesnotexist"' | jq
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="doesnotexist"' | jq
    ```
 
 2. Confirm the output is an empty array.
