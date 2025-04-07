@@ -1,17 +1,8 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "GetGrinnected - OpenAPI 3.0",
-    "description": "This is the API documentation for GetGrinnected. Everything is still work-in-progress, and changes will happen.",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/license/MIT"
-    },
+    "title": "GetGrinnected API",
     "version": "1.0"
-  },
-  "externalDocs": {
-    "description": "See the other docs",
-    "url": "https://getgrinnected.sites.grinnell.edu/docs/"
   },
   "servers": [
     {
@@ -36,18 +27,19 @@
           {
             "name": "tag",
             "in": "query",
-            "description": "Tags that events must have all of. Must be quoted in double quotes.",
+            "description": "Events must have all of these tags. Each tag needs double quotes.",
             "required": false,
             "explode": true,
             "schema": {
-              "type": "array",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Tags"
+                }
+              ],
               "example": [
                 "\"Music\"",
                 "\"Students\""
-              ],
-              "items": {
-                "type": "string"
-              }
+              ]
             }
           }
         ],
@@ -101,19 +93,20 @@
           },
           {
             "name": "tag",
+            "description": "Events must have all of these tags. Each tag needs double quotes.",
             "in": "query",
-            "description": "Tags that events must have all of. Must be quoted in double quotes.",
             "required": false,
             "explode": true,
             "schema": {
-              "type": "array",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Tags"
+                }
+              ],
               "example": [
                 "\"Music\"",
                 "\"Students\""
-              ],
-              "items": {
-                "type": "string"
-              }
+              ]
             }
           }
         ],
