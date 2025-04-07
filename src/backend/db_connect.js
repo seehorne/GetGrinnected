@@ -52,11 +52,11 @@ async function insertEventsFromScrape(){
                 const startTimeISO = new Date(event.StartTimeISO);
                 const endTimeISO = new Date(event.EndTimeISO);
 
-                // Executes the prepared statement with the event values and fills in with defaul values
+                // Executes the prepared statement with the event values and fills in with default values
                 // where the scraper didn't get information.
                 await pool.query(sql, [event.ID, event.Title, event.Description, event.Location,
                     JSON.stringify(orgs), 0, event.Date, event.Time, isAllDay, startTimeISO,
-                    endTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]);
+                    endTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]).then(console.log(`I added event:  ${event.Title}`))
 
             } catch (eventError) {
                 console.error(`Error inserting event: ${event.Title}`, eventError);
@@ -202,6 +202,7 @@ async function dropExpiredEvents(){
     const query = `DELETE FROM events WHERE eventid IN (${placeholders})`;
 
     const [result] = await pool.query(query, eventIds_array);
+    console.log(`Output from result: ${result}`);
     return result;
 }
 
