@@ -56,7 +56,7 @@ async function insertEventsFromScrape(){
                 // where the scraper didn't get information.
                 await pool.query(sql, [event.ID, event.Title, event.Description, event.Location,
                     JSON.stringify(orgs), 0, event.Date, event.Time, isAllDay, startTimeISO,
-                    endTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]).then(console.log(`I added event:  ${event.Title}`))
+                    endTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]).then(console.log(`I added event:  ${event.ID}`))
 
             } catch (eventError) {
                 console.error(`Error inserting event: ${event.Title}`, eventError);
