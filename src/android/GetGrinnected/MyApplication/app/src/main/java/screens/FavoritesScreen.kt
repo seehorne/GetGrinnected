@@ -45,7 +45,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
-            Text("Favorites", fontSize = 28.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 16.dp))
+            Text("Favorite Events", fontSize = 28.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 16.dp))
         }
 
         if (favoritedEvents.isEmpty()) {
