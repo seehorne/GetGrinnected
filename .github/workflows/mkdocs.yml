@@ -18,9 +18,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python_version: '3.13'
+        cache: pip
+      
+    - name: Install MkDocs and dependencies
+      run: python3 -m pip install mkdocs mkdocs-material mkdocs-render-swagger-plugin
+
     # Build into _site dir
-    - name: Build with MkDocs
-      uses: romw314/mkdocs-action@v9
+    - name: Build MkDocs
+      run: python3 -m mkdocs build --site-dir=_site
 
     # Upload to server directory
     - name: Deploy
