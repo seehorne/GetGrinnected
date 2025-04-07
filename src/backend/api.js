@@ -16,8 +16,9 @@ function run() {
   const app = express();
   app.use(express.json());
 
-  // Create a regular HTTP server too. Backup.
-  const http_port = process.env.HTTP_PORT || 80;
+  // Create a regular HTTP server.
+  // Default to 8080 so non-root users can run it.
+  const http_port = process.env.HTTP_PORT || 8080;
   http_server = http.createServer(app).listen(http_port, () => {
     console.log(`http server listening on port  ${http_port}`);
   });
@@ -31,10 +32,13 @@ function run() {
   };
 
   // Create an HTTPS server serving the application.
-  const https_port = process.env.HTTPS_PORT || 443;
-  https_server = https.createServer(credentials, app).listen(https_port, () => {
-    console.log(`https server listening on port ${https_port}`);
-  });
+  // Default to 4443 so non-root users can run it.
+  const https_port = process.env.HTTPS_PORT || 4443;
+  https_server = https
+    .createServer(credentials, app)
+    .listen(https_port, () => {
+      console.log(`https server listening on port ${https_port}`);
+    });
 
   // Define routes
   app.get('/', getAPIOnline);
