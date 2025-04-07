@@ -31,7 +31,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
     val scrollState = rememberScrollState()
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
 
-    val favoritedEvents = events.filter { it.isFavorited }
+    val favoritedEvents = events.filter { it.is_favorited }
 
     Column(
         modifier = modifier

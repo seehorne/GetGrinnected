@@ -21,6 +21,6 @@ data class Event(
     val repeats: Int,
     val event_image: String?,
     val is_draft: Int,
-    val isFavorited: Boolean = false
+    val is_favorited: Boolean = false
 )
 
