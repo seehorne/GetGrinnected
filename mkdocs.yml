@@ -12,3 +12,6 @@ site_url: https://getgrinnected.sites.grinnell.edu/docs/
 
 theme: 
   name: material
+
+plugins:
+  - render_swagger
