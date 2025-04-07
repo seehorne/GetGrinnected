@@ -1,3 +1,4 @@
+import java.net.URL
 
 // Test1(first) -> String
 // first - String
@@ -62,7 +63,15 @@ fun add(a: Int, b: Int): Int {
     return sum
 }
 
+
+fun readStringFromURL(urlString: String): String {
+    val url = URL(urlString)
+    return url.readText()
+}
+
 fun main(){
+    val content = readStringFromURL("http://node16049-csc324--spring2025.us.reclaim.cloud:11014/")
+    println(content)
     println("Hello World")
     test1("Ethan")
     println(test2(7))

@@ -3,7 +3,6 @@ package screens
 import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -67,11 +66,16 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.android.volley.toolbox.Volley.*
 import com.example.myapplication.R
+import org.w3c.dom.Document
+import java.net.URL
+import java.nio.charset.Charset
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
 import com.android.volley.toolbox.Volley.newRequestQueue as newRequestQueue1
+
 
 /*
 fun test(){
@@ -88,23 +92,21 @@ fun test(){
     )
 }
 
-fun test2(): StringRequest {
-// ...
-
-// Instantiate the RequestQueue.
+fun test2(): String {
     val url = "http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events"
 
-// Request a string response from the provided URL.
-    val stringRequest = StringRequest(Request.Method.GET, url,
-        { response ->
-            // Display the first 500 characters of the response string.
-            ( "Response is: ${response.substring(0, 500)}")
+    return(StringRequest(Request.Method.GET, url,
+        Response.Listener<String> { response ->
+            "${response.toString()}"
         },
-        { ("That didn't work!" ) })
-// Add the request to the RequestQueue.
-    return(stringRequest)
+        Response.ErrorListener { "That didn't work!" }).toString())
 }
 */
+fun readStringFromURL(urlString: String): String {
+    val url = URL(urlString)
+    return url.readText()
+}
+
 /**
  * Anthony Schwindt, Ethan Hughes
  *
@@ -112,7 +114,7 @@ fun test2(): StringRequest {
  */
 
 @OptIn(ExperimentalLayoutApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi1(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen() {
     // remembers what page the app is on
@@ -147,8 +149,7 @@ fun HomeScreen() {
     val check2 = remember { mutableStateOf(false)}
     val check3 = remember { mutableStateOf(false)}
     // path to API data
-    // val path = (URL("http://node16049-csc324--spring2025.us.reclaim.cloud:11014/"))
-
+    // val content = readStringFromURL("http://https://node16049-csc324--spring2025.us.reclaim.cloud/events")
     
     
     
@@ -178,8 +179,7 @@ fun HomeScreen() {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text =  "fine",
-                            //test2().toString(),
+                    text =  "test",
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,
