@@ -65,6 +65,8 @@ async function insertEventsFromScrape(){
 
     } catch (error) {
         console.error('Error processing events:', error);
+    } finally{
+        pool.end()
     }
 }
 
