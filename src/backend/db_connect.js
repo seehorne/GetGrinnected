@@ -27,7 +27,7 @@ const pool = mysql.createPool({
 async function insertEventsFromScrape(){
 
     try{
-        const file_data =  fs.readFileSync(scrape.TRUEPATH)
+        const file_data =  fs.readFileSync(scrape.TRUEPATH, 'utf-8')
         const parsing = JSON.parse(file_data);
         const events = parsing.data;
 
