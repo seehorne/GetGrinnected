@@ -48,14 +48,14 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
         NavItem("Settings", Icons.Default.AccountCircle),
     )
     val sampleEvents = listOf(
-        Event("Concert Night", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
-        Event("Crafternoon", "Lots of fun arts and crafts", listOf("NAMI"), "2025-05-01", "6:30 PM", "Younker Lounge", false, listOf("art, fun"), false),
-        Event("Concert Night2", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
-        Event("Concert Night3", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
-        Event("Concert Night4", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
-        Event("Concert Night5", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
-        Event("Concert Night6", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
-        Event("Concert Night7", "Live music and fun!", listOf("Music Club"), "2025-04-20", "8:00 PM", "Downtown Theater", true, listOf("music", "fun"), false),
+        Event(1, "Concert Night", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0, 0,"h", 0,true),
+        Event(2, "Crafternoon", "Lots of fun arts and crafts", "Downtown Theater",listOf("NAMI"), 0,"2025-05-01", "6:30 PM", 0,"8:00 PM", "8:00 PM", listOf("art, fun"), 0,0,"h", 0),
+        Event(3, "Concert Night2", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
+        Event(4, "Concert Night3", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
+        Event(5, "Concert Night4", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
+        Event(6, "Concert Night5", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
+        Event(7, "Concert Night6", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
+        Event(8, "Concert Night7", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM",  0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
     )
 
     Scaffold(

@@ -2,17 +2,25 @@ package com.example.myapplication
 
 
 /**
- *
+ * This class is used to define the event data type
  */
 data class Event(
-    val title: String,
-    val description: String,
+    val eventid: Int,
+    val event_name: String,
+    val event_description: String,
+    val event_location: String,
     val organizations: List<String>,
-    val date: String, //Not sure what to make these actually so this is temp
-    val time: String, //Not sure what to make these actually so this is temp
-    val location: String, //Not sure what to make this rn
-    val isFavorited: Boolean,
+    val rsvp: Int,
+    val event_date: String,
+    val event_time: String,
+    val event_all_day: Int,
+    val event_start_time: String,
+    val event_end_time: String,
     val tags: List<String>,
-    val isDraft: Boolean,
-
+    val event_private: Int,
+    val repeats: Int,
+    val event_image: String?,
+    val is_draft: Int,
+    val isFavorited: Boolean = false
 )
+

@@ -26,11 +26,11 @@ fun EventCardPreview(event: Event, modifier: Modifier = Modifier) {
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = event.title,
+                text = event.event_name,
                 fontWeight = FontWeight.Bold
             )
-            Text(text = "${event.date} at ${event.time}")
-            Text(text = event.location)
+            Text(text = "${event.event_date} at ${event.event_time}")
+            Text(text = event.event_location)
             if (event.organizations.isNotEmpty()) {
                 Text(text = "Hosted by: ${event.organizations.joinToString()}")
             }

@@ -1,19 +1,11 @@
 package com.example.myapplication
 
 import android.os.Build
-import screens.LoginScreen
-import screens.SignupScreen
-import screens.WelcomeScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import androidx.compose.ui.Alignment
 import androidx.compose.runtime.*
 
 /**
