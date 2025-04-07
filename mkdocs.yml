@@ -16,3 +16,6 @@ theme:
 
 plugins:
   - render_swagger
+
+extra_css:
+  - swagger-code-colors.css
