@@ -8,6 +8,8 @@ const scrape = require('./scrape.js');
 *  information in its contents (this isn't hard but will need to be added on the server side)
 */
 
+const DROPPATH = './src/backend/drop_ids.txt'
+
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -17,6 +19,11 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+/**
+ * insertEventsFromScrape
+ * 
+ * uses scraped json file to fill events into database
+ */
 async function insertEventsFromScrape(){
 
     try{
@@ -178,10 +185,18 @@ async function createAccount(username, email, password){
         return result;
 }
 
-async function dropExpiredEvents(eventIds){
+async function dropExpiredEvents(){
 
-    const eventIds_array = [...eventIds];
+    const file_data =  fs.readFileSync(scrape.DROPPATH, 'utf-8')
 
+    const json = JSON.parse(file_data);
+
+    const eventIds_array = json.data.map(item => item.ID).filter(id => id);
+
+    if (eventIds_array.length === 0) {
+        console.log("No events to delete.");
+        return;
+    }
     // Maps the number of event ids to corresponding ?s for prepared statement setup
     const placeholders = eventIds_array.map(() => "?").join(", ");
     const query = `DELETE FROM events WHERE eventid IN (${placeholders})`;
