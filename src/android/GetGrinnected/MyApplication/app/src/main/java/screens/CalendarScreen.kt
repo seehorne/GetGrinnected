@@ -23,9 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 
@@ -38,7 +40,7 @@ import com.example.myapplication.EventCard
 fun CalendarScreen(modifier: Modifier = Modifier) {
     var selectedView by remember { mutableIntStateOf(2) }
     val expanded = remember { mutableStateOf(false) }
-    val calendarInputList by remember{
+    val calendarInputList by remember {
         mutableStateOf(createCalendarList())
     }
     var clickedCalendarElem by remember {
@@ -46,20 +48,20 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
     }
     val scrollState = rememberScrollState()
 
-    Column (modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         Box(modifier = modifier.padding(16.dp)) {
             Row {
-                Button (onClick = { expanded.value = true }) {
-                    if (selectedView == 0){
+                Button(onClick = { expanded.value = true }) {
+                    if (selectedView == 0) {
                         Text("Day")
-                    } else if (selectedView == 1){
+                    } else if (selectedView == 1) {
                         Text("Week")
                     } else {
                         Text("Month")
                     }
                 }
             }
-            DropdownMenu (expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
+            DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
                 DropdownMenuItem(text = { Text("Day View") }, onClick = {
                     selectedView = 0
                     expanded.value = false
@@ -96,9 +98,17 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    clickedCalendarElem?.events?.forEach {
-                        EventCard(it)
-                        Spacer(modifier = Modifier.height(4.dp))
+                    clickedCalendarElem?.let { dayInfo ->
+                        Text(
+                            text = "April (Day ${dayInfo.day})",
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        dayInfo.events.forEach {
+                            EventCard(it)
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
                     }
                 }
             }
@@ -106,6 +116,10 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Creates the hard coded calendar input list for use in the calendar
+ * @return a list of CalendarInput values
+ */
 private fun createCalendarList(): List<CalendarInput>{
     val calendarInputs = mutableListOf<CalendarInput>()
     for(i in 1 .. 31){

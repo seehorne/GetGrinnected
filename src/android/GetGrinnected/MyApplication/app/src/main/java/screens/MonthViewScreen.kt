@@ -20,7 +20,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
@@ -28,7 +27,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Event
@@ -42,6 +40,12 @@ private const val CALENDAR_COLUMNS = 7
  * Calendar.
  *
  * @param modifier Modifier to be applied to the screen layout.
+ * @param calendarInput a list of CalendarInputs to put into the calendar with values
+ * @param onDayClick is a lambda function that handles what we should do when a day is clicked
+ * @param strokeWidth is a float used for our stokeWidth of our brush for making the calendar lines
+ * @param month is the current month as a string
+ *
+ * This was majorly adapted from tutorial: https://www.youtube.com/watch?v=QS-iOdm0pMs
  */
 
 @Composable
