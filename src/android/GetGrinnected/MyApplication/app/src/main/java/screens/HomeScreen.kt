@@ -81,6 +81,7 @@ import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
 import com.android.volley.toolbox.Volley.newRequestQueue as newRequestQueue1
+import com.google.gson.Gson
 
 
 
@@ -112,6 +113,14 @@ fun getDataFromUrl(url: String): String? {
     }
 }
 
+data class Event(
+    val title: String,
+    val description: String,
+    val organizations: List<String>,
+    val date: String, //Not sure what to make these actually so this is temp
+    val time: String, //Not sure what to make these actually so this is temp
+    val location: String, //Not sure what to make this rn
+    )
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -157,13 +166,7 @@ fun HomeScreen() {
     // path to API data
     val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
     val result = getDataFromUrl(url)
-    val regex = Regex("(event_name): (\\w+)")
-    val matches = regex.findAll(result.toString())
-    val events = mutableListOf("")
-    matches.forEach {
-        val (key, value) = it.destructured
-        events.add(value)
-    }
+    val events4 = Gson().fromJson(result, Event::class.java)
     
     
     
@@ -184,7 +187,7 @@ fun HomeScreen() {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
         // populates the page with model cards
-        repeat(events.size) {
+        repeat(1) {
             Card(
                 modifier = Modifier
                     .size(width = 380.dp, height = 100.dp)
@@ -192,7 +195,7 @@ fun HomeScreen() {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text =  events[cardnum],
+                    text =  events4,
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,

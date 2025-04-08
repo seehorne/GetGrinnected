@@ -2,7 +2,7 @@ import java.net.URL
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.net.ssl.HttpsURLConnection
-import com.google.gson.Gson
+// import com.google.gson.Gson
 
 // Test1(first) -> String
 // first - String
@@ -117,8 +117,8 @@ fun main(){
         println("Failed to get data from URL")
     }
     val regex = Regex("event_name")
-    val events4 = Gson().fromJson(result, Event::class.java)
-    println(events4) // Output: Person(name=John, age=30)
+    // val events4 = Gson().fromJson(result, Event::class.java)
+    // println(events4) // Output: Person(name=John, age=30)
     val matches = regex.findAll(result.toString())
     val events = mutableListOf("")
     matches.forEach {

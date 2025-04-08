@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-    implementation (libs.gson.v2121)
+    implementation ("com.google.code.gson:gson:2.10.1")
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.core.ktx)
