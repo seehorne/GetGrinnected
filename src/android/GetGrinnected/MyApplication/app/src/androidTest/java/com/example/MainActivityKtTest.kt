@@ -45,17 +45,16 @@ class MainActivityKtTest {
    composeTestRule.onAllNodesWithText("Create a free account").fetchSemanticsNodes().isNotEmpty()
   }
   composeTestRule.onNodeWithText("Create a free account").assertIsDisplayed()
- }
+  }
 
  /**
   * Tests whether we can go from the welcome screen to the signup and then use the
   * Signin button to go to the signup page
   */
-
  /*
  @Test
  fun signupScreen_SigninButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(event = events) }
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
    composeTestRule.onAllNodesWithText("Sign Up").fetchSemanticsNodes().isNotEmpty()
@@ -120,7 +119,6 @@ class MainActivityKtTest {
    composeTestRule.onNodeWithText(expectedScreenText).assertIsDisplayed()
   }
  }
-
  /**
   * Data class used for testing navigation
   */
@@ -128,5 +126,4 @@ class MainActivityKtTest {
   val navText: String,
   val expectedScreenText: String
  )
-
 }

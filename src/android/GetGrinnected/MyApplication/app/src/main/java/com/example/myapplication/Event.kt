@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import kotlinx.serialization.Serializable
+
 
 /**
  * This class is used to define the event data type
@@ -21,23 +23,24 @@ package com.example.myapplication
  * is_draft: Integer used as a 0 or 1 for whether an event is a draft or not
  * is_favorited: Boolean used to discern whether the current user has favorited this event
  */
+@Serializable
 data class Event(
-    val eventid: Int,
-    val event_name: String,
-    val event_description: String,
-    val event_location: String,
-    val organizations: List<String>,
-    val rsvp: Int,
-    val event_date: String,
-    val event_time: String,
     val event_all_day: Int,
-    val event_start_time: String,
+    val event_date: String,
+    val event_description: String,
     val event_end_time: String,
-    val tags: List<String>,
+    val event_image: String,
+    val event_location: String,
+    val event_name: String,
     val event_private: Int,
-    val repeats: Int,
-    val event_image: String?,
+    val event_start_time: String,
+    val event_time: String,
+    val eventid: Int,
     val is_draft: Int,
+    val organizations: List<String>,
+    val repeats: Int,
+    val rsvp: Int,
+    val tags: List<String>,
     val is_favorited: Boolean = false
 )
 
