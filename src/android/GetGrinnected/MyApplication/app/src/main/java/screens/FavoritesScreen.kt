@@ -21,7 +21,7 @@ import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 
 /**
- * A composable function that represents the Favorites screen of our app. (More to come)
+ * A composable function that represents the Favorites screen of our app.
  *
  * @param modifier Modifier to be applied to the screen layout.
  * @param events List of events to be displayed on favorites screen.
