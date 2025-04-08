@@ -2,7 +2,6 @@ package com.example
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.navigation.compose.rememberNavController
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -108,7 +107,7 @@ class MainActivityKtTest {
   )
 
   composeTestRule.setContent {
-   MainPage(navController = rememberNavController(), darkTheme = false, onToggleTheme =  {})
+   MainPage(darkTheme = false, onToggleTheme =  {})
   }
 
   destinations.forEach { (tabText, expectedScreenText) ->

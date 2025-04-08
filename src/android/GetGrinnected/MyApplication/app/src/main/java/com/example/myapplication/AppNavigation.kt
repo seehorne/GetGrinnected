@@ -14,6 +14,9 @@ import screens.WelcomeScreen
 /**
  * A composable function that is utilized for smooth navigation through login/signup process
  * @param modifier the modifier to be applied to page layouts navigated to.
+ * @param darkTheme the current state of the Theme of light or dark mode
+ * @param onToggleTheme a lambda function passed down from previous screen that calls back to the
+ * function instated in the call the AppNavigation in the MainActivity.
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -33,7 +36,7 @@ fun AppNavigation(modifier: Modifier = Modifier,
             LoginScreen(modifier, navController)
         }
         composable("main"){
-            MainPage(modifier, navController, darkTheme, onToggleTheme)
+            MainPage(modifier, darkTheme, onToggleTheme)
         }
 
     }

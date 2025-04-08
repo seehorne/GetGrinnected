@@ -26,8 +26,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,17 +37,21 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.OrgCard
 import com.example.myapplication.R
 import com.example.myapplication.User
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 /**
  * A composable function that represents the Settings screen of our app.
  *
  * @param modifier Modifier to be applied to the screen layout.
+ * @param orgs the list of orgs that they follow.
+ * @param account the user account that is currently logged in
+ * @param darkTheme the current state of the Theme of light or dark mode
+ * @param onToggleTheme a lambda function passed down from previous screen that calls back to the
+ * function instated in the call the AppNavigation in the MainActivity.
  */
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier,
                    orgs: List<User>,
+                   account: User,
                    darkTheme: Boolean,
                    onToggleTheme: (Boolean) -> Unit) {
     val scrollState = rememberScrollState()
@@ -119,7 +121,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Username123", fontSize = 16.sp)
+                Text(text = account.account_name, fontSize = 16.sp)
                 IconButton(onClick = { /* TODO handle username edit */ }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -170,6 +172,9 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     }
 }
 
+/**
+ * Preview used specifically for UI design purposes
+ */
 @Preview (showBackground = true)
 @Composable
 fun SettingsScreenPreview(){
@@ -180,5 +185,5 @@ fun SettingsScreenPreview(){
         User(1, "test4", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
         User(1, "test5", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
         )
-    SettingsScreen(orgs = sampleOrgs, darkTheme = false, onToggleTheme =  {})
+    SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {})
 }

@@ -24,7 +24,8 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme(darkTheme = darkTheme) {
                     AppNavigation(
                         darkTheme = darkTheme,
-                        onToggleTheme = {darkTheme = it}
+                        onToggleTheme = {darkTheme = it}  /* This call is how we get back into our
+                        Theme.kt to change the theme of the whole app */
                     )
             }
         }
