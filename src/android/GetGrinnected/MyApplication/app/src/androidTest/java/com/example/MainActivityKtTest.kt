@@ -101,7 +101,7 @@ class MainActivityKtTest {
  @Test
  fun mainPage_Navbar_NavigatesToAllScreens() {
   val destinations = listOf(
-   NavTestData("Calendar", "MonthView"),
+   NavTestData("Calendar", "April"),
    NavTestData("Favorites", "Favorite Events"),
    NavTestData("Settings", "Profile"),
   )

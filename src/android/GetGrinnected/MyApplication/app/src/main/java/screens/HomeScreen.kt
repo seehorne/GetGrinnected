@@ -276,11 +276,11 @@ fun HomeScreen (modifier: Modifier = Modifier){
                 })
             }
         }
-        when (selectedView) {
+       /* when (selectedView) {
             0 -> DayViewScreen(Modifier)
             1 -> WeekViewScreen(Modifier)
             2 -> MonthViewScreen(Modifier)
-        }
+            */
     }
 }
 
