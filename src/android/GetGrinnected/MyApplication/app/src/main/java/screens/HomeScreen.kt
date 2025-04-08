@@ -1,52 +1,32 @@
 package screens
 
-import android.Manifest.permission.INTERNET
-import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
-import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,34 +34,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Button
-import androidx.compose.ui.semantics.isTraversalGroup
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.DiskBasedCache
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.android.volley.toolbox.Volley.*
 import com.example.myapplication.R
-import org.w3c.dom.Document
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.URL
-import java.nio.charset.Charset
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import javax.net.ssl.HttpsURLConnection
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
-import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
-import com.android.volley.toolbox.Volley.newRequestQueue as newRequestQueue1
-import com.google.gson.Gson
+import java.net.URL
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import javax.net.ssl.HttpsURLConnection
 
 
 
@@ -114,13 +77,23 @@ fun getDataFromUrl(url: String): String? {
 }
 
 data class Event(
-    val title: String,
-    val description: String,
+    val event_all_day: Int,
+    val event_date: String,
+    val event_description: String,
+    val event_end_time: String,
+    val event_image: Any,
+    val event_location: String,
+    val event_name: String,
+    val event_private: Int,
+    val event_start_time: String,
+    val event_time: String,
+    val eventid: Int,
+    val is_draft: Int,
     val organizations: List<String>,
-    val date: String, //Not sure what to make these actually so this is temp
-    val time: String, //Not sure what to make these actually so this is temp
-    val location: String, //Not sure what to make this rn
-    )
+    val repeats: Int,
+    val rsvp: Int,
+    val tags: List<String>
+)
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -131,7 +104,7 @@ data class Event(
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(event: Event) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(2) }
     // holds whether the dropdown menu's are up or down
@@ -166,7 +139,7 @@ fun HomeScreen() {
     // path to API data
     val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
     val result = getDataFromUrl(url)
-    val events4 = Gson().fromJson(result, Event::class.java)
+
     
     
     
@@ -187,7 +160,7 @@ fun HomeScreen() {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
         // populates the page with model cards
-        repeat(1) {
+        repeat(3) {
             Card(
                 modifier = Modifier
                     .size(width = 380.dp, height = 100.dp)
@@ -195,7 +168,7 @@ fun HomeScreen() {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text =  events4,
+                    text =  event.toString(),
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,

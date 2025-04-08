@@ -25,6 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import screens.Event
 
 /**
  * A composable function that displays the main page of the app with a bottom navbar.
@@ -38,7 +39,7 @@ import androidx.navigation.compose.rememberNavController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
+fun MainPage(modifier: Modifier = Modifier, event: Event, navController: NavController) {
     val bottomNavController = rememberNavController()
 
     val navItemList = listOf(
@@ -77,7 +78,7 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
             startDestination = "home",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("Home") { HomeScreen() }
+            composable("Home") { HomeScreen(event) }
             composable("Calendar") { CalendarScreen() }
             composable("Favorites") { FavoritesScreen() }
             composable("Settings") { SettingsScreen() }

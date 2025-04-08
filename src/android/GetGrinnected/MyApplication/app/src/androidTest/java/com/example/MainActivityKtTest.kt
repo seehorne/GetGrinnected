@@ -74,4 +74,6 @@ class MainActivityKtTest {
   }
   composeTestRule.onNodeWithText("Create a free account").assertIsDisplayed()
  }
+
+
 }
