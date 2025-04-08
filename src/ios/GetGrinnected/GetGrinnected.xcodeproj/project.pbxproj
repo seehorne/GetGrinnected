@@ -13,6 +13,8 @@
 		0CBBC3DA2D77AB9B002E482E /* GetGrinnectedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3D92D77AB9B002E482E /* GetGrinnectedTests.swift */; };
 		0CBBC3E42D77AB9B002E482E /* GetGrinnectedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3E32D77AB9B002E482E /* GetGrinnectedUITests.swift */; };
 		0CBBC3E62D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3E52D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift */; };
+		0CF63C292DA5E40B009744F8 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 0CF63C282DA5E40B009744F8 /* ViewInspector */; };
+		0CF63C2B2DA5E459009744F8 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 0CF63C2A2DA5E459009744F8 /* ViewInspector */; };
 		4CA0C5732DA4BBEE00059803 /* EventTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5722DA4BBEE00059803 /* EventTags.swift */; };
 		4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5742DA4BF6500059803 /* CheckBox.swift */; };
 		4CA0C5772DA5D16200059803 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5762DA5D15300059803 /* Header.swift */; };
@@ -110,6 +112,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CF63C292DA5E40B009744F8 /* ViewInspector in Frameworks */,
+				0CF63C2B2DA5E459009744F8 /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +134,7 @@
 				0CBBC3D82D77AB9B002E482E /* GetGrinnectedTests */,
 				0CBBC3E22D77AB9B002E482E /* GetGrinnectedUITests */,
 				4CD5D1B72D9A119D001E91BD /* GetGrinnectedTestsCI */,
+				0CF63C272DA5E40B009744F8 /* Frameworks */,
 				0CBBC3C62D77AB95002E482E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -182,6 +187,13 @@
 				0CBBC3E52D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift */,
 			);
 			path = GetGrinnectedUITests;
+			sourceTree = "<group>";
+		};
+		0CF63C272DA5E40B009744F8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CACCD4472DA31696001D31C0 /* Classes */ = {
@@ -337,6 +349,9 @@
 				Base,
 			);
 			mainGroup = 0CBBC3BC2D77AB95002E482E;
+			packageReferences = (
+				0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */,
+			);
 			productRefGroup = 0CBBC3C62D77AB95002E482E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -781,6 +796,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0CF63C282DA5E40B009744F8 /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
+		0CF63C2A2DA5E459009744F8 /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0CBBC3BD2D77AB95002E482E /* Project object */;
 }

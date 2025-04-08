@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import ViewInspector
 
 final class GetGrinnectedUITests: XCTestCase {
 
@@ -38,4 +39,6 @@ final class GetGrinnectedUITests: XCTestCase {
             }
         }
     }
+    
+    
 }
