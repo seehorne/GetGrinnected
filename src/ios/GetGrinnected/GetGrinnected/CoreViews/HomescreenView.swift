@@ -17,6 +17,7 @@ struct HomescreenView: View {
             Text("Hello, Homescreen!")
         }
         .padding()
+        
     }
 }
 

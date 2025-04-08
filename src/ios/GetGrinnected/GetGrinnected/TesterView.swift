@@ -36,24 +36,11 @@ import SwiftUI
 struct TesterView: View {
     var body: some View {
         // this is the proper input form for EventData
-        let data = EventData(fromJSON: """
-            {"Title":"Aikido",
-            "Date":"April 4",
-            "Time":"5:30 p.m. - 6:30 p.m.",
-            "StartTimeISO":"2025-04-04T17:30:00-05:00",
-            "EndTimeISO":"2025-04-04T18:30:00-05:00",
-            "AllDay?":false,
-            "Location":"BRAC P103 - Multipurpose Dance Studio",
-            "Description":"\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n",
-            "Audience":["Alumni","Faculty &amp; Staff","General Public","Prospective Students","Student Families","Students"],
-            "Org":"Aikido",
-            "Tags":null,
-            "ID":23325}
-        """)
+        
         //testing whether or not the ouptuts work!
         //let printSt = if(data.title.compare("Aikido").rawValue == 0) {"Correct!"} else {"Incorrect!"}
 //        Text(printSt)
-        EventCards()
+//        EventCards()
     }//body
 }
 
