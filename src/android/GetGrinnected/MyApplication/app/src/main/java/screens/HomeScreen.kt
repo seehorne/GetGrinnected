@@ -109,7 +109,7 @@ fun HomeScreen(event: List<Event>) {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
         // populates the page with model cards
-        repeat(3) {
+        repeat(10) {
             Card(
                 modifier = Modifier
                     .size(width = 380.dp, height = 100.dp)
@@ -117,7 +117,7 @@ fun HomeScreen(event: List<Event>) {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text =  event.toString(),
+                    text =  event[cardnum].event_name.toString(),
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,

@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)

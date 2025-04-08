@@ -1,9 +1,12 @@
 package com.example.myapplication
 
+import kotlinx.serialization.Serializable
+
 
 /**
  *
  */
+@Serializable
 data class Event(
     val event_all_day: Int,
     val event_date: String,
