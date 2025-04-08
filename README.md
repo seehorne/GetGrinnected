@@ -212,6 +212,28 @@ These instructions are written for a linux machine, but they may work on Mac. It
 
 #### Database
 
+##### (For the instructor) Use our database
+
+You should already have access to Reclaim Cloud, so you can use our database.
+
+You can find the login details from the environment file used to run the database connector. This is how to access that file.
+
+1. Log into Reclaim Cloud.
+
+2. Open the project titled "GetGrinnected" with the subtitle "csc324--spring2025.us.reclaim.cloud"
+
+3. Hover over the "Application Servers" area. A "Web SSH" icon should appear that is a small black terminal with green text reading `>_`. Click that icon.
+
+4. In the terminal it opens, run `cd ROOT`.
+
+5. Next, run `less .env` to open the environment file.
+
+6. Note the lines that start with `MYSQL_`.
+
+7. Use these details for your database connection, or copy the entire `.env` file to the same path in the repo you clone to run our code.
+
+##### Create your own database
+
 1. Set up a MySQL server with version 9.2.0.
 
 2. Log into the server as a user that can create new databases.
