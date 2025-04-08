@@ -83,6 +83,7 @@ import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
 import com.android.volley.toolbox.Volley.newRequestQueue as newRequestQueue1
 
 
+
 fun getDataFromUrl(url: String): String? {
     var connection: HttpsURLConnection? = null
     return try {
@@ -156,6 +157,13 @@ fun HomeScreen() {
     // path to API data
     val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
     val result = getDataFromUrl(url)
+    val regex = Regex("(event_name): (\\w+)")
+    val matches = regex.findAll(result.toString())
+    val events = mutableListOf("")
+    matches.forEach {
+        val (key, value) = it.destructured
+        events.add(value)
+    }
     
     
     
@@ -176,7 +184,7 @@ fun HomeScreen() {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
         // populates the page with model cards
-        repeat(20) {
+        repeat(events.size) {
             Card(
                 modifier = Modifier
                     .size(width = 380.dp, height = 100.dp)
@@ -184,7 +192,7 @@ fun HomeScreen() {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text =  "test2()",
+                    text =  events[cardnum],
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,

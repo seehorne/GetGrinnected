@@ -2,6 +2,9 @@ import java.net.URL
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.net.ssl.HttpsURLConnection
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
 
 // Test1(first) -> String
 // first - String
@@ -94,8 +97,18 @@ fun getDataFromUrl(url: String): String? {
     }
 }
 
+data class Event(
+    val title: String,
+    val description: String,
+    val organizations: List<String>,
+    val date: String, //Not sure what to make these actually so this is temp
+    val time: String, //Not sure what to make these actually so this is temp
+    val location: String, //Not sure what to make this rn
+    val isFavorited: Boolean,
+    val tags: List<String>,
+    val isDraft: Boolean,
 
-
+    )
 
 fun main(){
     val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
@@ -105,13 +118,18 @@ fun main(){
     } else {
         println("Failed to get data from URL")
     }
-    println("Hello World")
-    test1("Ethan")
-    println(test2(7))
-    println(recursive(1))
-    println(result)
-    loop()
-    val trialRun = arrayOf(" learn Kotlin ", " sleep ", " suffer ")
-    loop2(trialRun)
+    val regex = Regex("event_name")
+    val events4 = Json.decodeFromString<Event>(result)
+    val matches = regex.findAll(result.toString())
+    val events = mutableListOf("")
+    matches.forEach {
+        val (key, value) = it.destructured
+        events.add(value)
+    }
+    val events2 = regex.findAll(result.toString())
+    println(result.toString())
+    println(events)
+    println(events.size)
+    println(events[0])
 }
 main()

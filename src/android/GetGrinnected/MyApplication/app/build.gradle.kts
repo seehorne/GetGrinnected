@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.core.ktx)
