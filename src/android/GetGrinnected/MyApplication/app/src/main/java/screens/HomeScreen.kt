@@ -70,62 +70,47 @@ import com.android.volley.toolbox.Volley
 import com.android.volley.toolbox.Volley.*
 import com.example.myapplication.R
 import org.w3c.dom.Document
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.net.URL
 import java.nio.charset.Charset
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.net.ssl.HttpsURLConnection
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
 import com.android.volley.toolbox.Volley.newRequestQueue as newRequestQueue1
 
 
+fun getDataFromUrl(url: String): String? {
+    var connection: HttpsURLConnection? = null
+    return try {
+        val urlObj = URL(url)
+        connection = urlObj.openConnection() as HttpsURLConnection
+        connection.requestMethod = "GET"
 
-/*
-fun test(){
-    val url = "http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events"
-
-    val jsonObjectRequest = JsonArrayRequest(
-        Request.Method.GET, url, null,
-        { response ->
-            println("Response: %s".format(response.toString()))
-        },
-        { error ->
-            println("Response: %s".format(error.toString()))
+        val responseCode = connection.responseCode
+        if (responseCode == HttpsURLConnection.HTTP_OK) {
+            val reader = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = StringBuilder()
+            var line: String?
+            while (reader.readLine().also { line = it } != null) {
+                response.append(line)
+            }
+            reader.close()
+            response.toString()
+        } else {
+            null
         }
-    )
-}
-*/
-
-
-fun test2(): String {
-    val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
-
-    return(StringRequest(Request.Method.GET, url,
-        Response.Listener<String> { response ->
-            "${response.toString()}"
-        },
-        Response.ErrorListener { "That didn't work!" }).toString())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    } finally {
+        connection?.disconnect()
+    }
 }
 
-fun test3(): String{
-    var soo = "meh"
-
-    val queue = Volley.newRequestQueue(/* context = */ this)
-    val stringRequest = StringRequest(Request.Method.GET, "https://node16049-csc324--spring2025.us.reclaim.cloud/events",
-        com.android.volley.Response.Listener<String> { response ->
-            soo = response
-            Log.d("see again", soo)
-        }, com.android.volley.Response.ErrorListener {
-            // didn't work
-        });
-    queue.add(stringRequest)
-}
-
-fun readStringFromURL(urlString: String): String {
-    val url = URL(urlString)
-    return url.readText()
-}
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -169,8 +154,8 @@ fun HomeScreen() {
     val check2 = remember { mutableStateOf(false)}
     val check3 = remember { mutableStateOf(false)}
     // path to API data
-    // val content = readStringFromURL("https://node16049-csc324--spring2025.us.reclaim.cloud/events")
-    
+    val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
+    val result = getDataFromUrl(url)
     
     
     
@@ -199,7 +184,7 @@ fun HomeScreen() {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text =  test2(),
+                    text =  "test2()",
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,

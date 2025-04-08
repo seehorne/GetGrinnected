@@ -1,4 +1,0 @@
-package screens
-
-class test {
-}

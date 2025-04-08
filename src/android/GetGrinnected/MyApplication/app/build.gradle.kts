@@ -42,13 +42,6 @@ android {
 dependencies {
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0") // or other converter
-    implementation("com.squareup.okhttp3:okhttp:4.11.0") // Optional, but recommended
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // Optional, for logging requests
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // Optional, for coroutines support
-    implementation (libs.retrofit2.x1.x)
-    implementation (libs.converter.gson2.x1.x)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
