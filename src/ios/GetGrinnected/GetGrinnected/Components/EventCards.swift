@@ -29,20 +29,49 @@
  */
 import SwiftUI
 struct EventCards: View {
-    var title: String
-    var date: String
-    var startTimeISO: String
-    var endTimeISO: String
-    var allDay: Bool
-    var location: String
-    var description: String
-    var audience: [String]?
-    var organization: String
-    var tags: [String]
-    var id: Int
     //Until EventData is complete, we cannot use this form
-//    var myData: EventData
+    var myData: EventData
     
+    
+    init(myData: EventData){
+        self.myData = myData
+    }
+    
+    
+    //Example initialization
+    init?(){
+        
+        self.myData = EventData(fromJSON: """
+            {"Title":"Aikido",
+            "Date":"April 4",
+            "Time":"5:30 p.m. - 6:30 p.m.",
+            "StartTimeISO":"2025-04-04T17:30:00-05:00",
+            "EndTimeISO":"2025-04-04T18:30:00-05:00",
+            "AllDay?":false,
+            "Location":"BRAC P103 - Multipurpose Dance Studio",
+            "Description":"\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n",
+            "Audience":["Alumni","Faculty &amp; Staff","General Public","Prospective Students","Student Families","Students"],
+            "Org":"Aikido",
+            "Tags":null,
+            "ID":23325}
+        """)
+        self.myData.title = "Aikido"
+        self.myData.date = "April 4"
+        self.myData.time = "5:30 p.m. - 6:30 p.m."
+        self.myData.startTimeISO = "2025-04-04T17:30:00-05:00"
+        self.myData.endTimeISO = "2025-04-04T18:30:00-05:00"
+        self.myData.allDay = false
+        self.myData.location = "BRAC P103 - Multipurpose Dance Studio"
+        self.myData.description = "\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n"
+        self.myData.audience = ["Alumni","Faculty &amp; Staff","General Public","Prospective Students","Student Families","Students"]
+        self.myData.organization = "Aikido"
+        self.myData.tags = []
+        self.myData.id = 23325
+        self.myData.notify = false
+        self.myData.favorited = false
+        
+        
+    }//tester initializer
     
     /** For logic of favorites and notifications*/
     //The specific logic needs to be figured out as of 2025.04.06, 11:50 pm, however
@@ -57,45 +86,38 @@ struct EventCards: View {
         VStack (alignment: .leading, spacing: 12) {
             //location of title
             GroupBox {
-                HStack{
+                HStack(alignment: .center){
                     VStack{
-                        Text(title)// once EventData is ready, myData.title is the correct call
+                        Text(myData.title)// once EventData is ready, myData.title is the correct call
                             .foregroundStyle(Color(.textPrimary))
                             .fontWeight(.semibold)
                             //to be determined later
-                        Text(organization) // once ready myData.organization
+                        Text(myData.organization) // once ready myData.organization
                             .foregroundStyle(Color(.textPrimary))
                             .fontWeight(.light)
                         
-                    } //left side
-                    VStack{
-                        Text(date)//once EventData is ready, myData.date
+                    }//left side
+                    VStack(alignment: .trailing){
+                        Text(myData.date)//once EventData is ready, myData.date
                             .foregroundStyle(Color(.textSecondary))
                             .fontWeight(.light)
-                            .frame(alignment: .leading)
-                        Text(location)// once EventData is ready, myData.location
+                        Text(myData.location)// once EventData is ready, myData.location
                             .foregroundStyle(Color(.textSecondary))
                             .fontWeight(.light)
-                            .frame(alignment: .leading)
                     } //right side
-//                    HStack{
-//                        Button{
-//                            notify.toggle()
-//                        } label: {
-//                            Image(systemName: notify ? "bell.fill" : "bell")
-//                        }//notifications bell
-//                        
-//                        Button{
-//                            favorited.toggle()
-//                        } label:{
-//                            Image(systemName: notify ? "heart.fill" : "heart")
-//                        }//favorites button
-//                        
-//                        
-//                    }
+                    VStack {
+                        //currently does not work!
+                        Button("", systemImage: myData.notify ? "bell.fill" : "bell") { myData.notify.toggle() }
+                            .buttonStyle(.bordered)
+                            .padding(0)
+                        Button("", systemImage: myData.favorited ? "heart.fill" : "heart") { myData.favorited.toggle()}
+                            .buttonStyle(.bordered)
+                            .padding(0)
+                    }
                     
-                }
-            } //title group box
+                    
+                }//Hstack (outer)
+            }//title group box
             .foregroundStyle(Color(.container))
             Divider ()
         }//Vstack
@@ -125,9 +147,7 @@ struct EventCards: View {
  */
 struct EventCards_Previews: PreviewProvider {
     static var previews: some View {
-        
-        //Must be changed once event cards are ready
-        EventCards(title: "Aikido", date: "April 4", startTimeISO: "2025-04-04T17:30:00-05:00", endTimeISO: "2025-04-04T18:30:00-05:00", allDay: false, location: "BRAC P103 - Multipurpose Dance Studio", description: "\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n", organization: "Aikido", tags: [], id: 23325)
-        //EventCards(myData: )
+
+        EventCards()
     }
 }
