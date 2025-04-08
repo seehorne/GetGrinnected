@@ -119,7 +119,6 @@ class MainActivityKtTest {
    composeTestRule.onNodeWithText(expectedScreenText).assertIsDisplayed()
   }
  }
-
  /**
   * Data class used for testing navigation
   */
@@ -127,7 +126,4 @@ class MainActivityKtTest {
   val navText: String,
   val expectedScreenText: String
  )
-
-
-
 }

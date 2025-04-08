@@ -37,7 +37,7 @@ fun AppNavigation(modifier: Modifier = Modifier,
             LoginScreen(modifier, navController)
         }
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme event, navController)
+            MainPage(modifier, darkTheme, onToggleTheme, event)
         }
 
     }
