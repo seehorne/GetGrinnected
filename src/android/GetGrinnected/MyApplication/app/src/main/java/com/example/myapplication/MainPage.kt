@@ -58,6 +58,14 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
         Event(8, "Concert Night7", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM",  0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
     )
 
+    val sampleOrgs = listOf(
+        User(1, "test", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
+        User(1, "test2", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test3", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test4", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test5", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+    )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -90,7 +98,7 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
             composable("Home") { HomeScreen() }
             composable("Calendar") { CalendarScreen() }
             composable("Favorites") { FavoritesScreen(events = sampleEvents) }
-            composable("Settings") { SettingsScreen() }
+            composable("Settings") { SettingsScreen(orgs = sampleOrgs) }
         }
     }
 }
