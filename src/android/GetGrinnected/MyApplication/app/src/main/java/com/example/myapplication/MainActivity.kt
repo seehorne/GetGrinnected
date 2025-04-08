@@ -7,8 +7,13 @@ import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
@@ -21,23 +26,28 @@ import javax.net.ssl.HttpsURLConnection
  * creation.
  */
 class MainActivity : ComponentActivity() {
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+
+        lifecycleScope.launch {
             val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
-            val result = getDataFromUrl(url)
+            val result = withContext(Dispatchers.IO) {
+                getDataFromUrl(url)
+            }
+
             val gson = Gson()
-            val events = mutableListOf<Event>(gson.fromJson(result, Event::class.java))
-            MyApplicationTheme {
-                    AppNavigation(
-                        event = events
-                    )
+            val listType = object : TypeToken<List<Event>>() {}.type
+            val events: List<Event> = gson.fromJson(result, listType) ?: emptyList()
+
+            setContent {
+                MyApplicationTheme {
+                    AppNavigation(event = events)
+                }
             }
         }
     }
-
-
 }
 
 fun getDataFromUrl(url: String): String? {
