@@ -9,7 +9,7 @@ Our tools: We use google docs as a staging area for many of these textual descri
 
 The structure of our Repository is as follows: 
 
-## Writeups
+## Sprint Reports
 
 - `written reports/` - Markdown write-ups for class milestones
   - `requirements.md` - Living requirements document
@@ -42,10 +42,9 @@ The structure of our Repository is as follows:
 - `test procedures/` - Manual test procedures we are keeping.
   - `[COMPONENT].md` - Test procedure to run for a particular COMPONENT.
 
-
 # Issue Tracking
 
-[Trello](https://trello.com/invite/b/67aa2af610b85d0ead6a8419/ATTI86565b68d11ca1636671d8b646735837A143ECBB/getgrinnected)
+Our issue manager is Trello. See our Trello board at <https://trello.com/b/pAnl7SQ3/getgrinnected>.
 
 # Developer Guidelines
 
@@ -125,3 +124,140 @@ Swift:
 Node:
 - <https://github.com/felixge/node-style-guide>
 - We chose this guideline because it was understandable and well formatted. We will hold each other accountable to these guidelines by reviewing each other's code and commenting when others make a mistake. We will hold ourselves responsible by individually reading the guidelines and trying to follow them to the best of our ability. 
+
+# How to Build, Test, and Run this System
+
+## Building
+
+### Kotlin frontend
+
+We use Android Studio for this.
+
+Android Studio doesn't distinguish between building and running code. See the running section below.
+
+### Swift frontend
+
+TODO: ALMOND CANNOT DO THIS. SHOULD DUPLICATE YOUR INSTALL SECTION OF THE SPRINT REPORT.
+
+### Node backend
+
+1. Clone this repo.
+
+2. Install Node.js and NPM, the latest LTS versions of each. <https://docs.npmjs.com/downloading-and-installing-node-js-and-npm>
+
+3. In the terminal, `cd` into the repo and run `npm ci` to install all packages we depend on.
+
+This builds all dependencies of the backend.
+
+## Testing
+
+### Kotlin frontend
+
+1. In Android Studio, select the drop down for build type.
+
+2. Switch the build type to "All Tests."
+
+3. Click the green run button.
+
+Or, run from (mostly) the command line using Gradle.
+
+1. In Android Studio, run something (e.g. tests, app) on a virtual device so that it sets up the virtual device.
+
+2. Do not close Android Studio, but open a terminal in the repo.
+
+3. Change directories to `src/android/GetGrinnected/MyApplication`.
+
+4. Run `./gradlew connectedCheck`.
+
+### Swift frontend
+
+TODO: ALMOND CANNOT DO THIS.
+
+### Node backend
+
+1. From the top level of the repo, run `npm test`.
+
+## Running
+
+### Kotlin frontend
+
+All Kotlin code is currently built and run from Android Studio.
+
+Follow these steps to build and run Android code.
+
+1. Install Android Studio on your device: <https://developer.android.com/studio/install>
+
+2. Open the `src/android/GetGrinnected/MyApplication` directory as a project in Android Studio.
+
+3. Set up a device to build for.
+
+    - Physical device: <https://developer.android.com/studio/run/device>
+    - Virtual device: <https://developer.android.com/studio/run/managing-avds>
+
+4. On the top bar of Android studio, select the correct device to build for.
+
+5. To the right of the device selector, make sure the dropdown menu for build job is set to 'My_Application.app'.
+
+6. Click the green Run or Play button. When the code is built, it will automatically open the app on the selected device.
+
+### Swift Frontend
+
+TODO: ALMOND CANNOT DO THIS.
+
+### Node backend
+
+All of these run on a dedicated server, but you could technically run them locally from a computer you have administrative access to.
+
+These instructions are written for a linux machine, but they may work on Mac. It is not reasonable for us to write instructions to run on any non-Linux operating system.
+
+#### Database
+
+1. Set up a MySQL server with version 9.2.0.
+
+2. Log into the server as a user that can create new databases.
+
+3. In the mysql prompt, source the file to create the tables. Here, the path is given starting at the top level of the repository.
+
+   ```
+   mysql> source src/backend/Database/GetGrinnectedDB.sql
+   ```
+
+4. Create a `.env` file at the top level of the repo that has the following contents, according to the dotenv description at <https://www.npmjs.com/package/dotenv>.
+
+    - `MYSQL_HOST` - hostname of the system the MySQL server is running on.
+    - `MYSQL_USER` - user to authenticate as
+    - `MYSQL_PASSWORD` - that user's password.
+    - `MYSQL_DATABASE` - database name, GetGrinnected.
+
+5. Optionally, the `.env` file can have the following options to allow the API to run on HTTPS with proper SSL certificates.
+
+    - `HTTPS_PORT` - the port to attempt to host HTTPS over. for port 443, node must be run with `sudo`.
+    - `HTTP_PORT` - the port to attempt to host HTTP over. for port 80, node must be run with `sudo`.
+    - `SSL_KEY` - private key for a valid SSL cert.
+    - `SSL_CA` - CA certificate for a valid SSL cert.
+    - `SSL_CERT` - Certificate for a valid SSL cert.
+
+#### Event scraper
+
+1. Set up a cron job that will run the correct script daily. This is what to put in the crontab, replacing the daily events path with an absolute path.
+
+   ```
+   5 5 * * * /usr/bin/bash /PATH/TO/update_daily_events.sh 
+   ```
+
+2. Run the script manually in order to kickstart the database with events. This path is given with respect to the top of the repository.
+
+   ```
+   /usr/bin/bash /PATH/TO/update_daily_events.sh
+   ```
+
+#### API
+
+1. Run the API in a terminal. From the top of the repository, run:
+
+   ```
+   node src/backend/api.js
+   ```
+
+2. It announces what ports the API is running on. By default it will run HTTP on port 8080 and HTTPS on port 4443, unless
+   otherwise specified in the .env file or environment variables.
