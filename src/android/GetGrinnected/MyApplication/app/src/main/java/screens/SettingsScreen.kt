@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -21,9 +22,12 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +39,8 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.OrgCard
 import com.example.myapplication.R
 import com.example.myapplication.User
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 /**
  * A composable function that represents the Settings screen of our app.
@@ -42,7 +48,10 @@ import com.example.myapplication.User
  * @param modifier Modifier to be applied to the screen layout.
  */
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier, orgs: List<User>) {
+fun SettingsScreen(modifier: Modifier = Modifier,
+                   orgs: List<User>,
+                   darkTheme: Boolean,
+                   onToggleTheme: (Boolean) -> Unit) {
     val scrollState = rememberScrollState()
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
 
@@ -137,6 +146,26 @@ fun SettingsScreen(modifier: Modifier = Modifier, orgs: List<User>) {
                     )
                 }
             }
+
+            Spacer(modifier = modifier.height(8.dp))
+
+            Text("Settings", fontSize = 20.sp)
+
+            Spacer(modifier = modifier.height(4.dp))
+
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Switch between light and dark mode", fontSize = 16.sp)
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Switch(
+                checked = darkTheme,
+                onCheckedChange = {
+                    onToggleTheme(it)
+                })
+            }
         }
     }
 }
@@ -151,5 +180,5 @@ fun SettingsScreenPreview(){
         User(1, "test4", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
         User(1, "test5", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
         )
-    SettingsScreen(orgs = sampleOrgs)
+    SettingsScreen(orgs = sampleOrgs, darkTheme = false, onToggleTheme =  {})
 }

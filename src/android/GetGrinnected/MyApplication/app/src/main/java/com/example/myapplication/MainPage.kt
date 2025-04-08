@@ -38,7 +38,10 @@ import androidx.navigation.compose.rememberNavController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
+fun MainPage(modifier: Modifier = Modifier,
+             navController: NavController,
+             darkTheme: Boolean,
+             onToggleTheme: (Boolean) -> Unit) {
     val bottomNavController = rememberNavController()
 
     val navItemList = listOf(
@@ -98,7 +101,7 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
             composable("Home") { HomeScreen() }
             composable("Calendar") { CalendarScreen() }
             composable("Favorites") { FavoritesScreen(events = sampleEvents) }
-            composable("Settings") { SettingsScreen(orgs = sampleOrgs) }
+            composable("Settings") { SettingsScreen(orgs = sampleOrgs, darkTheme = darkTheme, onToggleTheme = onToggleTheme) }
         }
     }
 }

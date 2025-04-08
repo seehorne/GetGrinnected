@@ -22,7 +22,7 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_LoginButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(darkTheme = false, onToggleTheme =  {}) }
 
   composeTestRule.onNodeWithText("Login").performClick()
 
@@ -38,7 +38,7 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_SignUpButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(darkTheme = false, onToggleTheme =  {}) }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
 
@@ -81,7 +81,7 @@ class MainActivityKtTest {
   */
  @Test
  fun loginScreen_SignupButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(darkTheme = false, onToggleTheme =  {}) }
 
   composeTestRule.onNodeWithText("Login").performClick()
 
@@ -104,11 +104,11 @@ class MainActivityKtTest {
   val destinations = listOf(
    NavTestData("Calendar", "MonthView"),
    NavTestData("Favorites", "Favorite Events"),
-   NavTestData("Settings", "Settings Page"),
+   NavTestData("Settings", "Profile"),
   )
 
   composeTestRule.setContent {
-   MainPage(navController = rememberNavController())
+   MainPage(navController = rememberNavController(), darkTheme = false, onToggleTheme =  {})
   }
 
   destinations.forEach { (tabText, expectedScreenText) ->
