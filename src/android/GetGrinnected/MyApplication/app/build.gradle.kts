@@ -40,7 +40,10 @@ android {
 }
 
 dependencies {
-
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation(libs.androidx.tools.core)
+    implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -52,13 +55,18 @@ dependencies {
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.ui.test.junit4.android)
     implementation(libs.androidx.fragment.ktx)
-    implementation ("androidx.navigation:navigation-compose:2.7.6")
+    implementation (libs.androidx.navigation.compose.v276)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.volley)
+    implementation(libs.transport.api)
+    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    androidTestImplementation(libs.androidx.espresso.core.v350)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.ui.test.manifest)
+
 }

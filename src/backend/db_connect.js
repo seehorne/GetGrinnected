@@ -8,6 +8,8 @@ const scrape = require('./scrape.js');
 *  information in its contents (this isn't hard but will need to be added on the server side)
 */
 
+const DROPPATH = './src/backend/drop_ids.txt'
+
 dotenv.config();
 
 const pool = mysql.createPool({
@@ -17,10 +19,15 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+/**
+ * insertEventsFromScrape
+ * 
+ * uses scraped json file to fill events into database
+ */
 async function insertEventsFromScrape(){
 
     try{
-        const file_data =  fs.readFileSync(scrape.TRUEPATH)
+        const file_data =  fs.readFileSync(scrape.TRUEPATH, 'utf-8')
         const parsing = JSON.parse(file_data);
         const events = parsing.data;
 
@@ -45,11 +52,11 @@ async function insertEventsFromScrape(){
                 const startTimeISO = new Date(event.StartTimeISO);
                 const endTimeISO = new Date(event.EndTimeISO);
 
-                // Executes the prepared statement with the event values and fills in with defaul values
+                // Executes the prepared statement with the event values and fills in with default values
                 // where the scraper didn't get information.
                 await pool.query(sql, [event.ID, event.Title, event.Description, event.Location,
                     JSON.stringify(orgs), 0, event.Date, event.Time, isAllDay, startTimeISO,
-                    endTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]);
+                    endTimeISO, JSON.stringify(tags), 0, 0, null, 0 ]).then(console.log(`I added event:  ${event.ID}`))
 
             } catch (eventError) {
                 console.error(`Error inserting event: ${event.Title}`, eventError);
@@ -58,7 +65,7 @@ async function insertEventsFromScrape(){
 
     } catch (error) {
         console.error('Error processing events:', error);
-    }
+    } 
 }
 
 // This is to combine the tags and audience to use audience as an additional tag
@@ -178,15 +185,24 @@ async function createAccount(username, email, password){
         return result;
 }
 
-async function dropExpiredEvents(eventIds){
+async function dropExpiredEvents(){
 
-    const eventIds_array = [...eventIds];
+    const file_data =  fs.readFileSync(scrape.DROPPATH, 'utf-8')
 
+    const json = JSON.parse(file_data);
+
+    const eventIds_array = json.data.map(item => item.ID).filter(id => id);
+
+    if (eventIds_array.length === 0) {
+        console.log("No events to delete.");
+        return;
+    }
     // Maps the number of event ids to corresponding ?s for prepared statement setup
     const placeholders = eventIds_array.map(() => "?").join(", ");
     const query = `DELETE FROM events WHERE eventid IN (${placeholders})`;
 
     const [result] = await pool.query(query, eventIds_array);
+    console.log(`Output from result: ${result}`);
     return result;
 }
 

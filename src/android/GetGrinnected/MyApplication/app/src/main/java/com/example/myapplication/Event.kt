@@ -1,18 +1,46 @@
 package com.example.myapplication
 
+import kotlinx.serialization.Serializable
+
 
 /**
- *
+ * This class is used to define the event data type
+ * eventid: Integer associated with the unique id for an event
+ * event_name: String the title of an event
+ * event_description: String a description about the event
+ * event_location: String the location where the event is taking place
+ * organizations: List<String> a list of orgs that are putting on the event
+ * rsvp: Integer used as a 0 or 1 for whether an event requires RSVP
+ * event_date: String the human legible date of an event
+ * event_time: String human legible start time of an event
+ * event_all_day: Integer used as a 0 or 1 for whether an event is all day or not
+ * event_start_time: String the ISO time format of the start time of the event
+ * event_end_time: String the ISO time format of the end time of the event
+ * tags: List<String> a list of tags assigned to an event
+ * event_private: Integer used as a 0 or 1 for whether an event is private or not
+ * repeats: Integer used as a 0 or 1 for whether an event repeats or not
+ * event_image: String the path to the image associated with the event
+ * is_draft: Integer used as a 0 or 1 for whether an event is a draft or not
+ * is_favorited: Boolean used to discern whether the current user has favorited this event
  */
+@Serializable
 data class Event(
-    val title: String,
-    val description: String,
+    val event_all_day: Int,
+    val event_date: String,
+    val event_description: String,
+    val event_end_time: String,
+    val event_image: String,
+    val event_location: String,
+    val event_name: String,
+    val event_private: Int,
+    val event_start_time: String,
+    val event_time: String,
+    val eventid: Int,
+    val is_draft: Int,
     val organizations: List<String>,
-    val date: String, //Not sure what to make these actually so this is temp
-    val time: String, //Not sure what to make these actually so this is temp
-    val location: String, //Not sure what to make this rn
-    val isFavorited: Boolean,
+    val repeats: Int,
+    val rsvp: Int,
     val tags: List<String>,
-    val isDraft: Boolean,
-
+    val is_favorited: Boolean = false
 )
+

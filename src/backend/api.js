@@ -1,28 +1,49 @@
+const db = require('./db_connect.js');
 const express = require('express');
 const fs = require('fs');
-const db = require('./db_connect.js');
+const http = require('http');
+const https = require('https');
 
 /* global var to store if we are running a server */
-var server = null;
+var http_server = null;
+var https_server = null;
 
 /**
  * Run the API.
  */
 function run() {
-  // Listen on port 5844 by default
-  const app = express();
-  const port = process.env.PORT || 5844;
-  server = app.listen(port, () => {
-    console.log(`server listening on port ${port}`);
-  });
+  // Load environment vars from .env file
+  require('dotenv').config()
 
-  // Middleware to parse JSON requests
+  // Create the app that we will serve
+  const app = express();
   app.use(express.json());
 
-  // Basic GET route just to show the API is up.
-  app.get('/', getAPIOnline);
+  // Create a regular HTTP server.
+  // Default to 8080 so non-root users can run it.
+  const http_port = Number(process.env.HTTP_PORT) || 8080;
+  http_server = http.createServer(app).listen(http_port, () => {
+    console.log(`http server listening on port  ${http_port}`);
+  });
 
-  // GET events
+  // Read SSL credentials from their system files
+  const credentials = {
+    key: process.env.SSL_KEY,
+    ca: process.env.SSL_CA,
+    cert: process.env.SSL_CERT,
+  };
+
+  // Create an HTTPS server serving the application.
+  // Default to 4443 so non-root users can run it.
+  const https_port = Number(process.env.HTTPS_PORT) || 4443;
+  https_server = https
+    .createServer(credentials, app)
+    .listen(https_port, () => {
+      console.log(`https server listening on port ${https_port}`);
+    });
+
+  // Define routes
+  app.get('/', getAPIOnline);
   app.get('/events', getEvents);
   app.get('/events/between/:start/:end', getEventsBetween);
 }
@@ -31,17 +52,27 @@ function run() {
  * Stop running the API. Uses the global `server` var set by run()
  */
 function close() {
-  if (server == null) {
-    return;
+  // close http server
+  if (http_server != null) {
+    http_server.close((err) => {
+      if (err) {
+        console.log(`http server closed with status ${err}`);
+      } else {
+        console.log(`http server closed with no error`);
+      }
+    });
   }
 
-  server.close((err) => {
-    if (err) {
-      console.log(`server closed with status ${err}`)
-    } else {
-      console.log('server closed with no error')
-    }
-  });
+  // close https server
+  if (https_server != null) {
+    https_server.close((err) => {
+      if (err) {
+        console.log(`https server closed with status ${err}`);
+      } else {
+        console.log(`https server closed with no error`);
+      }
+    });
+  }
 }
 
 /**

@@ -1,6 +1,7 @@
 # see https://www.mkdocs.org/user-guide/writing-your-docs/#configure-pages-and-navigation
 nav:
   - Home: index.md
+  - API v1: api-v1.md
 
 ################################################################################
 
@@ -12,3 +13,9 @@ site_url: https://getgrinnected.sites.grinnell.edu/docs/
 
 theme: 
   name: material
+
+plugins:
+  - render_swagger
+
+extra_css:
+  - swagger-code-colors.css
