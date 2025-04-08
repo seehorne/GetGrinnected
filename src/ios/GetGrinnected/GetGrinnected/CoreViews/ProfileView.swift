@@ -13,6 +13,8 @@ struct ProfileView: View {
     
     var body: some View {
         NavigationStack {
+            Header(title: "Profile") // add header to view
+            
             VStack {
                 Image(systemName:"person.crop.circle.badge.plus")
                     .imageScale(.large)
@@ -23,24 +25,6 @@ struct ProfileView: View {
             } //VStack
             
             .padding()
-            .navigationTitle("Profile")
-            .toolbarBackground(Color.red, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar{
-                // logo on toolbar. copied from budhil
-                Image("white_circle")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 75, height: 75)
-                    .padding(.vertical, 32)
-                    .overlay(
-                        Image("gglogo_nt")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 75, height: 75)
-                            .padding(.vertical, 32)
-                    )
-            } // toolbar
         } //NavigationStack
     } //body
 } //ProfileView

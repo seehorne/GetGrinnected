@@ -20,6 +20,10 @@ struct HomescreenView: View {
     
     var body: some View {
         NavigationStack {
+            Header(title: "Home") // add header to view
+            
+            Spacer() // add some space under header
+            
             VStack {
                 HStack {
                     // a picker for date
@@ -40,25 +44,6 @@ struct HomescreenView: View {
                     EventCards(title: "Aikido", date: "April 4", startTimeISO: "2025-04-04T17:30:00-05:00", endTimeISO: "2025-04-04T18:30:00-05:00", allDay: false, location: "BRAC P103 - Multipurpose Dance Studio", description: "\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n", organization: "Aikido", tags: [], id: 23325)
                 }
             } //VStack
-            
-            .navigationTitle("Home")
-            .toolbarBackground(Color.red, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar{
-                // logo on toolbar. copied from budhil
-                Image("white_circle")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 75, height: 75)
-                    .padding(.vertical, 32)
-                    .overlay(
-                        Image("gglogo_nt")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 75, height: 75)
-                            .padding(.vertical, 32)
-                    )
-            } // toolbar
         } //NavigationStack
     } //body
 } //HomescreenView

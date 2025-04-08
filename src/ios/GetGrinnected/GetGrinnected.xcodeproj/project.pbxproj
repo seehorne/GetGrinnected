@@ -15,6 +15,7 @@
 		0CBBC3E62D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBBC3E52D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift */; };
 		4CA0C5732DA4BBEE00059803 /* EventTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5722DA4BBEE00059803 /* EventTags.swift */; };
 		4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5742DA4BF6500059803 /* CheckBox.swift */; };
+		4CA0C5772DA5D16200059803 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5762DA5D15300059803 /* Header.swift */; };
 		CACCD4562DA31696001D31C0 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4532DA31696001D31C0 /* SignUpView.swift */; };
 		CACCD4572DA31696001D31C0 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44E2DA31696001D31C0 /* FavoritesView.swift */; };
 		CACCD4592DA31696001D31C0 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4482DA31696001D31C0 /* ColorTheme.swift */; };
@@ -67,6 +68,7 @@
 		0CBBC3E52D77AB9B002E482E /* GetGrinnectedUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGrinnectedUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4CA0C5722DA4BBEE00059803 /* EventTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTags.swift; sourceTree = "<group>"; };
 		4CA0C5742DA4BF6500059803 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
+		4CA0C5762DA5D15300059803 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CACCD4452DA31696001D31C0 /* EventData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		CACCD4462DA31696001D31C0 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 		CACCD44A2DA31696001D31C0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				4CA0C5762DA5D15300059803 /* Header.swift */,
 				4CA0C5742DA4BF6500059803 /* CheckBox.swift */,
 				CACCD4642DA318EE001D31C0 /* EventCards.swift */,
 				CACCD4482DA31696001D31C0 /* ColorTheme.swift */,
@@ -394,6 +397,7 @@
 				CACCD45D2DA31696001D31C0 /* EventCreationView.swift in Sources */,
 				CACCD45E2DA31696001D31C0 /* InputField.swift in Sources */,
 				CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */,
+				4CA0C5772DA5D16200059803 /* Header.swift in Sources */,
 				4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */,
 				CACCD4652DA318F3001D31C0 /* EventCards.swift in Sources */,
 				4CA0C5732DA4BBEE00059803 /* EventTags.swift in Sources */,
