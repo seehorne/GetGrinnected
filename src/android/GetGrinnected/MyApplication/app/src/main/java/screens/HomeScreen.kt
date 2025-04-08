@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.Event
 import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -53,7 +54,7 @@ import androidx.compose.foundation.layout.Column as Column1
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(event: Event) {
+fun HomeScreen(event: List<Event>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(2) }
     // holds whether the dropdown menu's are up or down

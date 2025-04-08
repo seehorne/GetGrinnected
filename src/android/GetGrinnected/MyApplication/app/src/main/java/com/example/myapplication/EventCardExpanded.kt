@@ -16,10 +16,10 @@ fun EventCardExpanded(event: Event, modifier: Modifier){
             .size(width = 300.dp, height = 100.dp)
     ) {
         Text(
-            text = "${event.title}, " +
-                    "${event.time}, " +
-                    "${event.location}, " +
-                    "${event.description}, " +
+            text = "${event.event_name}, " +
+                    "${event.event_start_time}, " +
+                    "${event.event_location}, " +
+                    "${event.event_description}, " +
                     "${event.organizations}" +
                     "${event.tags}",
             modifier = modifier

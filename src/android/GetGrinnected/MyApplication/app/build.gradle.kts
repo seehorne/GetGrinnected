@@ -57,6 +57,8 @@ dependencies {
     implementation (libs.androidx.navigation.compose.v276)
     implementation(libs.androidx.room.ktx)
     implementation(libs.volley)
+    implementation(libs.transport.api)
+    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core.v350)

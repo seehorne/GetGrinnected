@@ -116,6 +116,7 @@ fun main(){
     } else {
         println("Failed to get data from URL")
     }
+    /*
     val regex = Regex("event_name")
     // val events4 = Gson().fromJson(result, Event::class.java)
     // println(events4) // Output: Person(name=John, age=30)
@@ -130,5 +131,7 @@ fun main(){
     println(events)
     println(events.size)
     println(events[0])
+    */
+
 }
 main()

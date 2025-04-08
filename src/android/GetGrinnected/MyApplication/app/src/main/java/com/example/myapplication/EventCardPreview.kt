@@ -23,9 +23,9 @@ fun EventCardPreview(event: Event, modifier: Modifier) {
             .size(width = 300.dp, height = 100.dp)
     ) {
         Text(
-            text = "${event.title}, " +
-                    "${event.time}, " +
-                    "${event.location}, ",
+            text = "${event.event_name}, " +
+                    "${event.event_time}, " +
+                    "${event.event_location}, ",
             modifier = modifier
                 .padding(16.dp),
             textAlign = TextAlign.Center,

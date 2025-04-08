@@ -16,7 +16,7 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_LoginButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(event = events) }
 
   composeTestRule.onNodeWithText("Login").performClick()
 
@@ -28,7 +28,7 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_SignUpButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(event = events) }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
 
@@ -40,7 +40,7 @@ class MainActivityKtTest {
 
  @Test
  fun signupScreen_SigninButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(event = events) }
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
    composeTestRule.onAllNodesWithText("Sign Up").fetchSemanticsNodes().isNotEmpty()
@@ -60,7 +60,7 @@ class MainActivityKtTest {
 
  @Test
  fun loginScreen_SignupButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation() }
+  composeTestRule.setContent { AppNavigation(event = events) }
 
   composeTestRule.onNodeWithText("Login").performClick()
 

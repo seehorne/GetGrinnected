@@ -22,6 +22,8 @@ roomKtx = "2.6.1"
 volley = "1.2.1"
 toolsCore = "1.0.0-alpha13"
 media3CommonKtx = "1.6.0"
+transportApi = "4.0.0"
+firebaseDatabaseKtx = "21.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +58,8 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
+transport-api = { group = "com.google.android.datatransport", name = "transport-api", version.ref = "transportApi" }
+firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

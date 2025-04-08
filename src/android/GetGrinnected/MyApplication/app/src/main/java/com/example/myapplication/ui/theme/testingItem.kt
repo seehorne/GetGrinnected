@@ -1,15 +1,11 @@
-package com.example.myapplication
+package com.example.myapplication.ui.theme
 
-
-/**
- *
- */
-data class Event(
+data class testingItem(
     val event_all_day: Int,
     val event_date: String,
     val event_description: String,
     val event_end_time: String,
-    val event_image: String,
+    val event_image: Any,
     val event_location: String,
     val event_name: String,
     val event_private: Int,
@@ -22,4 +18,3 @@ data class Event(
     val rsvp: Int,
     val tags: List<String>
 )
-

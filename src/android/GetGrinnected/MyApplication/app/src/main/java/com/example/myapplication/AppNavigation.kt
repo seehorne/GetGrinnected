@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import screens.Event
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
@@ -18,7 +17,7 @@ import screens.WelcomeScreen
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AppNavigation(modifier: Modifier = Modifier, event: Event){
+fun AppNavigation(modifier: Modifier = Modifier, event: List<Event>){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "welcome"){
 
