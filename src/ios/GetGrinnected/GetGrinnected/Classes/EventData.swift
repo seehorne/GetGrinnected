@@ -1,246 +1,147 @@
 //
-//  eventData.swift
+//  EventData.swift
 //  GetGrinnected
 //
-//  Created by Budhil Thijm on 4/1/25.
+//  Created by Budhil Thijm on 4/8/25.
 //
-
-/**
- 
- 
- AS OF 2025.04.06, THIS SCRAPING DOESN'T WORK FOR SURE
- 
- HOW TO GET THE ACTUAL API CALLS?
- 
- 
- WHAT ARE THE NAMES OF THE EXACT VARIABLES?
- 
- 
- THIS IS ALMOST THERE BUT NOT QUITE
- 
- 
- 
- */
-
-//https://www.hackingwithswift.com/read/7/3/parsing-json-using-the-codable-protocol 
-import Foundation
 import SwiftUI
+
 /**
- JSON format:
+ Guides for decoding:
+ - https://codewithchris.com/codable/
  
- Example Event JSON:
- {"Title":"Aikido",
- "Date":"April 4",
- "Time":"5:30 p.m. - 6:30 p.m.",
- "StartTimeISO":"2025-04-04T17:30:00-05:00",
- "EndTimeISO":"2025-04-04T18:30:00-05:00",
- "AllDay?":false,
- "Location":"BRAC P103 - Multipurpose Dance Studio",
- "Description":"\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n",
- "Audience":["Alumni","Faculty &amp; Staff","General Public","Prospective Students","Student Families","Students"],
- "Org":"Aikido",
- "Tags":null,
- "ID":23325},
-
-  
- "Tags" and "Audience" are same format!
+ Class for making API call, converting JSON to Event Struct, to be turned into a UI component in EventCards.swift
+ 
+ As of 2025.04.08, no API call. just a string declaration
+ 
  */
- 
-class EventData: ObservableObject, Identifiable {
-    // Properties mirroring the JSON
-    @Published var title: String = ""
-    @Published var date: String = ""
-    @Published var startTimeISO: String = ""
-    @Published var endTimeISO: String = ""
-    @Published var allDay: Bool = false
-    @Published var location: String = ""
-    @Published var description: String? = nil
-    @Published var audience: [String]? = nil
-    @Published var organization: String = ""
-    @Published var tags: [String]? = nil
-    @Published var id: Int = 0
+
+
+class EventData{
+    //initialize array of events
+    var events = [Event]()
+    //our API link
+    let urlString = "https://node16049-csc324--spring2025.us.reclaim.cloud/"
     
-    /**
-     Non-scraped data
-     */
-    @Published var notify: Bool = false
-    @Published var favorited: Bool = false
-    
-    // Helper struct for decoding JSON
-    private struct EventDataDTO: Decodable {
-        var title: String
-        var date: String
-        var startTimeISO: String
-        var endTimeISO: String
-        var allDay: Bool
-        var location: String
-        var description: String?
-        var audience: [String]?
-        var organization: String
-        var tags: [String]?
-        var id: Int
-        
-        enum CodingKeys: String, CodingKey {
-            case title = "Title"
-            case date = "Date"             // Maps struct property "date" to JSON key "Date"
-            case startTimeISO = "StartTimeISO"
-            case endTimeISO = "EndTimeISO"
-            case allDay = "AllDay?"
-            case location = "Location"
-            case description = "Description"
-            case audience = "Audience"
-            case organization = "Org"      // Maps struct property "organization" to JSON key "Org"
-            case tags = "Tags"
-            case id = "ID"
-        }
-    }
-    
-    //default
-    init(){
-        
-    }
-    
-    //full initializer
-    init(title: String,
-        date: String,
-        startTimeISO: String,
-        endTimeISO: String,
-        allDay: Bool,
-        location: String,
-        description: String?,
-        audience: [String]?,
-        organization: String,
-        tags: [String]?,
-        id: Int){
-        self.title = title
-        self.date = date
-        self.startTimeISO = startTimeISO
-        self.endTimeISO = endTimeISO
-        self.allDay = allDay
-        self.location = location
-        self.description = description
-        self.audience = audience
-        self.organization = organization
-        self.tags = tags
-        self.id = id
-    }
-    
-    
-    // Initialize from JSON string
-    convenience init(fromJSON jsonString: String) {
-        self.init()
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            print("Failed to convert string to data")
-            //No longer returning nil, as this is no longer a init? type
-            return //nil
-        }
-            
-        do {
-            //initialize decoder
-            let decoder = JSONDecoder()
-            let dto = try decoder.decode(EventDataDTO.self, from: jsonData)
-                
-            // Transfer values from DTO to published properties
-            self.title = dto.title
-            self.date = dto.date
-            self.startTimeISO = dto.startTimeISO
-            self.endTimeISO = dto.endTimeISO
-            self.allDay = dto.allDay
-            self.location = dto.location
-            self.description = dto.description
-            self.audience = dto.audience
-            self.organization = dto.organization
-            self.tags = dto.tags
-            self.id = dto.id
-            
-            //non-scraped
-            self.notify = false
-            self.favorited = false
-        } catch {
-            print("Decoding error: \(error)")
-            //no longer  afailable initializer
-            //return nil
-        }//do-catch
-    }//initialize with a string input
-        
-    
-    // function to parse JSON string into EventData
-    static func fromJSON(_ jsonString: String) -> EventData? {
-        return EventData(fromJSON: jsonString)
-    }
-        
-    // function to parse an array of JSON objects, does the same as initializer
-    static func arrayFromJSON(_ jsonString: String) -> [EventData]? {
-        //convert string data
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            print("Failed to convert string to data")
-            return nil
-        }
-        
-        do {
-            //initialize decoder
-            let decoder = JSONDecoder()
-            let dtos = try decoder.decode([EventDataDTO].self, from: jsonData)
-                
-            //initialize the event-Data decoding using the initializer
-            return dtos.map { dto in
-                EventData(
-                    title: dto.title,
-                    date: dto.date,
-                    startTimeISO: dto.startTimeISO,
-                    endTimeISO: dto.endTimeISO,
-                    allDay: dto.allDay,
-                    location: dto.location,
-                    description: dto.description,
-                    audience: dto.audience,
-                    organization: dto.organization,
-                    tags: dto.tags,
-                    id: dto.id
-                )
+    // convert to URL and then convert with "parse"
+    func getData() {
+        //safely convert to url
+        if let url = URL(string: urlString) {
+            if let data = try? Data(contentsOf: url) {
+                parse(json: data)
             }
-        } catch {
-            //print error if an error is found
-            print("Array decoding error: \(error)")
-            return nil
-        }
-    }
-}
-
-
-//API call --> ALL events
-//for a page, note current filters!
-//filter out events that are not included
-//turn each of remaining events into eventCards UI components
-//
-
-struct myView: View {
-    var body: some View{
-        // this is the proper input form for EventData
-        let data = EventData(fromJSON: """
-            {"Title":"Aikido",
-            "Date":"April 4",
-            "Time":"5:30 p.m. - 6:30 p.m.",
-            "StartTimeISO":"2025-04-04T17:30:00-05:00",
-            "EndTimeISO":"2025-04-04T18:30:00-05:00",
-            "AllDay?":false,
-            "Location":"BRAC P103 - Multipurpose Dance Studio",
-            "Description":"\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n",
-            "Audience":["Alumni","Faculty &amp; Staff","General Public","Prospective Students","Student Families","Students"],
-            "Org":"Aikido",
-            "Tags":null,
-            "ID":23325}
-        """)
-        //testing whether or not the ouptuts work!
-        //let printSt = if(data.title.compare("Aikido").rawValue == 0) {"Correct!"} else {"Incorrect!"}
-//        Text(printSt)
-        var title = if(data.title.compare("Aikido").rawValue == 0) {"Correct!"} else {"Incorrect!"}
-        var location = if(data.location.compare("Aikido").rawValue == 0) {"Correct!"} else {"Incorrect!"}
-        Text(title)
-        Text(location)
+        }//if
     }
     
+    
+    
+    //parse function taken from the tutorial linked at the top
+    func parse(json: Data) {
+        let decoder = JSONDecoder()
+        if let jsonEvents = try? decoder.decode (Events.self, from: json) {
+            events = jsonEvents.data
+        }
+    }
+    
+    static func decode(json: String) -> String{
+        /// Then convert it to Data so we can decode it using
+        /// JSONDecoder
+        
+        guard let data = json.data(using: .utf8) else {
+            print("Failed to convert JSON string to data")
+            return "Error: JSON string conversion failed"
+        }
+        /// This is the JSONDecoder instance we'll use to
+        /// convert the JSON string into the model struct
+        let decoder = JSONDecoder()
+        
+        do {
+            // Attempt to decode the JSON data into an Event object
+            let myEventData = try decoder.decode(Event.self, from: data)
+            print("Successfully decoded event: \(myEventData.event_name)")
+            return myEventData.event_name
+        } catch {
+            // Enhanced error handling for better debugging
+            print("Decoding error: \(error)")
+                
+            // Provide more detail about the specific decoding error
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .keyNotFound(let key, let context):
+                    print(
+                        "Missing key: \(key.stringValue) - \(context.debugDescription)"
+                    )
+                    return "Error: Missing key '\(key.stringValue)'"
+                        
+                case .typeMismatch(let type, let context):
+                    print(
+                        "Type mismatch: expected \(type) - \(context.debugDescription)"
+                    )
+                    return "Error: Type mismatch for '\(context.codingPath.last?.stringValue ?? "unknown field")'"
+                        
+                case .valueNotFound(let type, let context):
+                    print(
+                        "Value not found: expected \(type) - \(context.debugDescription)"
+                    )
+                    return "Error: Missing value for '\(context.codingPath.last?.stringValue ?? "unknown field")'"
+                        
+                case .dataCorrupted(let context):
+                    print("Data corrupted: \(context.debugDescription)")
+                    return "Error: JSON data is corrupted"
+                        
+                @unknown default:
+                    print("Unknown decoding error")
+                    return "Error: Unknown decoding issue"
+                }
+            }
+                
+            return "Error: \(error.localizedDescription)"
+        }
+    }
+
+    
 }
+
+struct SampleView: View {
+    var body: some View {
+        let printString = EventData.decode(json: """
+            {
+              "eventid": 28273,
+              "event_name": "SGA Concert",
+              "event_description": "No description available",
+              "event_location": "Main Hall Gardner Lounge",
+              "organizations": [
+                "Sga Concerts"
+              ],
+              "rsvp": 0,
+              "event_date": "April 9",
+              "event_time": "7 p.m. - 10 p.m.",
+              "event_all_day": 0,
+              "event_start_time": "2025-04-10T00:00:00.000Z",
+              "event_end_time": "2025-04-10T03:00:00.000Z",
+              "tags": [
+                "Music",
+                "Student Activity",
+                "Alumni",
+                "Faculty &amp; Staff",
+                "General Public",
+                "Prospective Students",
+                "Student Families",
+                "Students"
+              ],
+              "event_private": 0,
+              "repeats": 0,
+              "event_image": null,
+              "is_draft": 0
+            }
+        """)
+        Text(printString)
+    }
+}
+
 
 #Preview {
-    myView()
+    SampleView()
 }
+
+
