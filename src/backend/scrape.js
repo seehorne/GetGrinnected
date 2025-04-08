@@ -1,5 +1,10 @@
 const fs = require("fs");
-const url = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
+const URL = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
+const CIPATH = './src/backend/ci_events.json'
+const TRUEPATH = './src/backend/event_data.json'
+const DROPPATH = './src/backend/drop_ids.json'
+const CLOSEFILE = '\n]\n}'
+const OPENFILE = '{\n\"data\" : [\n'
 
 /**
  * processExisting
@@ -7,16 +12,16 @@ const url = 'https://events.grinnell.edu/live/json/events/response_fields/all/pa
  * Processes already scraped events to create a set of their IDs
  * @returns Set of IDs associated with pre-existing events
  */
-function processExisting(){
+function processExisting(path){
   try{
-    events = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
-    currentEvents = JSON.parse(events)
+    events = fs.readFileSync(path, 'utf-8');
+    currentEvents = JSON.parse(events) //parse existing events
       existingIDs = new Set();
       if (currentEvents.data && Array.isArray(currentEvents.data)){
         currentEvents.data.forEach(event =>{
-          existingIDs.add(event.ID);
+          existingIDs.add(event.ID); //add each ID to a set
       });
-      return existingIDs;
+      return existingIDs; //return the set
       }
   }
   catch(error){
@@ -31,8 +36,8 @@ function processExisting(){
  * Repackages relevant data to JSON structure stored in event_data.json
  * @param {*} url -> url to data to be scraped, assumes JSON data
  */
-async function scrapeData(url) {
-  existingIDs = await processExisting();
+async function scrapeData(url, path) {
+  existingIDs = await processExisting(path);
   const appendPromises = [];
   fetch(url)
   .then(response => {
@@ -42,16 +47,19 @@ async function scrapeData(url) {
     return response.json();
   })
   .then(async events => {
-    existingEvents = fs.readFileSync('./src/backend/event_data.json', 'utf-8');
+    existingEvents = fs.readFileSync(path, 'utf-8');
     lines = existingEvents.split('\n');
+    console.log(lines.length);
+    anyExistingEvents = lines.length > 4;
+    zeroEventsNotCorrupt = lines.length === 4;
     updatedLines = lines.slice(0, -2); //remove last two lines
-    fs.writeFileSync('./src/backend/event_data.json', updatedLines.join('\n'));
-    counter = 0;
+    fs.writeFileSync(path, updatedLines.join('\n'));
     if (events.data && Array.isArray(events.data)) {
+      counter = 0;
       events.data.forEach(event => {
-        if (!existingIDs.has(event.id)){
-        existingIDs.add(event.id);
-        eventInfo = {};
+        if (!existingIDs.has(event.id)){ //event not already listed
+        existingIDs.add(event.id); //add id to list
+        eventInfo = {}; //make dictionary to JSONify event
         eventInfo["Title"] = event.title;
         eventInfo["Date"] = event.date;
         eventInfo["Time"] = event.date_time;
@@ -70,22 +78,24 @@ async function scrapeData(url) {
         eventInfo["Tags"]= event.tags;
         eventInfo["ID"]= event.id;
         stringifyEvent = JSON.stringify(eventInfo);
-        if (counter != 0 || lines.length >= 2){ //not first event to be added ever
-            stringifyEvent = ',\n'+stringifyEvent;
+        if (anyExistingEvents||counter !=0){ //not first event to be added ever
+          stringifyEvent = ',\n'+stringifyEvent;
         }
-        counter++;
-        appendPromises.push(fs.appendFile('./src/backend/event_data.json', 
+        else if (zeroEventsNotCorrupt){
+          stringifyEvent = '\n'+stringifyEvent;
+        }
+        appendPromises.push(fs.appendFileSync(path, 
           stringifyEvent, function(err){
             if(err) throw err;
             console.log('WRITING TO JSON')
           }));
         }
+        counter++;
       }
     );
     }
     await Promise.all(appendPromises);
-    const CLOSEFILE = '\n]\n}'
-    fs.appendFile('./src/backend/event_data.json', CLOSEFILE, function(err){
+    fs.appendFile(path, CLOSEFILE, function(err){
       if(err) throw err;
       console.log('WRITING TO JSON')
       });
@@ -95,6 +105,87 @@ async function scrapeData(url) {
   });
 }
 
-module.exports = { processExisting, scrapeData, url};
+/**
+ * dropPastEvents
+ * 
+ * removes elapsed events from JSON of events to be in app 
+ * and writes their IDs to drop_ids.json, clearing all previous
+ * contents.
+ * 
+ */
+function dropPastEvents(path){
+  //record current time for comparison
+  now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+  console.log(now)
+  events = fs.readFileSync(path, 'utf-8');
+  storedEvents = JSON.parse(events);
+  lines = events.split('\n');
+  console.log(lines.length);
+  fs.writeFileSync(DROPPATH, OPENFILE); //write opening to JSON
+  if (lines.length <= 4){
+    return; //this implies there are no events even there
+  }
+  expiredEvents = 0; //count amount of expired events
+  expiredIndices = new Set(); //keep track of expired indices
+  //how many with start and end times to remove
+  now_midnight = new Date(now).setHours(0, 0, 0, 0); //record midnight today
+  idString = "";
+  for (let i = 0; i < storedEvents.data.length; i++) {
+    console.log(i); //log event index
+    let event = storedEvents.data[i]; 
+    //time difference between today midnight and event day midnight
+    //negative implies expired, 0 implies today, positive implies future
+    dayDiff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now_midnight;
+    console.log(dayDiff); //log difference from current time
+    eventInfo = {}; //set up JSON entry
+    if (dayDiff < 0) {//event is on day that has passed
+        expiredEvents++;
+        expiredIndices.add(i);
+        console.log("DROPPING"+ event.Title);
+        eventInfo["ID"] = event.ID;
+        eventStr = "";
+            if (expiredEvents!==1){
+              eventStr = ",\n"
+            }
+            eventStr = eventStr + JSON.stringify(eventInfo);
+        fs.appendFileSync(DROPPATH, eventStr, function(err){
+          if(err) throw err;
+          console.log('WRITING TO JSON')
+        });
+    } else if (!event.allDay && dayDiff === 0) {//event is today, may or may not be over
+        let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
+        console.log(diff); //log time difference
+        console.log(event.Title); //log event under consideration
+        if (diff < 0) { //negative difference = expired event
+          console.log("DROPPING"+ event.Title);
+            expiredEvents++;
+            expiredIndices.add(i);
+            eventInfo["ID"] = event.ID;
+            eventStr = "";
+            if (expiredEvents!==1){
+              eventStr = ",\n"
+            }
+            eventStr = eventStr + JSON.stringify(eventInfo);
+            //write the JSONified id to file of ones to drop
+            fs.appendFileSync(DROPPATH, eventStr, function(err){
+              if(err) throw err;
+              console.log('WRITING TO JSON')
+            });
+        }
+    } else if(dayDiff > 0){//event is after today
+      break;//since they're time sorted, no need to look further once on tomorrow
+    }
+  }
+  // remove the lines associated with the expired events
+  // minus 2 so we don't remove the brackets at the top but rather actual events
+  updatedLines = lines.filter((_, i) => !expiredIndices.has(i-2));
+  fs.writeFileSync(path, updatedLines.join('\n'), 'utf-8');
+  fs.appendFileSync(DROPPATH, CLOSEFILE, function(err){
+    if(err) throw err;
+    console.log('WRITING TO JSON')
+    });
+  return;
+}
+
+module.exports = { processExisting, scrapeData, URL, dropPastEvents, CIPATH, TRUEPATH, DROPPATH};
 //scrapeData(url)
-  

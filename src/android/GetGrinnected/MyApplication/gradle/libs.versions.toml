@@ -10,6 +10,9 @@ activityCompose = "1.8.0"
 composeBom = "2024.09.00"
 junitKtx = "1.2.1"
 uiTestJunit4Android = "1.7.8"
+fragmentKtx = "1.8.6"
+navigationCompose = "2.8.9"
+navigationComposeJvmstubs = "2.9.0-alpha09"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +33,9 @@ androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

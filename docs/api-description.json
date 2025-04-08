@@ -1,0 +1,287 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "GetGrinnected API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://node16049-csc324--spring2025.us.reclaim.cloud/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "events"
+    }
+  ],
+  "paths": {
+    "/events": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Find all events.",
+        "description": "Find all events stored in the database.",
+        "operationId": "findAllEvents",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "Events must have all of these tags. Each tag needs double quotes.",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Tags"
+                }
+              ],
+              "example": [
+                "\"Music\"",
+                "\"Students\""
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/between/{start}/{end}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Find events between dates.",
+        "description": "Find all events between a start and end time.\n\n`start` and `end` parameters must match one of these valid formats:\n\n- `YYYY-MM-DD` for a date at midnight, in Grinnell time (UTC-5).\n- `YYYY-MM-DDTHH:MM` for a date and time, in Grinnell time (UTC-5).\n- `YYYY-MM-DDTHH:MMZ` for a date and time, in a specific timezone Timezones should be formatted like `-0600` or `+1200`.\n",
+        "operationId": "findEventsBetween",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "path",
+            "description": "Start of the period to search. Format must match description above.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "example": "2025-04-07"
+            }
+          },
+          {
+            "name": "end",
+            "in": "path",
+            "description": "End of the period to search. Format must match description above.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "example": "2025-04-08"
+            }
+          },
+          {
+            "name": "tag",
+            "description": "Events must have all of these tags. Each tag needs double quotes.",
+            "in": "query",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Tags"
+                }
+              ],
+              "example": [
+                "\"Music\"",
+                "\"Students\""
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Event"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ],
+                  "properties": {
+                    "code": {
+                      "example": "ERR_INVALID_DATE"
+                    },
+                    "message": {
+                      "example": "Got invalid date 20210102"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "ERR_UNKNOWN"
+          },
+          "message": {
+            "type": "string",
+            "example": "Unknown error"
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "eventid": {
+            "type": "integer",
+            "example": 30881,
+            "description": "ID of the event in Grinnell Events."
+          },
+          "event_name": {
+            "type": "string",
+            "example": "Grinnell Advocates Karaoke",
+            "description": "Name of the event."
+          },
+          "event_description": {
+            "type": "string",
+            "example": "\\n  Grinnell Advocates Karaoke\\n",
+            "description": "Description of the event."
+          },
+          "event_location": {
+            "type": "string",
+            "example": "Bob’s Underground - Main Hall",
+            "description": "Location the event takes place."
+          },
+          "organizations": {
+            "type": "array",
+            "example": [
+              "Advocates",
+              " Crssj"
+            ],
+            "description": "Array of organizations in charge.",
+            "items": {
+              "description": "Organization names.",
+              "type": "string"
+            }
+          },
+          "rsvp": {
+            "type": "integer",
+            "example": 0,
+            "enum": [
+              0,
+              1
+            ],
+            "description": "Whether the event requires rsvp."
+          },
+          "event_date": {
+            "type": "string",
+            "example": "April 8",
+            "description": "Human-readable date the event takes place."
+          },
+          "event_all_day": {
+            "type": "integer",
+            "example": 0,
+            "enum": [
+              0,
+              1
+            ],
+            "description": "Whether the event is all-day."
+          },
+          "event_start_time": {
+            "type": "string",
+            "example": "2025-04-09T00:00:00.000Z",
+            "description": "Event start time in UTC."
+          },
+          "event_end_time": {
+            "type": "string",
+            "example": "2025-04-09T02:00:00.000Z",
+            "description": "Event end time in UTC"
+          },
+          "tags": {
+            "$ref": "#/components/schemas/Tags"
+          },
+          "event_private": {
+            "type": "integer",
+            "example": 0,
+            "description": "Whether the event is private.",
+            "enum": [
+              0,
+              1
+            ]
+          },
+          "repeats": {
+            "type": "integer",
+            "example": 0,
+            "description": "Whether the event repeats.",
+            "enum": [
+              0,
+              1
+            ]
+          },
+          "event_image": {
+            "type": "string",
+            "example": null,
+            "description": "Path to image for event."
+          },
+          "is_draft": {
+            "type": "integer",
+            "example": 0,
+            "description": "Whether the event is a draft.",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        }
+      },
+      "Tags": {
+        "type": "array",
+        "example": [
+          "Music",
+          "Students"
+        ],
+        "description": "Array of event tags.",
+        "items": {
+          "description": "Tag names.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
