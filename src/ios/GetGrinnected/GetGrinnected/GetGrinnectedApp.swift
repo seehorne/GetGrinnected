@@ -12,6 +12,7 @@ struct GetGrinnectedApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            //TesterView()
         }
     }
 }
