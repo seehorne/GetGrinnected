@@ -41,59 +41,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
-import java.net.URL
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import javax.net.ssl.HttpsURLConnection
 
 
-
-fun getDataFromUrl(url: String): String? {
-    var connection: HttpsURLConnection? = null
-    return try {
-        val urlObj = URL(url)
-        connection = urlObj.openConnection() as HttpsURLConnection
-        connection.requestMethod = "GET"
-
-        val responseCode = connection.responseCode
-        if (responseCode == HttpsURLConnection.HTTP_OK) {
-            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-            val response = StringBuilder()
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                response.append(line)
-            }
-            reader.close()
-            response.toString()
-        } else {
-            null
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    } finally {
-        connection?.disconnect()
-    }
-}
-
-data class Event(
-    val event_all_day: Int,
-    val event_date: String,
-    val event_description: String,
-    val event_end_time: String,
-    val event_image: Any,
-    val event_location: String,
-    val event_name: String,
-    val event_private: Int,
-    val event_start_time: String,
-    val event_time: String,
-    val eventid: Int,
-    val is_draft: Int,
-    val organizations: List<String>,
-    val repeats: Int,
-    val rsvp: Int,
-    val tags: List<String>
-)
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -137,8 +86,7 @@ fun HomeScreen(event: Event) {
     val check2 = remember { mutableStateOf(false)}
     val check3 = remember { mutableStateOf(false)}
     // path to API data
-    val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
-    val result = getDataFromUrl(url)
+
 
     
     
