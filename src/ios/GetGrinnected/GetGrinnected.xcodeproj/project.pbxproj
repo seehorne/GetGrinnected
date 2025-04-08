@@ -16,6 +16,10 @@
 		4CA0C5732DA4BBEE00059803 /* EventTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5722DA4BBEE00059803 /* EventTags.swift */; };
 		4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5742DA4BF6500059803 /* CheckBox.swift */; };
 		4CA0C5772DA5D16200059803 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5762DA5D15300059803 /* Header.swift */; };
+		4CCCD6C82DA5DBB400F1A806 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6C62DA5DBB400F1A806 /* Event.swift */; };
+		4CCCD6C92DA5DBB400F1A806 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6C72DA5DBB400F1A806 /* Events.swift */; };
+		4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */; };
+		4CCCD6CD2DA5DE3E00F1A806 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CC2DA5DE3E00F1A806 /* EventData.swift */; };
 		CACCD4562DA31696001D31C0 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4532DA31696001D31C0 /* SignUpView.swift */; };
 		CACCD4572DA31696001D31C0 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44E2DA31696001D31C0 /* FavoritesView.swift */; };
 		CACCD4592DA31696001D31C0 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4482DA31696001D31C0 /* ColorTheme.swift */; };
@@ -69,8 +73,11 @@
 		4CA0C5722DA4BBEE00059803 /* EventTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTags.swift; sourceTree = "<group>"; };
 		4CA0C5742DA4BF6500059803 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		4CA0C5762DA5D15300059803 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		4CCCD6C62DA5DBB400F1A806 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		4CCCD6C72DA5DBB400F1A806 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
+		4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organizations.swift; sourceTree = "<group>"; };
+		4CCCD6CC2DA5DE3E00F1A806 /* EventData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CACCD4452DA31696001D31C0 /* EventData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		CACCD4462DA31696001D31C0 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		CACCD4482DA31696001D31C0 /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
 		CACCD4492DA31696001D31C0 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
@@ -187,7 +194,9 @@
 		CACCD4472DA31696001D31C0 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				CACCD4452DA31696001D31C0 /* EventData.swift */,
+				4CCCD6C62DA5DBB400F1A806 /* Event.swift */,
+				4CCCD6CC2DA5DE3E00F1A806 /* EventData.swift */,
+				4CCCD6C72DA5DBB400F1A806 /* Events.swift */,
 				4CA0C5722DA4BBEE00059803 /* EventTags.swift */,
 				CACCD4462DA31696001D31C0 /* UserProfile.swift */,
 			);
@@ -202,6 +211,7 @@
 				CACCD4642DA318EE001D31C0 /* EventCards.swift */,
 				CACCD4482DA31696001D31C0 /* ColorTheme.swift */,
 				CACCD4492DA31696001D31C0 /* InputField.swift */,
+				4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -391,6 +401,7 @@
 				CACCD4672DA349E4001D31C0 /* TesterView.swift in Sources */,
 				CACCD4572DA31696001D31C0 /* FavoritesView.swift in Sources */,
 				CACCD4592DA31696001D31C0 /* ColorTheme.swift in Sources */,
+				4CCCD6CD2DA5DE3E00F1A806 /* EventData.swift in Sources */,
 				CACCD45A2DA31696001D31C0 /* CalendarView.swift in Sources */,
 				CACCD45B2DA31696001D31C0 /* MainNavView.swift in Sources */,
 				CACCD45C2DA31696001D31C0 /* ProfileView.swift in Sources */,
@@ -401,6 +412,9 @@
 				4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */,
 				CACCD4652DA318F3001D31C0 /* EventCards.swift in Sources */,
 				4CA0C5732DA4BBEE00059803 /* EventTags.swift in Sources */,
+				4CCCD6C82DA5DBB400F1A806 /* Event.swift in Sources */,
+				4CCCD6C92DA5DBB400F1A806 /* Events.swift in Sources */,
+				4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */,
 				CACCD4612DA31696001D31C0 /* LoginView.swift in Sources */,
 				CACCD4622DA31696001D31C0 /* HomescreenView.swift in Sources */,
 				CACCD4632DA31696001D31C0 /* UserProfile.swift in Sources */,
