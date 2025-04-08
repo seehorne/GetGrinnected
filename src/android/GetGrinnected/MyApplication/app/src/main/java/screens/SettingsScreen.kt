@@ -133,27 +133,9 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Spacer(modifier = modifier.height(8.dp))
 
-            Text("Organizations you follow: ", fontSize = 20.sp)
-
-            Spacer(modifier = modifier.height(4.dp))
-
-            if (isFollowed.isEmpty()) {
-                Text("You haven't favorited any events yet.", modifier = Modifier.padding(16.dp))
-            } else {
-                isFollowed.forEach { account ->
-                    OrgCard(
-                        account = account, modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 8.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = modifier.height(8.dp))
-
             Text("Settings", fontSize = 20.sp)
 
-            Spacer(modifier = modifier.height(4.dp))
+            Spacer(modifier = modifier.height(8.dp))
 
             Row (
                 verticalAlignment = Alignment.CenterVertically
@@ -163,10 +145,28 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Switch(
-                checked = darkTheme,
-                onCheckedChange = {
-                    onToggleTheme(it)
-                })
+                    checked = darkTheme,
+                    onCheckedChange = {
+                        onToggleTheme(it)
+                    })
+            }
+
+            Spacer(modifier = modifier.height(8.dp))
+
+            Text("Organizations you follow: ", fontSize = 20.sp)
+
+            Spacer(modifier = modifier.height(4.dp))
+
+            if (isFollowed.isEmpty()) {
+                Text("You haven't followed any organizations yet.", modifier = Modifier.padding(16.dp))
+            } else {
+                isFollowed.forEach { account ->
+                    OrgCard(
+                        account = account, modifier = modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 8.dp)
+                    )
+                }
             }
         }
     }
