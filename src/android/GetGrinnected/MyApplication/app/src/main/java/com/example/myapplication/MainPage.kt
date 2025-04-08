@@ -20,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -32,13 +31,17 @@ import androidx.navigation.compose.rememberNavController
  * It sets up the primary UI for our logged in app experience (Navigation between Homepage,
  * Calendar, Favorites and Settings)
  *
- * @param modifier Modifier to be applied to the root layout.
- *
+ *  @param modifier Modifier to be applied to the root layout.
+ *  @param darkTheme the current state of the Theme of light or dark mode
+ *  @param onToggleTheme a lambda function passed down from previous screen that calls back to the
+ *  function instated in the call the AppNavigation in the MainActivity.
  */
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
+fun MainPage(modifier: Modifier = Modifier,
+             darkTheme: Boolean,
+             onToggleTheme: (Boolean) -> Unit) {
     val bottomNavController = rememberNavController()
 
     val navItemList = listOf(
@@ -58,8 +61,16 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
         Event(8, "Concert Night7", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM",  0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
     )
 
+    val sampleOrgs = listOf(
+        User(1, "test", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
+        User(1, "test2", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test3", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test4", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test5", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+    )
+
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
                 val currentDestination = bottomNavController.currentBackStackEntryAsState().value?.destination?.route
@@ -85,12 +96,12 @@ fun MainPage(modifier: Modifier = Modifier, navController: NavController) {
         NavHost(
             navController = bottomNavController,
             startDestination = "home",
-            modifier = Modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding)
         ) {
             composable("Home") { HomeScreen() }
             composable("Calendar") { CalendarScreen() }
             composable("Favorites") { FavoritesScreen(events = sampleEvents) }
-            composable("Settings") { SettingsScreen() }
+            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme) }
         }
     }
 }
