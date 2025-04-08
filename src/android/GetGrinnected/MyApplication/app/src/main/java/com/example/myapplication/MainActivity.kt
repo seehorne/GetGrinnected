@@ -1,12 +1,19 @@
 package com.example.myapplication
 
 import android.os.Build
+import screens.LoginScreen
+import screens.SignupScreen
+import screens.WelcomeScreen
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.google.gson.Gson
@@ -40,10 +47,16 @@ class MainActivity : ComponentActivity() {
             val gson = Gson()
             val listType = object : TypeToken<List<Event>>() {}.type
             val events: List<Event> = gson.fromJson(result, listType) ?: emptyList()
-
+            var darkTheme by remember { mutableStateOf(false) }
             setContent {
                 MyApplicationTheme {
-                    AppNavigation(event = events)
+                    AppNavigation(
+                        darkTheme = darkTheme,
+                        onToggleTheme = {darkTheme = it},
+                        event = events
+                        /* This call is how we get back into our
+                        Theme.kt to change the theme of the whole app */
+                    )
                 }
             }
         }

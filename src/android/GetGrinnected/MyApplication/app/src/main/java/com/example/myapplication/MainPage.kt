@@ -20,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -32,13 +31,18 @@ import androidx.navigation.compose.rememberNavController
  * It sets up the primary UI for our logged in app experience (Navigation between Homepage,
  * Calendar, Favorites and Settings)
  *
- * @param modifier Modifier to be applied to the root layout.
- *
+ *  @param modifier Modifier to be applied to the root layout.
+ *  @param darkTheme the current state of the Theme of light or dark mode
+ *  @param onToggleTheme a lambda function passed down from previous screen that calls back to the
+ *  function instated in the call the AppNavigation in the MainActivity.
  */
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainPage(modifier: Modifier = Modifier, event: List<Event>, navController: NavController) {
+fun MainPage(modifier: Modifier = Modifier,
+             darkTheme: Boolean,
+             onToggleTheme: (Boolean) -> Unit,
+             event: List<Event>) {
     val bottomNavController = rememberNavController()
 
     val navItemList = listOf(
@@ -47,9 +51,27 @@ fun MainPage(modifier: Modifier = Modifier, event: List<Event>, navController: N
         NavItem("Favorites", Icons.Default.Favorite),
         NavItem("Settings", Icons.Default.AccountCircle),
     )
+    val sampleEvents = listOf(
+        Event(1, "Concert Night", "Live music and fun really long description to really push the sizing as far as I can to see waht it would look like if you did this and had a longer description for an event just in general for any normal event!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0, 0,"h", 0,true),
+        Event(2, "Crafternoon", "Lots of fun arts and crafts", "Downtown Theater",listOf("NAMI"), 0,"2025-05-01", "6:30 PM", 0,"8:00 PM", "8:00 PM", listOf("art, fun"), 0,0,"h", 0),
+        Event(3, "Concert Night2", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
+        Event(4, "Concert Night3", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
+        Event(5, "Concert Night4", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
+        Event(6, "Concert Night5", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
+        Event(7, "Concert Night6", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
+        Event(8, "Concert Night7", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM",  0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
+    )
+
+    val sampleOrgs = listOf(
+        User(1, "test", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
+        User(1, "test2", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test3", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test4", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test5", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+    )
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
                 val currentDestination = bottomNavController.currentBackStackEntryAsState().value?.destination?.route
@@ -75,12 +97,12 @@ fun MainPage(modifier: Modifier = Modifier, event: List<Event>, navController: N
         NavHost(
             navController = bottomNavController,
             startDestination = "home",
-            modifier = Modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding)
         ) {
             composable("Home") { HomeScreen(event) }
             composable("Calendar") { CalendarScreen() }
-            composable("Favorites") { FavoritesScreen() }
-            composable("Settings") { SettingsScreen() }
+            composable("Favorites") { FavoritesScreen(events = sampleEvents) }
+            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme) }
         }
     }
 }

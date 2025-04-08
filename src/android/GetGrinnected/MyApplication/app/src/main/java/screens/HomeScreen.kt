@@ -49,12 +49,14 @@ import androidx.compose.foundation.layout.Column as Column1
  * Anthony Schwindt, Ethan Hughes
  *
  * A composable function that represents the Home screen of our app. (More to come)
+ *
+ * @param modifier Modifier to be applied to the screen layout.
  */
 
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(event: List<Event>) {
+fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(2) }
     // holds whether the dropdown menu's are up or down
@@ -89,9 +91,9 @@ fun HomeScreen(event: List<Event>) {
     // path to API data
 
 
-    
-    
-    
+
+
+
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     // creates the UI field for the events
@@ -99,6 +101,7 @@ fun HomeScreen(event: List<Event>) {
         modifier = Modifier
             // sets the color of the background
             .background(gradient)
+            .padding(horizontal = 8.dp)
             .fillMaxSize()
             .verticalScroll(state),
         // centers the event cards
