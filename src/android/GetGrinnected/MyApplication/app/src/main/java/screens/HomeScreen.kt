@@ -1,7 +1,9 @@
 package screens
 
+import android.Manifest.permission.INTERNET
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -52,6 +54,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
@@ -77,6 +80,7 @@ import androidx.compose.foundation.lazy.LazyColumn as LazyColumn
 import com.android.volley.toolbox.Volley.newRequestQueue as newRequestQueue1
 
 
+
 /*
 fun test(){
     val url = "http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events"
@@ -91,9 +95,11 @@ fun test(){
         }
     )
 }
+*/
+
 
 fun test2(): String {
-    val url = "http://node16049-csc324--spring2025.us.reclaim.cloud:11014/events"
+    val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
 
     return(StringRequest(Request.Method.GET, url,
         Response.Listener<String> { response ->
@@ -101,7 +107,21 @@ fun test2(): String {
         },
         Response.ErrorListener { "That didn't work!" }).toString())
 }
-*/
+
+fun test3(): String{
+    var soo = "meh"
+
+    val queue = Volley.newRequestQueue(/* context = */ this)
+    val stringRequest = StringRequest(Request.Method.GET, "https://node16049-csc324--spring2025.us.reclaim.cloud/events",
+        com.android.volley.Response.Listener<String> { response ->
+            soo = response
+            Log.d("see again", soo)
+        }, com.android.volley.Response.ErrorListener {
+            // didn't work
+        });
+    queue.add(stringRequest)
+}
+
 fun readStringFromURL(urlString: String): String {
     val url = URL(urlString)
     return url.readText()
@@ -149,7 +169,7 @@ fun HomeScreen() {
     val check2 = remember { mutableStateOf(false)}
     val check3 = remember { mutableStateOf(false)}
     // path to API data
-    // val content = readStringFromURL("http://https://node16049-csc324--spring2025.us.reclaim.cloud/events")
+    // val content = readStringFromURL("https://node16049-csc324--spring2025.us.reclaim.cloud/events")
     
     
     
@@ -179,7 +199,7 @@ fun HomeScreen() {
                     .border(2.dp, Color.Black)
             ) {
                 Text(
-                    text =  "test",
+                    text =  test2(),
                     modifier = Modifier
                         .padding(16.dp),
                     textAlign = TextAlign.Center,
