@@ -22,6 +22,7 @@
  
  */
 
+//https://www.hackingwithswift.com/read/7/3/parsing-json-using-the-codable-protocol 
 import Foundation
 import SwiftUI
 /**
@@ -100,8 +101,7 @@ class EventData: ObservableObject, Identifiable {
     }
     
     //full initializer
-    init(
-        title: String,
+    init(title: String,
         date: String,
         startTimeISO: String,
         endTimeISO: String,
@@ -111,8 +111,7 @@ class EventData: ObservableObject, Identifiable {
         audience: [String]?,
         organization: String,
         tags: [String]?,
-        id: Int
-){
+        id: Int){
         self.title = title
         self.date = date
         self.startTimeISO = startTimeISO
@@ -128,15 +127,16 @@ class EventData: ObservableObject, Identifiable {
     
     
     // Initialize from JSON string
-    convenience init?(fromJSON jsonString: String) {
+    convenience init(fromJSON jsonString: String) {
         self.init()
-            
         guard let jsonData = jsonString.data(using: .utf8) else {
             print("Failed to convert string to data")
-            return nil
+            //No longer returning nil, as this is no longer a init? type
+            return //nil
         }
             
         do {
+            //initialize decoder
             let decoder = JSONDecoder()
             let dto = try decoder.decode(EventDataDTO.self, from: jsonData)
                 
@@ -152,28 +152,37 @@ class EventData: ObservableObject, Identifiable {
             self.organization = dto.organization
             self.tags = dto.tags
             self.id = dto.id
+            
+            //non-scraped
+            self.notify = false
+            self.favorited = false
         } catch {
             print("Decoding error: \(error)")
-            return nil
-        }
-    }
+            //no longer  afailable initializer
+            //return nil
+        }//do-catch
+    }//initialize with a string input
         
-    // Static function to parse JSON string into EventData
+    
+    // function to parse JSON string into EventData
     static func fromJSON(_ jsonString: String) -> EventData? {
         return EventData(fromJSON: jsonString)
     }
         
-    // Static function to parse an array of JSON objects
+    // function to parse an array of JSON objects, does the same as initializer
     static func arrayFromJSON(_ jsonString: String) -> [EventData]? {
+        //convert string data
         guard let jsonData = jsonString.data(using: .utf8) else {
             print("Failed to convert string to data")
             return nil
         }
-            
+        
         do {
+            //initialize decoder
             let decoder = JSONDecoder()
             let dtos = try decoder.decode([EventDataDTO].self, from: jsonData)
                 
+            //initialize the event-Data decoding using the initializer
             return dtos.map { dto in
                 EventData(
                     title: dto.title,
@@ -190,8 +199,48 @@ class EventData: ObservableObject, Identifiable {
                 )
             }
         } catch {
+            //print error if an error is found
             print("Array decoding error: \(error)")
             return nil
         }
     }
+}
+
+
+//API call --> ALL events
+//for a page, note current filters!
+//filter out events that are not included
+//turn each of remaining events into eventCards UI components
+//
+
+struct myView: View {
+    var body: some View{
+        // this is the proper input form for EventData
+        let data = EventData(fromJSON: """
+            {"Title":"Aikido",
+            "Date":"April 4",
+            "Time":"5:30 p.m. - 6:30 p.m.",
+            "StartTimeISO":"2025-04-04T17:30:00-05:00",
+            "EndTimeISO":"2025-04-04T18:30:00-05:00",
+            "AllDay?":false,
+            "Location":"BRAC P103 - Multipurpose Dance Studio",
+            "Description":"\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n",
+            "Audience":["Alumni","Faculty &amp; Staff","General Public","Prospective Students","Student Families","Students"],
+            "Org":"Aikido",
+            "Tags":null,
+            "ID":23325}
+        """)
+        //testing whether or not the ouptuts work!
+        //let printSt = if(data.title.compare("Aikido").rawValue == 0) {"Correct!"} else {"Incorrect!"}
+//        Text(printSt)
+        var title = if(data.title.compare("Aikido").rawValue == 0) {"Correct!"} else {"Incorrect!"}
+        var location = if(data.location.compare("Aikido").rawValue == 0) {"Correct!"} else {"Incorrect!"}
+        Text(title)
+        Text(location)
+    }
+    
+}
+
+#Preview {
+    myView()
 }
