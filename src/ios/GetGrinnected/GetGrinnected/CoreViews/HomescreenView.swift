@@ -9,17 +9,44 @@ import Foundation
 import SwiftUI
 
 struct HomescreenView: View {
+    // the date is currently being viewed. default is today
+    @State private var viewedDate = Date.now
+    // the furthest date in the future we can see. default is 2 weeks
+    @State private var lastDate = Date.now.addingTimeInterval(86400 * 13)
+    // the tags selected to filter by. default is any
+    @State var selectedTags = EventTags.any
+    // the events we have
+    // @State var events: [EventData]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, Homescreen!")
-        }
-        .padding()
-        
-    }
-}
+        NavigationStack {
+            Header(title: "Home") // add header to view
+            
+            Spacer() // add some space under header
+            
+            VStack {
+                HStack {
+                    // a picker for date
+                    DatePicker("Currently viewing date: ", selection: $viewedDate, in: Date.now...lastDate, displayedComponents: .date)
+                        .labelsHidden()
+                    
+                    // a picker for tags
+                    Picker("Tags", selection: $selectedTags)
+                    {
+                        ForEach(EventTags.allCases, id: \.self) { tag in
+                            Text(tag.rawValue)
+                        }
+                    }
+                } //HStack
+                
+                List {
+//                    EventCards()
+//                    EventCards()
+                }
+            } //VStack
+        } //NavigationStack
+    } //body
+} //HomescreenView
 
 #Preview {
     HomescreenView()
