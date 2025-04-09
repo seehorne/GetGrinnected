@@ -137,7 +137,9 @@ Android Studio doesn't distinguish between building and running code. See the ru
 
 ### Swift frontend
 
-TODO: ALMOND CANNOT DO THIS. SHOULD DUPLICATE YOUR INSTALL SECTION OF THE SPRINT REPORT.
+We use Xcode for this.
+
+Xcode will build and run in one step. See the running section below.
 
 ### Node backend
 
@@ -171,7 +173,9 @@ Or, run from (mostly) the command line using Gradle.
 
 ### Swift frontend
 
-TODO: ALMOND CANNOT DO THIS.
+1. In Xcode, click the Product drop down menu.
+
+2. In the drop down menu click Test.
 
 ### Node backend
 
@@ -202,7 +206,33 @@ Follow these steps to build and run Android code.
 
 ### Swift Frontend
 
-TODO: ALMOND CANNOT DO THIS.
+All Swift code is currently built and run from Xcode.
+
+Follow these steps to build and run Android code.
+
+1. Search for Xcode in the Apple app store on an apple computer and install it.
+
+2. Open Xcode and click "Open Existing Project...". Open the `src/ios/GetGrinnected` directory as a project.
+
+3. If any files are missing from your Xcode UI, drag them in from the finder.
+
+4. Install the simulator for iOS 17.5 by following these steps:
+
+    1. Window > Devices and Simulators
+
+    2. Press the + in the bottom left corner.
+
+    3. OS Version > Download more simulator runtimes
+
+    4. Press the + in the bottom left corner.
+
+    5. Look for iOS 17.5 and install it.
+
+    6. Create a new simulator using iOS 17.5.
+
+5. Click on the device that is shown in the middle of the top of the Xcode window and switch it to your new simulator.
+
+6. Product > Run
 
 ### Node backend
 

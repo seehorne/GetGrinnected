@@ -120,7 +120,67 @@ Since there are two frontends, there are two sets of steps.
 
 # Swift Frontend
 
-TODO: ALMOND CANNOT DO THIS.
+## Installing the app
+
+1. Clone the project from Github.
+
+2. Install Xcode, and open this path within the GitGrinnected repo as a project: `src/ios/GetGrinnected`.
+
+3. Follow these steps to run the app on your device. <https://developer.apple.com/documentation/xcode/running-your-app-in-simulator-or-on-a-device>
+
+## Login
+
+1. This is the page the app starts on.
+
+1. Optionally, type in the "Grinnell Email" and "Password" field. You can enter anything, currently logins are not checked.
+
+2. Optionally, click the "Don't have an account?" text in the bottom message to jump to the "Sign Up" page.
+
+3. Click the "Login" button to go to the "Home" page.
+
+## Sign Up
+
+1. After starting the app, click the "Don't have an account" button to get here.
+
+2. Optionally, enter text in the fields. They are not checked yet.
+
+3. Optionally, click the "Back" button in the top left to jump to the "Login" page.
+
+4. Click the "Sign In" button to go to the "Home" page.
+
+## Home
+
+1. See current day viewed.
+
+2. Change currently viewed day. You can only look up to two weeks in the future.
+
+3. Change what tag you are filtering by.
+
+4. Move to this page by pressing the home button on the bottom.
+
+5. Move to other pages by pressing their buttons on the bottom.
+
+## Calendar
+
+1. Move to this page by pressing the calendar button on the bottom.
+
+2. Move to other pages by pressing their buttons on the bottom.
+
+## Favorites
+
+1. Move to this page by pressing the favorites button on the bottom.
+
+2. Move to other pages by pressing their buttons on the bottom.
+
+## Settings
+
+1. Look at the place holder profile picture.
+
+2. Optionally enter a different email for account. You can enter anything, currently it is not checked.
+
+3. Move to this page by pressing the profile button on the bottom.
+
+4. Move to other pages by pressing their buttons on the bottom.
 
 ## What progress have you made that is not visible to a common user?
 
