@@ -7,9 +7,6 @@
 
 import Foundation
 import SwiftUI
-import ViewInspector
-
-extension LoginView: Inspectable {}
 
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
