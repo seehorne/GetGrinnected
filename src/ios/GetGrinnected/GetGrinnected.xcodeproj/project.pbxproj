@@ -16,15 +16,12 @@
 		0CF63C292DA5E40B009744F8 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 0CF63C282DA5E40B009744F8 /* ViewInspector */; };
 		0CF63C332DA5FE3B009744F8 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 0CF63C322DA5FE3B009744F8 /* ViewInspector */; };
 		0CF63C352DA5FE41009744F8 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 0CF63C342DA5FE41009744F8 /* ViewInspector */; };
-		0CF63C372DA5FE4A009744F8 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 0CF63C362DA5FE4A009744F8 /* ViewInspector */; };
-		0CF63C392DA5FE79009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; };
+		0CF63C392DA5FE79009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (Weak, ); }; };
 		0CF63C3A2DA5FE79009744F8 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		0CF63C3C2DA5FE82009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; };
+		0CF63C3C2DA5FE82009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (Weak, ); }; };
 		0CF63C3D2DA5FE82009744F8 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		0CF63C3F2DA5FE8F009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; };
+		0CF63C3F2DA5FE8F009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (Weak, ); }; };
 		0CF63C402DA5FE8F009744F8 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		0CF63C4A2DA5FFF4009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; };
-		0CF63C4B2DA5FFF4009744F8 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4CA0C5732DA4BBEE00059803 /* EventTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5722DA4BBEE00059803 /* EventTags.swift */; };
 		4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5742DA4BF6500059803 /* CheckBox.swift */; };
 		4CA0C5772DA5D16200059803 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5762DA5D15300059803 /* Header.swift */; };
@@ -107,17 +104,6 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0CF63C4C2DA5FFF4009744F8 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0CF63C4B2DA5FFF4009744F8 /* XCTest.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -165,8 +151,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0CF63C372DA5FE4A009744F8 /* ViewInspector in Frameworks */,
-				0CF63C4A2DA5FFF4009744F8 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,12 +306,10 @@
 				0CBBC3C12D77AB95002E482E /* Sources */,
 				0CBBC3C22D77AB95002E482E /* Frameworks */,
 				0CBBC3C32D77AB95002E482E /* Resources */,
-				0CF63C4C2DA5FFF4009744F8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				0CF63C472DA5FF20009744F8 /* PBXTargetDependency */,
 			);
 			name = GetGrinnected;
 			productName = GetGrinnected;
@@ -560,10 +542,6 @@
 			isa = PBXTargetDependency;
 			productRef = 0CF63C442DA5FF1A009744F8 /* ViewInspector */;
 		};
-		0CF63C472DA5FF20009744F8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 0CF63C462DA5FF20009744F8 /* ViewInspector */;
-		};
 		0CF63C492DA5FF25009744F8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 0CF63C482DA5FF25009744F8 /* ViewInspector */;
@@ -698,11 +676,13 @@
 		0CBBC3EA2D77AB9B002E482E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GetGrinnected/Preview Content\"";
+				DEVELOPMENT_TEAM = 9YFZX46D45;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -710,6 +690,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -726,11 +707,13 @@
 		0CBBC3EB2D77AB9B002E482E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GetGrinnected/Preview Content\"";
+				DEVELOPMENT_TEAM = 9YFZX46D45;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -738,6 +721,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -826,7 +810,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = GetGrinnected.GetGrinnectedTestsCI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -844,7 +828,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = GetGrinnected.GetGrinnectedTestsCI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -932,22 +916,12 @@
 			package = 0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */;
 			productName = ViewInspector;
 		};
-		0CF63C362DA5FE4A009744F8 /* ViewInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */;
-			productName = ViewInspector;
-		};
 		0CF63C422DA5FF0B009744F8 /* ViewInspector */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */;
 			productName = ViewInspector;
 		};
 		0CF63C442DA5FF1A009744F8 /* ViewInspector */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */;
-			productName = ViewInspector;
-		};
-		0CF63C462DA5FF20009744F8 /* ViewInspector */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0CF63C262DA5E39D009744F8 /* XCRemoteSwiftPackageReference "ViewInspector" */;
 			productName = ViewInspector;
