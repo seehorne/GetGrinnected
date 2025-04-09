@@ -18,11 +18,6 @@ import SwiftUI
 
 
 class EventData{
-    //initialize array of events
-    var events = [Event]()
-    //our API link
-    let urlString = "https://node16049-csc324--spring2025.us.reclaim.cloud/"
-
     
     static func fetchData(urlString: String) async throws -> String {
         let url = URL(string: urlString)!
@@ -61,7 +56,7 @@ class EventData{
     }//decode
     
     static func parseEvents(json: String) -> [Event] {
-
+        
         
         // Convert string to data
         guard let data = json.data(using: .utf8) else {
