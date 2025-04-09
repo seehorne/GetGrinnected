@@ -1,5 +1,7 @@
 package screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,8 +39,17 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
 
     val favoritedEvents = events.filter { it.is_favorited }
 
+    val gradient =
+        Brush.verticalGradient(
+            listOf(Color.Red, Color.Blue, Color.Green),
+            0.0f,
+            10000.0f,
+            TileMode.Repeated
+        )
+
     Column(
         modifier = modifier
+            .background(gradient)
             .padding(horizontal = 8.dp)
             .fillMaxSize()
             .verticalScroll(scrollState),
@@ -54,14 +68,12 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
         } else {
             favoritedEvents.forEach { event ->
                 EventCard(event = event, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 8.dp))
+                    .background(Color.White)
+                    .border(2.dp, Color.Black))
             }
         }
     }
 }
-
-
 
 /**
  * Preview used specifically for UI design purposes

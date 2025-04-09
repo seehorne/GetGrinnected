@@ -23,7 +23,8 @@ import screens.WelcomeScreen
 fun AppNavigation(modifier: Modifier = Modifier,
                   darkTheme: Boolean,
                   onToggleTheme: (Boolean) -> Unit,
-                  event: List<Event>){
+                  event: List<Event>,
+                  eventnum: Int){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "welcome"){
 
@@ -37,7 +38,7 @@ fun AppNavigation(modifier: Modifier = Modifier,
             LoginScreen(modifier, navController)
         }
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme, event)
+            MainPage(modifier, darkTheme, onToggleTheme, event, eventnum)
         }
 
     }

@@ -39,10 +39,13 @@ import androidx.navigation.compose.rememberNavController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainPage(modifier: Modifier = Modifier,
-             darkTheme: Boolean,
-             onToggleTheme: (Boolean) -> Unit,
-             event: List<Event>) {
+fun MainPage(
+    modifier: Modifier = Modifier,
+    darkTheme: Boolean,
+    onToggleTheme: (Boolean) -> Unit,
+    event: List<Event>,
+    eventnum: Int
+) {
     val bottomNavController = rememberNavController()
 
     val navItemList = listOf(
@@ -92,7 +95,7 @@ fun MainPage(modifier: Modifier = Modifier,
             startDestination = "home",
             modifier = modifier.padding(innerPadding)
         ) {
-            composable("Home") { HomeScreen(event =event) }
+            composable("Home") { HomeScreen(event = event, eventnum = eventnum) }
             composable("Calendar") { CalendarScreen() }
             composable("Favorites") { FavoritesScreen(events = sampleEvents) }
             composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme) }
