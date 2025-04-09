@@ -1,6 +1,8 @@
 # Requirements Changes
 
-We have not made any changes to our requirements documents this sprint.
+To see changes in our requirements document, look at the difference from the start of the sprint, and then search for `written reports/requirements.md`.
+
+<http://github.com/seehorne/GetGrinnected/compare/sprint2..sprint3>
 
 # Non User-Facing Progress
 
