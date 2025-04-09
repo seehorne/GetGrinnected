@@ -152,13 +152,15 @@ Since there are two frontends, there are two sets of steps.
 
 1. See current day viewed.
 
-2. Change currently viewed day. You can only look up to two weeks in the future.
+2. Change currently viewed day. You can only look up to two weeks in the future. Does not currently change seen events.
 
 3. Change what tag you are filtering by.
 
-4. Move to this page by pressing the home button on the bottom.
+4. See the events that are happening today. DO NOT SCROLL!!! IT WILL CRASH!
 
-5. Move to other pages by pressing their buttons on the bottom.
+5. Move to this page by pressing the home button on the bottom.
+
+6. Move to other pages by pressing their buttons on the bottom.
 
 ## Calendar
 
