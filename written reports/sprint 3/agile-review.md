@@ -156,7 +156,7 @@ Since there are two frontends, there are two sets of steps.
 
 3. Change what tag you are filtering by.
 
-4. See the events that are happening today. DO NOT SCROLL!!! IT WILL CRASH!
+4. See the events that are happening today and scroll through them.
 
 5. Move to this page by pressing the home button on the bottom.
 
