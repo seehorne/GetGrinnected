@@ -10,8 +10,6 @@ Since there are two frontends, there are two sets of steps.
 
 # Kotlin Frontend
 
-TODO: CHANGES ARE INEVITABLE, BUT CHANGING PARTS IS EASIER THAN STARTING OVER. UPDATE BEFORE SUBMISSION.
-
 ## Installing the app
 
 1. Clone the project from Github.
@@ -44,21 +42,41 @@ TODO: CHANGES ARE INEVITABLE, BUT CHANGING PARTS IS EASIER THAN STARTING OVER. U
 
 ## Home
 
-1. Look at the example event cards shown for the current date.
+1. Look at all of the event cards for all events we have in the database currently.
 
-2. Optionally, click the date on the top bar to open a dropdown and change which date is being shown.
+2. Click on any of the event cards shown to expand the description.
+
+3. Optionally, click the date on the top bar to open a dropdown and change which date is being shown.
 
     - Currently, this will have no effect on visuals.
 
-3. Click any of the other icons on the bottom bar to go to their pages.
+4. Optionally, click the tags on the top bar to open a dropdown for checkboxes and select boxes.
+
+    - Currently, this will have no effect on visuals.
+
+5. Optionally, scroll through the list of cards.
+
+6. Click any of the other icons on the bottom bar to go to their pages.
 
 ## Calendar
 
 1. Click the "Week" button in the top left to open a dropdown and change between Day, Week, and Month views.
 
-2. Notice that the background text changes for each view.
+3. Notice that the background text changes for each view.
 
-3. Click any of the other icons on the bottom bar to go to their pages.
+4. On the "Month" view tap on a day on the calendar.
+
+5. Notice that the bottom of the screen displays that day and a scrollable field with event cards on that day.
+
+6. Click on any of the event cards shown to expand the description.
+
+7. Optionally, click on the heart next to an event to unselect it.
+
+    - Currently, unhearting an event does not do anything.
+
+8. Optionally, scroll through the list of cards.
+
+9. Click any of the other icons on the bottom bar to go to their pages.
 
 ## Favorites
 
@@ -74,7 +92,7 @@ TODO: CHANGES ARE INEVITABLE, BUT CHANGING PARTS IS EASIER THAN STARTING OVER. U
 
 ## Settings
 
-1. Nothing is currently on the settings page, except for the text showint it exists.
+1. 
 
 2. Click any of the other icons on the bottom bar to go to their pages.
 
