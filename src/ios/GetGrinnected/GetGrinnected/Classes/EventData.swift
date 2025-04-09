@@ -18,13 +18,19 @@ import SwiftUI
 
 
 class EventData{
-    //initialize array of events
-    var events = [Event]()
-    //our API link
-    let urlString = "https://node16049-csc324--spring2025.us.reclaim.cloud/"
-
+    static func fetchData(urlString: String) async -> String {
+        let url = URL(string: urlString)!
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return String(data: data, encoding: .utf8)!
+        } catch {
+            print("Data fetching error: \(error)")
+            return "Error: \(error.localizedDescription)"
+        }
+    }
     
-    static func decode(json: String) -> String{
+    static func decode(json: String) -> String {
         /// Then convert it to Data so we can decode it using
         /// JSONDecoder
         
@@ -49,8 +55,6 @@ class EventData{
     }//decode
     
     static func parseEvents(json: String) -> [Event] {
-
-        
         // Convert string to data
         guard let data = json.data(using: .utf8) else {
             print("Failed to convert JSON string to data")
