@@ -39,10 +39,9 @@ struct HomescreenView: View {
                     }
                 } //HStack
                 
-                List {
-//                    EventCards()
-//                    EventCards()
-                }
+                
+                EventListView()
+                
             } //VStack
         } //NavigationStack
     } //body

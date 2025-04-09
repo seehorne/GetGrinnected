@@ -16,18 +16,20 @@ import SwiftUI
 struct CheckBoxOption {
     var name: String
     var isChecked: Bool
+    var uiCompOne: String
+    var uiCompTwo: String
 }
 
 struct CheckBox: View {
-    @State var items: [CheckBoxOption]
     
+    @State var items: [CheckBoxOption]
     var body: some View {
         VStack {
             // Display each check box item
             ForEach($items, id: \.name) { $item in
                 HStack {
-                    Image(systemName: item.isChecked ? "checkmark.square.fill" : "square")
-                        .foregroundColor(item.isChecked ? Color.green : Color.gray)
+                    Image(systemName: item.isChecked ? item.uiCompOne : item.uiCompTwo)
+                        .foregroundColor(item.isChecked ? .colorRed : Color(.gray))
                         .onTapGesture { // if image is tapped, toggle checkmark
                             item.isChecked.toggle()
                         }
@@ -43,6 +45,6 @@ struct CheckBox: View {
 } // CheckBox
 
 #Preview {
-    CheckBox(items: [CheckBoxOption(name: "Not checked", isChecked: false),
-                     CheckBoxOption(name: "Checked", isChecked: true)])
+    CheckBox(items: [CheckBoxOption(name: "Not checked", isChecked: false, uiCompOne: "checkmark.square.fill", uiCompTwo: "square"),
+                     CheckBoxOption(name: "Checked", isChecked: true, uiCompOne: "checkmark.square.fill", uiCompTwo: "square" )])
 }
