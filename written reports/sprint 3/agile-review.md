@@ -92,9 +92,31 @@ Since there are two frontends, there are two sets of steps.
 
 ## Settings
 
-1. 
+1. Click on Switch Account button (Looks like refresh) to switch accounts.
 
-2. Click any of the other icons on the bottom bar to go to their pages.
+    - Currently, this will have no effect on visuals and does nothing.
+
+2. Click on pencil icon by profile picture to change profile picture.
+
+     - Currently, this will have no effect on visuals and does nothing.
+
+3. Click on pencil icon by the username to change your username
+
+     - Currently, this will have no effect on visuals and does nothing.
+
+4. Click on switch next to dark/light mode to change between modes on the app.
+
+     - Currently, this will have no effect on visuals and will not slide.
+
+5. Optionally, scroll through the list of org cards.
+
+6. Click on any of the org cards shown to expand the and see an about section.
+
+7. Optionally, click on the heart next to an event to unselect it.
+
+    - Currently, unhearting an event does not do anything.
+
+8. Click any of the other icons on the bottom bar to go to their pages.
 
 # Swift Frontend
 
