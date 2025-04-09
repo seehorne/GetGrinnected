@@ -78,4 +78,34 @@ test('All events are unique by ID', { concurrency: true }, t => {
   }
 )
 
+test('When running drop twice, IDs to drop are distinct each run',
+{ concurrency: false}, t => {
+  //run drop once
+  scrape.dropPastEvents(scrape.CIPATH);
+  //read resulting file
+  firstScrape = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+  //JSONify
+  firstIDs = JSON.parse(firstScrape);
+  //count number of IDs
+  firstIDCount = firstIDs.data.length;
+  //do it all again for a second version
+  scrape.dropPastEvents(scrape.CIPATH);
+  secondScrape = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+  secondIDs = JSON.parse(secondScrape);
+  secondIDCount = firstIDs.data.length;
+  //if all IDs are distinct, this should be the total number we're looking at now
+  totalNumberID = firstIDCount + secondIDCount;
+  //make a set to store IDs in
+  allIDs = new Set();
+  //add IDs to set
+  firstIDs.data.forEach(event => {
+    allIDs.add(event.ID);
+  });
+  secondIDs.data.forEach(event => {
+    allIDs.add(event.ID);
+  });
+  //if all IDs were distinct, the set size should be the number we added to
+  assert(totalNumberID === allIDs.size)
+}
+)
 });

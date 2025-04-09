@@ -376,6 +376,8 @@ invalid password:
 
 ## Use Case 2: Creating an Event
 
+**NOTE** This use case has been relegated to a stretch goal.
+
 **Actor:** A SEPC, Student Org Leader, MLC, MSO, ISO (student group leader of some form) who wants to create a new event for their orginatization. This would be an Event Creator user.
 
 **Goal:** The general overarching goal is to create an event to get their organization or group out for others to see the events they have planned.
@@ -472,6 +474,8 @@ no event found:
 
 ## Use Case 4: Following an organization
 
+**NOTE** This use case has been relegated to a stretch goal.
+
 **Actor:** Any user to this app. They can really have any user role.
 
 **Goal:** Connect with an org whose events you are consistently interested in.
@@ -515,6 +519,9 @@ Unfollowing an organization:
 4. They close the pop up, and the relevant organization is no longer listed in the orgs.
 
 ## User Case 5: Following up a Posted Event:
+
+**NOTE** This use case has been relegated to a stretch goal.
+
 **Actor:** Power users. Power users who have already created an event. 
 
 **Goal**: Change anything about an event that has already been posted, and notify users who have favorited that event about those changes. 
@@ -566,6 +573,9 @@ Discarding Changes:
 5. No change is made to the event and no updates were sent out. 
 
 ## User Case 6: Adding a new account:
+
+**NOTE** This use case has been relegated to a stretch goal.
+
 **Actor:** Any user to this app. They can really have any user role.
 
 **Goal**: Adding another personal or organization account to the same device.

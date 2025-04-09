@@ -6,6 +6,9 @@
 //
 
 import XCTest
+import ViewInspector
+@testable import GetGrinnected
+import SwiftUICore
 
 final class GetGrinnectedUITests: XCTestCase {
 
@@ -36,6 +39,25 @@ final class GetGrinnectedUITests: XCTestCase {
             measure(metrics: [XCTApplicationLaunchMetric()]) {
                 XCUIApplication().launch()
             }
+        }
+    }
+    
+    final class LoginViewTests: XCTestCase {
+        func testLoginViewLoadsCorrectly() throws {
+            // Create an instance of the view
+            let loginView = LoginView(isLoggedIn: .constant(false))
+            
+            let vStack = try loginView.inspect().vStack()
+            
+            let emailInput = try vStack.text(0)
+            XCTAssertEqual(try emailInput.string(), "Grinnell Email")
+            
+            let passwordInput = try vStack.text(1)
+            XCTAssertEqual(try passwordInput.string(), "Password")
+            
+
+            let signUpLink = try vStack.text(2)
+            XCTAssertEqual(try signUpLink.string(), "Don't have an account?")
         }
     }
 }
