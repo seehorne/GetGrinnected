@@ -283,3 +283,15 @@ You can find the login details from the environment file used to run the databas
 
 2. It announces what ports the API is running on. By default it will run HTTP on port 8080 and HTTPS on port 4443, unless
    otherwise specified in the .env file or environment variables.
+
+# Currently Operational Use Cases
+
+This list will be updated as we progress.
+
+- Partial functionality for Use Case 1, Signing Up.
+
+  - It is possible to go through the sign up screen, but it does not check any fields or send any data over the network to create an account.
+
+- Partial functionality for Use Case 3, Finding an Event
+
+  - It is possible to see events on the home screen, but not search.
