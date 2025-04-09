@@ -34,9 +34,16 @@ import SwiftUI
 "Tags" and "Audience" are same format!
  */
 struct TesterView: View {
+    func Task() async {
+        do {
+            let myString = try await EventData.fetchData(urlString: "https://node16049-csc324--spring2025.us.reclaim.cloud/")
+            var events = EventData.parseEvents(json: myString)
+        } catch {
+            print(error)
+        }
+    }
     var body: some View {
-        // this is the long-input form of event card
-        EventCards(title: "Aikido", date: "April 4", startTimeISO: "2025-04-04T17:30:00-05:00", endTimeISO: "2025-04-04T18:30:00-05:00", allDay: false, location: "BRAC P103 - Multipurpose Dance Studio", description: "\n  Aikido Practice: Aikido is a Japanese martial art dedicated to resolving conflict as peacefully as possible. It uses unified body motion, rather than upper body strength, to throw, lock, or pin attackers. We are affiliated with the United States Aikido Federation, and rank earned at Grinnell is transferrable to other dojos in our organization. Beginners are welcome to start at any time (just wear comfortable clothes).\n", organization: "Aikido", tags: [], id: 23325)
+        
     }//body
 }
 

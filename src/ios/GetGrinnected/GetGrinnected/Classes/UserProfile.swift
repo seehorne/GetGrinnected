@@ -11,6 +11,7 @@ import SwiftUI
  Class for creating a new user profile. For now, we will keep isPowerUser and isAdmin both false.
  New userProfile created only in SIGNUP
  */
+
 class UserProfile: ObservableObject {
     //set email and set password after validating them
     @Published private(set) var emailText = ""
