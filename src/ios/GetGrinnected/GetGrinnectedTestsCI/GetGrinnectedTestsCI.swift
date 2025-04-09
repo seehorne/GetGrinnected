@@ -7,20 +7,21 @@
 
 import Testing
 @testable import GetGrinnected
+import SwiftUI
 
 struct GetGrinnectedTestsCI {
 
     @Suite("Main navigation view tests")
-    struct MainNavViewTests {
-        let mainNavView: MainNavView
+    struct LoginViewTests {
+        let LoginView: LoginView
         
         init () throws {
-            mainNavView = .init()
+            LoginView = .init(isLoggedIn: .constant(true))
         }
         
         // Tests that the main view has started
-        @Test("Main navigation view starts") func MainNavViewStarts() throws {
-            #expect(mainNavView != nil)
+        @Test("Login view starts") func LoginViewStarts() throws {
+            #expect(LoginView != nil)
         }
     }
 

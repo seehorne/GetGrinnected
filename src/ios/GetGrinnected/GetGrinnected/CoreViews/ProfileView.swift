@@ -9,16 +9,25 @@ import Foundation
 import SwiftUI
 
 struct ProfileView: View {
+    @State private var email = ""
+    
     var body: some View {
-        VStack {
-            Image(systemName:"globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, Profile!")
-        }
-        .padding()
-    }
-}
+        NavigationStack {
+            Header(title: "Profile") // add header to view
+            
+            VStack {
+                Image(systemName:"person.crop.circle.badge.plus")
+                    .imageScale(.large)
+                    .font(.system(size: 100))
+                    .foregroundStyle(.blue, .gray)
+                
+                InputView(text: $email, title: "Change Email", placeholder: "Enter your Grinnell Email")
+            } //VStack
+            
+            .padding()
+        } //NavigationStack
+    } //body
+} //ProfileView
 
 #Preview {
     ProfileView()
