@@ -48,7 +48,7 @@ Since there are two frontends, there are two sets of steps.
 
 3. Optionally, click the date on the top bar to open a dropdown and change which date is being shown.
 
-    - Currently, this will have no effect on visuals.
+    - Notice that the events displayed switch to displaying events only on that day (Currently events 5 or less hours from the dateline it won't be displayed on the correct page)..
 
 4. Optionally, click the tags on the top bar to open a dropdown for checkboxes and select boxes.
 
