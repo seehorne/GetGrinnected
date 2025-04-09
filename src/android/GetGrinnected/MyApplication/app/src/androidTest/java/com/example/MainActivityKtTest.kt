@@ -21,7 +21,12 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_LoginButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation(darkTheme = false, onToggleTheme =  {}) }
+  composeTestRule.setContent { AppNavigation(
+      darkTheme = false, onToggleTheme = {},
+      modifier = TODO(),
+      event = TODO(),
+      eventnum = TODO()
+  ) }
 
   composeTestRule.onNodeWithText("Login").performClick()
 
@@ -37,7 +42,12 @@ class MainActivityKtTest {
 
  @Test
  fun welcomeScreen_SignUpButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation(darkTheme = false, onToggleTheme =  {}) }
+  composeTestRule.setContent { AppNavigation(
+      darkTheme = false, onToggleTheme = {},
+      modifier = TODO(),
+      event = TODO(),
+      eventnum = TODO()
+  ) }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
 
@@ -79,7 +89,12 @@ class MainActivityKtTest {
   */
  @Test
  fun loginScreen_SignupButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation(darkTheme = false, onToggleTheme =  {}) }
+  composeTestRule.setContent { AppNavigation(
+      darkTheme = false, onToggleTheme = {},
+      modifier = TODO(),
+      event = TODO(),
+      eventnum = TODO()
+  ) }
 
   composeTestRule.onNodeWithText("Login").performClick()
 
@@ -101,12 +116,18 @@ class MainActivityKtTest {
  fun mainPage_Navbar_NavigatesToAllScreens() {
   val destinations = listOf(
    NavTestData("Calendar", "April"),
+   NavTestData("Home", "Tags"),
    NavTestData("Favorites", "Favorite Events"),
    NavTestData("Settings", "Profile"),
   )
 
   composeTestRule.setContent {
-   MainPage(darkTheme = false, onToggleTheme =  {})
+   MainPage(
+       darkTheme = false, onToggleTheme = {},
+       modifier = TODO(),
+       event = TODO(),
+       eventnum = TODO()
+   )
   }
 
   destinations.forEach { (tabText, expectedScreenText) ->

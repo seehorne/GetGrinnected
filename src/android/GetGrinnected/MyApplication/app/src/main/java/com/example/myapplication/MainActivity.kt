@@ -39,17 +39,19 @@ class MainActivity : ComponentActivity() {
             val result = withContext(Dispatchers.IO) {
                 getDataFromUrl(url)
             }
-
             val gson = Gson()
             val listType = object : TypeToken<List<Event>>() {}.type
             val events: List<Event> = gson.fromJson(result, listType) ?: emptyList()
+            val length = events.size
+            val eventssorted = events.sortedBy { it.event_time }
             var darkTheme = false
             setContent {
                 MyApplicationTheme {
                     AppNavigation(
                         darkTheme = darkTheme,
                         onToggleTheme = {darkTheme = it},
-                        event = events
+                        event = eventssorted,
+                        eventnum = length
                         /* This call is how we get back into our
                         Theme.kt to change the theme of the whole app */
                     )

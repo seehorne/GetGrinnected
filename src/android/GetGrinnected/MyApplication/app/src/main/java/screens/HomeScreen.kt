@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -34,11 +33,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.Event
+import com.example.myapplication.EventCard
 import com.example.myapplication.R
 import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
@@ -56,9 +56,9 @@ import androidx.compose.foundation.layout.Column as Column1
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>) {
+fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int) {
     // remembers what page the app is on
-    var selectedView by remember { mutableIntStateOf(2) }
+    var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
     val expanded = remember { mutableStateOf(false) }
     val expanded2 = remember { mutableStateOf(false) }
@@ -73,7 +73,7 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>) {
     // formats the date view
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     // currently for numbering events will get rid of with real events
-    var cardnum = 1
+    var cardnum = 0
     // background color for the page
     val gradient =
         Brush.verticalGradient(
@@ -112,22 +112,72 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>) {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
         // populates the page with model cards
-        repeat(10) {
-            Card(
-                modifier = Modifier
-                    .size(width = 380.dp, height = 100.dp)
-                    .background(Color.White)
-                    .border(2.dp, Color.Black)
-            ) {
-                Text(
-                    text =  event[cardnum].event_name.toString(),
-                    modifier = Modifier
-                        .padding(16.dp),
-                    textAlign = TextAlign.Center,
-                )
+        repeat(eventnum) {
+            if (selectedView == 0) {
+                if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
+                    EventCard(event = event[cardnum], modifier = Modifier
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
+                    )
+                    // creates space between cards
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            } else if (selectedView == 1) {
+                if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString()){
+                    EventCard(event = event[cardnum], modifier = Modifier
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
+                    )
+                    // creates space between cards
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            } else if (selectedView == 2) {
+                if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString()){
+                    EventCard(event = event[cardnum], modifier = Modifier
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
+                    )
+                    // creates space between cards
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            } else if (selectedView == 3) {
+                if (event[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString()){
+                    EventCard(event = event[cardnum], modifier = Modifier
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
+                    )
+                    // creates space between cards
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            } else if (selectedView == 4) {
+                if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString()){
+                    EventCard(event = event[cardnum], modifier = Modifier
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
+                    )
+                    // creates space between cards
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            } else if (selectedView == 5) {
+                if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
+                    EventCard(event = event[cardnum], modifier = Modifier
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
+                    )
+                    // creates space between cards
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            } else if(selectedView == 6){
+                if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(formatter).toString()){
+                    EventCard(event = event[cardnum], modifier = Modifier
+                        .background(Color.White)
+                        .border(2.dp, Color.Black)
+                    )
+                    // creates space between cards
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
-            // creates space between cards
-            Spacer(modifier = Modifier.height(8.dp))
+
             // currently helps number model events - remove later
             cardnum += 1
         }
@@ -154,6 +204,7 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>) {
                 contentDescription = "App Logo",
                 modifier = Modifier
                     .padding(25.dp)
+                    .background(Color.White)
                     .size(50.dp)
             )
             // centers the bottons
