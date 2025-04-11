@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { setMaxParserCache } = require("mysql2");
 const URL = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
 const CIPATH = './src/backend/ci_events.json'
 const TRUEPATH = './src/backend/event_data.json'
@@ -12,7 +13,7 @@ const OPENFILE = '{\n\"data\" : [\n'
  * Processes already scraped events to create a set of their IDs
  * @returns Set of IDs associated with pre-existing events
  */
-function processExisting(path){
+function processExisting(path) {
   try{
     events = fs.readFileSync(path, 'utf-8');
     currentEvents = JSON.parse(events) //parse existing events
@@ -35,25 +36,55 @@ function processExisting(path){
  * Scrapes JSON data of calendar events from specified URL
  * Repackages relevant data to JSON structure stored in event_data.json
  * @param {*} url -> url to data to be scraped, assumes JSON data
+ * @param {*} path -> filepath to write to
  */
 async function scrapeData(url, path) {
   existingIDs = await processExisting(path);
-  const appendPromises = [];
-  fetch(url)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+  const events = await response.json();
+  existingEvents = fs.readFileSync(path, 'utf-8');
+  lines = existingEvents.split('\n');
+  console.log(lines.length);
+  anyExistingEvents = lines.length > 4;
+  zeroEventsNotCorrupt = lines.length === 4;
+  updatedLines = lines.slice(0, -2); //remove last two lines
+  fs.writeFileSync(path, updatedLines.join('\n'));
+  maxPage = events.meta.total_pages; //how many pages
+  url = url + '?page=' //add ending to look at different pages
+  for(let i = 1; i <= maxPage; i++){
+    pageURL = url+i.toString();
+    console.log(pageURL)
+    await scrapePage(pageURL, path, anyExistingEvents, zeroEventsNotCorrupt);
+    lineTracker = fs.readFileSync(path, 'utf-8').split('\n').length;
+    if (!anyExistingEvents){
+      didAdd = lineTracker > 4;
+      anyExistingEvents = didAdd
+      }
+    if (zeroEventsNotCorrupt){
+      stillNone = lineTracker === 4;
+      zeroEventsNotCorrupt = stillNone;
     }
-    return response.json();
-  })
-  .then(async events => {
-    existingEvents = fs.readFileSync(path, 'utf-8');
-    lines = existingEvents.split('\n');
-    console.log(lines.length);
-    anyExistingEvents = lines.length > 4;
-    zeroEventsNotCorrupt = lines.length === 4;
-    updatedLines = lines.slice(0, -2); //remove last two lines
-    fs.writeFileSync(path, updatedLines.join('\n'));
+  }
+    fs.appendFileSync(path, CLOSEFILE);
+}
+
+
+
+/**
+ * scrapePage
+ * 
+ * scrapes the content of one page of calendar.
+ * 
+ * @param {*} url -> url to page of data to be scraped
+ * @param {*} path -> file to write to
+ * @param {*} anyExistingEvents -> boolean, json currently have events
+ * @param {*} zeroEventsNotCorrupt -> bool, json eventless rn but not corrupt
+ */
+async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const events = await response.json();
     if (events.data && Array.isArray(events.data)) {
       counter = 0;
       events.data.forEach(event => {
@@ -84,25 +115,13 @@ async function scrapeData(url, path) {
         else if (zeroEventsNotCorrupt){
           stringifyEvent = '\n'+stringifyEvent;
         }
-        appendPromises.push(fs.appendFileSync(path, 
-          stringifyEvent, function(err){
-            if(err) throw err;
-            console.log('WRITING TO JSON')
-          }));
+        fs.appendFileSync(path, stringifyEvent);
+        console.log("Adding "+ event.title + " " + event.id + " " + event.date)
         }
         counter++;
       }
     );
     }
-    await Promise.all(appendPromises);
-    fs.appendFile(path, CLOSEFILE, function(err){
-      if(err) throw err;
-      console.log('WRITING TO JSON')
-      });
-  })
-  .catch(error => {
-    console.error('Error fetching the JSON data:', error);
-  });
 }
 
 /**
@@ -112,6 +131,7 @@ async function scrapeData(url, path) {
  * and writes their IDs to drop_ids.json, clearing all previous
  * contents.
  * 
+ * @param {*} path -> filepath to update
  */
 function dropPastEvents(path){
   //record current time for comparison
@@ -172,9 +192,10 @@ function dropPastEvents(path){
               console.log('WRITING TO JSON')
             });
         }
-    } else if(dayDiff > 0){//event is after today
-      break;//since they're time sorted, no need to look further once on tomorrow
-    }
+    } 
+    // else if(dayDiff > 0){//event is after today
+    //   break;//since they're time sorted, no need to look further once on tomorrow
+    // }
   }
   // remove the lines associated with the expired events
   // minus 2 so we don't remove the brackets at the top but rather actual events
