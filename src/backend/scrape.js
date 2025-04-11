@@ -13,7 +13,7 @@ const OPENFILE = '{\n\"data\" : [\n'
  * Processes already scraped events to create a set of their IDs
  * @returns Set of IDs associated with pre-existing events
  */
-function processExisting(path){
+function processExisting(path) {
   try{
     events = fs.readFileSync(path, 'utf-8');
     currentEvents = JSON.parse(events) //parse existing events
@@ -38,7 +38,7 @@ function processExisting(path){
  * @param {*} url -> url to data to be scraped, assumes JSON data
  * @param {*} path -> filepath to write to
  */
-async function scrapeData(url ,path){
+async function scrapeData(url, path) {
   existingIDs = await processExisting(path);
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -56,10 +56,15 @@ async function scrapeData(url ,path){
     pageURL = url+i.toString();
     console.log(pageURL)
     await scrapePage(pageURL, path, anyExistingEvents, zeroEventsNotCorrupt);
+    lineTracker = fs.readFileSync(path, 'utf-8').split('\n').length;
     if (!anyExistingEvents){
-      didAdd = fs.readFileSync(path, 'utf-8').split('\n').length > 4;
+      didAdd = lineTracker > 4;
       anyExistingEvents = didAdd
       }
+    if (zeroEventsNotCorrupt){
+      stillNone = lineTracker === 4;
+      zeroEventsNotCorrupt = stillNone;
+    }
   }
     fs.appendFileSync(path, CLOSEFILE);
 }
