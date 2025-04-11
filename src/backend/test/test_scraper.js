@@ -109,3 +109,28 @@ test('When running drop twice, IDs to drop are distinct each run',
 }
 )
 });
+
+test('Number of events post-scrape cooresponds to number of scraped pages',
+  { concurrency: true}, async t => {
+    //run drop to get a fresh start
+    scrape.dropPastEvents(scrape.CIPATH);
+    //read the URL for new scrape
+    const response = await fetch(scrape.URL);
+    const events = await response.json();
+    //get how many pages there are
+    numPages = events.meta.total_pages;
+    //each page has 100 events
+    //(except for last, which has up to 100 but may not be full)
+    //so number of events should be > 100 * (#pages-1) 
+    //and <= 100 * (#pages)
+    minEvents = 100 * (numPages-1)
+    maxEvents = 100 * (numPages)
+    //do the scrape
+    await scrape.scrapeData(scrape.URL,scrape.CIPATH)
+    //check how many events there are
+    foundEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    jsonifiedFoundEvents = JSON.parse(foundEvents);
+    foundEventCount = jsonifiedFoundEvents.length;
+    assert(foundEventCount > minEvents && foundEventCount <= maxEvents);
+  }
+)

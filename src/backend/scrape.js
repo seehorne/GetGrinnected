@@ -74,9 +74,9 @@ async function scrapeData(url ,path){
  * @param {*} url -> url to page of data to be scraped
  * @param {*} path -> file to write to
  * @param {*} anyExistingEvents -> boolean, json currently have events
- * @param {*} anyExistingEvents -> boolean, json currently has no events but isnt corrupt
+ * @param {*} zeroEventsNotCorrupt -> bool, json eventless rn but not corrupt
  */
-async function scrapePage(url, path, anyExistingEvents, zeroNC) {
+async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const events = await response.json();
