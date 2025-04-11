@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { setMaxParserCache } = require("mysql2");
 const URL = 'https://events.grinnell.edu/live/json/events/response_fields/all/paginate'
 const CIPATH = './src/backend/ci_events.json'
 const TRUEPATH = './src/backend/event_data.json'
@@ -29,24 +30,17 @@ function processExisting(path){
   }
 }
 
-/**
- * scrapeData
- * 
- * Scrapes JSON data of calendar events from specified URL
- * Repackages relevant data to JSON structure stored in event_data.json
- * @param {*} url -> url to data to be scraped, assumes JSON data
- */
-async function scrapeData(url, path) {
+async function scrapeData(url ,path){
   existingIDs = await processExisting(path);
-  const appendPromises = [];
-  fetch(url)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(async events => {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+  // .then(response => {
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! Status: ${response.status}`);
+  //   }
+  //   return response.json();
+  // })
+  const events = await response.json();
     existingEvents = fs.readFileSync(path, 'utf-8');
     lines = existingEvents.split('\n');
     console.log(lines.length);
@@ -54,6 +48,54 @@ async function scrapeData(url, path) {
     zeroEventsNotCorrupt = lines.length === 4;
     updatedLines = lines.slice(0, -2); //remove last two lines
     fs.writeFileSync(path, updatedLines.join('\n'));
+    maxPage = events.meta.total_pages;
+    url = url + '?page='
+    for(let i = 1; i <= maxPage; i++){
+      pageURL = url+i.toString();
+      console.log(pageURL)
+      await scrapePage(pageURL, path, anyExistingEvents);
+      if (!anyExistingEvents){
+        didAdd = fs.readFileSync(path, 'utf-8').split('\n').length > 4;
+        anyExistingEvents = didAdd
+      }
+    }
+    fs.appendFileSync(path, CLOSEFILE);
+  // })
+  // .catch(error => {
+  //   console.error('Error fetching the JSON data:', error);
+  // });
+}
+
+
+
+/**
+ * scrapeData
+ * 
+ * Scrapes JSON data of calendar events from specified URL
+ * Repackages relevant data to JSON structure stored in event_data.json
+ * @param {*} url -> url to data to be scraped, assumes JSON data
+ */
+async function scrapePage(url, path, anyExistingEvents) {
+  //existingIDs = await processExisting(path);
+  const appendPromises = [];
+  console.log(url)
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+  // .then(response => {
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! Status: ${response.status}`);
+  //   }
+  //   return response.json();
+  // })
+  // .then(async events => {
+    const events = await response.json()
+    // existingEvents = fs.readFileSync(path, 'utf-8');
+    // lines = existingEvents.split('\n');
+    // console.log(lines.length);
+    // anyExistingEvents = lines.length > 4;
+    // zeroEventsNotCorrupt = lines.length === 4;
+    // updatedLines = lines.slice(0, -2); //remove last two lines
+    // fs.writeFileSync(path, updatedLines.join('\n'));
     if (events.data && Array.isArray(events.data)) {
       counter = 0;
       events.data.forEach(event => {
@@ -84,25 +126,20 @@ async function scrapeData(url, path) {
         else if (zeroEventsNotCorrupt){
           stringifyEvent = '\n'+stringifyEvent;
         }
-        appendPromises.push(fs.appendFileSync(path, 
-          stringifyEvent, function(err){
-            if(err) throw err;
-            console.log('WRITING TO JSON')
-          }));
+        fs.appendFileSync(path, stringifyEvent);
         }
         counter++;
       }
     );
     }
-    await Promise.all(appendPromises);
-    fs.appendFile(path, CLOSEFILE, function(err){
-      if(err) throw err;
-      console.log('WRITING TO JSON')
-      });
-  })
-  .catch(error => {
-    console.error('Error fetching the JSON data:', error);
-  });
+    //await Promise.all(appendPromises);
+    // fs.appendFile(path, CLOSEFILE, function(err){
+    //   if(err) throw err;
+    //   console.log('WRITING TO JSON')
+    //   });
+  // .catch(error => {
+  //   console.error('Error fetching the JSON data:', error);
+  // });
 }
 
 /**
@@ -172,9 +209,10 @@ function dropPastEvents(path){
               console.log('WRITING TO JSON')
             });
         }
-    } else if(dayDiff > 0){//event is after today
-      break;//since they're time sorted, no need to look further once on tomorrow
-    }
+    } 
+    // else if(dayDiff > 0){//event is after today
+    //   break;//since they're time sorted, no need to look further once on tomorrow
+    // }
   }
   // remove the lines associated with the expired events
   // minus 2 so we don't remove the brackets at the top but rather actual events
