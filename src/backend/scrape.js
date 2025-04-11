@@ -30,72 +30,56 @@ function processExisting(path){
   }
 }
 
-async function scrapeData(url ,path){
-  existingIDs = await processExisting(path);
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-  // .then(response => {
-  //   if (!response.ok) {
-  //     throw new Error(`HTTP error! Status: ${response.status}`);
-  //   }
-  //   return response.json();
-  // })
-  const events = await response.json();
-    existingEvents = fs.readFileSync(path, 'utf-8');
-    lines = existingEvents.split('\n');
-    console.log(lines.length);
-    anyExistingEvents = lines.length > 4;
-    zeroEventsNotCorrupt = lines.length === 4;
-    updatedLines = lines.slice(0, -2); //remove last two lines
-    fs.writeFileSync(path, updatedLines.join('\n'));
-    maxPage = events.meta.total_pages;
-    url = url + '?page='
-    for(let i = 1; i <= maxPage; i++){
-      pageURL = url+i.toString();
-      console.log(pageURL)
-      await scrapePage(pageURL, path, anyExistingEvents);
-      if (!anyExistingEvents){
-        didAdd = fs.readFileSync(path, 'utf-8').split('\n').length > 4;
-        anyExistingEvents = didAdd
-      }
-    }
-    fs.appendFileSync(path, CLOSEFILE);
-  // })
-  // .catch(error => {
-  //   console.error('Error fetching the JSON data:', error);
-  // });
-}
-
-
-
 /**
  * scrapeData
  * 
  * Scrapes JSON data of calendar events from specified URL
  * Repackages relevant data to JSON structure stored in event_data.json
  * @param {*} url -> url to data to be scraped, assumes JSON data
+ * @param {*} path -> filepath to write to
  */
-async function scrapePage(url, path, anyExistingEvents) {
-  //existingIDs = await processExisting(path);
-  const appendPromises = [];
-  console.log(url)
+async function scrapeData(url ,path){
+  existingIDs = await processExisting(path);
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-  // .then(response => {
-  //   if (!response.ok) {
-  //     throw new Error(`HTTP error! Status: ${response.status}`);
-  //   }
-  //   return response.json();
-  // })
-  // .then(async events => {
-    const events = await response.json()
-    // existingEvents = fs.readFileSync(path, 'utf-8');
-    // lines = existingEvents.split('\n');
-    // console.log(lines.length);
-    // anyExistingEvents = lines.length > 4;
-    // zeroEventsNotCorrupt = lines.length === 4;
-    // updatedLines = lines.slice(0, -2); //remove last two lines
-    // fs.writeFileSync(path, updatedLines.join('\n'));
+  const events = await response.json();
+  existingEvents = fs.readFileSync(path, 'utf-8');
+  lines = existingEvents.split('\n');
+  console.log(lines.length);
+  anyExistingEvents = lines.length > 4;
+  zeroEventsNotCorrupt = lines.length === 4;
+  updatedLines = lines.slice(0, -2); //remove last two lines
+  fs.writeFileSync(path, updatedLines.join('\n'));
+  maxPage = events.meta.total_pages; //how many pages
+  url = url + '?page=' //add ending to look at different pages
+  for(let i = 1; i <= maxPage; i++){
+    pageURL = url+i.toString();
+    console.log(pageURL)
+    await scrapePage(pageURL, path, anyExistingEvents, zeroEventsNotCorrupt);
+    if (!anyExistingEvents){
+      didAdd = fs.readFileSync(path, 'utf-8').split('\n').length > 4;
+      anyExistingEvents = didAdd
+      }
+  }
+    fs.appendFileSync(path, CLOSEFILE);
+}
+
+
+
+/**
+ * scrapePage
+ * 
+ * scrapes the content of one page of calendar.
+ * 
+ * @param {*} url -> url to page of data to be scraped
+ * @param {*} path -> file to write to
+ * @param {*} anyExistingEvents -> boolean, json currently have events
+ * @param {*} anyExistingEvents -> boolean, json currently has no events but isnt corrupt
+ */
+async function scrapePage(url, path, anyExistingEvents, zeroNC) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const events = await response.json();
     if (events.data && Array.isArray(events.data)) {
       counter = 0;
       events.data.forEach(event => {
@@ -127,19 +111,12 @@ async function scrapePage(url, path, anyExistingEvents) {
           stringifyEvent = '\n'+stringifyEvent;
         }
         fs.appendFileSync(path, stringifyEvent);
+        console.log("Adding "+ event.title + " " + event.id + " " + event.date)
         }
         counter++;
       }
     );
     }
-    //await Promise.all(appendPromises);
-    // fs.appendFile(path, CLOSEFILE, function(err){
-    //   if(err) throw err;
-    //   console.log('WRITING TO JSON')
-    //   });
-  // .catch(error => {
-  //   console.error('Error fetching the JSON data:', error);
-  // });
 }
 
 /**
@@ -149,6 +126,7 @@ async function scrapePage(url, path, anyExistingEvents) {
  * and writes their IDs to drop_ids.json, clearing all previous
  * contents.
  * 
+ * @param {*} path -> filepath to update
  */
 function dropPastEvents(path){
   //record current time for comparison
