@@ -215,7 +215,7 @@ async function dropPastEvents(path,time_based){
       pageEvents.data.forEach(event => {
         console.log(currentIDs.size)
         currentIDs.delete(event.id)
-        console.log("removed "+event.id)
+        console.log("removed "+event.id+ " from set")
         console.log(currentIDs.size)
       })
     }
@@ -236,7 +236,8 @@ async function dropPastEvents(path,time_based){
         eventStr = eventStr + JSON.stringify(eventInfo);
         fs.appendFileSync(DROPPATH,eventStr);
         //record index of line to drop from big JSON
-        removableIndices.add(lines.findIndex(findID(ID)));
+        removableIndices.add((lines.findIndex(findID(ID)))-2);//to account for this being on actual lines
+        //^the -2 is to account that this runs on text lines vs the actual JSON data
       }
       )
     }
