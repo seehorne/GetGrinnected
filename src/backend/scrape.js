@@ -133,73 +133,83 @@ async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
  * 
  * @param {*} path -> filepath to update
  */
-function dropPastEvents(path){
-  //record current time for comparison
-  now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
-  console.log(now)
+async function dropPastEvents(path,time_based){
   events = fs.readFileSync(path, 'utf-8');
   storedEvents = JSON.parse(events);
   lines = events.split('\n');
   console.log(lines.length);
   fs.writeFileSync(DROPPATH, OPENFILE); //write opening to JSON
-  if (lines.length <= 4){
-    return; //this implies there are no events even there
-  }
-  expiredEvents = 0; //count amount of expired events
-  expiredIndices = new Set(); //keep track of expired indices
-  //how many with start and end times to remove
-  now_midnight = new Date(now).setHours(0, 0, 0, 0); //record midnight today
-  idString = "";
-  for (let i = 0; i < storedEvents.data.length; i++) {
-    console.log(i); //log event index
-    let event = storedEvents.data[i]; 
-    //time difference between today midnight and event day midnight
-    //negative implies expired, 0 implies today, positive implies future
-    dayDiff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now_midnight;
-    console.log(dayDiff); //log difference from current time
-    eventInfo = {}; //set up JSON entry
-    if (dayDiff < 0) {//event is on day that has passed
-        expiredEvents++;
-        expiredIndices.add(i);
-        console.log("DROPPING"+ event.Title);
-        eventInfo["ID"] = event.ID;
-        eventStr = "";
-            if (expiredEvents!==1){
-              eventStr = ",\n"
-            }
-            eventStr = eventStr + JSON.stringify(eventInfo);
-        fs.appendFileSync(DROPPATH, eventStr, function(err){
-          if(err) throw err;
-          console.log('WRITING TO JSON')
-        });
-    } else if (!event.allDay && dayDiff === 0) {//event is today, may or may not be over
-        let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
-        console.log(diff); //log time difference
-        console.log(event.Title); //log event under consideration
-        if (diff < 0) { //negative difference = expired event
+  removableIndices = new Set(); //keep track of expired/irrelevant indices
+  if (time_based){
+    //record current time for comparison
+    now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+    console.log(now)
+    if (lines.length <= 4){
+      return; //this implies there are no events even there
+    }
+    expiredEvents = 0; //count amount of expired events
+    //how many with start and end times to remove
+    now_midnight = new Date(now).setHours(0, 0, 0, 0); //record midnight today
+    idString = "";
+    for (let i = 0; i < storedEvents.data.length; i++) {
+      console.log(i); //log event index
+      let event = storedEvents.data[i]; 
+      //time difference between today midnight and event day midnight
+      //negative implies expired, 0 implies today, positive implies future
+      dayDiff = new Date(event.StartTimeISO).setHours(0, 0, 0, 0) - now_midnight;
+      console.log(dayDiff); //log difference from current time
+      eventInfo = {}; //set up JSON entry
+      if (dayDiff < 0) {//event is on day that has passed
+          expiredEvents++;
+          removableIndices.add(i);
           console.log("DROPPING"+ event.Title);
-            expiredEvents++;
-            expiredIndices.add(i);
-            eventInfo["ID"] = event.ID;
-            eventStr = "";
-            if (expiredEvents!==1){
-              eventStr = ",\n"
-            }
-            eventStr = eventStr + JSON.stringify(eventInfo);
-            //write the JSONified id to file of ones to drop
-            fs.appendFileSync(DROPPATH, eventStr, function(err){
-              if(err) throw err;
-              console.log('WRITING TO JSON')
-            });
+          eventInfo["ID"] = event.ID;
+          eventStr = "";
+              if (expiredEvents!==1){
+                eventStr = ",\n"
+              }
+              eventStr = eventStr + JSON.stringify(eventInfo);
+          fs.appendFileSync(DROPPATH, eventStr, function(err){
+            if(err) throw err;
+            console.log('WRITING TO JSON')
+          });
+      } else if (!event.allDay && dayDiff === 0) {//event is today, may or may not be over
+          let diff = new Date(event.EndTimeISO).getTime() - now.getTime();
+          console.log(diff); //log time difference
+          console.log(event.Title); //log event under consideration
+          if (diff < 0) { //negative difference = expired event
+            console.log("DROPPING"+ event.Title);
+              expiredEvents++;
+              removableIndices.add(i);
+              eventInfo["ID"] = event.ID;
+              eventStr = "";
+              if (expiredEvents!==1){
+                eventStr = ",\n"
+              }
+              eventStr = eventStr + JSON.stringify(eventInfo);
+              //write the JSONified id to file of ones to drop
+              fs.appendFileSync(DROPPATH, eventStr, function(err){
+                if(err) throw err;
+                console.log('WRITING TO JSON')
+              });
         }
     } 
-    // else if(dayDiff > 0){//event is after today
-    //   break;//since they're time sorted, no need to look further once on tomorrow
-    // }
+  }
+  }
+  else{//not time based, looking for events we have that just aren't on the site anymore
+    currentIDs = processExisting(path);
+    const response = await fetch(URL);
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const events = await response.json();
+    numPages = events.meta.total_pages;
+    localURL = URL+'?page=';
+    for (let i = 1; i <= numPages; i++){
+      //go through, read, drop IDs from set
+    }
   }
   // remove the lines associated with the expired events
   // minus 2 so we don't remove the brackets at the top but rather actual events
-  updatedLines = lines.filter((_, i) => !expiredIndices.has(i-2));
+  updatedLines = lines.filter((_, i) => !removableIndices.has(i-2));
   fs.writeFileSync(path, updatedLines.join('\n'), 'utf-8');
   fs.appendFileSync(DROPPATH, CLOSEFILE, function(err){
     if(err) throw err;
@@ -207,6 +217,8 @@ function dropPastEvents(path){
     });
   return;
 }
+
+
 
 module.exports = { processExisting, scrapeData, URL, dropPastEvents, CIPATH, TRUEPATH, DROPPATH};
 //scrapeData(url)
