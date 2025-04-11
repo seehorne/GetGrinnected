@@ -130,7 +130,8 @@ test('Number of events post-scrape cooresponds to number of scraped pages',
     //check how many events there are
     foundEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
     jsonifiedFoundEvents = JSON.parse(foundEvents);
-    foundEventCount = jsonifiedFoundEvents.length;
+    foundEventCount = jsonifiedFoundEvents.data.length;
+    console.log(foundEventCount)
     assert(foundEventCount > minEvents && foundEventCount <= maxEvents);
   }
 )
