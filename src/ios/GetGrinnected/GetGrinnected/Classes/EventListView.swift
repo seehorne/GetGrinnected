@@ -98,11 +98,11 @@ struct EventListView: View {
                     }
                 }
             }
-            .navigationTitle("Events")
+//            .navigationTitle("Events")
             .onAppear {
                 viewModel.fetchEvents()
             }
-        }
+        }//navigation view
     }
 }
 

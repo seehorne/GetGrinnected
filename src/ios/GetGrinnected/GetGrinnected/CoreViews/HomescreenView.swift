@@ -19,31 +19,44 @@ struct HomescreenView: View {
     // @State var events: [EventData]
     
     var body: some View {
-        NavigationStack {
-            Header(title: "Home") // add header to view
-            
-            Spacer() // add some space under header
-            
-            VStack {
-                HStack {
-                    // a picker for date
-                    DatePicker("Currently viewing date: ", selection: $viewedDate, in: Date.now...lastDate, displayedComponents: .date)
-                        .labelsHidden()
+        GeometryReader{proxy in
+            let safeAreaTop = proxy.safeAreaInsets.top
+            ScrollView(.vertical, showsIndicators: false){
+                VStack(){
+                    Header(safeAreaTop, title: "Home", searchBarOn: true)
                     
-                    // a picker for tags
-                    Picker("Tags", selection: $selectedTags)
-                    {
-                        ForEach(EventTags.allCases, id: \.self) { tag in
-                            Text(tag.rawValue)
-                        }
-                    }
-                } //HStack
-                
-                
-                EventListView()
-                
-            } //VStack
-        } //NavigationStack
+                    
+                    //content
+                    VStack {
+                        HStack {
+                            // a picker for date
+                            DatePicker(
+                                "Currently viewing date: ",
+                                selection: $viewedDate,
+                                in: Date.now...lastDate,
+                                displayedComponents: .date
+                            )
+                            .labelsHidden()
+                        
+                            // a picker for tags
+                            Picker("Tags", selection: $selectedTags){
+                                ForEach(EventTags.allCases, id: \.self) { tag in
+                                    Text(tag.rawValue)
+                                }
+                            }
+                        } //HStack
+                    
+                        EventListView()
+
+                    } //VStack
+                    .frame(minHeight: proxy.size.height)//height
+                            
+                }
+            }//Scroll view
+            .edgesIgnoringSafeArea(.top)
+//https://stackoverflow.com/questions/67873845/why-my-custom-views-try-to-take-all-the-available-vertical-space-in-vstack
+            
+        }//GeometryReaderh
     } //body
 } //HomescreenView
 

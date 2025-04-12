@@ -10,13 +10,30 @@ import SwiftUI
 
 struct CalendarView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, calendar!")
-        }
-        .padding()
+        
+        GeometryReader{proxy in
+            let safeAreaTop = proxy.safeAreaInsets.top
+            ScrollView(.vertical, showsIndicators: false){
+                VStack(){
+                    Header(safeAreaTop, title: "Calendar", searchBarOn: false)
+                    
+                    
+                    VStack{
+                        //content
+                        Image(systemName: "globe")
+                            .imageScale(.large)
+                            .foregroundStyle(.tint)
+                        Text("Hello, calendar!")
+                        
+                    }
+                    .frame(minHeight: proxy.size.height)//height
+                            
+                }
+            }
+            .edgesIgnoringSafeArea(.top)
+            
+        }//GeometryReader
+        
     }
 }
 

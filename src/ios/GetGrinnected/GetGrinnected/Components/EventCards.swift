@@ -80,6 +80,7 @@ struct EventCards: View {
                             .font(.caption)
                             .foregroundStyle(.textPrimary)
                     }
+                    .lineLimit(1, reservesSpace: true)
                     .padding(.vertical, 4)
                     VStack {
                         CheckBox(
