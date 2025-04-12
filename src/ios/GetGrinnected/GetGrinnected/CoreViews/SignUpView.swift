@@ -22,6 +22,10 @@ struct SignUpView: View{
     
     var body: some View{
         VStack(spacing: 20) {
+            Text("Create Account")
+                .bold()
+                .font(.title)
+                .foregroundColor(.textPrimary)
             
             /** input fields*/
             //Username
@@ -56,7 +60,7 @@ struct SignUpView: View{
             } label: {
                 HStack{
                     Text("SIGN UP")
-                        .fontWeight(.light)
+                        .fontWeight(.medium)
                         .padding()
                         .foregroundColor(Color.white)
                     Image(systemName: "arrow.right")
@@ -71,7 +75,6 @@ struct SignUpView: View{
             
         }//VStack
         .padding()
-        .navigationTitle("Create Account")
         
     }//Body
     
@@ -96,7 +99,6 @@ struct SignUpView: View{
         }
         
         
-    
         //**YET TO BE IMPLEMENTED: Check in database if this user already exists*//
         //Check if user already exists
         //userProfile.alreadyExists()
