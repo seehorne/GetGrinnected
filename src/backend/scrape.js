@@ -149,7 +149,8 @@ async function dropPastEvents(path,time_based){
         if(err) throw err;
         console.log('WRITING TO JSON')
         });//write the end on
-      return; //this implies there are no events even there
+      return; //this implies there are no events listed 
+      //bc all 4 lines would be the format ones. so no need to drop anything.
     }
     expiredEvents = 0; //count amount of expired events
     //how many with start and end times to remove
