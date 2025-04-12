@@ -12,7 +12,8 @@
     "get_events": "node ./src/backend/fetch_events.js",
     "add_to_db": "node ./src/backend/database_add.js",
     "drop_file": "node ./src/backend/drop_expired_json.js",
-    "drop_db": "node ./src/backend/drop_expired_db.js"
+    "drop_db": "node ./src/backend/drop_expired_db.js",
+    "drop_cancelled": "node ./src/backend/drop_cancelled_json.js"
   },
   "devDependencies": {
     "lodash": "^4.17.21",
