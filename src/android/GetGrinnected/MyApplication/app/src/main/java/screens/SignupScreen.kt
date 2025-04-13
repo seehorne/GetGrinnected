@@ -16,10 +16,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,11 +28,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -55,6 +57,10 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
+    var confirmPassword by remember { mutableStateOf("") }
+    var errPwd by remember { mutableStateOf(false) }
+    var errMsg by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +80,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(text = "Welcome to GetGrinnected", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Welcome to GetGrinnected", fontSize = 28.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
 
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -82,7 +88,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        OutlinedTextField(
             value = username,
             onValueChange = { username = it },
             label = { Text("Username") },
@@ -98,7 +104,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        OutlinedTextField(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
@@ -114,20 +120,52 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it
+                val validationError = validatePassword(it)
+                errMsg = validationError ?: if (confirmPassword.isNotEmpty() && it != confirmPassword) {
+                    "Passwords do not match"
+                } else ""
+                errPwd = errMsg.isNotEmpty()
+            },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
-            ),
+            isError = errPwd,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(
-                onDone ={
-                    focusManager.clearFocus()
-                }
+                onNext = { focusManager.moveFocus(FocusDirection.Down) }
             )
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = {
+                confirmPassword = it
+                errMsg = if (password != it) {
+                    "Passwords do not match"
+                } else validatePassword(password) ?: ""
+                errPwd = errMsg.isNotEmpty()
+            },
+            label = { Text("Retype Password") },
+            visualTransformation = PasswordVisualTransformation(),
+            isError = errPwd,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = { focusManager.clearFocus() }
+            )
+        )
+
+        if (errPwd) {
+            Text(
+                text = errMsg,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodySmall
+            ) //Everything I am seeing says we should start using this for style so that it can switch between light and dark mode and is scalable.
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -151,4 +189,28 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(200.dp))
     }
+}
+
+/**
+ * Validates a password meets the following parameters:
+ * At least 8 characters long
+ * Not longer that 256 characters
+ * Has at least 1 uppercase letter
+ * Has at least 1 lowercase letter
+ * Has at least 1 number
+ * Has at least 1 special character
+ * If it meets all of these:
+ * @return null which basically means it meets all the requirements other wise
+ * it returns a string associated with the error it isn't meeting.
+ */
+
+fun validatePassword(pwd: String): String? {
+    if (pwd.length < 8) return "Password must be at least 8 characters"
+    if (pwd.length > 256) return "Password is too long"
+    if (!pwd.any { it.isUpperCase() }) return "Password must contain an uppercase letter"
+    if (!pwd.any { it.isLowerCase() }) return "Password must contain a lowercase letter"
+    if (!pwd.any { it.isDigit() }) return "Password must contain a number"
+    if (!pwd.any { "!@#$%^&*()-_=+[]{}|;:'\",.<>?/\\`~".contains(it) }) // I think this should cover all possible special characters
+        return "Password must contain a special character"
+    return null
 }
