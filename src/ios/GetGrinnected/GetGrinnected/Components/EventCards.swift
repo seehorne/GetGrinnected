@@ -51,17 +51,9 @@
  */
 import SwiftUI
 
-struct EventCards: View {
-    //Until EventData is complete, we cannot use this form
-    var myData: Event
+@ViewBuilder
+func eventCard(_ event: Event) -> some View {
     
-    
-    init(myData: Event){
-        self.myData = myData
-    }
-    
-    /** For logic of favorites and notifications*/
-    var body: some View {
         
         /**
             For each event cards, there will be two views: the "compressed view," and the "hover" (or in this case, "open", after tapping the "compressed view")
@@ -71,15 +63,16 @@ struct EventCards: View {
             GroupBox {
                 HStack(alignment: .center){
                     VStack(alignment: .leading) {
-                        Text("\(myData.event_name) - \(myData.organizations)")
+                        Text("\(event.event_name) - \(event.organizations)")
                             .font(.headline)
                             .foregroundStyle(.textPrimary)
-                        Text(myData.event_location)
+                        Text(event.event_location)
                             .foregroundStyle(.textPrimary)
-                        Text("\(myData.event_date) • \(myData.event_time)")
+                        Text("\(event.event_date) • \(event.event_time)")
                             .font(.caption)
                             .foregroundStyle(.textPrimary)
                     }
+                    .lineLimit(1, reservesSpace: true)
                     .padding(.vertical, 4)
                     VStack {
                         CheckBox(
@@ -104,10 +97,6 @@ struct EventCards: View {
             }//title group box
             .foregroundStyle(Color(.container))
         }//Vstack
-        
-    }//body
-    
-
 }
 
 /**
@@ -132,6 +121,6 @@ struct EventCards_Previews: PreviewProvider {
     static var previews: some View {
         let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
             let myEvents = EventData.parseEvents(json: myjson)
-        EventCards(myData: myEvents[0])
+        eventCard(myEvents[0])
     }
 }

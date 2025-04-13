@@ -75,7 +75,7 @@ struct EventListView: View {
                 List {
                     ForEach(viewModel.events, id: \.eventid) { event in
                         VStack(alignment: .leading) {
-                            EventCards(myData: event)
+                            eventCard(event)
                         }
                     }
                 }
@@ -98,11 +98,11 @@ struct EventListView: View {
                     }
                 }
             }
-            .navigationTitle("Events")
+//            .navigationTitle("Events")
             .onAppear {
                 viewModel.fetchEvents()
             }
-        }
+        }//navigation view
     }
 }
 

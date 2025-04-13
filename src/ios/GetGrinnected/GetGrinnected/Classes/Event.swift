@@ -6,6 +6,58 @@
 //
 
 /**
+ This struct is meant to decode the information from a JSON file with the example (commented on the bottom of this file)
+ 
+ */
+struct Event: Codable {
+    var eventid: Int
+    var event_name: String
+    var event_description: String
+    var event_location: String
+    var organizations: [String]
+    var rsvp: Int
+    var event_date: String
+    var event_time: String
+    var event_all_day: Int
+    var event_start_time: String
+    var event_end_time: String
+    var tags: [String]
+    var event_private: Int
+    var repeats: Int
+    var event_image: String?
+    var is_draft: Int
+    
+    
+    /**
+     A new feature in swift allows us to match the event names exactly as we see fit.
+     So, if in the JSON there's a title of an event, You can match that here.
+     I don't necessarily have to have all the fields filled out below in this CodingKeys struct, however it's helpful. 
+     */
+    enum CodingKeys: String, CodingKey {
+        case eventid = "eventid"
+        case event_name = "event_name"
+        case event_description = "event_description"
+        case event_location = "event_location"
+        case organizations = "organizations"
+        case rsvp = "rsvp"
+        case event_date = "event_date"
+        case event_time = "event_time"
+        case event_all_day = "event_all_day"
+        case event_start_time = "event_start_time"
+        case event_end_time = "event_end_time"
+        case tags = "tags"
+        case event_private = "event_private"
+        case repeats = "repeats"
+        case event_image = "event_image"
+        case is_draft = "is_draft"
+        
+    }
+    
+}
+
+//Example Event in JSON
+
+/**
  
  [
    {
@@ -64,42 +116,3 @@
  ]
  
  */
-struct Event: Codable {
-    var eventid: Int
-    var event_name: String
-    var event_description: String
-    var event_location: String
-    var organizations: [String]
-    var rsvp: Int
-    var event_date: String
-    var event_time: String
-    var event_all_day: Int
-    var event_start_time: String
-    var event_end_time: String
-    var tags: [String]
-    var event_private: Int
-    var repeats: Int
-    var event_image: String?
-    var is_draft: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case eventid = "eventid"
-        case event_name = "event_name"
-        case event_description = "event_description"
-        case event_location = "event_location"
-        case organizations = "organizations"
-        case rsvp = "rsvp"
-        case event_date = "event_date"
-        case event_time = "event_time"
-        case event_all_day = "event_all_day"
-        case event_start_time = "event_start_time"
-        case event_end_time = "event_end_time"
-        case tags = "tags"
-        case event_private = "event_private"
-        case repeats = "repeats"
-        case event_image = "event_image"
-        case is_draft = "is_draft"
-        
-    }
-    
-}
