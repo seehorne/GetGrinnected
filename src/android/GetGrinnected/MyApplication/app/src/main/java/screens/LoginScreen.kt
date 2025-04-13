@@ -17,10 +17,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +54,7 @@ import com.example.myapplication.R
 fun LoginScreen(modifier: Modifier, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errMsg by remember { mutableStateOf("") }
 
     val focusManager = LocalFocusManager.current
     Column(
@@ -116,10 +117,30 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {navController.navigate("main"){
-            popUpTo(0){inclusive = true}
-            launchSingleTop = true
-        } }) {
+        if (errMsg.isNotEmpty()) {
+            Text(
+                text = errMsg,
+                color = androidx.compose.ui.graphics.Color.Red,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        // This does general field validation to insure stuff has at least been entered
+        Button(onClick = {
+            errMsg = when {
+                username.isBlank() -> "Please enter Username"
+                password.isBlank() -> "Please enter Password"
+                else -> ""
+            }
+            // This check is what allows us to properly navigate only when the previous validation passes
+            if (errMsg.isEmpty()) {
+                navController.navigate("main") {
+                    popUpTo(0) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
+        }) {
             Text("Login")
         }
 

@@ -106,7 +106,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { email = it.trim().lowercase() }, //ensures it isn't case sensitive
             label = { Text("Email") },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
@@ -124,8 +124,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
             value = password,
             onValueChange = {
                 password = it
-                val validationError = validatePassword(it)
-                errMsg = validationError ?: if (confirmPassword.isNotEmpty() && it != confirmPassword) {
+                errMsg = validatePassword(it) ?: if (confirmPassword.isNotEmpty() && it != confirmPassword) {
                     "Passwords do not match"
                 } else ""
                 errPwd = errMsg.isNotEmpty()
@@ -169,11 +168,29 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick =  {
-            navController.navigate("main"){
-                popUpTo(0){inclusive = true}
-                launchSingleTop = true
-        } }) {
+        Button(onClick = {
+            val pwdError = validatePassword(password)
+            val emailError = validateEmail(email)
+            val missingUsername = username.isBlank()
+            val passwordsMismatch = password != confirmPassword
+
+            errMsg = when {
+                missingUsername -> "Username is required"
+                emailError != null -> emailError
+                pwdError != null -> pwdError
+                passwordsMismatch -> "Passwords do not match"
+                else -> ""
+            }
+
+            errPwd = errMsg.isNotEmpty()
+
+            if (!errPwd) {
+                navController.navigate("main") {
+                    popUpTo(0) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
+        }) {
             Text("Sign up")
         }
 
@@ -200,6 +217,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
  * Has at least 1 number
  * Has at least 1 special character
  * If it meets all of these:
+ * @param pwd takes in a String representation of a password
  * @return null which basically means it meets all the requirements other wise
  * it returns a string associated with the error it isn't meeting.
  */
@@ -212,5 +230,16 @@ fun validatePassword(pwd: String): String? {
     if (!pwd.any { it.isDigit() }) return "Password must contain a number"
     if (!pwd.any { "!@#$%^&*()-_=+[]{}|;:'\",.<>?/\\`~".contains(it) }) // I think this should cover all possible special characters
         return "Password must contain a special character"
+    return null
+}
+
+/**
+ * Validates an email ends in @grinnell.edu
+ * @param email takes in a String representation of an email
+ * @return null which basically means it ends in @grinnell.edu otherwise
+ * it returns a string associated with the error it isn't meeting.
+ */
+fun validateEmail(email: String): String? {
+    if (!email.endsWith("@grinnell.edu")) return "Email must end with @grinnell.edu"
     return null
 }
