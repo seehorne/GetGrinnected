@@ -63,15 +63,17 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     var isLoading by remember { mutableStateOf(false)}
 
     val focusManager = LocalFocusManager.current
+    // This sets up the general look of the entire screen
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()) // THis makes our app scrollable
             .padding(16.dp)
             .imePadding(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // This is our app logo image
         Image(
             painter = painterResource(id = R.drawable.gg_logo_2),
             contentDescription = "App Logo",
@@ -89,7 +91,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         Text(text = "Login to your account")
 
         Spacer(modifier = Modifier.height(8.dp))
-
+        // This is our username text box that takes in our user's password
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
@@ -105,7 +107,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-
+        // This is the password text box that takes in our user's password
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -123,6 +125,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // This handles general errors that may arise from user not inputting
         if (errMsg.isNotEmpty()) {
             Text(
                 text = errMsg,
@@ -132,7 +135,8 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
+        // This is our login button handles an api request for login and if successful navigates
+        // to main screen if not gives an error message
         Button(onClick = {
             coroutineScope.launch {
                 errMsg = ""
@@ -144,9 +148,12 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
                 isLoading = true
                 try {
+                    // Makes the api login request
                     val response = RetrofitLoginClient.authModel.login(
                         LoginRequest(username, password)
                     )
+                    // Assess if the request and validation of login was successful if so
+                    // nav to main if not show login failure.
                     if (response.isSuccessful && response.body()?.success == true) {
                         navController.navigate("main") {
                             popUpTo(0) { inclusive = true }
@@ -155,6 +162,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                     } else {
                         errMsg = response.body()?.message ?: "Login failed"
                     }
+                    // Failure specifically with a network connection ie couldn't leave our app
                 } catch (e: Exception) {
                     errMsg = "Network error: ${e.localizedMessage}"
                 } finally {
@@ -173,6 +181,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // This is to properly align our link to signup page with a intuitive message.
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
             Text(text = "New to GetGrinnected?")

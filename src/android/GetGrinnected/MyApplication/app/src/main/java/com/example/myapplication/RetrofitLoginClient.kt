@@ -10,7 +10,7 @@ object RetrofitLoginClient {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://node16049-csc324--spring2025.us.reclaim.cloud/")
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create()) // Used to convert from JSON to our data structures
         .build()
 
     val authModel: AuthModel = retrofit.create(AuthModel::class.java)
