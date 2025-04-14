@@ -94,21 +94,17 @@ function getAPIOnline(req, res) {
  * \param next Error handler function
  */
 async function getEvents(req, res, next) {
-  // If they don't request tags, return all known events
+  // Determine if the user wants to query specific tags
   const tags = parseQueryTags(req.query.tag);
-  if (tags == null) {
+
+  // Query the DB, including tags if those were provided
+  if (tags.length === 0) { 
     const events = await db.getEvents();
     res.json(events);
     return;
-  }
-
-  // If they do request tags, query the DB for them
-  const events = await db.getEventsWithTags(tags);
-  if (!events) {
-    res.status(404).json({ 
-      'message': 'No events found with tags',
-      'tags': tags
-    });
+  } else {
+    const events = await db.getEventsWithTags(tags);
+    res.json(events);
     return;
   }
   res.json(events);
@@ -177,23 +173,26 @@ function parseParamDate(paramDate) {
   const validTimeZone = "[+-]\\d\\d\\d\\d"        // Timezone, eg -0500 or +1230
 
   // If all features are specified, use that and respect the date and timezone provided
+  // YYYY-MM-DDTHH:MM-0000
   const allFeaturesRegex = new RegExp('^' + validDate + validTime + validTimeZone + '$');
   if (allFeaturesRegex.test(paramDate)) {
-    return Date.parse(paramDate);
+    return Math.floor(Date.parse(paramDate) / 1000);
   }
 
   // If no timezone is specified, assume they mean Grinnell time (UTC-5)
+  // YYYY-MM-DDTHH:MM
   const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
   if (dateTimeRegex.test(paramDate)) {
     paramDate = paramDate.concat('-0500');
-    return Date.parse(paramDate);
+    return Math.floor(Date.parse(paramDate) / 1000);
   }
 
   // If no timezone OR time is specified, assume they mean midnight at grinnell time
+  // YYYY-MM-DD
   const dateOnlyRegex = new RegExp('^' + validDate + '$');
   if (dateOnlyRegex.test(paramDate)) {
     paramDate = paramDate.concat('T00:00-0500');
-    return Date.parse(paramDate);
+    return Math.floor(Date.parse(paramDate) / 1000);
   }
 
   // If none of those attempts to figure out the format worked, bypass Date.parse and return failure.
@@ -207,11 +206,12 @@ function parseParamDate(paramDate) {
  * \param queryTags a query tag object, which can be
  *                  either a list of strings or a string.
  * \returns an array containing each tag, or null if no tags were found.
+ *                   each tag in the array will be quoted.
  */
 function parseQueryTags(queryTags) {
   // Don't try parse zero-like tags
   if (!queryTags) {
-    return null;
+    return [];
   }
 
   // If there is only one tag, it will not get put in a list. fix that.
@@ -219,8 +219,11 @@ function parseQueryTags(queryTags) {
     queryTags = [queryTags];
   }
 
-  // Split any comma-separated items like a,b,c
-  const tags = queryTags.map((x) => x.split(',')).flat();
+  // Split any comma-separated items like a,b,c to make them part of the array.
+  queryTags = queryTags.map((x) => x.split(',')).flat();
+
+  // The final tags must have quotation marks on either side, add those.
+  const tags = queryTags.map((x) => '"' + x + '"');
   return tags;
 }
 
