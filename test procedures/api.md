@@ -109,6 +109,21 @@ For these steps, open a second terminal not connected to the server.
 
 3. Note a tag that at least one event has, but at least one other event does not have.
 
+## Confirm date cutoff applies to end dates
+
+1. Look at the last event in your output from the previous command, and note its end time.
+
+2. Construct a `curl` command that will exclude that event. 
+
+   For instance, if it ends at `2025-04-15T02:00:00.000Z` you need to make the cutoff `2025-04-15T01:59T+0000`. Make sure your end time still matches the API spec.
+
+   Here is an example of such a command. This example uses specific dates to show the altered end date.
+   ```
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events/between/2025-04-14/2025-04-15T01:59+0000/' | jq
+   ```
+
+3. Confirm that the event you are trying to exclude is no longer at the bottom of the output.
+
 ## Get tagged events between dates
 
 1. Using the tag you noted before, query for events with those tags.
