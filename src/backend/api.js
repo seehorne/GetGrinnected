@@ -175,18 +175,16 @@ async function getEventsBetween(req, res, _next) {
   // These will look like 'YYYY-MM-DD HH:MM:00.000Z'
   const startSQLString = new Date(start).toISOString();
   const endSQLString = new Date(end).toISOString();
-
-  // 
-  const tags = parseQueryTags(req.query.tag);
-
+  
   // If there are no tags query the DB normally,
   // if there are tags query for them
+  const tags = parseQueryTags(req.query.tag);
   if (tags.length === 0) {
-    const events = await db.getEventsBetween(start, end);
+    const events = await db.getEventsBetween(startSQLString, endSQLString);
     res.json(events);
     return;
   } else {
-    const events = await db.getEventsBetweenWithTags(start, end, tags);
+    const events = await db.getEventsBetweenWithTags(startSQLString, endSQLString, tags);
     res.json(events);
     return;
   }
