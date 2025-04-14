@@ -211,8 +211,7 @@ function parseParamDate(paramDate) {
     '$'                                      // matches end of string
   );
   if (allFeaturesRegex.test(paramDate)) {
-    // Divide by 1000 because date.parse returns ms and we need seconds
-    return Math.floor(Date.parse(paramDate) / 1000);
+    return Date.parse(paramDate);
   }
 
   // MATCHES: YYYY-MM-DDTHH:MM
@@ -220,8 +219,7 @@ function parseParamDate(paramDate) {
   const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
   if (dateTimeRegex.test(paramDate)) {
     paramDate = paramDate.concat('-0500');
-    // Divide by 1000 because date.parse returns ms and we need seconds
-    return Math.floor(Date.parse(paramDate) / 1000);
+    return Date.parse(paramDate);
   }
 
   // MATCHES: YYYY-MM-DD
@@ -231,7 +229,7 @@ function parseParamDate(paramDate) {
   if (dateOnlyRegex.test(paramDate)) {
     paramDate = paramDate.concat('T00:00-0500');
     // Divide by 1000 because date.parse returns ms and we need seconds
-    return Math.floor(Date.parse(paramDate) / 1000);
+    return Date.parse(paramDate);
   }
 
   // If none of those attempts to figure out the format worked, fail with NaN

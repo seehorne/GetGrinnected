@@ -184,28 +184,28 @@ describe('parseParamDate', () => {
 
     it('should accept ISO-8601 time unchanged', () => {
         const input = '2025-04-05T22:19-0500';
-        const expected = Math.floor(Date.parse(input) / 1000);
+        const expected = Date.parse(input);
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
     });
 
     it('should respect non-Grinnell ISO-8601 timezones', () => {
         const input = '2022-03-12T10:32+1230';
-        const expected = Math.floor(Date.parse(input) / 1000);
+        const expected = Date.parse(input);
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
     });
 
     it('should assume Grinnell time if timezone unspecified', () => {
         const input = '1999-01-01T08:19';
-        const expected = Math.floor(Date.parse(input + '-0500') / 1000);
+        const expected = Date.parse(input + '-0500');
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
     });
 
     it('should assume Grinnell midnight if no time specified', () => {
         const input = '2025-08-04';
-        const expected = Math.floor(Date.parse(input + 'T00:00-0500') / 1000);
+        const expected = Date.parse(input + 'T00:00-0500');
         const actual = api.parseParamDate(input);
         assert.strictEqual(expected, actual);
     });
