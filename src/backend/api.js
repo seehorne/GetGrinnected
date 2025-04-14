@@ -122,30 +122,49 @@ async function getEventsBetween(req, res, next) {
   // Try to parse the start and end times, fail if it does not work.
   const start = parseParamDate(req.params.start);
   const end = parseParamDate(req.params.end);
-  if (isNaN(start)) {
+
+  // Return descriptive error on failure to parse stard and/or end
+  //   .status(400)  creates a 400 "Invalid request" HTTP error
+  //   .json(...)    lets us specify what JSON object we return with the error, 
+  //     so we can have a consistent error code and more detailed error messages 
+  if (isNaN(start) && isNaN(end)) {
     res.status(400).json({
-      'message': 'Expected start time to match format YYYY-MM-DD(THH:MM(z))',
-      'start': req.params.start,
+      'error': 'Invalid date',
+      'message': 'Start and end date could not be read properly.'
+    });
+    return;
+  } else if (isNaN(start)) {
+    res.status(400).json({
+      'error': 'Invalid date',
+      'message': 'Start date could not be read properly.'
     });
     return;
   } else if (isNaN(end)) {
     res.status(400).json({
-      'message': 'Expected end time to match format YYYY-MM-DD(THH:MM(z))',
-      'end': req.params.end,
+      'error': 'Invalid date',
+      'message': 'End date could not be read properly.'
     });
     return;
-  } else if (start >= end) {
+  }
+
+  // Return descriptive error if start is before end
+  //   .status(400)  creates a 400 "Invalid request" HTTP error
+  //   .json(...)    lets us specify what JSON object we return with the error, 
+  //     so we can have a consistent error code and more detailed error message
+  else if (start >= end) {
     res.status(400).json({
-      'message': 'Start time must be before end time',
-      'start': req.params.start,
-      'end': req.params.end,
+      'error': 'Bad date order',
+      'message': 'Start date must occur before end date.'
     });
     return;
   }
 
   // If tags are not requested, simply query db.
   const tags = parseQueryTags(req.query.tag);
-  if (tags == null) { 
+
+  // If there are no tags query the DB normally,
+  // if there are tags query for them
+  if (tags.length === 0) {
     const events = await db.getEventsBetween(start, end);
     res.json(events);
     return;
@@ -153,10 +172,6 @@ async function getEventsBetween(req, res, next) {
 
   // If tags have been provided query the db for them.
   const events = await db.getEventsBetweenWithTags(start, end, tags);
-  if (!events) {
-    res.status(404).json({ 'message': 'No events found with tags', 'tags': tags });
-    return;
-  } 
   res.json(events);
 }
 
