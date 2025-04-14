@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitLoginClient
+import kotlinx.coroutines.launch
 
 /**
  * A composable function that represents the Login screen of our application.
@@ -55,6 +59,8 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errMsg by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false)}
 
     val focusManager = LocalFocusManager.current
     Column(
@@ -126,22 +132,39 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        // This does general field validation to insure stuff has at least been entered
+
         Button(onClick = {
-            errMsg = when {
-                username.isBlank() -> "Please enter Username"
-                password.isBlank() -> "Please enter Password"
-                else -> ""
-            }
-            // This check is what allows us to properly navigate only when the previous validation passes
-            if (errMsg.isEmpty()) {
-                navController.navigate("main") {
-                    popUpTo(0) { inclusive = true }
-                    launchSingleTop = true
+            coroutineScope.launch {
+                errMsg = ""
+                // This does general field validation to insure stuff has at least been entered
+                if (username.isBlank() || password.isBlank()) {
+                    errMsg = "Please enter both username and password"
+                    return@launch // Escapes launch if they are missing info
+                }
+
+                isLoading = true
+                try {
+                    val response = RetrofitLoginClient.authModel.login(
+                        LoginRequest(username, password)
+                    )
+                    if (response.isSuccessful && response.body()?.success == true) {
+                        navController.navigate("main") {
+                            popUpTo(0) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    } else {
+                        errMsg = response.body()?.message ?: "Login failed"
+                    }
+                } catch (e: Exception) {
+                    errMsg = "Network error: ${e.localizedMessage}"
+                } finally {
+                    isLoading = false
                 }
             }
-        }) {
-            Text("Login")
+        },
+            enabled = !isLoading
+        ) {
+            Text(if (isLoading) "Logging in..." else "Login")
         }
 
         Spacer(modifier = Modifier.height(32.dp))
