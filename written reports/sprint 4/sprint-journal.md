@@ -49,7 +49,10 @@ We agreed that, although there were already comments on many relevant parts of t
 
 Existing documentation did a decent job of saying what each thing did in most cases, but lacked enough depth to be easily understood. 
 
-You can see these changes at the commit with hash [ac70e9d](https://github.com/seehorne/GetGrinnected/commit/ac70e9dd6d85291ea54f5c202a1b3a6b3eb28f89).
+For this one, we made changes across more than one commit so I can't give you a hash. However, I can give you a link to the PR page that shows
+exactly what was changed based on this lab: <https://github.com/seehorne/GetGrinnected/pull/64/files>
+
+> If you *really* want a commit hash, most changes are part of commit [ac70e9d](https://github.com/seehorne/GetGrinnected/commit/ac70e9dd6d85291ea54f5c202a1b3a6b3eb28f89).
 
 ### A: Budhil B: almond
 
