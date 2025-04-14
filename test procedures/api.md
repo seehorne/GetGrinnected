@@ -69,7 +69,7 @@ For these steps, open a second terminal not connected to the server.
 
    Make sure to HTML escape it, such as by replacing spaces with `%20`.
    ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="TAGNAME"' | jq
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag=TAGNAME' | jq
    ```
 
 2. Confirm that all events shown in the output have the tag you copied.
@@ -82,59 +82,85 @@ For these steps, open a second terminal not connected to the server.
 
    Make sure to HTML escape them, such as by replacing spaces with `%20`.
    ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="TAG1"&tag="TAG2"' | jq
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag=TAG1&tag=TAG2' | jq
    ```
 
 2. Confirm that all events shown have both of the tags you specified.
-
-## Compare get output lengths
-
-1. In sequence, repeat the three `curl` commands you did before. Instead of piping them into `jq`, pipe them into `wc -c`.
-
-   > By piping into `wc -c` instead of `jq`, your computer will count how many characters are in each
-   > output rather than printing the whole text to the screen. This gives an easy-to-read summary.
-
-2. Say the sizes are s1, s2, and s3 in order of the curl commands. Make sure that s1 > s2 > s3.
 
 ## Get nonexistent tagged events
 
 1. Perform this curl request.
    ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="doesnotexist"' | jq
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag=doesnotexist' | jq
    ```
 
 2. Confirm the output is an empty array.
 
 ## Get events between dates
 
-TODO: This section cannot yet be written.
+1. Based on today's date, find only events that happen in the next day. To do this, you will pass a start date of today and an end date of tomorrow. Format these dates like `YYYY-MM-DD`.
+
+   Here is an example command.
+   ```  
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events/between/YYYY-MM-DD/YYYY-MM-DD' | jq
+   ```
+
+2. Confirm that more than one event appears in that date range. If there are too few, choose a different date range and try again. If no events are shown, something is likely broken.
+
+3. Note a tag that at least one event has, but at least one other event does not have.
+
+## Confirm date cutoff applies to end dates
+
+1. Look at the last event in your output from the previous command, and note its end time.
+
+2. Construct a `curl` command that will exclude that event. 
+
+   For instance, if it ends at `2025-04-15T02:00:00.000Z` you need to make the cutoff `2025-04-15T01:59T+0000`. Make sure your end time still matches the API spec.
+
+   Here is an example of such a command. This example uses specific dates to show the altered end date.
+   ```
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events/between/2025-04-14/2025-04-15T01:59+0000/' | jq
+   ```
+
+3. Confirm that the event you are trying to exclude is no longer at the bottom of the output.
 
 ## Get tagged events between dates
 
-TODO: This section cannot yet be written.
+1. Using the tag you noted before, query for events with those tags.
+
+   ```
+   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events/between/YYYY-MM-DD/YYYY-MM-DD?tag=YOURTAGHERE' | jq
+   ```
+
+2. Confirm that the event(s) you noted with this tag is shown, but the event(s) you saw without this tag are not shown.
 
 # Teardown
 
 When you are done, undo everything you did in the setup.
 
-1. Change back to the main branch.
+1. Press Ctrl+C to stop your running API.
+
+   When you do this the API goes down, so try to do the next steps quickly.
+
+2. Change back to the most up-to-date version of the main branch.
    ```
    git checkout main
+   git pull
    ```
 
-2. Delete your testing branch.
+3. Delete your testing branch.
    ```
    git branch -D <YOUR_BRANCH>
    ```
 
-3. Restart the system process for the API.
+4. Restart the system process for the API.
    ```
    sudo systemctl start nodejs
    ```
 
-4. Confirm that the process is marked as running.
+5. Confirm that the process is marked as running.
    ```
    sudo systemctl status nodejs
    ```
 
-5. Close your ssh session.
+6. Close your ssh session.

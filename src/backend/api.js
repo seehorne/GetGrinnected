@@ -93,22 +93,18 @@ function getAPIOnline(req, res) {
  * \param res  Express response object
  * \param next Error handler function
  */
-async function getEvents(req, res, next) {
-  // If they don't request tags, return all known events
+async function getEvents(req, res, _next) {
+  // Determine if the user wants to query specific tags
   const tags = parseQueryTags(req.query.tag);
-  if (tags == null) {
+
+  // Query the DB, including tags if those were provided
+  if (tags.length === 0) { 
     const events = await db.getEvents();
     res.json(events);
     return;
-  }
-
-  // If they do request tags, query the DB for them
-  const events = await db.getEventsWithTags(tags);
-  if (!events) {
-    res.status(404).json({ 
-      'message': 'No events found with tags',
-      'tags': tags
-    });
+  } else {
+    const events = await db.getEventsWithTags(tags);
+    res.json(events);
     return;
   }
   res.json(events);
@@ -122,45 +118,66 @@ async function getEvents(req, res, next) {
  * \param res  Express response object
  * \param next Error handler function
  */
-async function getEventsBetween(req, res, next) {
+async function getEventsBetween(req, res, _next) {
   // Try to parse the start and end times, fail if it does not work.
   const start = parseParamDate(req.params.start);
   const end = parseParamDate(req.params.end);
-  if (isNaN(start)) {
+
+  // Return descriptive error on failure to parse stard and/or end
+  //   .status(400)  creates a 400 "Invalid request" HTTP error
+  //   .json(...)    lets us specify what JSON object we return with the error, 
+  //     so we can have a consistent error code and more detailed error messages 
+  if (isNaN(start) && isNaN(end)) {
     res.status(400).json({
-      'message': 'Expected start time to match format YYYY-MM-DD(THH:MM(z))',
-      'start': req.params.start,
+      'error': 'Invalid date',
+      'message': 'Start and end date could not be read properly.'
+    });
+    return;
+  } else if (isNaN(start)) {
+    res.status(400).json({
+      'error': 'Invalid date',
+      'message': 'Start date could not be read properly.'
     });
     return;
   } else if (isNaN(end)) {
     res.status(400).json({
-      'message': 'Expected end time to match format YYYY-MM-DD(THH:MM(z))',
-      'end': req.params.end,
-    });
-    return;
-  } else if (start >= end) {
-    res.status(400).json({
-      'message': 'Start time must be before end time',
-      'start': req.params.start,
-      'end': req.params.end,
+      'error': 'Invalid date',
+      'message': 'End date could not be read properly.'
     });
     return;
   }
 
+  // Return descriptive error if start is before end
+  //   .status(400)  creates a 400 "Invalid request" HTTP error
+  //   .json(...)    lets us specify what JSON object we return with the error, 
+  //     so we can have a consistent error code and more detailed error message
+  else if (start >= end) {
+    res.status(400).json({
+      'error': 'Bad date order',
+      'message': 'Start date must occur before end date.'
+    });
+    return;
+  }
+
+  // We know the start and end dates are good, so transform them into strings
+  // that can be handled by the SQL side.
+  // These will look like 'YYYY-MM-DD HH:MM:00.000Z'
+  const startSQLString = new Date(start).toISOString();
+  const endSQLString = new Date(end).toISOString();
+
   // If tags are not requested, simply query db.
   const tags = parseQueryTags(req.query.tag);
-  if (tags == null) { 
-    const events = await db.getEventsBetween(start, end);
+
+  // If there are no tags query the DB normally,
+  // if there are tags query for them
+  if (tags.length === 0) {
+    const events = await db.getEventsBetween(startSQLString, endSQLString);
     res.json(events);
     return;
   }
 
   // If tags have been provided query the db for them.
-  const events = await db.getEventsBetweenWithTags(start, end, tags);
-  if (!events) {
-    res.status(404).json({ 'message': 'No events found with tags', 'tags': tags });
-    return;
-  } 
+  const events = await db.getEventsBetweenWithTags(startSQLString, endSQLString, tags);
   res.json(events);
 }
 
@@ -177,12 +194,14 @@ function parseParamDate(paramDate) {
   const validTimeZone = "[+-]\\d\\d\\d\\d"        // Timezone, eg -0500 or +1230
 
   // If all features are specified, use that and respect the date and timezone provided
+  // YYYY-MM-DDTHH:MM-0000
   const allFeaturesRegex = new RegExp('^' + validDate + validTime + validTimeZone + '$');
   if (allFeaturesRegex.test(paramDate)) {
     return Date.parse(paramDate);
   }
 
   // If no timezone is specified, assume they mean Grinnell time (UTC-5)
+  // YYYY-MM-DDTHH:MM
   const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
   if (dateTimeRegex.test(paramDate)) {
     paramDate = paramDate.concat('-0500');
@@ -190,6 +209,7 @@ function parseParamDate(paramDate) {
   }
 
   // If no timezone OR time is specified, assume they mean midnight at grinnell time
+  // YYYY-MM-DD
   const dateOnlyRegex = new RegExp('^' + validDate + '$');
   if (dateOnlyRegex.test(paramDate)) {
     paramDate = paramDate.concat('T00:00-0500');
@@ -207,11 +227,12 @@ function parseParamDate(paramDate) {
  * \param queryTags a query tag object, which can be
  *                  either a list of strings or a string.
  * \returns an array containing each tag, or null if no tags were found.
+ *                   each tag in the array will be quoted.
  */
 function parseQueryTags(queryTags) {
   // Don't try parse zero-like tags
   if (!queryTags) {
-    return null;
+    return [];
   }
 
   // If there is only one tag, it will not get put in a list. fix that.
@@ -219,8 +240,11 @@ function parseQueryTags(queryTags) {
     queryTags = [queryTags];
   }
 
-  // Split any comma-separated items like a,b,c
-  const tags = queryTags.map((x) => x.split(',')).flat();
+  // Split any comma-separated items like a,b,c to make them part of the array.
+  queryTags = queryTags.map((x) => x.split(',')).flat();
+
+  // The final tags must have quotation marks on either side, add those.
+  const tags = queryTags.map((x) => '"' + x + '"');
   return tags;
 }
 

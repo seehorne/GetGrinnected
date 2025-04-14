@@ -25,37 +25,12 @@
         "operationId": "findAllEvents",
         "parameters": [
           {
-            "name": "tag",
-            "in": "query",
-            "description": "Events must have all of these tags. Each tag needs double quotes.",
-            "required": false,
-            "explode": true,
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Tags"
-                }
-              ],
-              "example": [
-                "\"Music\"",
-                "\"Students\""
-              ]
-            }
+            "$ref": "#/components/parameters/tags"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Event"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/success"
           }
         }
       }
@@ -66,7 +41,7 @@
           "events"
         ],
         "summary": "Find events between dates.",
-        "description": "Find all events between a start and end time.\n\n`start` and `end` parameters must match one of these valid formats:\n\n- `YYYY-MM-DD` for a date at midnight, in Grinnell time (UTC-5).\n- `YYYY-MM-DDTHH:MM` for a date and time, in Grinnell time (UTC-5).\n- `YYYY-MM-DDTHH:MMZ` for a date and time, in a specific timezone Timezones should be formatted like `-0600` or `+1200`.\n",
+        "description": "Find all events between a start and end time.\n\n\n`start` and `end` parameters must match one of these valid formats:\n\n\n- `YYYY-MM-DD` for a date at midnight, in Grinnell time (UTC-5).\n\n- `YYYY-MM-DDTHH:MM` for a date and time, in Grinnell time (UTC-5).\n\n- `YYYY-MM-DDTHH:MMZ` for a date and time, in a specific timezone\nTimezones should be formatted like `-0600` or `+1200`.\n",
         "operationId": "findEventsBetween",
         "parameters": [
           {
@@ -92,56 +67,26 @@
             }
           },
           {
-            "name": "tag",
-            "description": "Events must have all of these tags. Each tag needs double quotes.",
-            "in": "query",
-            "required": false,
-            "explode": true,
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Tags"
-                }
-              ],
-              "example": [
-                "\"Music\"",
-                "\"Students\""
-              ]
-            }
+            "$ref": "#/components/parameters/tags"
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Event"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/success"
           },
           "400": {
-            "description": "invalid parameters",
+            "description": "Invalid request. Dates must follow correct format and start date must be before end date.\n",
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [
+                  "anyOf": [
                     {
-                      "$ref": "#/components/schemas/Error"
-                    }
-                  ],
-                  "properties": {
-                    "code": {
-                      "example": "ERR_INVALID_DATE"
+                      "$ref": "#/components/schemas/ErrorDateInvalid"
                     },
-                    "message": {
-                      "example": "Got invalid date 20210102"
+                    {
+                      "$ref": "#/components/schemas/ErrorDateOrder"
                     }
-                  }
+                  ]
                 }
               }
             }
@@ -151,20 +96,33 @@
     }
   },
   "components": {
-    "schemas": {
-      "Error": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "example": "ERR_UNKNOWN"
-          },
-          "message": {
-            "type": "string",
-            "example": "Unknown error"
+    "parameters": {
+      "tags": {
+        "name": "tags",
+        "in": "query",
+        "description": "Events must have all of these tags if specified.",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/Tags"
+        }
+      }
+    },
+    "responses": {
+      "success": {
+        "description": "Successful operation.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
           }
         }
-      },
+      }
+    },
+    "schemas": {
       "Event": {
         "type": "object",
         "properties": {
@@ -280,6 +238,49 @@
         "items": {
           "description": "Tag names.",
           "type": "string"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Unknown error"
+          },
+          "message": {
+            "type": "string",
+            "example": "An unknown error has occured."
+          }
+        }
+      },
+      "ErrorDateOrder": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          }
+        ],
+        "properties": {
+          "error": {
+            "example": "Invalid date"
+          },
+          "message": {
+            "example": "Start date could not be read properly."
+          }
+        }
+      },
+      "ErrorDateInvalid": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          }
+        ],
+        "properties": {
+          "error": {
+            "example": "Bad date order"
+          },
+          "message": {
+            "example": "Start date must occur before end date."
+          }
         }
       }
     }
