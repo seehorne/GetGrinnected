@@ -1,4 +1,19 @@
-# Internal Documentation Lab
+# (1) External Documentation and Stakeholder Meetings
+
+> Description (TODO: DELETEME before completion)
+>
+> In your Sprint Journal, add an entry that includes the following for each stakeholder:
+>
+> - Who you met with
+>   - Name, occupation, and other relevant information about the stakeholder
+>   - Date and time of the stakeholder meeting
+> - Description of the test session and feedback
+>   - What was their behavior of interacting with the documentation?
+>   - Did they succeed or get stuck?
+>   - What feedback did they provide about documentation?
+>   - What questions did you ask, and what were the stakeholder's answers?
+
+# (2) Internal Documentation Lab
 
 ## Group Anthony and Michael
 
@@ -45,3 +60,26 @@ In this case, a lot of the documentation changes we made were to add new informa
 There wasn't much previous documentation that could help us in this case.
 
 You can see our changes at the commit with hash [695e0af](https://github.com/seehorne/GetGrinnected/pull/62/commits/695e0affb3f11506795e6bde4454b452f7f8c2c7).
+
+## Group Ellie and Ethan
+
+> TODO: DELETEME ON COMPLETION
+> THIS SECTION STILL NEEDS TO BE FILLED OUT.
+
+# (3) Self-Selected Work toward Minimum Viable Product (MVP)
+
+> Description (TODO: DELETEME ON COMPLETION)
+> - In a Sprint Journal entry, remind us what your MVP is (look back to Milestone 1 where you described what features would be included in your MVP)
+> - Describe what work, if any, remains toward delivering your MVP
+
+# (4) **Generative AI** Experiment
+
+> Description (TODO: DELETEME WHEN STUFF IS ADDED)
+>
+> For each use of AI this sprint, write an entry in your Sprint Journal including:
+> 
+> 1. Name the members of your team who tried it.
+> 2. Going into this use of AI, what were your goals and expectations?
+> 3. Describe the use specifically in detail. How did you prompt the AI, and what was its output?
+> 4. How did this use of AI affect your product development or other sprint deliverables? If you integrated any of its output directly into your code base, include a link to a pull request where the generated output can be clearly distinguished.
+> 5. Refer back to your answer to question 2. To what extent did the use of AI achieve your goals and conform to your expectations?
