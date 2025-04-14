@@ -132,6 +132,7 @@ async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
  * contents.
  * 
  * @param {*} path -> filepath to update
+ * @param {*} time_based -> boolean true if time based drop, false otherwise
  */
 async function dropPastEvents(path,time_based){
   events = fs.readFileSync(path, 'utf-8');
@@ -145,6 +146,9 @@ async function dropPastEvents(path,time_based){
     now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
     console.log(now)
     if (lines.length <= 4){
+      //we can close the file and end immediately if there is nothing in the events json
+      //to drop, which would happen if there is only the JSON array formatting, no JSON 
+      //entries
       fs.appendFileSync(DROPPATH, CLOSEFILE, function(err){
         if(err) throw err;
         console.log('WRITING TO JSON')
@@ -251,6 +255,14 @@ async function dropPastEvents(path,time_based){
   return;
 }
 
+/**
+ * findID
+ * 
+ *  helper for dropping to find the line with correct index
+ * 
+ * @param {*} idNum -> idNum we are searching for
+ * @returns function on a specific array index, to see if it has relevant ID field
+ */
 function findID(idNum){
   return function(line){
     try {

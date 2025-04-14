@@ -75,7 +75,7 @@ struct EventListView: View {
                 List {
                     ForEach(viewModel.events, id: \.eventid) { event in
                         VStack(alignment: .leading) {
-                            eventCard(event)
+                            EventCard(event: event)
                         }
                     }
                 }

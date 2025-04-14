@@ -103,7 +103,7 @@ function getAPIOnline(req, res) {
  * @param res  Express response object
  * @param next Error handler function
  */
-async function getEvents(req, res, next) {
+async function getEvents(req, res, _next) {
   // Pass any query parameters named "tag" so we can parse them into an array.
   // Could be undefined, that function will handle it.
   const tags = parseQueryTags(req.query.tag);
@@ -129,7 +129,7 @@ async function getEvents(req, res, next) {
  * @param res  Express response object
  * @param next Error handler function
  */
-async function getEventsBetween(req, res, next) {
+async function getEventsBetween(req, res, _next) {
   // Parse the required start and end parameters held in the request
   const start = parseParamDate(req.params.start);
   const end = parseParamDate(req.params.end);
@@ -170,8 +170,13 @@ async function getEventsBetween(req, res, next) {
     return;
   }
 
-  // Pass any query parameters named "tag" so we can parse them into an array.
-  // Could be undefined, that function will handle it.
+  // We know the start and end dates are good, so transform them into strings
+  // that can be handled by the SQL side.
+  // These will look like 'YYYY-MM-DD HH:MM:00.000Z'
+  const startSQLString = new Date(start).toISOString();
+  const endSQLString = new Date(end).toISOString();
+
+  // 
   const tags = parseQueryTags(req.query.tag);
 
   // If there are no tags query the DB normally,
