@@ -145,7 +145,7 @@ async function getEventsBetween(start, end) {
  */
 async function getEventsBetweenWithTags(start, end, tags) {
     const query = 'SELECT * FROM events WHERE ' + queryBetweenDates(start, end)
-        + ' AND ' + queryContainsAllTags(tags);
+        + ' AND ' + queryAllTags(tags);
     const [events] = await pool.query(query);
     return events;
 }
