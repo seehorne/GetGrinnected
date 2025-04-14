@@ -43,13 +43,13 @@ class MainActivity : ComponentActivity() {
             val result = withContext(Dispatchers.IO) {
                 getDataFromUrl(url)
             }
-            var current = 0
             val gson = Gson()
             val listType = object : TypeToken<List<Event>>() {}.type
             val events: List<Event> = gson.fromJson(result, listType) ?: emptyList()
             val length = events.size
-            var eventssorted = events.sortedBy { it.event_time }
-            val eventsTimeFixed = fixTime(eventssorted,length)
+            // sorts events by time
+            val eventssorted = events.sortedBy { it.event_start_time }
+            val eventsTimeFixed = fixTime(eventssorted)
             var darkTheme = false
 
             setContent {
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     AppNavigation(
                         darkTheme = darkTheme,
                         onToggleTheme = {darkTheme = it},
-                        event = eventssorted,
+                        event = eventsTimeFixed,
                         eventnum = length
                         /* This call is how we get back into our
                         Theme.kt to change the theme of the whole app */
@@ -68,6 +68,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Ethan Hughes
+ *
+ * a function that grabs a json from a url
+ *
+ * @param url a string that is a valid url link
+ */
 fun getDataFromUrl(url: String): String? {
     var connection: HttpsURLConnection? = null
     return try {
@@ -96,12 +103,21 @@ fun getDataFromUrl(url: String): String? {
     }
 }
 
-fun fixTime(aba: List<Event>, length: Int): List<Event>{
+/**
+ * Ethan Hughes
+ *
+ * a function that changes the timezone of elements in json list of event objects to the timezone of the device
+ *
+ * @param aba events list
+ * @param length the number of elements in aba
+ */
+fun fixTime(aba: List<Event>): List<Event>{
     var current = 0
-    val done: MutableList<Event> = mutableListOf()
+    val done = mutableListOf<Event>()
     var why = null
-    repeat(length){
-        done[current] = aba[current].copy(
+    repeat(aba.size){
+        done.add(aba[current].copy(
+            // Takes care of null cases so that java can be turned into kotlin
             event_image = if(aba[current].event_image == why){
                 "0"
             }
@@ -114,12 +130,33 @@ fun fixTime(aba: List<Event>, length: Int): List<Event>{
             else {
                 aba[current].event_location
             },
+            event_time = if(aba[current].event_time == why){
+                "0"
+            }
+            else {
+                aba[current].event_time
+            },
+            event_end_time = if(aba[current].event_end_time == why){
+                "0"
+            }
+            else {
+                aba[current].event_end_time
+            },
             event_start_time = aba[current].event_start_time.toDate().formatTo("yyyy-MM-dd").toString())
-                    current += 1
+        )
+        current += 1
     }
     return(done)
 }
 
+/**
+ * Ethan Hughes
+ *
+ * a function that turns a string into a date
+ *
+ * @param dateFormat string in date format
+ * @param timeZone grabs the current timezone from your phone
+ */
 fun String.toDate(
     dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
     timeZone: TimeZone = TimeZone.getTimeZone("UTC"),
@@ -129,6 +166,14 @@ fun String.toDate(
     return parser.parse(this)
 }
 
+/**
+ * Ethan Hughes
+ *
+ * a function that turns a string into a date
+ *
+ * @param dateFormat string in date format
+ * @param timeZone grabs the current timezone from your phone
+ */
 fun Date.formatTo(
     dateFormat: String,
     timeZone: TimeZone = TimeZone.getDefault(),
