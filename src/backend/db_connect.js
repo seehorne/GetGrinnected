@@ -104,9 +104,13 @@ function queryAllTags(tags) {
  * \returns      A string that serves as a SQL selector for those dates
  */
 function queryBetweenDates(start, end) {
-    // construct a query for that start and end time
-    const event_time_between = `(event_start_time BETWEEN ${pool.escape(start)} AND ${pool.escape(end)})`
-
+    // Construct a query for events that happen entirely between params
+    //
+    // "entirely between" means
+    //   event_start_time is AFTER start param
+    //     AND
+    //   event_end_time is BEFORE end param
+    const event_time_between = `(event_start_time >= ${pool.escape(start)} AND event_end_time <= ${pool.escape(end)})`
     return event_time_between;
 }
 
