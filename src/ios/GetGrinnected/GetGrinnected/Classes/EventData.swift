@@ -65,8 +65,10 @@ class EventData{
         do {
             // Attempt to decode the JSON data into an Event object
             let myEventData = try decoder.decode(Event.self, from: data)
-            print("Successfully decoded event: \(myEventData.event_name)")
-            return myEventData.event_name
+            if(myEventData.event_name != nil){
+                print("Successfully decoded event: \(myEventData.event_name!)")
+            }
+            return myEventData.event_name!
         } catch {
             // Enhanced error handling for better debugging
             print("Decoding error: \(error)")
@@ -169,7 +171,10 @@ struct SampleView: View {
         
         //see if we have successfully taken the event information
         Text("myEvents: \(myEvents)")
-        Text("Name: \(myEvents[0].event_name)")
+        //check before printing
+        if(myEvents[0].event_name != nil){
+            Text("Name: \(myEvents[0].event_name!)")
+        }
     }
 }
 

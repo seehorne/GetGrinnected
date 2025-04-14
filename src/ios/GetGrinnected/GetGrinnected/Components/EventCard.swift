@@ -51,9 +51,9 @@
  */
 import SwiftUI
 
-@ViewBuilder
-func eventCard(_ event: Event) -> some View {
-    
+struct EventCard: View {
+    var event: Event
+    var body: some View{
         
         /**
             For each event cards, there will be two views: the "compressed view," and the "hover" (or in this case, "open", after tapping the "compressed view")
@@ -63,12 +63,25 @@ func eventCard(_ event: Event) -> some View {
             GroupBox {
                 HStack(alignment: .center){
                     VStack(alignment: .leading) {
-                        Text("\(event.event_name) - \(event.organizations)")
-                            .font(.headline)
-                            .foregroundStyle(.textPrimary)
-                        Text(event.event_location)
-                            .foregroundStyle(.textPrimary)
-                        Text("\(event.event_date) • \(event.event_time)")
+                        //Check if null
+                        if(event.event_name != nil){
+                            Text("\(event.event_name!)")
+                                .font(.headline)
+                                .foregroundStyle(.textPrimary)
+                        }
+                        //Check if null
+                        if(!event.organizations!.isEmpty) {
+                            Text("\(event.organizations!.joined(separator: ", "))")
+                                .font(.subheadline)
+                                .foregroundStyle(.textPrimary)
+                        }//organizations
+                        
+                        //Check if null
+                        if(event.event_location != nil){
+                            Text(event.event_location!)
+                                .foregroundStyle(.textPrimary)
+                        }
+                        Text("\(event.event_date!) • \(event.event_time!)")
                             .font(.caption)
                             .foregroundStyle(.textPrimary)
                     }
@@ -97,7 +110,10 @@ func eventCard(_ event: Event) -> some View {
             }//title group box
             .foregroundStyle(Color(.container))
         }//Vstack
+    }
 }
+    
+    
 
 /**
  Example Event JSON:
@@ -121,6 +137,6 @@ struct EventCards_Previews: PreviewProvider {
     static var previews: some View {
         let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
             let myEvents = EventData.parseEvents(json: myjson)
-        eventCard(myEvents[0])
+        EventCard(event: myEvents[0])
     }
 }

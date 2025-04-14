@@ -10,22 +10,23 @@
  
  */
 struct Event: Codable {
-    var eventid: Int
-    var event_name: String
-    var event_description: String
-    var event_location: String
-    var organizations: [String]
-    var rsvp: Int
-    var event_date: String
-    var event_time: String
-    var event_all_day: Int
-    var event_start_time: String
-    var event_end_time: String
-    var tags: [String]
-    var event_private: Int
-    var repeats: Int
+    //? type is an optional type. If scraping finds a null value, the value may remain null.
+    var eventid: Int?
+    var event_name: String?
+    var event_description: String?
+    var event_location: String?
+    var organizations: [String]?
+    var rsvp: Int?
+    var event_date: String?
+    var event_time: String?
+    var event_all_day: Int?
+    var event_start_time: String?
+    var event_end_time: String?
+    var tags: [String]?
+    var event_private: Int?
+    var repeats: Int?
     var event_image: String?
-    var is_draft: Int
+    var is_draft: Int?
     
     
     /**
