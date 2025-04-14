@@ -104,12 +104,8 @@ function queryAllTags(tags) {
  * \returns      A string that serves as a SQL selector for those dates
  */
 function queryBetweenDates(start, end) {
-    // events where the start and end times are set
-    // TODO: comparisons seem to not be working. need more work
-    const event_time_between = `(event_start_time < FROM_UNIXTIME(${pool.escape(start)}) AND event_end_time > FROM_UNIXTIME(${pool.escape(end)}))`
-
-    // TODO: handle events that are marked all day and therefore don't have a start time and end time
-    // could it be done when scraping, maybe? this will SUCK to do in mysql.
+    // construct a query for that start and end time
+    const event_time_between = `(event_start_time BETWEEN ${pool.escape(start)} AND ${pool.escape(end)})`
 
     return event_time_between;
 }

@@ -93,7 +93,7 @@ function getAPIOnline(req, res) {
  * \param res  Express response object
  * \param next Error handler function
  */
-async function getEvents(req, res, next) {
+async function getEvents(req, res, _next) {
   // Determine if the user wants to query specific tags
   const tags = parseQueryTags(req.query.tag);
 
@@ -118,7 +118,7 @@ async function getEvents(req, res, next) {
  * \param res  Express response object
  * \param next Error handler function
  */
-async function getEventsBetween(req, res, next) {
+async function getEventsBetween(req, res, _next) {
   // Try to parse the start and end times, fail if it does not work.
   const start = parseParamDate(req.params.start);
   const end = parseParamDate(req.params.end);
@@ -159,19 +159,25 @@ async function getEventsBetween(req, res, next) {
     return;
   }
 
+  // We know the start and end dates are good, so transform them into strings
+  // that can be handled by the SQL side.
+  // These will look like 'YYYY-MM-DD HH:MM:00.000Z'
+  const startSQLString = new Date(start).toISOString();
+  const endSQLString = new Date(end).toISOString();
+
   // If tags are not requested, simply query db.
   const tags = parseQueryTags(req.query.tag);
 
   // If there are no tags query the DB normally,
   // if there are tags query for them
   if (tags.length === 0) {
-    const events = await db.getEventsBetween(start, end);
+    const events = await db.getEventsBetween(startSQLString, endSQLString);
     res.json(events);
     return;
   }
 
   // If tags have been provided query the db for them.
-  const events = await db.getEventsBetweenWithTags(start, end, tags);
+  const events = await db.getEventsBetweenWithTags(startSQLString, endSQLString, tags);
   res.json(events);
 }
 
