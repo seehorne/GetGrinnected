@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
             val events: List<Event> = gson.fromJson(result, listType) ?: emptyList()
             val length = events.size
             var eventssorted = events.sortedBy { it.event_time }
-            // val eventsTimeFixed = fixTime(eventssorted,length)
+            val eventsTimeFixed = fixTime(eventssorted,length)
             var darkTheme = false
 
             setContent {
@@ -99,15 +99,29 @@ fun getDataFromUrl(url: String): String? {
 fun fixTime(aba: List<Event>, length: Int): List<Event>{
     var current = 0
     val done: MutableList<Event> = mutableListOf()
+    var why = null
     repeat(length){
-        done[current] = aba[current].copy(event_start_time = aba[current].event_start_time.toDate().formatTo("yyyy-MM-dd").toString())
+        done[current] = aba[current].copy(
+            event_image = if(aba[current].event_image == why){
+                "0"
+            }
+            else {
+                aba[current].event_image
+            },
+            event_location = if(aba[current].event_location == why){
+                "0"
+            }
+            else {
+                aba[current].event_location
+            },
+            event_start_time = aba[current].event_start_time.toDate().formatTo("yyyy-MM-dd").toString())
                     current += 1
     }
     return(done)
 }
 
 fun String.toDate(
-    dateFormat: String = "yyyy-MM-dd HH:mm:ss",
+    dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
     timeZone: TimeZone = TimeZone.getTimeZone("UTC"),
 ): Date {
     val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
