@@ -10,6 +10,7 @@
  
  */
 struct Event: Codable {
+    //? type is an optional type. If scraping finds a null value, the value may remain null.
     var eventid: Int?
     var event_name: String?
     var event_description: String?

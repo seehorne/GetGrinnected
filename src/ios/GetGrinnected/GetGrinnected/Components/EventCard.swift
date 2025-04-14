@@ -63,17 +63,20 @@ struct EventCard: View {
             GroupBox {
                 HStack(alignment: .center){
                     VStack(alignment: .leading) {
+                        //Check if null
                         if(event.event_name != nil){
                             Text("\(event.event_name!)")
                                 .font(.headline)
                                 .foregroundStyle(.textPrimary)
                         }
+                        //Check if null
                         if(!event.organizations!.isEmpty) {
                             Text("\(event.organizations!.joined(separator: ", "))")
                                 .font(.subheadline)
                                 .foregroundStyle(.textPrimary)
                         }//organizations
-                            
+                        
+                        //Check if null
                         if(event.event_location != nil){
                             Text(event.event_location!)
                                 .foregroundStyle(.textPrimary)
