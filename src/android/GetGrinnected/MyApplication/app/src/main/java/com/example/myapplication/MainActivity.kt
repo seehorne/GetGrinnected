@@ -5,11 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.google.gson.Gson
@@ -25,8 +21,6 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import javax.net.ssl.HttpsURLConnection
-
-
 
 /**
  * Our main used to run and create our app. Currently utilizes the AppNavigator function at
@@ -50,17 +44,20 @@ class MainActivity : ComponentActivity() {
             val length = events.size
             var eventssorted = events.sortedBy { it.event_time }
             // val eventsTimeFixed = fixTime(eventssorted,length)
-            var darkTheme = false
+            val darkTheme = mutableStateOf(false)
 
+            /* The dark theme value is passed down to the switch that we toggle it at
+            and then the onToggleTheme is a lambda function that allows us to switch
+            the state of dark theme, additionally the darktheme value traces into our
+            theme file which allows us to change the whole app theme.
+            */
             setContent {
-                MyApplicationTheme {
+                MyApplicationTheme(darkTheme = darkTheme.value) {
                     AppNavigation(
-                        darkTheme = darkTheme,
-                        onToggleTheme = {darkTheme = it},
+                        darkTheme = darkTheme.value,
+                        onToggleTheme = { darkTheme.value = it },
                         event = eventssorted,
                         eventnum = length
-                        /* This call is how we get back into our
-                        Theme.kt to change the theme of the whole app */
                     )
                 }
             }
