@@ -46,6 +46,11 @@ class MainActivity : ComponentActivity() {
             // val eventsTimeFixed = fixTime(eventssorted,length)
             val darkTheme = mutableStateOf(false)
 
+            /* The dark theme value is passed down to the switch that we toggle it at
+            and then the onToggleTheme is a lambda function that allows us to switch
+            the state of dark theme, additionally the darktheme value traces into our
+            theme file which allows us to change the whole app theme.
+            */
             setContent {
                 MyApplicationTheme(darkTheme = darkTheme.value) {
                     AppNavigation(
@@ -53,8 +58,6 @@ class MainActivity : ComponentActivity() {
                         onToggleTheme = { darkTheme.value = it },
                         event = eventssorted,
                         eventnum = length
-                        /* This call is how we get back into our
-                        Theme.kt to change the theme of the whole app */
                     )
                 }
             }
