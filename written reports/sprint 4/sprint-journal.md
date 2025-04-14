@@ -1,8 +1,8 @@
-### Internal Documentation Lab
+# Internal Documentation Lab
 
-#### Group Anthony and Michael
+## Group Anthony and Michael
 
-##### A: Anthony B: Michael
+### A: Anthony B: Michael
 
 We worked on the login process code for Kotlin.
 
@@ -14,7 +14,7 @@ Hash of commit [2d3da7a58e94008b983e033657d2b8fefc0dc63b](https://github.com/see
 
 Our issue tracker was up to date on what the next step entailed.
 
-##### A: Michael B: Anthony
+### A: Michael B: Anthony
 
 We worked on the homepage for Swift.
 
