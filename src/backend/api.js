@@ -197,7 +197,7 @@ function parseParamDate(paramDate) {
   // YYYY-MM-DDTHH:MM-0000
   const allFeaturesRegex = new RegExp('^' + validDate + validTime + validTimeZone + '$');
   if (allFeaturesRegex.test(paramDate)) {
-    return Math.floor(Date.parse(paramDate) / 1000);
+    return Date.parse(paramDate);
   }
 
   // If no timezone is specified, assume they mean Grinnell time (UTC-5)
@@ -205,7 +205,7 @@ function parseParamDate(paramDate) {
   const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
   if (dateTimeRegex.test(paramDate)) {
     paramDate = paramDate.concat('-0500');
-    return Math.floor(Date.parse(paramDate) / 1000);
+    return Date.parse(paramDate);
   }
 
   // If no timezone OR time is specified, assume they mean midnight at grinnell time
@@ -213,7 +213,7 @@ function parseParamDate(paramDate) {
   const dateOnlyRegex = new RegExp('^' + validDate + '$');
   if (dateOnlyRegex.test(paramDate)) {
     paramDate = paramDate.concat('T00:00-0500');
-    return Math.floor(Date.parse(paramDate) / 1000);
+    return Date.parse(paramDate);
   }
 
   // If none of those attempts to figure out the format worked, bypass Date.parse and return failure.
