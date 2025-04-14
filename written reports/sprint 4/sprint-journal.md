@@ -10,7 +10,7 @@ We made no code changes but furthered documentation. We added inline comments ab
 
 The function headers and data class headers were helpful in understanding what each data class was used for or what a function did specifically. 
 
-Hash of commit [2d3da7a58e94008b983e033657d2b8fefc0dc63b](https://github.com/seehorne/GetGrinnected/commit/2d3da7a58e94008b983e033657d2b8fefc0dc63b)
+Hash of commit [2d3da7a](https://github.com/seehorne/GetGrinnected/commit/2d3da7a58e94008b983e033657d2b8fefc0dc63b)
 
 Our issue tracker was up to date on what the next step entailed.
 
@@ -22,7 +22,7 @@ We made no code changes but furthered documentation. We added a header comment t
 
 The in line comments for the homescreen were helpful specifically for which brackets closed which statements. Additionally the comments on the specific values of the variables.
 
-Hash of commit [b679543f27ed9e8f232e589c698d09ed25adbddc](https://github.com/seehorne/GetGrinnected/commit/b679543f27ed9e8f232e589c698d09ed25adbddc)
+Hash of commit [b679543](https://github.com/seehorne/GetGrinnected/commit/b679543f27ed9e8f232e589c698d09ed25adbddc)
 
 ## Group Budhil and almond
 
