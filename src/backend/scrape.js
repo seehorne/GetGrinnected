@@ -99,6 +99,7 @@ async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
         allDayEnd = new Date(event.date2_iso) === new Date('1970-01-01T00:00:00.000Z')
         if (eventInfo.EndTimeISO===null || allDayEnd){
           eventInfo["AllDay?"] = true;
+          eventInfo["EndTimeISO"] = new Date(new Date(event.date2_iso).setHours(23, 59, 0, 0))
         }
         else{
           eventInfo["AllDay?"] = false;
