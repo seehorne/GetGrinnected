@@ -74,7 +74,8 @@ You can see our changes at the commit with hash [695e0af](https://github.com/see
 MainActivity.kt, lines 41-186
 
 We worked together to make sure both of us had an understanding of the current code, how it works and what it was struggling with. The code previously had no documentation so I added basic function documentation. I also added some comments on specific lines to describe what they do to properly understand the function at a deeper level. 
- You can see our changes at the commit with the hash 
+
+ You can see our changes at the commit with the hash [b0d3ca9](https://github.com/seehorne/GetGrinnected/commit/b0d3ca92759449de424f9ef4d40c14623d970d83)
 
 
 # (3) Self-Selected Work toward Minimum Viable Product (MVP)
