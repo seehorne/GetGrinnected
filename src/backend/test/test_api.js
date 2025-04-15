@@ -186,7 +186,7 @@ describe('parseParamDate', () => {
         const input = '2025-04-05T22:19-0500';
         const expected = new Date(input);
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected.getDate(), actual.getDate());
+        assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should respect non-Grinnell ISO-8601 timezones', () => {
