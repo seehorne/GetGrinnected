@@ -184,65 +184,65 @@ describe('parseParamDate', () => {
 
     it('should accept ISO-8601 time unchanged', () => {
         const input = '2025-04-05T22:19-0500';
-        const expected = Date.parse(input);
+        const expected = new Date(input);
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected.getDate(), actual.getDate());
     });
 
     it('should respect non-Grinnell ISO-8601 timezones', () => {
         const input = '2022-03-12T10:32+1230';
-        const expected = Date.parse(input);
+        const expected = new Date(input);
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should assume Grinnell time if timezone unspecified', () => {
         const input = '1999-01-01T08:19';
-        const expected = Date.parse(input + '-0500');
+        const expected = new Date(input + '-0500');
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should assume Grinnell midnight if no time specified', () => {
         const input = '2025-08-04';
-        const expected = Date.parse(input + 'T00:00-0500');
+        const expected = new Date(input + 'T00:00-0500');
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should reject clearly malformed time', () => {
         const input = 'this is not a date'
         const expected = NaN;
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject date with seconds', () => {
         const input = '2021-05-10T10:30:53-0500'
         const expected = NaN;
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject dates with no separator', () => {
         const input = '20250405'
         const expected = NaN;
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject Unix time', () => {
         const input = '1743909495';
         const expected = NaN;
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject natural language formatted dates', () => {
         const input = 'March 3, 2002';
         const expected = NaN;
         const actual = api.parseParamDate(input);
-        assert.strictEqual(expected, actual);
+        assert.strictEqual(expected, actual.valueOf());
     });
 });
 

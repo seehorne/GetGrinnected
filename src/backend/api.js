@@ -131,14 +131,15 @@ async function getEvents(req, res, _next) {
  */
 async function getEventsBetween(req, res, _next) {
   // Parse the required start and end parameters held in the request
-  const start = parseParamDate(req.params.start);
-  const end = parseParamDate(req.params.end);
+  var start = parseParamDate(req.params.start);
+  var end = parseParamDate(req.params.end);
 
-  // Return descriptive error on failure to parse stard and/or end
+  // Return descriptive error on failure to parse stard and/or end date
+  //
   //   .status(400)  creates a 400 "Invalid request" HTTP error
   //   .json(...)    lets us specify what JSON object we return with the error, 
   //     so we can have a consistent error code and more detailed error messages 
-  if (isNaN(start) && isNaN(end)) {
+  if (isNaN(start.valueOf()) && isNaN(end.valueOf())) {
     res.status(400).json({
       'error': 'Invalid date',
       'message': 'Start and end date could not be read properly.'
@@ -173,18 +174,18 @@ async function getEventsBetween(req, res, _next) {
   // We know the start and end dates are good, so transform them into strings
   // that can be handled by the SQL side.
   // These will look like 'YYYY-MM-DD HH:MM:00.000Z'
-  const startSQLString = new Date(start).toISOString();
-  const endSQLString = new Date(end).toISOString();
+  start = start.toISOString();
+  end = end.toISOString();
   
   // If there are no tags query the DB normally,
   // if there are tags query for them
   const tags = parseQueryTags(req.query.tag);
   if (tags.length === 0) {
-    const events = await db.getEventsBetween(startSQLString, endSQLString);
+    const events = await db.getEventsBetween(start, end);
     res.json(events);
     return;
   } else {
-    const events = await db.getEventsBetweenWithTags(startSQLString, endSQLString, tags);
+    const events = await db.getEventsBetweenWithTags(start, end, tags);
     res.json(events);
     return;
   }
@@ -194,7 +195,8 @@ async function getEventsBetween(req, res, _next) {
  * Parse from a time URL parameter to a Unix timestamp.
  *
  * @param timeParam String representing a date.
- * @returns Unix time equivalent if parseable, NaN if not.
+ * @returns Date object representing the date. It may be an invalid date, in
+ *          which case calling .valueOf() on it will return NaN.
  */
 function parseParamDate(paramDate) {
   // these are the three features we care about in our date format.
@@ -203,7 +205,7 @@ function parseParamDate(paramDate) {
   const validTime = "T\\d\\d:\\d\\d"              // THH:MM, no seconds
   const validTimeZone = "[+-]\\d\\d\\d\\d"        // Timezone, eg -0500 or +1230
 
-  // MATCHES: YYYY-MM-DDTHH:MM-ZZZZ
+  // MATCHES: YYYY-MM-DDTHH:MM-ZZZZ or YYYY-MM-DDTHH:MM+ZZZZ
   // CHANGES: nothing
   const allFeaturesRegex = new RegExp(
     '^' +                                    // matches start of string
@@ -211,7 +213,7 @@ function parseParamDate(paramDate) {
     '$'                                      // matches end of string
   );
   if (allFeaturesRegex.test(paramDate)) {
-    return Date.parse(paramDate);
+    return new Date(paramDate);
   }
 
   // MATCHES: YYYY-MM-DDTHH:MM
@@ -219,7 +221,7 @@ function parseParamDate(paramDate) {
   const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
   if (dateTimeRegex.test(paramDate)) {
     paramDate = paramDate.concat('-0500');
-    return Date.parse(paramDate);
+    return new Date(paramDate);
   }
 
   // MATCHES: YYYY-MM-DD
@@ -228,13 +230,12 @@ function parseParamDate(paramDate) {
   const dateOnlyRegex = new RegExp('^' + validDate + '$');
   if (dateOnlyRegex.test(paramDate)) {
     paramDate = paramDate.concat('T00:00-0500');
-    // Divide by 1000 because date.parse returns ms and we need seconds
-    return Date.parse(paramDate);
+    return new Date(paramDate);
   }
 
-  // If none of those attempts to figure out the format worked, fail with NaN
-  // (which is the same error that Date.parse returns, making checking easier)
-  return NaN;
+  // If none of those attempts to figure out the format worked,
+  // return a date that we know is definitely invalid to match the return type.
+  return new Date('purposefully invalid date string');
 }
 
 /**
