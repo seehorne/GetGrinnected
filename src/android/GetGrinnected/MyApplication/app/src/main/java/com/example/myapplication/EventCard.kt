@@ -39,9 +39,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun EventCard(event: Event, modifier: Modifier = Modifier) {
+    // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
+    // Boolean to track whether a card is favorited
     val isFavorited = remember { mutableStateOf(event.is_favorited) }
 
+    // Sets up composable to be a card for our info
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -55,12 +58,14 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                 expanded.value = !expanded.value
             }
     ) {
+        // Sets up a column on our card
         Column(
             modifier = Modifier
                 .padding(12.dp)
                 .animateContentSize()
                 .background(Color.White)
         ) {
+            // Makes a row within the column
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
@@ -68,6 +73,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .background(Color.White)
             ) {
+                // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f).background(Color.White)) {
                     Text(
                         text = event.event_name,
@@ -84,10 +90,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
                     Spacer(modifier = Modifier.height(2.dp).background(Color.White))
 
+                    // If organizations is empty we won't include the output on the card
                     if (event.organizations.isNotEmpty()) {
                         Text(text = "Hosted by: ${event.organizations.joinToString()}")
                     }
                 }
+                // This is our favorite icon that is align with the column of info but beside it
+                // as it is in a row.
                 Icon(
                     imageVector = if (isFavorited.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "Favorite Icon",
@@ -98,6 +107,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                         },
                 )
             }
+            // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {
                 if (event.event_description.isNotEmpty()) {
                     Text(text = "Description: ${event.event_description}")
