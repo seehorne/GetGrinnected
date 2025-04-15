@@ -78,7 +78,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()) // THis makes our app scrollable
+            .verticalScroll(rememberScrollState()) // This makes our app scrollable
             .padding(16.dp)
             .imePadding(),
         verticalArrangement = Arrangement.Center,

@@ -249,7 +249,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                             // if it is navigates to
                             if(emailResponse.isSuccessful && emailResponse.body()?.success == true){
                                 // TODO SEND EMAIL HERE
-                                navController.navigate("main") {
+                                navController.navigate("verification") {
                                     popUpTo(0) { inclusive = true }
                                     launchSingleTop = true
                                 }

@@ -9,9 +9,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitLoginClient {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://node16049-csc324--spring2025.us.reclaim.cloud/")
+        .baseUrl("https://node16049-csc324--spring2025.us.reclaim.cloud/") // Our default Url
         .addConverterFactory(GsonConverterFactory.create()) // Used to convert from JSON to our data structures
-        .build()
+        .build() // Building this retrofit instance
 
+    // This is our instance of our Retrofit model to use for our api calls
     val authModel: AuthModel = retrofit.create(AuthModel::class.java)
 }

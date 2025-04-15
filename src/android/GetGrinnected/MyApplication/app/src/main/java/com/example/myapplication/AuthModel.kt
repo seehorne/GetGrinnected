@@ -15,7 +15,7 @@ interface AuthModel {
 
     // Async function for signup request
     @POST("signup")
-    suspend fun  signup(@Body request: SignupRequest): Response<AuthResponse>
+    suspend fun signup(@Body request: SignupRequest): Response<AuthResponse>
 
     // Async function to check if an email is available
     @POST("checkemail")

@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import screens.EmailVerificationScreen
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
@@ -40,6 +41,8 @@ fun AppNavigation(modifier: Modifier = Modifier,
         composable("main"){
             MainPage(modifier, darkTheme, onToggleTheme, event, eventnum)
         }
-
+        composable("verification"){
+            EmailVerificationScreen(modifier, navController)
+        }
     }
 }
