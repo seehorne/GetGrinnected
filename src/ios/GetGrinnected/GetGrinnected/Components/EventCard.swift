@@ -77,6 +77,7 @@ struct EventCard: View {
                             Text("\(event.event_name!)")
                                 .font(.headline) //determining font (make it big!)
                                 .foregroundStyle(.textPrimary)//this color is defined in assets
+                                .frame(alignment: .leading)//specifically adding leading alignment to get
                         }//event name
                         
                         //Check if null
@@ -96,16 +97,32 @@ struct EventCard: View {
                                 .foregroundStyle(.textPrimary)
                         }
                         
-                        //create a text bullet point inbetween the date and time
-                        if((event.event_date != nil) && (event.event_time != nil)){
-                            Text("\(event.event_date!) • \(event.event_time!)")
+                        
+                        
+                        //We want date and time on the same line, so we..
+                        
+                        if((event.event_date != nil) && (event.event_time != nil)){ //check if both are not nil, then..
+                            Text("\(event.event_date!) • \(event.event_time!)") //print out both strings and create a text bullet point inbetween the date and time
+                                .font(.caption)
+                                .foregroundStyle(.textPrimary)
+                        } else if(event.event_date != nil){//otherwise, we check if ONLY the date is not nil.
+                            Text("\(event.event_date!)") //print out date
+                                .font(.caption)
+                                .foregroundStyle(.textPrimary)
+                        } else if(event.event_time != nil){ //lastly, check if ONLY the time is not nil.
+                            Text("\(event.event_time!)")
                                 .font(.caption)
                                 .foregroundStyle(.textPrimary)
                         }
+                        
+                        
                             
                     }//Vstack text
                     .lineLimit(1, reservesSpace: true) //card wont change size thx to this.
                     .padding(.vertical, 4)
+                    .padding(.leading, 8) //adding space before
+                    
+                    Spacer()//adding a spacer between the two Vstacks, takes up maximum space
                     
                     
                     VStack {
@@ -120,6 +137,7 @@ struct EventCard: View {
                         CheckBox(items: [CheckBoxOption(name: "-", isChecked: false, uiCompOne: "bell.fill", uiCompTwo: "bell")])
                     }//Vstack
                     .padding(.vertical, 4)
+                    .padding(.trailing, 8)//adding space after
                     .frame(alignment: .trailing)
                     
                     
