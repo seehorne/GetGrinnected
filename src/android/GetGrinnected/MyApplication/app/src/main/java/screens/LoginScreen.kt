@@ -25,10 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +39,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.DataStoreSettings
 import com.example.myapplication.R
+import kotlinx.coroutines.launch
 
 /**
  * A composable function that represents the Login screen of our application.
@@ -54,6 +58,8 @@ import com.example.myapplication.R
 fun LoginScreen(modifier: Modifier, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current // The current context of our app
+    val coroutineScope = rememberCoroutineScope() // Used to launch background tasks and processes
 
     val focusManager = LocalFocusManager.current
     Column(
@@ -116,10 +122,16 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {navController.navigate("main"){
+        Button(onClick = {
+            // Sets our logged in state to true
+            coroutineScope.launch{
+                DataStoreSettings.setLoggedIn(context, true)
+            }
+            navController.navigate("main"){
             popUpTo(0){inclusive = true}
             launchSingleTop = true
-        } }) {
+        }
+        }) {
             Text("Login")
         }
 

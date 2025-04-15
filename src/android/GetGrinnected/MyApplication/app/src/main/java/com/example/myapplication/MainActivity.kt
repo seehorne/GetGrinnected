@@ -11,6 +11,7 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
+            // This chunk till just past events handles reading in events from the api.
             val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
             val result = withContext(Dispatchers.IO) {
                 getDataFromUrl(url)
@@ -44,7 +46,12 @@ class MainActivity : ComponentActivity() {
             val length = events.size
             var eventssorted = events.sortedBy { it.event_time }
             // val eventsTimeFixed = fixTime(eventssorted,length)
-            val darkTheme = mutableStateOf(false)
+
+            // These get our persistent state values for whether the user is logged in
+            // and what theme they had their app set to.
+            val isLoggedIn = DataStoreSettings.getLoggedIn(applicationContext).first()
+            val isDarkMode = DataStoreSettings.getDarkMode(applicationContext).first()
+            val darkTheme = mutableStateOf(isDarkMode)
 
             /* The dark theme value is passed down to the switch that we toggle it at
             and then the onToggleTheme is a lambda function that allows us to switch
@@ -55,9 +62,14 @@ class MainActivity : ComponentActivity() {
                 MyApplicationTheme(darkTheme = darkTheme.value) {
                     AppNavigation(
                         darkTheme = darkTheme.value,
-                        onToggleTheme = { darkTheme.value = it },
-                        event = eventssorted,
-                        eventnum = length
+                        onToggleTheme = { darkTheme.value = it
+                            // Used to pass the live change setting of theme down through the app to our UI switch.
+                            lifecycleScope.launch {
+                                DataStoreSettings.setDarkMode(applicationContext, it)
+                            }},
+                        event = eventssorted, // sorted list of events we are passing in
+                        eventnum = length, // length of the list of events
+                        startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
                 }
             }
