@@ -24,3 +24,17 @@ data class AuthResponse(
     val success: Boolean,
     val message: String
 )
+
+/**
+ * Data object of info sent to verify an email is available
+ */
+data class EmailRequest(
+    val email: String
+)
+
+/**
+ * Data object of info sent to verify a username is available
+ */
+data class UsernameRequest(
+    val account_username: String
+)

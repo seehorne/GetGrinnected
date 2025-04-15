@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +39,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitLoginClient
+import com.example.myapplication.UsernameRequest
+import kotlinx.coroutines.launch
 
 /**
  * A composable function that represents the Signup screen of our application.
@@ -53,14 +58,31 @@ import com.example.myapplication.R
 
 @Composable
 fun SignupScreen(modifier: Modifier, navController: NavController) {
+    // Username input by the user
     var username by remember { mutableStateOf("") }
+    // Password input by the user
     var password by remember { mutableStateOf("") }
+    // Email input by the user
     var email by remember { mutableStateOf("") }
+    // Manages the focus of the keyboard so we can move it
     val focusManager = LocalFocusManager.current
+    // The second writing of the password to verify they wrote it correctly
     var confirmPassword by remember { mutableStateOf("") }
+    // Specifically handles password related errors for shifting field color
     var errPwd by remember { mutableStateOf(false) }
+    // Boolean associated with specifically a username error to shift field color
+    var errUsername by remember { mutableStateOf(false) }
+    // Boolean associated with specifically an email error to shift field color
+    var errEmail by remember { mutableStateOf(false) }
+    // General message of errors associated with any given issue
     var errMsg by remember { mutableStateOf("") }
+    // Boolean to track whether our api is messaging and we need to halt input
+    var isLoading by remember { mutableStateOf(false)}
+    // Process to launch background tasks
+    val coroutineScope = rememberCoroutineScope()
 
+
+    // This sets up the general look of the entire screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,6 +92,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // This is the app logo image
         Image(
             painter = painterResource(id = R.drawable.gg_logo_2),
             contentDescription = "App Logo",
@@ -88,10 +111,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // This handles the username field
         OutlinedTextField(
             value = username,
-            onValueChange = { username = it },
+            onValueChange = { username = it
+                            errUsername = false},
             label = { Text("Username") },
+            isError = errUsername,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
             ),
@@ -104,10 +130,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // This handles the email field
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it.trim().lowercase() }, //ensures it isn't case sensitive
+            onValueChange = { email = it.trim().lowercase()
+                            errEmail = false}, //ensures it isn't case sensitive
             label = { Text("Email") },
+            isError = errEmail,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
             ),
@@ -120,12 +149,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // This handles the password field
         OutlinedTextField(
             value = password,
             onValueChange = {
                 password = it
                 errMsg = validatePassword(it) ?: if (confirmPassword.isNotEmpty() && it != confirmPassword) {
-                    "Passwords do not match"
+                    "Passwords do not match" // This compares the passwords and if their is an issue it adds it to the error message
                 } else ""
                 errPwd = errMsg.isNotEmpty()
             },
@@ -140,6 +170,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // This handles the confirm password field
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = {
@@ -158,7 +189,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
             )
         )
 
-        if (errPwd) {
+        if (errMsg.isNotEmpty()) {
             Text(
                 text = errMsg,
                 color = Color.Red,
@@ -169,29 +200,78 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            val pwdError = validatePassword(password)
-            val emailError = validateEmail(email)
-            val missingUsername = username.isBlank()
-            val passwordsMismatch = password != confirmPassword
+            coroutineScope.launch {
 
-            errMsg = when {
-                missingUsername -> "Username is required"
-                emailError != null -> emailError
-                pwdError != null -> pwdError
-                passwordsMismatch -> "Passwords do not match"
-                else -> ""
-            }
+                // Checks the validation conditions
+                val pwdError = validatePassword(password)
+                val emailError = validateEmail(email)
+                val missingUsername = username.isBlank()
+                val passwordsMismatch = password != confirmPassword
 
-            errPwd = errMsg.isNotEmpty()
+                if (missingUsername){
+                    errMsg = "Please enter username"
+                    errUsername = true
+                    return@launch // Escapes launch due to missing username
+                }
 
-            if (!errPwd) {
-                navController.navigate("main") {
-                    popUpTo(0) { inclusive = true }
-                    launchSingleTop = true
+                if (emailError != null){
+                    errMsg = emailError
+                    errEmail = true
+                    return@launch // Escapes launch due to non Grinnell email
+                }
+
+                if (pwdError != null){
+                    errMsg = pwdError
+                    errPwd = true
+                    return@launch // Escapes launch due to password issue
+                }
+
+                if (passwordsMismatch){
+                    errMsg = "Passwords do not match"
+                    errPwd = true
+                    return@launch // Escapes launch due to passwords not matching
+                }
+
+                isLoading = true
+                try{
+                    // Makes the api username request check
+                    val usernameReponse = RetrofitLoginClient.authModel.checkusername(
+                        UsernameRequest(username)
+                    )
+                    // Assess if the request and if the username was available
+                    if (usernameReponse.isSuccessful && usernameReponse.body()?.success == true) {
+                        try{
+                            // Makes the api email request check
+                            val emailResponse = RetrofitLoginClient.authModel.checkemail(
+                                EmailRequest(email)
+                            )
+                            // Assess if the request and if the username was available
+                            // if it is navigates to
+                            if(emailResponse.isSuccessful && emailResponse.body()?.success == true){
+                                // TODO SEND EMAIL HERE
+                                navController.navigate("main") {
+                                    popUpTo(0) { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            } else {
+                                errMsg = emailResponse.body()?.message ?: "Email already in use"
+                            }
+                        } catch (e: Exception) {
+                            errMsg = "Network error: ${e.localizedMessage}" // any network issue say they don't have wifi
+                        }
+                    } else {
+                        errMsg = usernameReponse.body()?.message ?: "User already exists"
+                    }
+                } catch(e: Exception) {
+                    errMsg = "Network error: ${e.localizedMessage}"
+                } finally{
+                    isLoading = false
                 }
             }
-        }) {
-            Text("Sign up")
+        },
+            enabled = !isLoading
+            ) {
+            Text(if (isLoading) "Signing up" else "Sign up")
         }
 
         Spacer(modifier = Modifier.height(32.dp))

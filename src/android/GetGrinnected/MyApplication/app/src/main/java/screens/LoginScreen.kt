@@ -56,13 +56,24 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(modifier: Modifier, navController: NavController) {
+    // Username input by user
     var username by remember { mutableStateOf("") }
+    // Password input by user
     var password by remember { mutableStateOf("") }
+    // Error Message to be displayed
     var errMsg by remember { mutableStateOf("") }
+    // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
+    // Boolean to track whether our api is messaging and we need to halt input
     var isLoading by remember { mutableStateOf(false)}
+    // Boolean associated with specifically a password error to shift field color
+    var errPwd by remember { mutableStateOf(false) }
+    // Boolean associated with specifically a username error to shift field color
+    var errUsername by remember { mutableStateOf(false) }
 
+    // Manages Keyboard focus and allows us to pull to specific locations
     val focusManager = LocalFocusManager.current
+
     // This sets up the general look of the entire screen
     Column(
         modifier = Modifier
@@ -94,8 +105,10 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         // This is our username text box that takes in our user's password
         OutlinedTextField(
             value = username,
-            onValueChange = { username = it },
+            onValueChange = { username = it
+                            errUsername = false},
             label = { Text("Username") },
+            isError = errUsername,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
             ),
@@ -110,9 +123,11 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         // This is the password text box that takes in our user's password
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                            errPwd = false},
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
+            isError = errPwd,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
                     ),
@@ -125,7 +140,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // This handles general errors that may arise from user not inputting
+        // This handles displaying the specific errors of note
         if (errMsg.isNotEmpty()) {
             Text(
                 text = errMsg,
@@ -141,8 +156,15 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
             coroutineScope.launch {
                 errMsg = ""
                 // This does general field validation to insure stuff has at least been entered
-                if (username.isBlank() || password.isBlank()) {
-                    errMsg = "Please enter both username and password"
+                if (username.isBlank()){
+                    errMsg = "Please enter username"
+                    errUsername = true
+                    return@launch // Escapes launch due to missing username
+                }
+
+                if (password.isBlank()) {
+                    errMsg = "Please enter password"
+                    errPwd = true
                     return@launch // Escapes launch if they are missing info
                 }
 
