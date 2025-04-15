@@ -77,12 +77,87 @@ You can see our changes at the commit with hash [695e0af](https://github.com/see
 
 # (4) **Generative AI** Experiment
 
-> Description (TODO: DELETEME WHEN STUFF IS ADDED)
->
-> For each use of AI this sprint, write an entry in your Sprint Journal including:
-> 
-> 1. Name the members of your team who tried it.
-> 2. Going into this use of AI, what were your goals and expectations?
-> 3. Describe the use specifically in detail. How did you prompt the AI, and what was its output?
-> 4. How did this use of AI affect your product development or other sprint deliverables? If you integrated any of its output directly into your code base, include a link to a pull request where the generated output can be clearly distinguished.
-> 5. Refer back to your answer to question 2. To what extent did the use of AI achieve your goals and conform to your expectations?
+Each experiment will be an h2 (`##`) below, with individual questions under h3s (`###`). 
+
+## Exploring Authorization Possibilities
+
+This was done almond on their own.
+
+### What were initial goals and expectations?
+
+Written before starting the experiment.
+
+I have been overwhelmed by how many options there are for implementing authorization, and the articles that talk about it are unhelpful because they are AI-generated and don't answer the questions I actually have.
+
+I want to find out a good option for us to use in our software, based on our needs. I will figure out what needs are relevant by asking the AI.
+
+Then, I want to be shown an example of what the flow might look like between different components.
+
+### How was AI used?
+
+I'm going to do a play by play of the prompts I used, and what I got from the responses.
+
+1. I asked "I am working on developing an app that users log in to, and I want to explore what options I have for authorizing a user when they log in. Can you give me a list of some ways to do that?"
+
+   It gave me many options (which I skimmed, seeing some familiar names) and then asked me "Would you like examples in code (e.g., for Node.js, Django, etc.), or want help picking the best one based on your app's structure or tech stack?"
+
+2. "Actually, it might be more helpful to think about the process of how they actually log in first. How about that?"
+
+   It corrected me on authentication vs authorization (oops, silly me, I shoulda remembered this), then gave me a list of more helpful results.
+
+3. I singled out "passwordless authentication" because we had talked about it in the past, and then I asked this.
+
+   "Let's start by looking into passwordless authentication. Can you give me a short (1-3 sentence) summary of both "magic link" and "one time code"?"
+
+   It did a good job at this.
+
+4. I asked, "I've been wanting to use OTP, but one problem I was worried about is whether the user would need to log in and do a one-time code every time they opened the app. Would that be a concern?"
+
+   It brought up storing a token on the device, and highlighted that it would be important to set an expiry so that the token would not be misused or stolen. For security.
+
+5. I said "I want to hear more about token expiry and refreshing. Could you give me a little bit more detail? This might also be the right time to bring up the software stack: I am using Express for the API. Is there any sort of builtin solution, or would it be one I implement?"
+
+   This was a multipart question, and it gave a long answer. These are the things I got from it.
+
+   * to do this, you use both Access Tokens and Refresh Tokens.
+
+     * access tokens last a short time (~15min) are are passed with each API request as authorization.
+     * refresh tokens last longer (~7 days) and you keep it in secure storage on the device.
+     * you use the refresh token to request new access tokens when they expire, and to request new refresh tokens when needed.
+       * so an API endpoint to refresh them. you can refresh both, which stops the refresh token from expiring.
+
+6. I thanked ChatGPT for its help, because I'm allowed to positively influence the data that's stored about me.
+
+7. Later I came back and asked "I have one last question that should be quick. The server obviously has to store these tokens somewhere, but how does it know when to delete them from storage? And is it important to encrypt them somehow?"
+
+   It answered that access tokens don't get stored on the server, just verifies them. This is a JWT thing.
+
+   For refresh tokens, it said that those do need to get stored (e.g. in a database) and it's important to encrypt them so they don't get used for bad purposes.
+
+   For cleaning them out, it said you can delete them when a user logs out and also have a cron job that runs every once in a while and cleans any that got missed.
+
+8. That was a satisfactory answer to me, so I thanked it again and decided to be done.
+
+### What impact did it have?
+
+It had a large impact on the design of things going forward, provided other team members are okay with and agree with the things it said. I was keeping a critical eye to possible inaccuracies, but I want to also bring in the feedback of another dev who knows more about this sort of stuff so I can make sure I'm not messing things up by going in this direction.
+
+### To what extent did this impact match goals and expectations?
+
+Since I specifically wrote the goals and expectations before hand, I followed them pretty closely and it matched well.
+
+I ended up deciding not to ask for any sort of diagram, since I decided this was not information that would be helpful to me right now. Besides, I have no idea if it would do a good job at making a diagram or not--natural language is what it's built for.
+
+### Optional Questions
+
+For this response I'll answer them, but not in complete sentences. The goal is to make discussion easier without requiring a lot of extra work.
+
+6. Helped learning, avoided sifting through generated and slop articles which are all I get trying to search this stuff up.
+
+7. I'm taking its advice at face value, and if it were telling me things that were wrong and I went forward that could have implications on the security of our software and our users' data.
+
+   Also, like with all Gen AI on the market, each query I make has massive environmental consequences! I don't like using AI! And yet I did anyway, and I made a lot of queries since I am not awesome at prompting. Bad.
+
+8. It's good at planning stuff, but also I really really hate to recommend people use AI under pretty much any circumstance.
+
+9. I think current policies are good because they require citation. I don't really care about the difference for using AI for one purpose versus another though, so that distinction has never had much of an impact on how I approach the course.
