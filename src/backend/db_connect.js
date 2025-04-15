@@ -32,12 +32,28 @@ async function insertEventsFromScrape(){
         const events = parsing.data;
 
         const sql = `
-        INSERT IGNORE INTO events (
+        INSERT INTO events (
             eventid, event_name, event_description, event_location, organizations, rsvp, 
             event_date, event_time, event_all_day, event_start_time, event_end_time, 
             tags, event_private, repeats, event_image, is_draft
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-             `;
+        ON DUPLICATE KEY UPDATE
+            event_name = VALUES(event_name),
+            event_description = VALUES(event_description),
+            event_location = VALUES(event_location),
+            organizations = VALUES(organizations),
+            rsvp = VALUES(rsvp),
+            event_date = VALUES(event_date),
+            event_time = VALUES(event_time),
+            event_all_day = VALUES(event_all_day),
+            event_start_time = VALUES(event_start_time),
+            event_end_time = VALUES(event_end_time),
+            tags = VALUES(tags),
+            event_private = VALUES(event_private),
+            repeats = VALUES(repeats),
+            event_image = VALUES(event_image),
+            is_draft = VALUES(is_draft)
+        `; // This sql query inserts a new event or updates (overrides) info of events already in db to handle event changes
 
         for (const event of events) {
             try {
