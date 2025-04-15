@@ -66,8 +66,16 @@ You can see our changes at the commit with hash [695e0af](https://github.com/see
 
 ## Group Ellie and Ethan
 
+### A: Ellie B: Ethan
 > TODO: DELETEME ON COMPLETION
 > THIS SECTION STILL NEEDS TO BE FILLED OUT.
+
+### A: Ethan B: Ellie
+MainActivity.kt, lines 41-186
+
+We worked together to make sure both of us had an understanding of the current code, how it works and what it was struggling with. The code previously had no documentation so I added basic function documentation. I also added some comments on specific lines to describe what they do to properly understand the function at a deeper level. 
+ You can see our changes at the commit with the hash 
+
 
 # (3) Self-Selected Work toward Minimum Viable Product (MVP)
 
