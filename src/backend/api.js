@@ -54,6 +54,16 @@ function run() {
   // Getting events between, set the URL parameter names with :start and :end.
   // Those params will get passed into the function as part of `req.params` dictionary
   app.get('/events/between/:start/:end', getEventsBetween);
+
+  // Check if a user exists by trying to GET them by username.
+  app.get('/users/{username}', checkUsernameExists);
+
+  // Login and signups will be done through POST requests, which is because you
+  // have to send information and there's the metaphor of creating something new.
+  //
+  // These will require an authorization header to be sent along with.
+  app.post('/users/login/', logInUser);
+  app.post('/users/signup/', signUpNewUser);
 }
 
 /**
@@ -189,6 +199,32 @@ async function getEventsBetween(req, res, _next) {
     res.json(events);
     return;
   }
+}
+
+/**
+ * Check if a user exists by username,
+ * @param {*} req    Express request containing parameters
+ * @param {*} res    Express response to send output to
+ * @param {*} _next  Error handler function for async (unused)
+ */
+async function checkUsernameExists(req, res, _next) {
+  // Ask the database to find a user with that username
+  const db_result = db.getAccount(req.params.username);
+
+  // Read the database result and decide if it's a user or not.
+  console.log(`user is ${db_result}, json is ${JSON.stringify(db_result)}`);
+
+  // Respond
+  res.json({ result: true });
+}
+
+async function signUpNewUser(req, res, _next) {
+  // Read the authorization header and return an error if it does not exist
+
+  // Send those credentials to the DB
+}
+
+async function logInUser(req, res, _next) {
 }
 
 /**

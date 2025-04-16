@@ -160,7 +160,8 @@ async function getAccount(username){
        FROM accounts
        WHERE account_name = ?
         `, [username]);
-        return account[0]; 
+    
+    return account[0]; 
 }
 
 async function createAccount(username, email, password){
@@ -263,6 +264,7 @@ if (require.main === module) {
     // File is being used as a module. Export it.
     module.exports = {
         dropExpiredEvents,
+        getAccount,
         getEvents,
         getEventsBetween,
         getEventsBetweenWithTags,
