@@ -38,8 +38,9 @@
 import SwiftUI
 
 /**
- What is the View Type? Why does this need to be a view type
- Versus a Func type
+ A view type is a struct that can create a view with the constructor of the variables. In this specific one, there's only "event" as an input
+ a func viewbuilder does the exact same thing, the syntax is different.
+ The difference is object-oriented (struct structName: View) versus functional (@Viewbuilder \n func functionName(){})
  */
 struct EventCard: View {
     
