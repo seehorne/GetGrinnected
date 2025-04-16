@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 /**
  * A composable function that represents the Signup screen of our application.
  *
- * This screen includes input fields for username, email, and password (That are all Strings),
+ * This screen includes input fields for username, email (That are all Strings),
  * along with a sign-up button (To navigate to the homepage/complete account creation)
  * and a sign in navigation option for users who already have an account.
  *
@@ -141,16 +141,18 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // Handles reporting issues and errors that arise from user input
         if (errMsg.isNotEmpty()) {
             Text(
                 text = errMsg,
                 color = Color.Red,
                 style = MaterialTheme.typography.bodySmall
-            ) //Everything I am seeing says we should start using this for style so that it can switch between light and dark mode and is scalable.
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // This is how we setup our signup button
         Button(onClick = {
             coroutineScope.launch {
 
@@ -170,7 +172,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     return@launch // Escapes launch due to non Grinnell email
                 }
 
-                isLoading = true
+                isLoading = true // Set loading state to true to disable the button
                 try{
                     // Makes the api email request check
                     val emailReponse = RetrofitLoginClient.authModel.checkemail(
@@ -186,9 +188,9 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     } else {
                         errMsg = emailReponse.body()?.message ?: "Email already in use"
                     }
-                } catch(e: Exception) {
+                } catch(e: Exception) { // Handles network errors that way arise when making the api call
                     errMsg = "Network error: ${e.localizedMessage}"
-                } finally{
+                } finally{ // Set loading state to false to reenable the button
                     isLoading = false
                 }
             }
@@ -200,6 +202,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // This creates a row that implies our sign in text button to take you to the login page
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
             Text(text = "Already on GetGrinnected?")
