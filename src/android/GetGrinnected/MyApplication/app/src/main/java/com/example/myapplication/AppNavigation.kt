@@ -4,9 +4,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import screens.EmailVerificationScreen
 import screens.LoginScreen
 import screens.SignupScreen
@@ -41,8 +43,20 @@ fun AppNavigation(modifier: Modifier = Modifier,
         composable("main"){
             MainPage(modifier, darkTheme, onToggleTheme, event, eventnum)
         }
-        composable("verification"){
-            EmailVerificationScreen(modifier, navController)
+        composable(
+            "verification/{email}/{flag}/{username}",
+            arguments = listOf(
+                navArgument("username") { type = NavType.StringType },
+                navArgument("email") { type = NavType.StringType },
+                navArgument("flag"){ type = NavType.BoolType },
+
+            )
+        ) { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: ""
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            val flag = backStackEntry.arguments?.getBoolean("flag") ?: false
+
+            EmailVerificationScreen(email, flag, username, navController = navController)
         }
     }
 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.EmailRequest
 import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitLoginClient
@@ -64,6 +65,8 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     var isLoading by remember { mutableStateOf(false)}
     // Boolean associated with specifically a email error to shift field color
     var errEmail by remember { mutableStateOf(false) }
+    // Flag sent to the verification function to indicate a login process (false means login true means signup)
+    val signUp = false
 
     // Manages Keyboard focus and allows us to pull to specific locations
     val focusManager = LocalFocusManager.current
@@ -140,19 +143,19 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                 isLoading = true
                 try {
                     // Makes the api login request
-                    val response = RetrofitLoginClient.authModel.login(
-                        LoginRequest(email)
+                    val emailResponse = RetrofitLoginClient.authModel.checkemail(
+                        EmailRequest(email)
                     )
                     // Assess if the request and validation of login was successful if so
                     // nav to main if not show login failure.
-                    if (response.isSuccessful && response.body()?.success == true) {
+                    if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
                         // TODO SEND EMAIL HERE
-                        navController.navigate("verification") {
+                        navController.navigate("verification/${email}/${signUp}") {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
                         }
                     } else {
-                        errMsg = response.body()?.message ?: "Login failed"
+                        errMsg = emailResponse.body()?.message ?: "Email Not Found"
                     }
                     // Failure specifically with a network connection ie couldn't leave our app
                 } catch (e: Exception) {

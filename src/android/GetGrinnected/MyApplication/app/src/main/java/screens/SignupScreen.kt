@@ -72,6 +72,8 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     var isLoading by remember { mutableStateOf(false)}
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
+    // Flag sent to the verification function to indicate a signUp Process
+    val signUp = true
 
 
     // This sets up the general look of the entire screen
@@ -181,7 +183,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     // Assess if the request and if the email was available
                     if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
                         // TODO SEND EMAIL HERE
-                        navController.navigate("verification") {
+                        navController.navigate("verification/${email}/${signUp}/${username}") {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
                         }

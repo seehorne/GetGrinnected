@@ -1,12 +1,28 @@
 package screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitLoginClient
 import com.example.myapplication.SignupRequest
@@ -34,7 +51,7 @@ import kotlinx.coroutines.launch
  * @param navController used to move through the app
  */
 @Composable
-fun EmailVerificationScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navController: NavController, modifier: Modifier = Modifier) {
     // The code the user inputs
     var codeInput by remember { mutableStateOf("") }
     // General error messages
@@ -96,23 +113,40 @@ fun EmailVerificationScreen(modifier: Modifier = Modifier, navController: NavCon
         Spacer(modifier = Modifier.height(24.dp))
 
         // This is our verify button
-        Button(onClick = {
+        Button (onClick = {
             if (codeInput == validCode) {
                 coroutineScope.launch {
                     try {
-                        // Makes the api signup request
-                        val response = RetrofitLoginClient.authModel.signup(
-                            SignupRequest(email = "email", account_username = "username")
-                        )
-                        // Assess if the request and creation of account was successful if so
-                        // nav to main if not show signup failure.
-                        if (response.isSuccessful && response.body()?.success == true) {
-                            navController.navigate("main") {
-                                popUpTo(0) { inclusive = true }
-                                launchSingleTop = true
+                        if (flag){
+                            // Makes the api signup request
+                            val response = RetrofitLoginClient.authModel.signup(
+                                SignupRequest(email = email, account_username = username)
+                            )
+                            // Assess if the request and creation of account was successful if so
+                            // nav to main if not show signup failure.
+                            if (response.isSuccessful && response.body()?.success == true) {
+                                navController.navigate("main") {
+                                    popUpTo(0) { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            } else {
+                                errMsg = response.body()?.message ?: "Sign up failed"
                             }
                         } else {
-                            errMsg = response.body()?.message ?: "Sign up failed"
+                            // Makes the api login request
+                            val response = RetrofitLoginClient.authModel.login(
+                                LoginRequest(email = email)
+                            )
+                            // Assess if the request for login was successful if so
+                            // nav to main if not show login failure.
+                            if (response.isSuccessful && response.body()?.success == true) {
+                                navController.navigate("main") {
+                                    popUpTo(0) { inclusive = true }
+                                    launchSingleTop = true
+                                }
+                            } else {
+                                errMsg = response.body()?.message ?: "login failed"
+                            }
                         }
                         // Failure specifically with a network connection ie couldn't leave our app
                     } catch (e: Exception) {
@@ -129,7 +163,7 @@ fun EmailVerificationScreen(modifier: Modifier = Modifier, navController: NavCon
         Spacer(modifier = Modifier.height(16.dp))
 
         // This is our resend code button that will resend the verification code
-        TextButton(onClick = {
+        TextButton (onClick = {
             // TODO: LOGIC TO RESEND CODE
             errMsg = "A new code has been sent to your email."
         }) {
@@ -138,8 +172,14 @@ fun EmailVerificationScreen(modifier: Modifier = Modifier, navController: NavCon
 
         // This is our cancel button that navigates back to the sign up page
         TextButton(onClick = {
-            navController.navigate("signup") {
-                popUpTo("verification") { inclusive = true }
+            if(flag) {
+                navController.navigate("signup") {
+                    popUpTo("verification") { inclusive = true }
+                }
+            } else{
+                navController.navigate("login") {
+                    popUpTo("verification") { inclusive = true }
+                }
             }
         }) {
             Text("Cancel")
@@ -154,5 +194,5 @@ fun EmailVerificationScreen(modifier: Modifier = Modifier, navController: NavCon
 @Preview (showBackground = true)
 @Composable
 fun EmailVerificationScreenPreview(){
-    EmailVerificationScreen(modifier= Modifier, navController = rememberNavController())
+    EmailVerificationScreen(modifier= Modifier, username = "user", email= "", flag = true, navController = rememberNavController())
 }
