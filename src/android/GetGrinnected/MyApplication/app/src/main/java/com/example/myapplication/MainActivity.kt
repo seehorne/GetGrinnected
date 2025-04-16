@@ -51,14 +51,27 @@ class MainActivity : ComponentActivity() {
             val eventssorted = events.sortedBy { it.event_start_time }
             val eventsTimeFixed = fixTime(eventssorted)
             var darkTheme = false
-
+            val tags = mutableListOf<String>()
+            var current2 = 0
+            var tagstotal = 0
+            repeat(length){
+                tagstotal = 0
+                repeat(events[current2].tags.size){
+                    if (tags.contains(events[current2].tags[tagstotal]) == false) {
+                        tags.add(events[current2].tags[tagstotal])
+                    }
+                    tagstotal += 1
+                }
+                current2 += 1
+            }
             setContent {
                 MyApplicationTheme {
                     AppNavigation(
                         darkTheme = darkTheme,
                         onToggleTheme = {darkTheme = it},
                         event = eventsTimeFixed,
-                        eventnum = length
+                        eventnum = length,
+                        tags = tags
                         /* This call is how we get back into our
                         Theme.kt to change the theme of the whole app */
                     )

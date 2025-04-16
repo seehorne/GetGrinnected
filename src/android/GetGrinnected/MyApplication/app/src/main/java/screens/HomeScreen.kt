@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,12 +39,15 @@ import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
 import java.time.LocalDate
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 
-
+fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
+    return mutableStateListOf<T>().apply {
+        repeat(size) { add(initialValue) }
+    }
+}
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -56,7 +60,7 @@ import androidx.compose.foundation.layout.Column as Column1
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int) {
+fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -85,14 +89,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
     // remembers where we are scrolled to
     val state = rememberScrollState()
     // stores whether checkboxes for tags are checked
-    val check1 = remember { mutableStateOf(false)}
-    val check2 = remember { mutableStateOf(false)}
-    val check3 = remember { mutableStateOf(false)}
-    // path to API data
-
-
-
-
+    val check = remember { mutableStateListOfWithSize(tags.size, false) }
+    var tagnum =  0
 
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
@@ -264,7 +262,7 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                         expanded.value = false
                     })
                 }}
-                // I don't know why this is necessary but wan needed to properly space tag menu
+                // I don't know why this is necessary but was needed to properly space tag menu
                 Row(
                     modifier = Modifier
                         .padding(25.dp),
@@ -278,6 +276,7 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     DropdownMenu(
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
+                        repeat(tags.size){
                         DropdownMenuItem(text = {
                             // formats checkbox and text on same line
                             Row(
@@ -288,62 +287,25 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                             {
                                 //creates a checkbox
                                 Checkbox(
-                                    checked = check1.value,
+                                    checked = check[tagnum],
                                     onCheckedChange = {
-                                        if (check1.value) {
-                                            check1.value = false }
-                                        else { check1.value = true}
+                                        if (check[tagnum]) {
+                                            check[tagnum] = false }
+                                        else {
+                                            check[tagnum] = true
+                                        }
                                     })
                                 // checkbox 1 label
-                                Text ("Student Activity")}},
+                                Text (tags[tagnum])}},
                             onClick = {
                                 selectedView = 0
                                 expanded2.value = false
                         })
-                        DropdownMenuItem(text = {
-                            // formats checkbox and text on same line
-                            Row(
-                                modifier = Modifier,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                            )
-                            {
-                                //creates a checkbox
-                                Checkbox(
-                                    checked = check2.value,
-                                    onCheckedChange = {
-                                        if (check2.value) {
-                                            check2.value = false }
-                                        else { check2.value = true}
-                                })
-                                // checkbox 2 label
-                                Text("CLS") }},
-                            onClick = {
-                                selectedView = 1
-                                expanded2.value = false
-                            })
-                        DropdownMenuItem(text = {
-                            // formats checkbox and text on same line
-                            Row(
-                                modifier = Modifier,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                            )
-                            {
-                                //creates a checkbox
-                                Checkbox(
-                                    checked = check3.value,
-                                    onCheckedChange = {
-                                        if (check3.value) {
-                                            check3.value = false }
-                                        else { check3.value = true}
-                                    })
-                                // checkbox 3 label
-                                Text("Misc") }},
-                            onClick = {
-                                selectedView = 2
-                                expanded2.value = false
-                        })
+                           if (tagnum < 30){
+                               tagnum += 1
+                           }
+                        }
+                        Spacer(modifier = Modifier.height(60.dp))
                     }
                 }
             }

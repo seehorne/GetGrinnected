@@ -44,7 +44,8 @@ fun MainPage(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     event: List<Event>,
-    eventnum: Int
+    eventnum: Int,
+    tags: List<String>
 ) {
     val bottomNavController = rememberNavController()
 
@@ -95,7 +96,9 @@ fun MainPage(
             startDestination = "home",
             modifier = modifier.padding(innerPadding)
         ) {
-            composable("Home") { HomeScreen(event = event, eventnum = eventnum) }
+            composable("Home") { HomeScreen(
+                event = event, eventnum = eventnum, tags = tags
+            ) }
             composable("Calendar") { CalendarScreen() }
             composable("Favorites") { FavoritesScreen(events = sampleEvents) }
             composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme) }
