@@ -6,7 +6,7 @@
 - Econ paper draft and midterm next week
 - Final art project starting, not super pressing yet
 
-### almond: 4 beans
+### almond: 4 beans this week, 2-3 beans next week
 - Linguistics is a hard class
 - Assignments haven’t piled up yet, but they will before the end of the sprint
 
