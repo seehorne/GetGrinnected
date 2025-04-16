@@ -29,12 +29,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -56,20 +54,16 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(modifier: Modifier, navController: NavController) {
-    // Username input by user
-    var username by remember { mutableStateOf("") }
-    // Password input by user
-    var password by remember { mutableStateOf("") }
+    // Email input by user
+    var email by remember { mutableStateOf("") }
     // Error Message to be displayed
     var errMsg by remember { mutableStateOf("") }
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
     // Boolean to track whether our api is messaging and we need to halt input
     var isLoading by remember { mutableStateOf(false)}
-    // Boolean associated with specifically a password error to shift field color
-    var errPwd by remember { mutableStateOf(false) }
-    // Boolean associated with specifically a username error to shift field color
-    var errUsername by remember { mutableStateOf(false) }
+    // Boolean associated with specifically a email error to shift field color
+    var errEmail by remember { mutableStateOf(false) }
 
     // Manages Keyboard focus and allows us to pull to specific locations
     val focusManager = LocalFocusManager.current
@@ -102,35 +96,16 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         Text(text = "Login to your account")
 
         Spacer(modifier = Modifier.height(8.dp))
-        // This is our username text box that takes in our user's password
+        // This is our textbox to handle users email input
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it
-                            errUsername = false},
-            label = { Text("Username") },
-            isError = errUsername,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext ={
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-        // This is the password text box that takes in our user's password
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it
-                            errPwd = false},
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            isError = errPwd,
+            value = email,
+            onValueChange = { email = it
+                            errEmail = false},
+            label = { Text("Email") },
+            isError = errEmail,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
-                    ),
+            ),
             keyboardActions = KeyboardActions(
                 onDone ={
                     focusManager.clearFocus()
@@ -156,28 +131,23 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
             coroutineScope.launch {
                 errMsg = ""
                 // This does general field validation to insure stuff has at least been entered
-                if (username.isBlank()){
-                    errMsg = "Please enter username"
-                    errUsername = true
+                if (email.isBlank()){
+                    errMsg = "Please enter email"
+                    errEmail = true
                     return@launch // Escapes launch due to missing username
-                }
-
-                if (password.isBlank()) {
-                    errMsg = "Please enter password"
-                    errPwd = true
-                    return@launch // Escapes launch if they are missing info
                 }
 
                 isLoading = true
                 try {
                     // Makes the api login request
                     val response = RetrofitLoginClient.authModel.login(
-                        LoginRequest(username, password)
+                        LoginRequest(email)
                     )
                     // Assess if the request and validation of login was successful if so
                     // nav to main if not show login failure.
                     if (response.isSuccessful && response.body()?.success == true) {
-                        navController.navigate("main") {
+                        // TODO SEND EMAIL HERE
+                        navController.navigate("verification") {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
                         }

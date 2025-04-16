@@ -4,8 +4,7 @@ package com.example.myapplication
  * Data object of info sent to make a request to log in
  */
 data class LoginRequest(
-    val account_username: String,
-    val password: String
+    val email: String
 )
 
 /**
@@ -14,7 +13,6 @@ data class LoginRequest(
 data class SignupRequest(
     val account_username: String,
     val email: String,
-    val password: String
 )
 
 /**
@@ -30,11 +28,4 @@ data class AuthResponse(
  */
 data class EmailRequest(
     val email: String
-)
-
-/**
- * Data object of info sent to verify a username is available
- */
-data class UsernameRequest(
-    val account_username: String
 )

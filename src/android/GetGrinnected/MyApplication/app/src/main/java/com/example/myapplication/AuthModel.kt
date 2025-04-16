@@ -20,9 +20,4 @@ interface AuthModel {
     // Async function to check if an email is available
     @POST("checkemail")
     suspend fun checkemail(@Body request: EmailRequest): Response<AuthResponse>
-
-    // Async function to check if a username is available
-    @POST("checkusername")
-    suspend fun checkusername(@Body request: UsernameRequest): Response<AuthResponse>
-
 }

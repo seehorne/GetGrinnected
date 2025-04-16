@@ -44,7 +44,6 @@ fun EmailVerificationScreen(modifier: Modifier = Modifier, navController: NavCon
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
 
-
     // This sets up all of our elements in a column layout
     Column(
         modifier = modifier
@@ -103,7 +102,7 @@ fun EmailVerificationScreen(modifier: Modifier = Modifier, navController: NavCon
                     try {
                         // Makes the api signup request
                         val response = RetrofitLoginClient.authModel.signup(
-                            SignupRequest(username, email, password)
+                            SignupRequest(email = "email", account_username = "username")
                         )
                         // Assess if the request and creation of account was successful if so
                         // nav to main if not show signup failure.
