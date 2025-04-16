@@ -56,14 +56,15 @@ function run() {
   app.get('/events/between/:start/:end', getEventsBetween);
 
   // Check if a user exists by trying to GET them by username.
-  app.get('/users/{username}', checkUsernameExists);
+  // :username gets passed as a parameter to the function, in `req.params`
+  app.get('/user/:username', checkUsernameExists);
 
   // Login and signups will be done through POST requests, which is because you
   // have to send information and there's the metaphor of creating something new.
   //
   // These will require an authorization header to be sent along with.
-  app.post('/users/login/', logInUser);
-  app.post('/users/signup/', signUpNewUser);
+  app.post('/user/login', logInUser);
+  app.post('/user/signup', signUpNewUser);
 }
 
 /**
@@ -203,19 +204,21 @@ async function getEventsBetween(req, res, _next) {
 
 /**
  * Check if a user exists by username,
+ * 
  * @param {*} req    Express request containing parameters
  * @param {*} res    Express response to send output to
  * @param {*} _next  Error handler function for async (unused)
  */
 async function checkUsernameExists(req, res, _next) {
   // Ask the database to find a user with that username
-  const db_result = db.getAccount(req.params.username);
+  const db_result = await db.getAccount(req.params.username);
 
-  // Read the database result and decide if it's a user or not.
-  console.log(`user is ${db_result}, json is ${JSON.stringify(db_result)}`);
+  // Database returns a JSON object if the account exists,
+  // or `undefined` if it does not exist
+  const exists = !(db_result === undefined)
 
-  // Respond
-  res.json({ result: true });
+  // Send the result through the response object
+  res.json({ result: exists });
 }
 
 async function signUpNewUser(req, res, _next) {

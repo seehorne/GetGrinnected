@@ -154,6 +154,13 @@ async function getEventsBetweenWithTags(start, end, tags) {
     return events;
 }
 
+/**
+ * Return whether a username has an account associated with it.
+ * 
+ * @param {*} username  The username to check
+ * @returns  The JSON representation of that user if they exist, or `undefined`
+ *           if they do not.
+ */
 async function getAccount(username){
     const [account] = await pool.query(`
        SELECT * 
