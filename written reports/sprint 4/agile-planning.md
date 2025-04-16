@@ -102,6 +102,7 @@ To see task breakdown, view "Sprint 4 Backlog", "In Progress", and "Done in Spri
 - Schedule Lily stakeholder meeting [DONE]
 - Handle event updates in JSON/scraping
 - Cowork with almond on authorization/authentication
+- Design external docs for external stakeholder meetings
 
 ### Ethan:
 - Kotlin 
