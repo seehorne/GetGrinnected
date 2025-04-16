@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -59,7 +60,7 @@ fun MainPage(
         NavItem("Home", Icons.Default.Home),
         NavItem("Calendar", Icons.Default.DateRange),
         NavItem("Favorites", Icons.Default.Favorite),
-        NavItem("Settings", Icons.Default.AccountCircle),
+        NavItem("Settings", Icons.Default.Settings),
     )
     // For demo purposes only
     val sampleEvents = listOf(

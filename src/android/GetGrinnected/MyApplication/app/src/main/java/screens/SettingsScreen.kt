@@ -1,7 +1,6 @@
 package screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,12 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -30,8 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,14 +71,14 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
     // Sets up our ui to follow a box layout
     Box(modifier = modifier.fillMaxSize()) {
-        // We make a row to set our profile text in line with our switch account icon
+        // We make a row to set our preferences text in line with our switch account icon
         Row(
             modifier = modifier
                 .align(Alignment.TopStart)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Profile", fontSize = 28.sp)
+            Text(text = "Preferences", fontSize = 28.sp)
 
             Spacer(modifier = modifier.weight(1f))
 
@@ -92,12 +87,12 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 onClick = { /* TODO handle switch account */ },
                 modifier = modifier.padding(end = 8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Switch Account",
-                )
+                Image(
+                    painter = painterResource(id = R.drawable.change_circle_24px),
+                    contentDescription = "Switch Icon",
+                    modifier = modifier.size(20.dp))
+                }
             }
-        }
 
         // Sets up a column for the rest of the information
         Column(
@@ -108,35 +103,6 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Sets up the layout to be a box
-            Box(
-                contentAlignment = Alignment.BottomEnd,
-                modifier = modifier.padding(16.dp)
-            ) {
-                // This is our profile image
-                Image(
-                    painter = painterResource(id = R.drawable.blank_profile_picture),
-                    contentDescription = "Profile Image",
-                    modifier = modifier
-                        .size(120.dp)
-                        .clip(CircleShape)
-                )
-                // Button to change the profile picture
-                IconButton(
-                    onClick = { /* TODO handle image change */ },
-                    modifier = modifier
-                        .offset(x = (-8).dp, y = (-8).dp)
-                        .background(Color.White, CircleShape)
-                        .size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit Profile Image",
-                        tint = Color.Black,
-                        modifier = modifier.size(18.dp)
-                    )
-                }
-            }
 
             Spacer(modifier = modifier.height(8.dp))
 
