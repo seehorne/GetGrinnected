@@ -19,9 +19,11 @@
 - Friday I have a prob stats exam gross
 - Afterwards I'm pretty normal
 
-### Budhil:
-
-TODO: FILL THIS OUT
+### Budhil: 2 Beans until Thursday, 3-4 from Monday after
+- Tomorrow I have a Japanese Essay Due
+- Thursday I have a Religious Studies Literature Review Due
+- Friday I have a Japanese presentation
+- Monday I have a presentation for another group project (AI class)
  
 ### Anthony: 2~3 beans
 - Interviews been very busy
@@ -90,9 +92,12 @@ To see task breakdown, view "Sprint 4 Backlog", "In Progress", and "Done in Spri
 - Schedule a Stakeholder Meeting
 
 ### Budhil:
-
-TODO: FILL THIS OUT
-
+- Local DB for caching
+- Calendar page (month, day, week)
+- Schedule a Stakeholder Meeting
+- Expandable Event Cards
+- Login process (validation of inputs & more)
+  
 ### Ellie:
 - Schedule Lily stakeholder meeting [DONE]
 - Handle event updates in JSON/scraping
