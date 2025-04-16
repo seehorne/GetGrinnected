@@ -1,6 +1,5 @@
 package screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,7 +27,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +34,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.DataStoreSettings
 import com.example.myapplication.OrgCard
-import com.example.myapplication.R
 import com.example.myapplication.User
 import kotlinx.coroutines.launch
 
@@ -87,10 +84,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 onClick = { /* TODO handle switch account */ },
                 modifier = modifier.padding(end = 8.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.change_circle_24px),
-                    contentDescription = "Switch Icon",
-                    modifier = modifier.size(20.dp))
+                Icon(
+                    imageVector = Icons.Filled.ChangeCircle,
+                    contentDescription = "Switch Account",
+                    modifier = modifier.size(24.dp)
+                )
                 }
             }
 
@@ -110,7 +108,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = account.account_name, fontSize = 16.sp)
+                Text(text = "Edit user name ${account.account_name}", fontSize = 20.sp)
                 // Button to edit the username
                 IconButton(onClick = { /* TODO handle username edit */ }) {
                     Icon(
@@ -120,10 +118,6 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                     )
                 }
             }
-
-            Spacer(modifier = modifier.height(8.dp))
-
-            Text("Settings", fontSize = 20.sp)
 
             Spacer(modifier = modifier.height(8.dp))
 
