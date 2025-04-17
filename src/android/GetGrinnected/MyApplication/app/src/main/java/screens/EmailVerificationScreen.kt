@@ -25,14 +25,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.LoginRequest
@@ -60,6 +57,10 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
     val validCode = "123456" // TODO: LOGIC TO GET CORRECT CODE
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
 
     // This sets up all of our elements in a column layout
     Column(
@@ -83,8 +84,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
 
         Text(
             text = "Enter the 6-digit verification code sent to your email",
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
+            style = typography.titleLarge,
+            color = colorScheme.onBackground,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
@@ -97,7 +98,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
             onValueChange = {
                 if (it.length <= 6) codeInput = it
             },
-            label = { Text("Verification Code") },
+            label = { Text("Verification Code", style = typography.labelLarge) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true
         )
@@ -106,8 +107,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
         if (errMsg.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = errMsg,
-                color = Color.Red,
-                style = MaterialTheme.typography.bodySmall)
+                color = colorScheme.error,
+                style = typography.bodySmall)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -157,7 +158,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                 errMsg = "Incorrect code. Please try again."
             }
         }) {
-            Text("Verify")
+            Text("Verify", style = typography.labelLarge)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -167,7 +168,9 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
             // TODO: LOGIC TO RESEND CODE
             errMsg = "A new code has been sent to your email."
         }) {
-            Text("Resend Code")
+            Text("Resend Code",
+                style = typography.labelLarge,
+                color = colorScheme.primary)
         }
 
         // This is our cancel button that navigates back to the sign up page
@@ -182,7 +185,9 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                 }
             }
         }) {
-            Text("Cancel")
+            Text("Cancel",
+                style = typography.labelLarge,
+                color = colorScheme.primary)
         }
     }
 }

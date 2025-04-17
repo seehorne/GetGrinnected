@@ -29,15 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
@@ -74,6 +72,11 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
     // Flag sent to the verification function to indicate a signUp Process
     val signUp = true
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
+
 
 
     // This sets up the general look of the entire screen
@@ -97,11 +100,15 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(text = "Welcome to GetGrinnected", fontSize = 28.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+        Text(text = "Welcome to GetGrinnected",
+            style = typography.headlineMedium,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text = "Create a free account")
+        Text(text = "Create a free account",
+            style = typography.bodyLarge,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -110,7 +117,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
             value = username,
             onValueChange = { username = it
                             errUsername = false},
-            label = { Text("Username") },
+            label = { Text("Username", style = typography.labelLarge) },
             isError = errUsername,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
@@ -129,7 +136,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
             value = email,
             onValueChange = { email = it.trim().lowercase()
                             errEmail = false}, //ensures it isn't case sensitive
-            label = { Text("Email") },
+            label = { Text("Email", style = typography.labelLarge) },
             isError = errEmail,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
@@ -147,8 +154,8 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         if (errMsg.isNotEmpty()) {
             Text(
                 text = errMsg,
-                color = Color.Red,
-                style = MaterialTheme.typography.bodySmall
+                color = colorScheme.error,
+                style = typography.bodySmall
             )
         }
 
@@ -199,7 +206,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         },
             enabled = !isLoading
             ) {
-            Text(if (isLoading) "Signing up" else "Sign up")
+            Text(if (isLoading) "Signing up" else "Sign up", style = typography.labelLarge)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -207,9 +214,9 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         // This creates a row that implies our sign in text button to take you to the login page
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
-            Text(text = "Already on GetGrinnected?")
+            Text(text = "Already on GetGrinnected?", style = typography.bodyMedium, color = colorScheme.onBackground)
             TextButton(onClick = {navController.navigate("login")}){
-                Text(text = "Sign in")
+                Text(text = "Sign in", style = typography.labelLarge)
             }
         }
 
@@ -226,4 +233,11 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 fun validateEmail(email: String): String? {
     if (!email.endsWith("@grinnell.edu")) return "Email must end with @grinnell.edu"
     return null
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun SignupScreenPreview(){
+    SignupScreen(modifier = Modifier, navController = rememberNavController())
 }

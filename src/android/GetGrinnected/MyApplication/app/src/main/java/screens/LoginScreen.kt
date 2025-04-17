@@ -31,11 +31,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
@@ -66,6 +66,10 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     var errEmail by remember { mutableStateOf(false) }
     // Flag sent to the verification function to indicate a login process (false means login true means signup)
     val signUp = false
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
 
     // Manages Keyboard focus and allows us to pull to specific locations
     val focusManager = LocalFocusManager.current
@@ -91,11 +95,15 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(text = "Welcome Back", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Welcome Back",
+            style = typography.headlineMedium,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text = "Login to your account")
+        Text(text = "Login to your account",
+            style = typography.bodyLarge,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(8.dp))
         // This is our textbox to handle users email input
@@ -103,7 +111,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
             value = email,
             onValueChange = { email = it
                             errEmail = false},
-            label = { Text("Email") },
+            label = { Text("Email", style = typography.labelLarge) },
             isError = errEmail,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
@@ -121,7 +129,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         if (errMsg.isNotEmpty()) {
             Text(
                 text = errMsg,
-                color = androidx.compose.ui.graphics.Color.Red,
+                color = colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -166,21 +174,35 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         },
             enabled = !isLoading
         ) {
-            Text(if (isLoading) "Logging in..." else "Login")
+            Text(if (isLoading) "Logging in..." else "Login", style = typography.labelLarge)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(text = "Forgot Password?", modifier = Modifier.clickable {  })
+        Text(text = "Forgot Password?",
+            style = typography.bodyMedium,
+            color = colorScheme.onBackground,
+            modifier = Modifier.clickable { /* TODO Logic to handle forgot password */})
 
         Spacer(modifier = Modifier.height(32.dp))
 
         // This is to properly align our link to signup page with a intuitive message.
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
-            Text(text = "New to GetGrinnected?")
-            TextButton(onClick = {navController.navigate("signup")}) { Text(text = "Join now")}
+            Text(text = "New to GetGrinnected?",
+                style = typography.bodyMedium,
+                color = colorScheme.onBackground)
+            TextButton(onClick = {navController.navigate("signup")}) {
+                Text(text = "Join now",
+                    style = typography.labelLarge,
+                    color = colorScheme.onBackground)}
         }
         Spacer(modifier = Modifier.height(200.dp))
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview(){
+    LoginScreen(modifier = Modifier, navController = rememberNavController())
 }
