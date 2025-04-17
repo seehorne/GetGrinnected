@@ -37,9 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.EmailRequest
-import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
-import com.example.myapplication.RetrofitLoginClient
+import com.example.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
 
 /**
@@ -143,7 +142,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                 isLoading = true
                 try {
                     // Makes the api login request
-                    val emailResponse = RetrofitLoginClient.authModel.checkemail(
+                    val emailResponse = RetrofitApiClient.apiModel.checkemail(
                         EmailRequest(email)
                     )
                     // Assess if the request and validation of login was successful if so

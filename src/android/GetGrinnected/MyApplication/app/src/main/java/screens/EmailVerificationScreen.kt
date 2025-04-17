@@ -37,7 +37,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
-import com.example.myapplication.RetrofitLoginClient
+import com.example.myapplication.RetrofitApiClient
 import com.example.myapplication.SignupRequest
 import kotlinx.coroutines.launch
 
@@ -119,7 +119,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                     try {
                         if (flag){
                             // Makes the api signup request
-                            val response = RetrofitLoginClient.authModel.signup(
+                            val response = RetrofitApiClient.apiModel.signup(
                                 SignupRequest(email = email, account_username = username)
                             )
                             // Assess if the request and creation of account was successful if so
@@ -134,7 +134,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                             }
                         } else {
                             // Makes the api login request
-                            val response = RetrofitLoginClient.authModel.login(
+                            val response = RetrofitApiClient.apiModel.login(
                                 LoginRequest(email = email)
                             )
                             // Assess if the request for login was successful if so

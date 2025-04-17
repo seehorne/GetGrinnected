@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
-import com.example.myapplication.RetrofitLoginClient
+import com.example.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
 
 /**
@@ -177,7 +177,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                 isLoading = true // Set loading state to true to disable the button
                 try{
                     // Makes the api email request check
-                    val emailReponse = RetrofitLoginClient.authModel.checkemail(
+                    val emailReponse = RetrofitApiClient.apiModel.checkemail(
                         EmailRequest(email)
                     )
                     // Assess if the request and if the email was available
