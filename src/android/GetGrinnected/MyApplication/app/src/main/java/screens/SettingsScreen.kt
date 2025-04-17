@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.DataStoreSettings
@@ -60,14 +60,21 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     val scrollState = rememberScrollState()
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
 
+    // Accessing colors from our theme
+    val colorScheme = MaterialTheme.colorScheme
+    // Accessing font info from our theme
+    val typography = MaterialTheme.typography
 
     // Sets the orgs to be only the set of orgs that are followed by the user.
     val isFollowed = orgs.filter { it.is_followed }
-    val context = LocalContext.current // The current context of our app
-    val coroutineScope = rememberCoroutineScope() // Used to launch background tasks and processes
+    // The current context of our app
+    val context = LocalContext.current
+    // Used to launch background tasks and processes
+    val coroutineScope = rememberCoroutineScope()
 
     // Sets up our ui to follow a box layout
     Box(modifier = modifier.fillMaxSize()) {
+
         // We make a row to set our preferences text in line with our switch account icon
         Row(
             modifier = modifier
@@ -75,7 +82,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Preferences", fontSize = 28.sp)
+            Text(
+                text = "Preferences",
+                style = typography.headlineMedium,
+                color = colorScheme.onBackground
+            )
 
             Spacer(modifier = modifier.weight(1f))
 
@@ -87,10 +98,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 Icon(
                     imageVector = Icons.Filled.ChangeCircle,
                     contentDescription = "Switch Account",
-                    modifier = modifier.size(24.dp)
+                    modifier = modifier.size(24.dp),
+                    tint = colorScheme.primary
                 )
-                }
             }
+        }
 
         // Sets up a column for the rest of the information
         Column(
@@ -101,20 +113,33 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-
             Spacer(modifier = modifier.height(8.dp))
+
+            Text(
+                text = "Username",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
+
+            Spacer(modifier = modifier.height(4.dp))
 
             // Setup row to have the username and editing button inline with each other
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Edit user name ${account.account_name}", fontSize = 20.sp)
+                Text(
+                    text = account.account_name,
+                    style = typography.bodyLarge,
+                    color = colorScheme.onBackground
+                )
+
                 // Button to edit the username
                 IconButton(onClick = { /* TODO handle username edit */ }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit Username",
-                        modifier = modifier.size(20.dp)
+                        modifier = modifier.size(20.dp),
+                        tint = colorScheme.primary
                     )
                 }
             }
@@ -125,7 +150,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Switch between light and dark mode", fontSize = 16.sp)
+                Text(
+                    text = if (darkTheme) "Switch to light mode" else "Switch to dark mode",
+                    style = typography.bodyLarge,
+                    color = colorScheme.onBackground
+                )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -149,25 +178,39 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         popUpTo(0){inclusive = true} // pops the back stack
                         launchSingleTop = true
                     }
-                          },
+                },
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Text("Sign Out")
+                Text(
+                    "Sign Out",
+                    style = typography.labelLarge
+                )
             }
 
-            Text("Organizations you follow: ", fontSize = 20.sp)
+            Text(
+                "Organizations you follow:",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
 
             Spacer(modifier = modifier.height(4.dp))
 
-            // Checks if the user has any followed orgs if not it displays the following
+            // Checks if the user has any followed orgs, if not it displays the following
             if (isFollowed.isEmpty()) {
-                Text("You haven't followed any organizations yet.", modifier = Modifier.padding(16.dp))
-            } else { // If the user does it makes a scrollable list of org cards that they follow
+                Text(
+                    "You haven't followed any organizations yet.",
+                    modifier = Modifier.padding(16.dp),
+                    style = typography.bodyMedium,
+                    color = colorScheme.onBackground
+                )
+            } else {
+                // If the user does, it makes a scrollable list of org cards that they follow
                 isFollowed.forEach { account ->
                     OrgCard(
-                        account = account, modifier = modifier
+                        account = account,
+                        modifier = modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 8.dp)
                     )
