@@ -40,7 +40,7 @@ import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
-import com.example.myapplication.check
+import com.example.myapplication.Check
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
@@ -186,6 +186,7 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: MutableList<check>) {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }}
+            // sorts by tag
             else {
                 var t = 0
                 repeat(chosenTags.size){

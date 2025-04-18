@@ -10,8 +10,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+/**
+ * A composable function that creates a checkbox and associated text
+ *
+ * @param check this is an Event object to fill the contents of the card.
+ */
+
 @Composable
-fun CheckBox(check: check) {
+fun CheckBox(check: Check) {
     val checked = remember { mutableStateOf(check.checked) }
 
     Row(
@@ -27,7 +33,7 @@ fun CheckBox(check: check) {
                 checked.value = !checked.value
                 check.checked = !check.checked
             })
-        // checkbox 1 label
+        // checkbox label
         Text (check.label)
     }
 
