@@ -52,12 +52,16 @@ async function scrapeData(url, path) {
   for(let i = 1; i <= maxPage; i++){
     pageURL = url+i.toString();
     console.log(pageURL)
-    if (i==1){
+    if (i===1){
       //true means adding first event
+      //this technically is the first page, but thats where event #1 will be
+      //and we update the value in the scrapePage function after the first one is added
+      //we want to know this for formatting reasons
+      //ie so we  don't add a comma and newline before the first event
       existingIDs = await scrapePage(pageURL, path, existingIDs, true);
     }
     else{
-      //false: not the very first event
+      //false: not the very first page, so not the very first event
       existingIDs = await scrapePage(pageURL, path, existingIDs, false);
     }
   }
