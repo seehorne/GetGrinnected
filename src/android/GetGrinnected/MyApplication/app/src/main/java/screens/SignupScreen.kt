@@ -121,10 +121,12 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
             label = { Text("Username", style = typography.labelLarge) },
             isError = errUsername,
             keyboardOptions = KeyboardOptions(
+                // This makes it so the enter key is a next button instead of enter
                 imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(
                 onNext ={
+                    // This moves our focus down to the next text field.
                     focusManager.moveFocus(FocusDirection.Down)
                 }
             )
@@ -140,10 +142,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
             label = { Text("Email", style = typography.labelLarge) },
             isError = errEmail,
             keyboardOptions = KeyboardOptions(
+                // This makes it so the enter key is a done button instead of enter
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone ={
+                    // Clear focus makes it so we are no longer focused on the field and can close the
+                    // keyboard on the phone
                     focusManager.clearFocus()
                 }
             )
