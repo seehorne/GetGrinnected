@@ -116,9 +116,10 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 /**
  * Preview of event card for UI adjustment purposes only.
  */
-
+/*
 @Preview (showBackground = true)
 @Composable
 fun eventCardPreview(){
     EventCard(Event(eventid= 2, event_name = "Crafternoon", event_description =  "Lots of fun arts and crafts", event_location = "Downtown Theater", organizations = listOf("NAMI"), rsvp = 0, event_date ="2025-05-01", event_start_time = "6:30 PM", event_private = 0, event_end_time = "8:00 PM", event_time ="8:00 PM", tags =listOf("art, fun"), is_draft = 0,repeats = 0, event_image = "h", event_all_day = 0, is_favorited = true))
 }
+*/

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
@@ -34,10 +33,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
+import com.example.myapplication.check
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
@@ -54,13 +57,12 @@ fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
  *
  * A composable function that represents the Home screen of our app. (More to come)
  *
- * @param modifier Modifier to be applied to the screen layout.
  */
 
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
+fun HomeScreen(event: List<Event>, eventnum: Int, tags: MutableList<check>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -89,9 +91,8 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
     // remembers where we are scrolled to
     val state = rememberScrollState()
     // stores whether checkboxes for tags are checked
-    val check = remember { mutableStateListOfWithSize(tags.size, false) }
-    var tagnum by remember {mutableIntStateOf(0)}
-
+    var tagnum = 0
+    val chosenTags = mutableListOf<String>()
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     // creates the UI field for the events
@@ -109,10 +110,19 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
     {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
-        // populates the page with model cards
+        var tagSorter = 0
+        repeat(tags.size){
+            if (tags[tagSorter].checked) {
+                chosenTags.add(tags[tagSorter].label)
+            }
+            tagSorter += 1
+        }
+        // populates the page with events
         repeat(eventnum) {
+            if (chosenTags.isEmpty()){
             if (selectedView == 0) {
-                if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
+                if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString())
+                {
                     EventCard(event = event[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
@@ -157,7 +167,8 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 5) {
-                if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
+                if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString())
+                {
                     EventCard(event = event[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
@@ -174,12 +185,90 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
                     // creates space between cards
                     Spacer(modifier = Modifier.height(8.dp))
                 }
+            }}
+            else {
+                var t = 0
+                repeat(chosenTags.size){
+                    if (selectedView == 0) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
+                        {
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 1) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 2) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 3) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 4) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 5) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
+                        {
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if(selectedView == 6) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(
+                                formatter
+                            ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                        ) {
+                            EventCard(
+                                event = event[cardnum], modifier = Modifier
+                                    .background(Color.White)
+                                    .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
+                    t += 1
+                }
             }
 
             // currently helps number model events - remove later
             cardnum += 1
         }
         // creates a space at the bottom for visual appeal
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("No events match filters" , fontSize = 30.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(120.dp))
     }
     // creates the top bar for the home page (I think might be erroneous with the row below
@@ -277,28 +366,13 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
                         repeat(tags.size){
-                        DropdownMenuItem(text = {
-                            // formats checkbox and text on same line
-                            Row(
-                                modifier = Modifier,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                            )
-                            {
-                                //creates a checkbox
-                                Checkbox(
-                                    checked = check[tagnum],
-                                    onCheckedChange = {
-                                        check[tagnum] = !check[tagnum]
-                                    })
-                                // checkbox 1 label
-                                Text (tags[tagnum])}},
-                           onClick = {})
-                           if (tagnum < 30){
-                               tagnum += 1
-                           }
+                        DropdownMenuItem(text = { CheckBox(
+                            check = tags[tagnum]
+                        ) },
+                            onClick = {}
+                        )
+                            tagnum += 1
                         }
-                        tagnum = 0
                         Spacer(modifier = Modifier.height(60.dp))
                     }
                 }

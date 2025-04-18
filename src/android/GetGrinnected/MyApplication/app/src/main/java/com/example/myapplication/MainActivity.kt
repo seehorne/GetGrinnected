@@ -5,11 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.google.gson.Gson
@@ -51,18 +46,24 @@ class MainActivity : ComponentActivity() {
             val eventssorted = events.sortedBy { it.event_start_time }
             val eventsTimeFixed = fixTime(eventssorted)
             var darkTheme = false
-            val tags = mutableListOf<String>()
+            val tagsString = mutableListOf<String>()
+            val tags = mutableListOf<check>()
             var current2 = 0
             var tagstotal = 0
             repeat(length){
                 tagstotal = 0
                 repeat(events[current2].tags.size){
-                    if (tags.contains(events[current2].tags[tagstotal]) == false) {
-                        tags.add(events[current2].tags[tagstotal])
+                    if (tagsString.contains(events[current2].tags[tagstotal]) == false) {
+                        tagsString.add(events[current2].tags[tagstotal])
                     }
                     tagstotal += 1
                 }
                 current2 += 1
+            }
+            var num = 0
+            repeat(tagsString.size){
+                tags.add(check(false,tagsString[num]))
+                num += 1
             }
             setContent {
                 MyApplicationTheme {
