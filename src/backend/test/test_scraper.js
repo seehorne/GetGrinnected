@@ -6,15 +6,6 @@ const fs = require("fs");
 const scrape = require('../scrape.js');
 
 describe('Web Scrape Output Unit Tests', () => {
-test('All events are unique by ID', { concurrency: true }, t => {
-    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
-    currentEvents = JSON.parse(events);
-    IDSet = scrape.processExisting(scrape.CIPATH);
-    numIDs = IDSet.size;
-    numEvents = currentEvents.data.length;
-    assert.strictEqual(numIDs,numEvents)
-  });
-
   test('All events have start time before end time OR marked as all day', 
     { concurrency: false }, t => {
     events = fs.readFileSync(scrape.CIPATH, 'utf-8');
@@ -51,19 +42,6 @@ test('All events are unique by ID', { concurrency: true }, t => {
     }
     assert.strictEqual(0,numNonCompliant);
   });
-
-  test('After scraping, there are as many or more events as before (no lost events)',
-    { concurrency: true }, async t => {
-    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
-    ogEvents = JSON.parse(events);
-    beforeSize = ogEvents.data.length;
-    await scrape.scrapeData(scrape.URL, scrape.CIPATH);
-    newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
-    nowEvents = JSON.parse(events);
-    nowSize = nowEvents.data.length;
-    assert(nowSize >= beforeSize)
-  }
-  )
 
   test('When running drop twice, IDs to drop are distinct each run',
     { concurrency: true}, async t => {
@@ -102,11 +80,11 @@ test('All events are unique by ID', { concurrency: true }, t => {
     });
     
     test('After dropping events, there are at most the same number as before (no spurious additions)',
-      { concurrency: false }, t => {
+      { concurrency: false }, async t => {
         events = fs.readFileSync(scrape.CIPATH, 'utf-8');
         ogEvents = JSON.parse(events);
         beforeSize = ogEvents.data.length;
-        scrape.dropPastEvents(scrape.CIPATH, true);
+        await scrape.dropPastEvents(scrape.CIPATH, true);
         newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
         nowEvents = JSON.parse(events);
         nowSize = nowEvents.data.length;
@@ -114,10 +92,24 @@ test('All events are unique by ID', { concurrency: true }, t => {
       }
     )
     
+    test('After scraping, there are as many or more events as before (no lost events)',
+      { concurrency: true }, async t => {
+      events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+      ogEvents = JSON.parse(events);
+      beforeSize = ogEvents.data.length;
+      await scrape.scrapeData(scrape.URL, scrape.CIPATH);
+      newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+      nowEvents = JSON.parse(events);
+      nowSize = nowEvents.data.length;
+      assert(nowSize >= beforeSize)
+    }
+    ) //this no longer necessarily holds up, unless it runs after all drop tests, but should after drops
+
     test('Number of events post-scrape cooresponds to number of scraped pages',
       { concurrency: true}, async t => {
         //run drop to get a fresh start
         await scrape.dropPastEvents(scrape.CIPATH, true);
+        await scrape.dropPastEvents(scrape.CIPATH, false);
         //read the URL for new scrape
         const response = await fetch(scrape.URL);
         const events = await response.json();
@@ -138,4 +130,14 @@ test('All events are unique by ID', { concurrency: true }, t => {
         console.log(foundEventCount)
         assert(foundEventCount >= minEvents && foundEventCount <= maxEvents);
       }
-    )
+    );
+
+    test('All events are unique by ID', { concurrency: true }, async t => {
+      await scrape.scrapeData(scrape.URL,scrape.CIPATH);
+      events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+      currentEvents = JSON.parse(events);
+      IDSet = scrape.processExisting(scrape.CIPATH);
+      numIDs = IDSet.size;
+      numEvents = currentEvents.data.length;
+      assert.strictEqual(numIDs,numEvents)
+    });

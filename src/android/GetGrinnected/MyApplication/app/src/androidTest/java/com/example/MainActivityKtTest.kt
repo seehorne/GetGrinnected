@@ -126,7 +126,7 @@ class MainActivityKtTest {
    NavTestData("Calendar", "April"),
    NavTestData("Home", "Tags"),
    NavTestData("Favorites", "Favorite Events"),
-   NavTestData("Settings", "Profile"),
+   NavTestData("Settings", "Preferences"),
   )
 
   composeTestRule.setContent {

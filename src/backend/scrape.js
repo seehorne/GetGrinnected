@@ -35,35 +35,34 @@ function processExisting(path) {
  * 
  * Scrapes JSON data of calendar events from specified URL
  * Repackages relevant data to JSON structure stored in event_data.json
+ * Rewrites all events, to ensure catching updates
+ * 
  * @param {*} url -> url to data to be scraped, assumes JSON data
  * @param {*} path -> filepath to write to
  */
 async function scrapeData(url, path) {
-  existingIDs = await processExisting(path);
+  //existingIDs = await processExisting(path);
+  existingIDs = new Set()
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
   const events = await response.json();
-  existingEvents = fs.readFileSync(path, 'utf-8');
-  lines = existingEvents.split('\n');
-  console.log(lines.length);
-  anyExistingEvents = lines.length > 4;
-  zeroEventsNotCorrupt = lines.length === 4;
-  updatedLines = lines.slice(0, -2); //remove last two lines
-  fs.writeFileSync(path, updatedLines.join('\n'));
+  fs.writeFileSync(path, OPENFILE);
   maxPage = events.meta.total_pages; //how many pages
   url = url + '?page=' //add ending to look at different pages
   for(let i = 1; i <= maxPage; i++){
     pageURL = url+i.toString();
     console.log(pageURL)
-    await scrapePage(pageURL, path, anyExistingEvents, zeroEventsNotCorrupt);
-    lineTracker = fs.readFileSync(path, 'utf-8').split('\n').length;
-    if (!anyExistingEvents){
-      didAdd = lineTracker > 4;
-      anyExistingEvents = didAdd
-      }
-    if (zeroEventsNotCorrupt){
-      stillNone = lineTracker === 4;
-      zeroEventsNotCorrupt = stillNone;
+    if (i===1){
+      //true means adding first event
+      //this technically is the first page, but thats where event #1 will be
+      //and we update the value in the scrapePage function after the first one is added
+      //we want to know this for formatting reasons
+      //ie so we  don't add a comma and newline before the first event
+      existingIDs = await scrapePage(pageURL, path, existingIDs, true);
+    }
+    else{
+      //false: not the very first page, so not the very first event
+      existingIDs = await scrapePage(pageURL, path, existingIDs, false);
     }
   }
     fs.appendFileSync(path, CLOSEFILE);
@@ -78,10 +77,11 @@ async function scrapeData(url, path) {
  * 
  * @param {*} url -> url to page of data to be scraped
  * @param {*} path -> file to write to
- * @param {*} anyExistingEvents -> boolean, json currently have events
- * @param {*} zeroEventsNotCorrupt -> bool, json eventless rn but not corrupt
+ * @param {*} existingIDs -> set of IDs already reflected in JSON
+ * @param {*} firstEvent -> boolean reflecting if we're adding the very first event
+ * @returns Updated set of IDs associated with pre-existing events (post-hoc existingIDs)
  */
-async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
+async function scrapePage(url, path, existingIDs, firstEvent) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const events = await response.json();
@@ -111,11 +111,11 @@ async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
         eventInfo["Tags"]= event.tags;
         eventInfo["ID"]= event.id;
         stringifyEvent = JSON.stringify(eventInfo);
-        if (anyExistingEvents||counter !=0){ //not first event to be added ever
+        if (!firstEvent){ //not first event to be added ever
           stringifyEvent = ',\n'+stringifyEvent;
         }
-        else if (zeroEventsNotCorrupt){
-          stringifyEvent = '\n'+stringifyEvent;
+        else{
+          firstEvent = false; //no other event should be the first event
         }
         fs.appendFileSync(path, stringifyEvent);
         console.log("Adding "+ event.title + " " + event.id + " " + event.date)
@@ -124,6 +124,7 @@ async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
       }
     );
     }
+    return existingIDs;
 }
 
 /**
