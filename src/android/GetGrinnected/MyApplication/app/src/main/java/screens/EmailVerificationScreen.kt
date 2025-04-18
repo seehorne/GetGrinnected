@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.DataStoreSettings
 import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
@@ -61,6 +63,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
     val typography = MaterialTheme.typography
+    // The current context of our app
+    val context = LocalContext.current
 
     // This sets up all of our elements in a column layout
     Column(
@@ -126,6 +130,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                             // Assess if the request and creation of account was successful if so
                             // nav to main if not show signup failure.
                           //  if (response.isSuccessful && response.body()?.success == true) {
+                                DataStoreSettings.setLoggedIn(context, true)
                                 navController.navigate("main") {
                                     popUpTo(0) { inclusive = true }
                                     launchSingleTop = true
@@ -141,6 +146,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                             // Assess if the request for login was successful if so
                             // nav to main if not show login failure.
                          //   if (response.isSuccessful && response.body()?.success == true) {
+                            // This is here so I remember how to handle this
+                                DataStoreSettings.setLoggedIn(context, true)
                                 navController.navigate("main") {
                                     popUpTo(0) { inclusive = true }
                                     launchSingleTop = true

@@ -29,7 +29,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -42,7 +41,6 @@ import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
 import com.example.myapplication.DataStoreSettings
-import com.example.myapplication.R
 import kotlinx.coroutines.launch
 
 /**
@@ -75,7 +73,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     // To access our font info from our theme
     val typography = MaterialTheme.typography
   
-    val context = LocalContext.current // The current context of our app
+
     // Manages Keyboard focus and allows us to pull to specific locations
     val focusManager = LocalFocusManager.current
 
@@ -163,10 +161,6 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                     // nav to main if not show login failure.
                     //if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
                         // TODO SEND EMAIL HERE
-                  // This is here so I remember how to handle this
-                              coroutineScope.launch{
-                DataStoreSettings.setLoggedIn(context, true)
-                }
                         navController.navigate("verification/${email}/${signUp}/str") {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
