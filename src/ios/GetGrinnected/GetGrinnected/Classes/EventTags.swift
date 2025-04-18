@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/*
+ These are the tags an event structure can have. The list is not fully complete.
+ */
 enum EventTags: String, CaseIterable {
     case none = "None"
     case any = "Any"

@@ -39,12 +39,15 @@ fun WelcomeScreen(modifier: Modifier, navController: NavController) {
     // To access our font info from our theme
     val typography = MaterialTheme.typography
 
+    // Sets up the overall format of the screen in a column composable
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Our logo for the app.
         Image(
             painter = painterResource(id = R.drawable.gg_logo_2),
             contentDescription = "App Logo",
@@ -52,6 +55,7 @@ fun WelcomeScreen(modifier: Modifier, navController: NavController) {
                 .fillMaxWidth()
                 .size(250.dp)
         )
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(text = "Welcome to GetGrinnected",
@@ -59,16 +63,18 @@ fun WelcomeScreen(modifier: Modifier, navController: NavController) {
             color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        // Sets up the buttons side by side that navigate us to login and signup respectively.
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(onClick = {navController.navigate("login"){
-                popUpTo("welcome"){inclusive = true}
+                popUpTo("welcome"){inclusive = true} // pops the welcome screen from the back stack
             } }) {
                 Text("Login", style = typography.labelLarge)
             }
             Button(onClick = {navController.navigate("signup"){
-                popUpTo("welcome"){inclusive = true}
+                popUpTo("welcome"){inclusive = true} // pops the welcome screen from the back stack
             } }) {
                 Text("Sign Up", style = typography.labelLarge)
             }

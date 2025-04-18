@@ -4,12 +4,15 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 
-/* global var to store if we are running a server */
+/* global var to store the servers we are running,
+ * so they can be shut down when needed */
 var http_server = null;
 var https_server = null;
 
 /**
  * Run the API.
+ * 
+ * This function will not exit on its own, 
  */
 function run() {
   // Load environment vars from .env file
@@ -26,7 +29,7 @@ function run() {
     console.log(`http server listening on port  ${http_port}`);
   });
 
-  // Read SSL credentials from their system files
+  // Read our SSL credentials from the environment (loaded from dotenv)
   const credentials = {
     key: process.env.SSL_KEY,
     ca: process.env.SSL_CA,
@@ -42,14 +45,21 @@ function run() {
       console.log(`https server listening on port ${https_port}`);
     });
 
-  // Define routes
+  // Default route just shows the API is online
   app.get('/', getAPIOnline);
+
+  // Getting all events takes no parameters
   app.get('/events', getEvents);
+
+  // Getting events between, set the URL parameter names with :start and :end.
+  // Those params will get passed into the function as part of `req.params` dictionary
   app.get('/events/between/:start/:end', getEventsBetween);
 }
 
 /**
- * Stop running the API. Uses the global `server` var set by run()
+ * Stop running the API.
+ * 
+ * It will only do something if you called run() before.
  */
 function close() {
   // close http server
@@ -78,8 +88,8 @@ function close() {
 /**
  * Just respond that the API is online.
  *
- * \param req Express request object
- * \param res Express response object
+ * @param req Express request object
+ * @param res Express response object
  */
 function getAPIOnline(req, res) {
   res.send('API online!');
@@ -89,138 +99,179 @@ function getAPIOnline(req, res) {
  * Query the database and respond with all known events in JSON.
  * Supports querying for tags with query parameter `tag`.
  *
- * \param req  Express request object
- * \param res  Express response object
- * \param next Error handler function
+ * @param req  Express request object
+ * @param res  Express response object
+ * @param next Error handler function
  */
-async function getEvents(req, res, next) {
-  // If they don't request tags, return all known events
+async function getEvents(req, res, _next) {
+  // Pass any query parameters named "tag" so we can parse them into an array.
+  // Could be undefined, that function will handle it.
   const tags = parseQueryTags(req.query.tag);
-  if (tags == null) {
+
+  // If there are no tags query the DB normally,
+  // if there are tags query for them
+  if (tags.length === 0) {
     const events = await db.getEvents();
     res.json(events);
     return;
-  }
-
-  // If they do request tags, query the DB for them
-  const events = await db.getEventsWithTags(tags);
-  if (!events) {
-    res.status(404).json({ 
-      'message': 'No events found with tags',
-      'tags': tags
-    });
+  } else {
+    const events = await db.getEventsWithTags(tags);
+    res.json(events);
     return;
   }
-  res.json(events);
 }
 
 /**
  * Query the database and respond with all events between two dates.
  * Supports querying for tags with query parameter `tag`.
  *
- * \param req  Express request object
- * \param res  Express response object
- * \param next Error handler function
+ * @param req  Express request object
+ * @param res  Express response object
+ * @param next Error handler function
  */
-async function getEventsBetween(req, res, next) {
-  // Try to parse the start and end times, fail if it does not work.
-  const start = parseParamDate(req.params.start);
-  const end = parseParamDate(req.params.end);
-  if (isNaN(start)) {
+async function getEventsBetween(req, res, _next) {
+  // Parse the required start and end parameters held in the request
+  var start = parseParamDate(req.params.start);
+  var end = parseParamDate(req.params.end);
+
+  // Return descriptive error on failure to parse stard and/or end date
+  //
+  //   .status(400)  creates a 400 "Invalid request" HTTP error
+  //   .json(...)    lets us specify what JSON object we return with the error, 
+  //     so we can have a consistent error code and more detailed error messages 
+  if (isNaN(start.valueOf()) && isNaN(end.valueOf())) {
     res.status(400).json({
-      'message': 'Expected start time to match format YYYY-MM-DD(THH:MM(z))',
-      'start': req.params.start,
+      'error': 'Invalid date',
+      'message': 'Start and end date could not be read properly.'
+    });
+    return;
+  } else if (isNaN(start)) {
+    res.status(400).json({
+      'error': 'Invalid date',
+      'message': 'Start date could not be read properly.'
     });
     return;
   } else if (isNaN(end)) {
     res.status(400).json({
-      'message': 'Expected end time to match format YYYY-MM-DD(THH:MM(z))',
-      'end': req.params.end,
-    });
-    return;
-  } else if (start >= end) {
-    res.status(400).json({
-      'message': 'Start time must be before end time',
-      'start': req.params.start,
-      'end': req.params.end,
+      'error': 'Invalid date',
+      'message': 'End date could not be read properly.'
     });
     return;
   }
 
-  // If tags are not requested, simply query db.
+  // Return descriptive error if start is before end
+  //   .status(400)  creates a 400 "Invalid request" HTTP error
+  //   .json(...)    lets us specify what JSON object we return with the error, 
+  //     so we can have a consistent error code and more detailed error message
+  else if (start >= end) {
+    res.status(400).json({
+      'error': 'Bad date order',
+      'message': 'Start date must occur before end date.'
+    });
+    return;
+  }
+
+  // We know the start and end dates are good, so transform them into strings
+  // that can be handled by the SQL side.
+  // These will look like 'YYYY-MM-DD HH:MM:00.000Z'
+  start = start.toISOString();
+  end = end.toISOString();
+  
+  // If there are no tags query the DB normally,
+  // if there are tags query for them
   const tags = parseQueryTags(req.query.tag);
-  if (tags == null) { 
+  if (tags.length === 0) {
     const events = await db.getEventsBetween(start, end);
     res.json(events);
     return;
-  }
-
-  // If tags have been provided query the db for them.
-  const events = await db.getEventsBetweenWithTags(start, end, tags);
-  if (!events) {
-    res.status(404).json({ 'message': 'No events found with tags', 'tags': tags });
+  } else {
+    const events = await db.getEventsBetweenWithTags(start, end, tags);
+    res.json(events);
     return;
-  } 
-  res.json(events);
+  }
 }
 
 /**
  * Parse from a time URL parameter to a Unix timestamp.
  *
- * \param timeParam String representing a date.
- * \returns Unix time equivalent if parseable, NaN if not.
+ * @param timeParam String representing a date.
+ * @returns Date object representing the date. It may be an invalid date, in
+ *          which case calling .valueOf() on it will return NaN.
  */
 function parseParamDate(paramDate) {
-  // these are the three features we care about in our date format
+  // these are the three features we care about in our date format.
+  // "\\d" goes to the string \d, which means any digit in regex.
   const validDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d"  // YYYY-MM-DD
   const validTime = "T\\d\\d:\\d\\d"              // THH:MM, no seconds
   const validTimeZone = "[+-]\\d\\d\\d\\d"        // Timezone, eg -0500 or +1230
 
-  // If all features are specified, use that and respect the date and timezone provided
-  const allFeaturesRegex = new RegExp('^' + validDate + validTime + validTimeZone + '$');
+  // MATCHES: YYYY-MM-DDTHH:MM-ZZZZ or YYYY-MM-DDTHH:MM+ZZZZ
+  // CHANGES: nothing
+  const allFeaturesRegex = new RegExp(
+    '^' +                                    // matches start of string
+    validDate + validTime + validTimeZone +  // main body of regex
+    '$'                                      // matches end of string
+  );
   if (allFeaturesRegex.test(paramDate)) {
-    return Date.parse(paramDate);
+    return new Date(paramDate);
   }
 
-  // If no timezone is specified, assume they mean Grinnell time (UTC-5)
+  // MATCHES: YYYY-MM-DDTHH:MM
+  // CHANGES: adds default timezone of UTC-5 (grinnell)
   const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
   if (dateTimeRegex.test(paramDate)) {
     paramDate = paramDate.concat('-0500');
-    return Date.parse(paramDate);
+    return new Date(paramDate);
   }
 
-  // If no timezone OR time is specified, assume they mean midnight at grinnell time
+  // MATCHES: YYYY-MM-DD
+  // CHANGES: adds default time of midnight
+  //          adds default timezone of UTC-5 (grinnell)
   const dateOnlyRegex = new RegExp('^' + validDate + '$');
   if (dateOnlyRegex.test(paramDate)) {
     paramDate = paramDate.concat('T00:00-0500');
-    return Date.parse(paramDate);
+    return new Date(paramDate);
   }
 
-  // If none of those attempts to figure out the format worked, bypass Date.parse and return failure.
-  return NaN;
+  // If none of those attempts to figure out the format worked,
+  // return a date that we know is definitely invalid to match the return type.
+  return new Date('purposefully invalid date string');
 }
 
 /**
  * Parse from a query tag object to a well-formed list of individual tags. Tags
  * with commas will be split to support queries like `?tag=a,b,c,d`.
+ * 
+ * These are the possible values for queryTags to take when coming from Express:
+ *   not specified      -> undefined
+ *   single instance    -> a string
+ *   multiple instances -> an array of strings
  *
- * \param queryTags a query tag object, which can be
+ * @param queryTags a query tag object, which can be
  *                  either a list of strings or a string.
- * \returns an array containing each tag, or null if no tags were found.
+ * @returns an array containing each tag, or null if no tags were found.
+ *                   each tag in the array will be quoted.
  */
 function parseQueryTags(queryTags) {
-  // Don't try parse zero-like tags
+  // Don't try and parse undefined tags (which means not provided in URL)
   if (!queryTags) {
-    return null;
+    return [];
   }
 
-  // If there is only one tag, it will not get put in a list. fix that.
+  // If there is only one element,
+  // we need to put it in an array for the next step to work
   if (!Array.isArray(queryTags)) {
     queryTags = [queryTags];
   }
 
-  // Split any comma-separated items like a,b,c
-  const tags = queryTags.map((x) => x.split(',')).flat();
+  // Split any comma-separated items to make the array flat. See example.
+  queryTags = queryTags        // ["a", "b,c"]
+    .map((x) => x.split(','))  // -> [["a"], ["b", "c"]]
+    .flat();                   // -> ["a", "b", "c"]
+
+  // For the DB query to find tags, we must put quotation marks on each tag.
+  // This is because of the way the tags are stored as JSON in the database.
+  const tags = queryTags.map((x) => '"' + x + '"');
   return tags;
 }
 

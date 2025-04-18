@@ -37,9 +37,12 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun OrgCard(account: User, modifier: Modifier = Modifier) {
+    // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
+    // Boolean to track whether a card is favorited
     val isFollowed = remember { mutableStateOf(account.is_followed) }
 
+    // Sets up composable to be a card for our info
     Card(
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
@@ -48,6 +51,7 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
                 expanded.value = !expanded.value
             }
     ) {
+        // Sets up a column on our card
         Column(
             modifier = Modifier
                 .padding(12.dp)
@@ -55,11 +59,13 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.Center
 
         ) {
+            // Makes a row within the column
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                // Makes a column within the row to display the name of the org
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = account.account_name,
@@ -69,6 +75,8 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
 
                     Spacer(modifier = Modifier.height(4.dp))
                 }
+                // This is our favorite icon that is align with the column of info but beside it
+                // as it is in a row.
                 Icon(
                     imageVector = if (isFollowed.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "Follow Icon",
@@ -79,13 +87,14 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
                         },
                 )
             }
+            // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {
                 if (account.account_description.isNotEmpty()) {
                     Text(text = "About:", fontWeight = FontWeight.SemiBold)
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    Text(text = "Description: ${account.account_description}")
+                    Text(text = account.account_description)
                 }
             }
         }

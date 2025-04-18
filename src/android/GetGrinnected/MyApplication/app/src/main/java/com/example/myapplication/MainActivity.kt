@@ -5,16 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-
 
 /**
  * Our main used to run and create our app. Currently utilizes the AppNavigator function at
@@ -27,7 +28,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-
             val response = withContext(Dispatchers.IO) {
                 RetrofitApiClient.apiModel.getEvents()
             }
@@ -36,17 +36,30 @@ class MainActivity : ComponentActivity() {
             val eventssorted = events.sortedBy { it.event_time }
             val length = eventssorted.size
             // val eventsTimeFixed = fixTime(eventssorted,length)
-            var darkTheme = false
 
+            // These get our persistent state values for whether the user is logged in
+            // and what theme they had their app set to.
+            val isLoggedIn = DataStoreSettings.getLoggedIn(applicationContext).first()
+            val isDarkMode = DataStoreSettings.getDarkMode(applicationContext).first()
+            val darkTheme = mutableStateOf(isDarkMode)
+
+            /* The dark theme value is passed down to the switch that we toggle it at
+            and then the onToggleTheme is a lambda function that allows us to switch
+            the state of dark theme, additionally the darktheme value traces into our
+            theme file which allows us to change the whole app theme.
+            */
             setContent {
-                MyApplicationTheme {
+                MyApplicationTheme(darkTheme = darkTheme.value) {
                     AppNavigation(
-                        darkTheme = darkTheme,
-                        onToggleTheme = {darkTheme = it},
-                        event = eventssorted,
-                        eventnum = length
-                        /* This call is how we get back into our
-                        Theme.kt to change the theme of the whole app */
+                        darkTheme = darkTheme.value,
+                        onToggleTheme = { darkTheme.value = it
+                            // Used to pass the live change setting of theme down through the app to our UI switch.
+                            lifecycleScope.launch {
+                                DataStoreSettings.setDarkMode(applicationContext, it)
+                            }},
+                        event = eventssorted, // sorted list of events we are passing in
+                        eventnum = length, // length of the list of events
+                        startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
                 }
             }

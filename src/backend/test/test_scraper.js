@@ -79,18 +79,22 @@ test('All events are unique by ID', { concurrency: true }, t => {
       await scrape.dropPastEvents(scrape.CIPATH, true);
       secondScrape = fs.readFileSync(scrape.DROPPATH, 'utf-8');
       secondIDs = JSON.parse(secondScrape);
-      secondIDCount = firstIDs.data.length;
+      secondIDCount = secondIDs.data.length;
       //if all IDs are distinct, this should be the total number we're looking at now
       totalNumberID = firstIDCount + secondIDCount;
+      console.log("total: "+ totalNumberID)
       //make a set to store IDs in
       allIDs = new Set();
       //add IDs to set
       firstIDs.data.forEach(event => {
         allIDs.add(event.ID);
+        console.log("adding "+ event.ID + " scrape2")
       });
       secondIDs.data.forEach(event => {
         allIDs.add(event.ID);
+        console.log("adding "+ event.ID + " scrape2")
       });
+      console.log("set size: "+ totalNumberID)
       //if all IDs were distinct, the set size should be the number we added to
       assert(totalNumberID === allIDs.size)
     }

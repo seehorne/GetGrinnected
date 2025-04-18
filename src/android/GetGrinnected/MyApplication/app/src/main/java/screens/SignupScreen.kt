@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -39,6 +40,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
+import com.example.myapplication.DataStoreSettings
+import com.example.myapplication.R
 import kotlinx.coroutines.launch
 
 /**
@@ -76,10 +79,11 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
     val typography = MaterialTheme.typography
-
-
+    // The current context of our app
+    val context = LocalContext.current
 
     // This sets up the general look of the entire screen
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -190,6 +194,10 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     // Assess if the request and if the email was available
                    // if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
                         // TODO SEND EMAIL HERE
+                              // Sets our logged in state to true
+            coroutineScope.launch{
+                DataStoreSettings.setLoggedIn(context, true)
+            }
                         navController.navigate("verification/${email}/${signUp}/${username}") {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true

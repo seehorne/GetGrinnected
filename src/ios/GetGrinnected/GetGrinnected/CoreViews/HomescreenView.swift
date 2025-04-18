@@ -28,6 +28,7 @@ struct HomescreenView: View {
                     
                     //content
                     VStack {
+                        //Place Event Picker at top
                         HStack {
                             // a picker for date
                             DatePicker(
@@ -46,6 +47,7 @@ struct HomescreenView: View {
                             }
                         } //HStack
                     
+                        //Main Event List View
                         EventListView()
 
                     } //VStack
