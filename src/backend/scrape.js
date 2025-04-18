@@ -35,6 +35,8 @@ function processExisting(path) {
  * 
  * Scrapes JSON data of calendar events from specified URL
  * Repackages relevant data to JSON structure stored in event_data.json
+ * Rewrites all events, to ensure catching updates
+ * 
  * @param {*} url -> url to data to be scraped, assumes JSON data
  * @param {*} path -> filepath to write to
  */
@@ -85,8 +87,9 @@ async function scrapeData(url, path) {
  * 
  * @param {*} url -> url to page of data to be scraped
  * @param {*} path -> file to write to
- * @param {*} anyExistingEvents -> boolean, json currently have events
- * @param {*} zeroEventsNotCorrupt -> bool, json eventless rn but not corrupt
+ * @param {*} existingIDs -> set of IDs already reflected in JSON
+ * @param {*} firstEvent -> boolean reflecting if we're adding the very first event
+ * @returns Updated set of IDs associated with pre-existing events (post-hoc existingIDs)
  */
 async function scrapePage(url, path, existingIDs, firstEvent) {
   const response = await fetch(url);
