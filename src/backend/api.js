@@ -102,10 +102,10 @@ function close() {
 /**
  * Just respond that the API is online.
  *
- * @param req Express request object
- * @param res Express response object
+ * @param _req  Express request object
+ * @param res   Express response object
  */
-function getAPIOnline(req, res) {
+function getAPIOnline(_req, res) {
   res.send('API online!');
 }
 
@@ -214,8 +214,8 @@ async function getEventsBetween(req, res, _next) {
  */
 async function checkUsernameExists(req, res, _next) {
   // Query the database, then send the result.
-  const result = await dbHasUsername(req.params.username);
-  res.json({ result: result });
+  const result = await db.getAccount(req.params.username);
+  res.json({ result: result !== undefined });
 }
 
 /**
@@ -275,7 +275,7 @@ async function signUpNewUser(req, res, _next) {
 
   // Make sure that user doesn't already exist.
   // If they do, we can't sign them up--they need to login.
-  if (await dbHasUsername(username)) {
+  if (await db.getAccount(username)) {
     res.status(400).json({
       'error': 'Username exists',
       'message': `A user with username ${username} already exists.`
@@ -291,7 +291,7 @@ async function signUpNewUser(req, res, _next) {
 
   // Respond with success-- account created!
   res.status(201).json({
-    'message': 'Account successfully created.'
+    'message': 'Account created, and OTP successfully sent.'
   });
 }
 
@@ -310,15 +310,41 @@ async function sendOTP(email) {
 /**
  * Request to log in an existing user account.
  * 
- * @param {*} req    Express request. Body should contain email to log into.
+ * @param {*} req    Express request. Body should contain username to log into.
  * @param {*} res    Express response. Will be send success or failure.
  * @param {*} _next  Express error handler, not used.
  */
 async function logInUser(req, res, _next) {
+  // Make sure username is included in the body
+  const username = req.body.username;
+  if (username === undefined) {
+    res.status(400).json({
+      'error': 'No username',
+      'message': 'A username must be provided in the body of the request.'
+    })
+    return;
+  }
+  
   // Make sure the user already exists. If it does not, return a HTTP 404 error.
   // That signifies "resource not found", which is appropriate here.
+  const userData = await db.getAccount(username);
+  if (!userData) {
+    res.status(404).json({
+      'error': 'No such user',
+      'message': `No user with username ${username} exists.`
+    });
+    return;
+  }
 
-  // 
+  // Retrieve the user's email from their DB entry, and send an OTP code to them
+  // so they can log in.
+  const email = userData.email;
+  await sendOTP(email);
+
+  // Respond with success-- OTP sent!
+  res.status(200).json({
+    'message': 'OTP successfully sent.'
+  });
 }
 
 /**
@@ -443,22 +469,6 @@ function parseQueryTags(queryTags) {
 }
 
 /**
- * Check if the database has a username stored.
- * 
- * @param {string} username  The username to check.
- * @returns  true if it is present, false if not.
- */
-async function dbHasUsername(username) {
-  // Ask the database to find a user with that username
-  const db_result = await db.getAccount(username);
-
-  // Database returns a JSON object if the account exists,
-  // or `undefined` if it does not exist
-  const exists = !(db_result === undefined)
-  return exists;
-}
-
-/**
  * Determine whether a username is valid.
  * 
  * @param {string} username  The username to check.
@@ -517,7 +527,7 @@ function validateUsername(username) {
   }
 
   // Make sure username doesn't contain doubles of any separators
-  if (username.includes('..') || username.includes('__') 
+  if (username.includes('..') || username.includes('__')
     || username.includes('._') || username.includes('_.')) {
     return {
       result: false,
