@@ -3,65 +3,60 @@
 //  GetGrinnected
 //
 //  Created by Ellie Seehorn on 3/4/25.
-//
+//  Edited by Budhil Thijm on 04/18/25.
 
 import Foundation
 import SwiftUI
 
+//Calendar view
 struct CalendarView: View {
+    //Show selected date
+    @State private var selectedDate = Date()
+    
+    //Main view body
     var body: some View {
-        
+        //geomtry view to have header
         GeometryReader{proxy in
+            //no safe area so the header goes all the way to the top
             let safeAreaTop = proxy.safeAreaInsets.top
+            //vertical scroll view to see mroe events
             ScrollView(.vertical, showsIndicators: false){
+                //vstack of header and events
                 VStack(){
-                    //Header
-                    Header(safeAreaTop, title: "Calendar", searchBarOn: false)
+                    //have search bar on here.
+                    Header(safeAreaTop, title: "Calendar", searchBarOn: true)
                     
-                    //Content
-                    VStack{
-                        // Horizontal Scrollable Hstack for the dates
-                        /// How do we get the "today?"
-                        /// If Day is selected, highlight it with our app colors.
-                        ScrollView(.horizontal, showsIndicators: false){
-                            HStack{
-                                ForEach(0..<7){_ in
-                                    Text("Sun")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                        }
-                        .padding(.leading, 20)
+                    //vstack to have some spacing between header and main compoments
+                    VStack(spacing: 16) {
                         
-                        //Body (today, selected day)
-                        VStack{
-                            HStack{
-                                Text("Today")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                Text("March 4th")
-                                    .font(.caption2)
-                                    .fontWeight(.bold)
-                            }//Today
-                            
-                            //Includes event cards from that day (sorted according to those parameters
-                            EventListView()
-                        }//The body
-                        .padding(.horizontal)
+                        WeekView(selectedDate: $selectedDate)
+                            .padding(.bottom, 4)
                         
+                        //event list view for all the events (may have to pass in some arguments according to the day
+                        EventListView()
                     }
-                    .frame(minHeight: proxy.size.height)//height
-                            
+                    .padding(.top)//padding on top
+                    
                 }
-            }
+                
+            }//scroll view
             .edgesIgnoringSafeArea(.top)
             
-        }//GeometryReader
-        
-    }
+        }//geometry reader
+    }//main body view
 }
 
-#Preview {
+
+
+
+
+#Preview("Light Mode") {
     CalendarView()
+        .preferredColorScheme(.light)
+}
+
+
+#Preview("Dark Mode") {
+    CalendarView()
+        .preferredColorScheme(.dark)
 }
