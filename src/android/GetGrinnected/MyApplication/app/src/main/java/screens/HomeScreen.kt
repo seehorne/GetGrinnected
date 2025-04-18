@@ -90,7 +90,7 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
     val state = rememberScrollState()
     // stores whether checkboxes for tags are checked
     val check = remember { mutableStateListOfWithSize(tags.size, false) }
-    var tagnum =  0
+    var tagnum by remember {mutableIntStateOf(0)}
 
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
@@ -289,22 +289,16 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<String>) {
                                 Checkbox(
                                     checked = check[tagnum],
                                     onCheckedChange = {
-                                        if (check[tagnum]) {
-                                            check[tagnum] = false }
-                                        else {
-                                            check[tagnum] = true
-                                        }
+                                        check[tagnum] = !check[tagnum]
                                     })
                                 // checkbox 1 label
                                 Text (tags[tagnum])}},
-                            onClick = {
-                                selectedView = 0
-                                expanded2.value = false
-                        })
+                           onClick = {})
                            if (tagnum < 30){
                                tagnum += 1
                            }
                         }
+                        tagnum = 0
                         Spacer(modifier = Modifier.height(60.dp))
                     }
                 }
