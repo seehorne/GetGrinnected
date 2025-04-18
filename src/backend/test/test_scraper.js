@@ -21,7 +21,7 @@ describe('Web Scrape Output Unit Tests', () => {
                 if(diff <= 0){
                     numNonCompliant++;
                 }
-            }
+            } 
         })
     }
     assert.strictEqual(0,numNonCompliant);
@@ -43,7 +43,7 @@ describe('Web Scrape Output Unit Tests', () => {
     assert.strictEqual(0,numNonCompliant);
   });
 
-  test('When running drop twice, IDs to drop are distinct each run',
+  test('When running drop timeout twice, IDs to drop are distinct each run',
     { concurrency: true}, async t => {
       //run drop once
       await scrape.dropPastEvents(scrape.CIPATH, true);
@@ -78,8 +78,43 @@ describe('Web Scrape Output Unit Tests', () => {
     }
     )
     });
+
+    test('When running drop cancel twice, IDs to drop are distinct each run',
+      { concurrency: true}, async t => {
+        //run drop once
+        await scrape.dropPastEvents(scrape.CIPATH, false);
+        //read resulting file
+        firstScrape = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+        //JSONify
+        firstIDs = JSON.parse(firstScrape);
+        //count number of IDs
+        firstIDCount = firstIDs.data.length;
+        //do it all again for a second version
+        await scrape.dropPastEvents(scrape.CIPATH, false);
+        secondScrape = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+        secondIDs = JSON.parse(secondScrape);
+        secondIDCount = secondIDs.data.length;
+        //if all IDs are distinct, this should be the total number we're looking at now
+        totalNumberID = firstIDCount + secondIDCount;
+        console.log("total: "+ totalNumberID)
+        //make a set to store IDs in
+        allIDs = new Set();
+        //add IDs to set
+        firstIDs.data.forEach(event => {
+          allIDs.add(event.ID);
+          console.log("adding "+ event.ID + " scrape2")
+        });
+        secondIDs.data.forEach(event => {
+          allIDs.add(event.ID);
+          console.log("adding "+ event.ID + " scrape2")
+        });
+        console.log("set size: "+ totalNumberID)
+        //if all IDs were distinct, the set size should be the number we added to
+        assert(totalNumberID === allIDs.size)
+      }
+      );
     
-    test('After dropping events, there are at most the same number as before (no spurious additions)',
+    test('After dropping events (timeout), there are at most the same number as before (no spurious additions)',
       { concurrency: false }, async t => {
         events = fs.readFileSync(scrape.CIPATH, 'utf-8');
         ogEvents = JSON.parse(events);
@@ -91,7 +126,20 @@ describe('Web Scrape Output Unit Tests', () => {
         assert(nowSize <= beforeSize)
       }
     )
-    
+
+    test('After dropping events (cancel), there are at most the same number as before (no spurious additions)',
+      { concurrency: false }, async t => {
+        events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+        ogEvents = JSON.parse(events);
+        beforeSize = ogEvents.data.length;
+        await scrape.dropPastEvents(scrape.CIPATH, false);
+        newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+        nowEvents = JSON.parse(events);
+        nowSize = nowEvents.data.length;
+        assert(nowSize <= beforeSize)
+      }
+    )
+  
     test('After scraping, there are as many or more events as before (no lost events)',
       { concurrency: true }, async t => {
       events = fs.readFileSync(scrape.CIPATH, 'utf-8');
