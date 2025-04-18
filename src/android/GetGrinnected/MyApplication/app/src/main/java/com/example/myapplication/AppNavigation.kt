@@ -26,7 +26,7 @@ fun AppNavigation(
     onToggleTheme: (Boolean) -> Unit,
     event: List<Event>,
     eventnum: Int,
-    tags: MutableList<check>
+    tags: MutableList<Check>
 ){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "welcome"){

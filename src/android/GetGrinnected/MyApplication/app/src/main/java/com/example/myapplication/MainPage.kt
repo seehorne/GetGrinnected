@@ -45,7 +45,7 @@ fun MainPage(
     onToggleTheme: (Boolean) -> Unit,
     event: List<Event>,
     eventnum: Int,
-    tags: MutableList<check>
+    tags: MutableList<Check>
 ) {
     val bottomNavController = rememberNavController()
 

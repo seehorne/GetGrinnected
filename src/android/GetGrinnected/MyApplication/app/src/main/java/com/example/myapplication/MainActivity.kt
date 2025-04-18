@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
             val eventsTimeFixed = fixTime(eventssorted)
             var darkTheme = false
             val tagsString = mutableListOf<String>()
-            val tags = mutableListOf<check>()
+            val tags = mutableListOf<Check>()
             var current2 = 0
             var tagstotal = 0
             repeat(length){
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
             }
             var num = 0
             repeat(tagsString.size){
-                tags.add(check(false,tagsString[num]))
+                tags.add(Check(false,tagsString[num]))
                 num += 1
             }
             setContent {

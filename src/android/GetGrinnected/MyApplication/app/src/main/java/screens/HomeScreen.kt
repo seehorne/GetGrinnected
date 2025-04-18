@@ -36,11 +36,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
-import com.example.myapplication.Check
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
@@ -62,7 +62,7 @@ fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(event: List<Event>, eventnum: Int, tags: MutableList<check>) {
+fun HomeScreen(event: List<Event>, eventnum: Int, tags: MutableList<Check>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
