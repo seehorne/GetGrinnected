@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +32,9 @@ class MainActivity : ComponentActivity() {
             val response = withContext(Dispatchers.IO) {
                 RetrofitApiClient.apiModel.getEvents()
             }
-            val events = response.body() ?: emptyList()
-            val eventssorted = events.sortedBy { it.event_time }
+            val events = response.body() ?: emptyList<Event>()
+            val eventssorted = events.sortedBy { it.event_start_time }
+            val eventsTimeFixed = fixTime(eventssorted)
             val length = eventssorted.size
             // val eventsTimeFixed = fixTime(eventssorted,length)
 
@@ -70,13 +72,17 @@ class MainActivity : ComponentActivity() {
                 MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
                     AppNavigation(
                         darkTheme = darkTheme.value,
-                        onToggleTheme = { darkTheme.value = it
+                        onToggleTheme = {
+                            darkTheme.value = it
                             // Used to pass the live change setting of theme down through the app to our UI switch.
                             lifecycleScope.launch {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
-                            }},
-                        event = eventssorted, // sorted list of events we are passing in
+                            }
+                        },
+                        event = eventsTimeFixed, // sorted list of events we are passing in
                         eventnum = length, // length of the list of events
+                        tags = tags,
+                        modifier = Modifier,
                         startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
                 }
@@ -88,9 +94,8 @@ class MainActivity : ComponentActivity() {
  * a function that changes the timezone of elements in json list of event objects to the timezone of the device
  *
  * @param aba events list
- * @param length the number of elements in aba
  */
-fun fixTime(aba: List<Event>, length: Int): List<Event>{
+fun fixTime(aba: List<Event>): List<Event>{
     var current = 0
     val done = mutableListOf<Event>()
     var why = null

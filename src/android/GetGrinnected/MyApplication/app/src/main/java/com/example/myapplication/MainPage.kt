@@ -50,7 +50,7 @@ fun MainPage(
     onToggleTheme: (Boolean) -> Unit,
     event: List<Event>,
     eventnum: Int,
-    tags: MutableList<Check>
+    tags: MutableList<Check>,
     navController: NavController
 ) {
     // Creates our navbar

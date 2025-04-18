@@ -269,7 +269,7 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: MutableList<Check>) {
         }
         // creates a space at the bottom for visual appeal
         Spacer(modifier = Modifier.height(8.dp))
-        Text("No events match filters" , fontSize = 30.sp, fontWeight = FontWeight.Bold)
+        Text("No more events match filters" , fontSize = 26.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(120.dp))
     }
     // creates the top bar for the home page (I think might be erroneous with the row below

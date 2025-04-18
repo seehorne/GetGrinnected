@@ -33,7 +33,7 @@ fun AppNavigation(
     onToggleTheme: (Boolean) -> Unit,
     event: List<Event>,
     eventnum: Int,
-    tags: MutableList<Check>
+    tags: MutableList<Check>,
     startDestination: String
   // This handles our navigation system with a nav controller
 ){
