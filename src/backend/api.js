@@ -1,6 +1,7 @@
-const db = require('./db_connect.js');
+const db = require('./db_connect');
+const otp = require('./one_time_code')
+const bcrypt = require('bcrypt');
 const express = require('express');
-const validator = require('express-validator');
 const http = require('http');
 const https = require('https');
 
@@ -61,10 +62,12 @@ function run() {
 
   // Login and signups will be done through POST requests, which is because you
   // have to send information and there's the metaphor of creating something new.
-  //
-  // These will require an authorization header to be sent along with.
   app.post('/user/login', logInUser);
   app.post('/user/signup', signUpNewUser);
+
+  // OTP code verification also through a POST request. If successful, it will
+  // send back the needed authentication tokens.
+  app.post('/user/verify', verifyOTP);
 }
 
 /**
@@ -213,7 +216,6 @@ async function checkUsernameExists(req, res, _next) {
   // Query the database, then send the result.
   const result = await dbHasUsername(req.params.username);
   res.json({ result: result });
-
 }
 
 /**
@@ -240,7 +242,8 @@ async function signUpNewUser(req, res, _next) {
   }
 
   // Do the same check to make sure an email is included in the request body.
-  if (req.body.email === undefined) {
+  const email = req.body.email;
+  if (email === undefined) {
     res.status(400).json({
       'error': 'No email',
       'message': 'An email must be provided in the body of the request.'
@@ -248,14 +251,20 @@ async function signUpNewUser(req, res, _next) {
     return;
   }
 
-  // TODO: I REALLY NEED TO USE THAT EXPRESS-VALIDATOR THING FOR THESE INSTEAD THAT WOULD BE BETTER.
-  // TODO: AAAGHHHHHHH I HATE IT HEREEEE
+  // Make sure the email is a grinnell email. If it does not, respond with
+  // an appropriate error. 400 again.
+  if (!email.endsWith('@grinnell.edu')) {
+    res.status(400).json({
+      'error': 'Invalid email',
+      'message': 'Email must end with @grinnell.edu.'
+    })
+  }
 
   // Make sure the username provided doesn't break any format rules.
   // If not, return HTTP 400 again.
-  const valid = validUsername(username);
+  const valid = validateUsername(username);
   if (!valid.result) {
-    // reuse the reason returned by validUsername if the check fails,
+    // reuse the reason returned by validateUsername if the check fails,
     // so we can have a more descriptive error
     res.status(400).json({
       'error': 'Invalid username',
@@ -274,26 +283,79 @@ async function signUpNewUser(req, res, _next) {
     return;
   }
 
-  // Having passed all the checks, we can now create that user.
-  // First, create an account for them in the database.
-  db.createNewAccount(username, req.body.email)
+  // Having passed all the checks, we can now create that user in the database
+  await db.createAccount(username, email);
 
-  // Then, send them a one-time code to log in.
+  // With the account created, send them an email.
+  await sendOTP(email);
+
+  // Respond with success-- account created!
+  res.status(201).json({
+    'message': 'Account successfully created.'
+  });
+}
+
+async function sendOTP(email) {
+  // Send the user a one-time code by email.
+  const code = otp.sendCode(email);
+
+  // Salt and hash the code before we store it
+  const saltRounds = 10;  // generally-accepted number of rounds
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hashedCode = await bcrypt.hash(code, salt);
+
+  // TODO: STORE THE CODE SO WE CAN CHECK IT
 }
 
 /**
  * Request to log in an existing user account.
  * 
- * @param {*} req  Express request. Body should contain EITHER:
- * - username to log into
- * @param {*} res 
- * @param {*} _next 
+ * @param {*} req    Express request. Body should contain email to log into.
+ * @param {*} res    Express response. Will be send success or failure.
+ * @param {*} _next  Express error handler, not used.
  */
 async function logInUser(req, res, _next) {
   // Make sure the user already exists. If it does not, return a HTTP 404 error.
   // That signifies "resource not found", which is appropriate here.
 
   // 
+}
+
+/**
+ * Verify an OTP code.
+ * 
+ * @param {*} req  Express request. Body should contain email logging into,
+ * as well as otp code being verified.
+ * @param {*} res  Express response, will be sent success or failure.
+ * @param {*} _next  Express error handler, not used.
+ */
+async function verifyOTP(req, res, _next) {
+  // Get the email and OTP sent from the body,
+  // and make sure they were actually sent.
+  const email = req.body.email;
+  const code = req.body.code;
+  if (email === undefined) {
+    res.status(400).json({
+      'error': 'No email',
+      'message': 'Request body must contain email.'
+    });
+    return;
+  }
+  if (code === undefined) {
+    res.status(400).json({
+      'error': 'No code',
+      'message': 'Request body must contain code.'
+    });
+    return;
+  }
+
+  console.log(`got OTP verify request from ${email} with code ${code}`);
+
+  // TODO: CHECK CODE AGAINST LOCAL STORAGE
+  res.status(400).json({
+    'error': 'Bad code',
+    'message': 'Could not verify OTP.'
+  });
 }
 
 /**

@@ -171,24 +171,24 @@ async function getAccount(username){
     return account[0]; 
 }
 
-async function createAccount(username, email, password){
-
+/**
+ * Create a new account with a username and email.
+ * 
+ * @param {string} username  Username of account
+ * @param {string} email     Grinnell email to create account for
+ * @throws   Error if user already exists.
+ * @returns  Result of the DB query once it is completed.
+ */
+async function createAccount(username, email){
     const existing_account = await getAccount(username);
 
     if(existing_account){
         throw new Error("User already exists.");
     }
-
-    // Setting saltRounds to 10 as it is what I have found is recommended but it is also different from app to app
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-
-    const hashedPassword = await bcrypt.hash(password, salt);
-
     const result = await pool.query(`
         INSERT INTO
-        accounts (account_name, email, password)
-        VALUES (?, ?, ?, ?)`, [username, email, hashedPassword]);
+        accounts (account_name, email)
+        VALUES (?, ?)`, [username, email]);
     
         return result;
 }
@@ -270,6 +270,7 @@ if (require.main === module) {
 } else {
     // File is being used as a module. Export it.
     module.exports = {
+        createAccount,
         dropExpiredEvents,
         getAccount,
         getEvents,
