@@ -10,15 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
 
 /**
@@ -33,12 +34,20 @@ import com.example.myapplication.R
 
 @Composable
 fun WelcomeScreen(modifier: Modifier, navController: NavController) {
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
+
+    // Sets up the overall format of the screen in a column composable
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Our logo for the app.
         Image(
             painter = painterResource(id = R.drawable.gg_logo_2),
             contentDescription = "App Logo",
@@ -46,22 +55,35 @@ fun WelcomeScreen(modifier: Modifier, navController: NavController) {
                 .fillMaxWidth()
                 .size(250.dp)
         )
+
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = "Welcome to GetGrinnected", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+
+        Text(text = "Welcome to GetGrinnected",
+            style = typography.headlineMedium,
+            color = colorScheme.onBackground)
+
         Spacer(modifier = Modifier.height(24.dp))
+
+        // Sets up the buttons side by side that navigate us to login and signup respectively.
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(onClick = {navController.navigate("login"){
-                popUpTo("welcome"){inclusive = true}
+                popUpTo("welcome"){inclusive = true} // pops the welcome screen from the back stack
             } }) {
-                Text("Login")
+                Text("Login", style = typography.labelLarge)
             }
             Button(onClick = {navController.navigate("signup"){
-                popUpTo("welcome"){inclusive = true}
+                popUpTo("welcome"){inclusive = true} // pops the welcome screen from the back stack
             } }) {
-                Text("Sign Up")
+                Text("Sign Up", style = typography.labelLarge)
             }
         }
     }
+}
+
+@Preview (showBackground = true)
+@Composable
+fun WelcomeScreenPreview(){
+    WelcomeScreen(modifier = Modifier, navController = rememberNavController())
 }

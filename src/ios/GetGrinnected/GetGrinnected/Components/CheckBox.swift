@@ -12,6 +12,8 @@ import SwiftUI
  
  name: A string that holds the displayed name of the option
  isChecked: A boolean that is true if the option is checked. Otherwise, false.
+ uiCompOne: The component that is displayed when the check box is checked.
+ uiCompTwo: The component that is displayed when the check box is not checked.
  */
 struct CheckBoxOption {
     var name: String

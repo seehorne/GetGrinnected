@@ -70,38 +70,34 @@ struct EventListView: View {
     @StateObject private var viewModel = EventViewModel()
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                List {
-                    ForEach(viewModel.events, id: \.eventid) { event in
-                        VStack(alignment: .leading) {
-                            EventCards(myData: event)
-                        }
-                    }
-                }
+        VStack{
+            ForEach(viewModel.events, id: \.eventid) { event in
+                EventCard(event: event)
                 
-                if viewModel.isLoading {
-                    ProgressView()
-                }
-                
-                if let error = viewModel.errorMessage {
-                    VStack {
-                        Text(error)
-                            .foregroundColor(.red)
-                        Button("Retry") {
-                            viewModel.fetchEvents()
-                        }
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+            }
+        
+            
+            if viewModel.isLoading {
+                ProgressView()
+            }
+            
+            if let error = viewModel.errorMessage {
+                VStack {
+                    Text(error)
+                        .foregroundColor(.red)
+                    Button("Retry") {
+                        viewModel.fetchEvents()
                     }
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
                 }
             }
-            .navigationTitle("Events")
-            .onAppear {
-                viewModel.fetchEvents()
-            }
+                
+        }//For all events
+        .onAppear(){
+            viewModel.fetchEvents()
         }
     }
 }

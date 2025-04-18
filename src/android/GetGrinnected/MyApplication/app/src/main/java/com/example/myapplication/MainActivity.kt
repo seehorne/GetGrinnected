@@ -5,23 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import javax.net.ssl.HttpsURLConnection
-
-
 
 /**
  * Our main used to run and create our app. Currently utilizes the AppNavigator function at
@@ -34,18 +28,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
-            val result = withContext(Dispatchers.IO) {
-                getDataFromUrl(url)
+            val response = withContext(Dispatchers.IO) {
+                RetrofitApiClient.apiModel.getEvents()
             }
-            val gson = Gson()
-            val listType = object : TypeToken<List<Event>>() {}.type
-            val events: List<Event> = gson.fromJson(result, listType) ?: emptyList()
-            val length = events.size
-            // sorts events by time
-            val eventssorted = events.sortedBy { it.event_start_time }
-            val eventsTimeFixed = fixTime(eventssorted)
-            var darkTheme = false
+            val events = response.body() ?: emptyList()
+            val eventssorted = events.sortedBy { it.event_time }
+            val length = eventssorted.size
+            // val eventsTimeFixed = fixTime(eventssorted,length)
+
+            // These get our persistent state values for whether the user is logged in
+            // and what theme they had their app set to.
+            val isLoggedIn = DataStoreSettings.getLoggedIn(applicationContext).first()
+            val isDarkMode = DataStoreSettings.getDarkMode(applicationContext).first()
+            val darkTheme = mutableStateOf(isDarkMode)
+
+            /* The dark theme value is passed down to the switch that we toggle it at
+            and then the onToggleTheme is a lambda function that allows us to switch
+            the state of dark theme, additionally the darktheme value traces into our
+            theme file which allows us to change the whole app theme.
+            */
             val tagsString = mutableListOf<String>()
             val tags = mutableListOf<Check>()
             var current2 = 0
@@ -66,66 +67,30 @@ class MainActivity : ComponentActivity() {
                 num += 1
             }
             setContent {
-                MyApplicationTheme {
+                MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
                     AppNavigation(
-                        darkTheme = darkTheme,
-                        onToggleTheme = {darkTheme = it},
-                        event = eventsTimeFixed,
-                        eventnum = length,
-                        tags = tags
-                        /* This call is how we get back into our
-                        Theme.kt to change the theme of the whole app */
+                        darkTheme = darkTheme.value,
+                        onToggleTheme = { darkTheme.value = it
+                            // Used to pass the live change setting of theme down through the app to our UI switch.
+                            lifecycleScope.launch {
+                                DataStoreSettings.setDarkMode(applicationContext, it)
+                            }},
+                        event = eventssorted, // sorted list of events we are passing in
+                        eventnum = length, // length of the list of events
+                        startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
                 }
             }
         }
     }
 }
-
 /**
- * Ethan Hughes
- *
- * a function that grabs a json from a url
- *
- * @param url a string that is a valid url link
- */
-fun getDataFromUrl(url: String): String? {
-    var connection: HttpsURLConnection? = null
-    return try {
-        val urlObj = URL(url)
-        connection = urlObj.openConnection() as HttpsURLConnection
-        connection.requestMethod = "GET"
-
-        val responseCode = connection.responseCode
-        if (responseCode == HttpsURLConnection.HTTP_OK) {
-            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-            val response = StringBuilder()
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                response.append(line)
-            }
-            reader.close()
-            response.toString()
-        } else {
-            null
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    } finally {
-        connection?.disconnect()
-    }
-}
-
-/**
- * Ethan Hughes
- *
  * a function that changes the timezone of elements in json list of event objects to the timezone of the device
  *
  * @param aba events list
  * @param length the number of elements in aba
  */
-fun fixTime(aba: List<Event>): List<Event>{
+fun fixTime(aba: List<Event>, length: Int): List<Event>{
     var current = 0
     val done = mutableListOf<Event>()
     var why = null

@@ -18,25 +18,32 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.DataStoreSettings
 import com.example.myapplication.OrgCard
 import com.example.myapplication.R
 import com.example.myapplication.User
+import kotlinx.coroutines.launch
 
 /**
  * A composable function that represents the Settings screen of our app.
@@ -47,40 +54,94 @@ import com.example.myapplication.User
  * @param darkTheme the current state of the Theme of light or dark mode
  * @param onToggleTheme a lambda function passed down from previous screen that calls back to the
  * function instated in the call the AppNavigation in the MainActivity.
+ * @param navController is the navigation system passed down from our app navigation to be
+ * used for sign out functionality
  */
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier,
                    orgs: List<User>,
                    account: User,
                    darkTheme: Boolean,
-                   onToggleTheme: (Boolean) -> Unit) {
+                   onToggleTheme: (Boolean) -> Unit,
+                   navController: NavController) {
+    // Allows the app to be a scrollable view
     val scrollState = rememberScrollState()
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
 
-    val isFollowed = orgs.filter { it.is_followed }
+    // Accessing colors from our theme
+    val colorScheme = MaterialTheme.colorScheme
+    // Accessing font info from our theme
+    val typography = MaterialTheme.typography
 
+    // Sets the orgs to be only the set of orgs that are followed by the user.
+    val isFollowed = orgs.filter { it.is_followed }
+    // The current context of our app
+    val context = LocalContext.current
+    // Used to launch background tasks and processes
+    val coroutineScope = rememberCoroutineScope()
+
+    // Sets up our ui to follow a box layout
     Box(modifier = modifier.fillMaxSize()) {
+
+        // We make a row to set our preferences text in line with our switch account icon
         Row(
             modifier = modifier
                 .align(Alignment.TopStart)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Profile", fontSize = 28.sp)
+            Text(
+                text = "Preferences",
+                style = typography.headlineMedium,
+                color = colorScheme.onBackground
+            )
 
             Spacer(modifier = modifier.weight(1f))
 
+            // This is the icon button for switch an account
             IconButton(
                 onClick = { /* TODO handle switch account */ },
                 modifier = modifier.padding(end = 8.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Refresh,
+                    imageVector = Icons.Filled.ChangeCircle,
                     contentDescription = "Switch Account",
+                    modifier = modifier.size(24.dp),
+                    tint = colorScheme.primary
                 )
             }
         }
-
+/* This is commented out for the time being as we have the profile picture as a stretch goal.
+        Box(
+            contentAlignment = Alignment.BottomEnd,
+            modifier = modifier.padding(16.dp)
+        ) {
+            // This is our profile image
+            Image(
+                painter = painterResource(id = R.drawable.blank_profile_picture),
+                contentDescription = "Profile Image",
+                modifier = modifier
+                    .size(120.dp)
+                    .clip(CircleShape)
+            )
+            // Button to change the profile picture
+            IconButton(
+                onClick = { /* TODO handle image change */ },
+                modifier = modifier
+                    .offset(x = (-8).dp, y = (-8).dp)
+                    .background(Color.White, CircleShape)
+                    .size(32.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit Profile Image",
+                    tint = Color.Black,
+                    modifier = modifier.size(18.dp)
+                )
+            }
+        }
+*/
+        // Sets up a column for the rest of the information
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -89,61 +150,52 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Box(
-                contentAlignment = Alignment.BottomEnd,
-                modifier = modifier.padding(16.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.blank_profile_picture),
-                    contentDescription = "Profile Image",
-                    modifier = modifier
-                        .size(120.dp)
-                        .clip(CircleShape)
-                )
-                IconButton(
-                    onClick = { /* TODO handle image change */ },
-                    modifier = modifier
-                        .offset(x = (-8).dp, y = (-8).dp)
-                        .background(Color.White, CircleShape)
-                        .size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit Profile Image",
-                        tint = Color.Black,
-                        modifier = modifier.size(18.dp)
-                    )
-                }
-            }
-
             Spacer(modifier = modifier.height(8.dp))
 
+            Text(
+                text = "Username",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
+
+            Spacer(modifier = modifier.height(4.dp))
+
+            // Setup row to have the username and editing button inline with each other
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = account.account_name, fontSize = 16.sp)
+                Text(
+                    text = account.account_name,
+                    style = typography.bodyLarge,
+                    color = colorScheme.onBackground
+                )
+
+                // Button to edit the username
                 IconButton(onClick = { /* TODO handle username edit */ }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit Username",
-                        modifier = modifier.size(20.dp)
+                        modifier = modifier.size(20.dp),
+                        tint = colorScheme.primary
                     )
                 }
             }
 
             Spacer(modifier = modifier.height(8.dp))
 
-            Text("Settings", fontSize = 20.sp)
-
-            Spacer(modifier = modifier.height(8.dp))
-
+            // Setup a row to have the wording for the dark mode switch inline with the switch
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Switch between light and dark mode", fontSize = 16.sp)
+                Text(
+                    text = if (darkTheme) "Switch to light mode" else "Switch to dark mode",
+                    style = typography.bodyLarge,
+                    color = colorScheme.onBackground
+                )
 
                 Spacer(modifier = Modifier.width(12.dp))
 
+                // Switch to toggle dark or light mode
                 Switch(
                     checked = darkTheme,
                     onCheckedChange = {
@@ -153,16 +205,49 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Spacer(modifier = modifier.height(8.dp))
 
-            Text("Organizations you follow: ", fontSize = 20.sp)
+            // This button handles our sign out process
+            Button (
+                onClick = {  // Sets our logged in state to false
+                    coroutineScope.launch{
+                        DataStoreSettings.setLoggedIn(context, false)
+                    }
+                    navController.navigate("welcome"){ // takes us to the welcome screen
+                        popUpTo(0){inclusive = true} // pops the back stack
+                        launchSingleTop = true
+                    }
+                },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    "Sign Out",
+                    style = typography.labelLarge
+                )
+            }
+
+            Text(
+                "Organizations you follow:",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
 
             Spacer(modifier = modifier.height(4.dp))
 
+            // Checks if the user has any followed orgs, if not it displays the following
             if (isFollowed.isEmpty()) {
-                Text("You haven't followed any organizations yet.", modifier = Modifier.padding(16.dp))
+                Text(
+                    "You haven't followed any organizations yet.",
+                    modifier = Modifier.padding(16.dp),
+                    style = typography.bodyMedium,
+                    color = colorScheme.onBackground
+                )
             } else {
+                // If the user does, it makes a scrollable list of org cards that they follow
                 isFollowed.forEach { account ->
                     OrgCard(
-                        account = account, modifier = modifier
+                        account = account,
+                        modifier = modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 8.dp)
                     )
@@ -185,5 +270,5 @@ fun SettingsScreenPreview(){
         User(1, "test4", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
         User(1, "test5", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
         )
-    SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {})
+    SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {}, navController = rememberNavController())
 }

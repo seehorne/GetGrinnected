@@ -33,21 +33,16 @@ import SwiftUI
  
 "Tags" and "Audience" are same format!
  */
-//struct TesterView: View {
-//    func Task() async {
-//        do {
-//            let myString = try await EventData.fetchData(urlString: "https://node16049-csc324--spring2025.us.reclaim.cloud/")
-//            var events = EventData.parseEvents(json: myString)
-//        } catch {
-//            print(error)
-//        }
-//    }
-//    var body: some View {
-//        
-//    }//body
-//}
-//
-//
-//#Preview {
-//    TesterView()
-//}
+
+import SwiftUI
+
+struct TesterView: View {
+    var body: some View {
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        TesterView()
+    }
+}
