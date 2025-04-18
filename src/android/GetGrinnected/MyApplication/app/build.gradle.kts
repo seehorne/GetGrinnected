@@ -43,6 +43,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.core.ktx)

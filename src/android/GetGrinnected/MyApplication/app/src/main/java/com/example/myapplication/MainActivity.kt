@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
             theme file which allows us to change the whole app theme.
             */
             setContent {
-                MyApplicationTheme(darkTheme = darkTheme.value) {
+                MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
                     AppNavigation(
                         darkTheme = darkTheme.value,
                         onToggleTheme = { darkTheme.value = it
