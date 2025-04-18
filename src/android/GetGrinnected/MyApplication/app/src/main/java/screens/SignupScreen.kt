@@ -184,21 +184,21 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                 isLoading = true // Set loading state to true to disable the button
                 try{
                     // Makes the api email request check
-                    val emailReponse = RetrofitApiClient.apiModel.checkemail(
-                        EmailRequest(email)
-                    )
+                 //   val emailReponse = RetrofitApiClient.apiModel.checkemail(
+                   //     EmailRequest(email)
+                   // )
                     // Assess if the request and if the email was available
-                    if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
+                   // if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
                         // TODO SEND EMAIL HERE
                         navController.navigate("verification/${email}/${signUp}/${username}") {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
                         }
-                    } else {
-                        errMsg = emailReponse.body()?.message ?: "Email already in use"
-                    }
-                } catch(e: Exception) { // Handles network errors that way arise when making the api call
-                    errMsg = "Network error: ${e.localizedMessage}"
+                   // } else {
+                     //   errMsg = emailReponse.body()?.message ?: "Email already in use"
+                   // }
+               // } catch(e: Exception) { // Handles network errors that way arise when making the api call
+                 //   errMsg = "Network error: ${e.localizedMessage}"
                 } finally{ // Set loading state to false to reenable the button
                     isLoading = false
                 }

@@ -117,42 +117,42 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
         Button (onClick = {
             if (codeInput == validCode) {
                 coroutineScope.launch {
-                    try {
+                  //  try {
                         if (flag){
                             // Makes the api signup request
-                            val response = RetrofitApiClient.apiModel.signup(
-                                SignupRequest(email = email, account_username = username)
-                            )
+                          //  val response = RetrofitApiClient.apiModel.signup(
+                            //    SignupRequest(email = email, account_username = username)
+                           // )
                             // Assess if the request and creation of account was successful if so
                             // nav to main if not show signup failure.
-                            if (response.isSuccessful && response.body()?.success == true) {
+                          //  if (response.isSuccessful && response.body()?.success == true) {
                                 navController.navigate("main") {
                                     popUpTo(0) { inclusive = true }
                                     launchSingleTop = true
                                 }
-                            } else {
-                                errMsg = response.body()?.message ?: "Sign up failed"
-                            }
+                           // } else {
+                           //     errMsg = response.body()?.message ?: "Sign up failed"
+                           // }
                         } else {
                             // Makes the api login request
-                            val response = RetrofitApiClient.apiModel.login(
-                                LoginRequest(email = email)
-                            )
+                       //     val response = RetrofitApiClient.apiModel.login(
+                         //       LoginRequest(email = email)
+                         //   )
                             // Assess if the request for login was successful if so
                             // nav to main if not show login failure.
-                            if (response.isSuccessful && response.body()?.success == true) {
+                         //   if (response.isSuccessful && response.body()?.success == true) {
                                 navController.navigate("main") {
                                     popUpTo(0) { inclusive = true }
                                     launchSingleTop = true
                                 }
-                            } else {
-                                errMsg = response.body()?.message ?: "login failed"
-                            }
+                          //  } else {
+                            //    errMsg = response.body()?.message ?: "login failed"
+                           // }
                         }
                         // Failure specifically with a network connection ie couldn't leave our app
-                    } catch (e: Exception) {
-                        errMsg = "Network error: ${e.localizedMessage}"
-                    }
+                //    } catch (e: Exception) {
+                  //      errMsg = "Network error: ${e.localizedMessage}"
+                 //   }
                 }
             } else {
                 errMsg = "Incorrect code. Please try again."

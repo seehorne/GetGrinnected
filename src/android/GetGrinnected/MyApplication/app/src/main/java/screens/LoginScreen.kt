@@ -150,23 +150,23 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                 isLoading = true
                 try {
                     // Makes the api login request
-                    val emailResponse = RetrofitApiClient.apiModel.checkemail(
-                        EmailRequest(email)
-                    )
+                  //  val emailResponse = RetrofitApiClient.apiModel.checkemail(
+                    //    EmailRequest(email)
+                    //)
                     // Assess if the request and validation of login was successful if so
                     // nav to main if not show login failure.
-                    if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
+                    //if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
                         // TODO SEND EMAIL HERE
-                        navController.navigate("verification/${email}/${signUp}") {
+                        navController.navigate("verification/${email}/${signUp}/str") {
                             popUpTo(0) { inclusive = true }
                             launchSingleTop = true
                         }
-                    } else {
-                        errMsg = emailResponse.body()?.message ?: "Email Not Found"
-                    }
+                    //} else {
+                      //  errMsg = emailResponse.body()?.message ?: "Email Not Found"
+                    //}
                     // Failure specifically with a network connection ie couldn't leave our app
-                } catch (e: Exception) {
-                    errMsg = "Network error: ${e.localizedMessage}"
+               // } catch (e: Exception) {
+                 //   errMsg = "Network error: ${e.localizedMessage}"
                 } finally {
                     isLoading = false
                 }
