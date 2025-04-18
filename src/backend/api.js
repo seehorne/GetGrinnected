@@ -304,42 +304,36 @@ async function sendOTP(email) {
   const salt = await bcrypt.genSalt(saltRounds);
   const hashedCode = await bcrypt.hash(code, salt);
 
-  // TODO: STORE THE CODE SO WE CAN CHECK IT
+  // TODO: STORE (email, hashed code, current time) TO CHECK LATER
 }
 
 /**
  * Request to log in an existing user account.
  * 
- * @param {*} req    Express request. Body should contain username to log into.
+ * @param {*} req    Express request. Body should contain email to log into.
  * @param {*} res    Express response. Will be send success or failure.
  * @param {*} _next  Express error handler, not used.
  */
 async function logInUser(req, res, _next) {
-  // Make sure username is included in the body
-  const username = req.body.username;
-  if (username === undefined) {
+  // Make sure email is included in the body
+  const email = req.body.email;
+  if (email === undefined) {
     res.status(400).json({
-      'error': 'No username',
-      'message': 'A username must be provided in the body of the request.'
+      'error': 'No email',
+      'message': 'An email must be provided in the body of the request.'
     })
     return;
   }
   
   // Make sure the user already exists. If it does not, return a HTTP 404 error.
   // That signifies "resource not found", which is appropriate here.
-  const userData = await db.getAccount(username);
-  if (!userData) {
+  if (!await db.getAccountByEmail(email)) {
     res.status(404).json({
       'error': 'No such user',
-      'message': `No user with username ${username} exists.`
+      'message': 'No user account exists with that email.'
     });
     return;
   }
-
-  // Retrieve the user's email from their DB entry, and send an OTP code to them
-  // so they can log in.
-  const email = userData.email;
-  await sendOTP(email);
 
   // Respond with success-- OTP sent!
   res.status(200).json({

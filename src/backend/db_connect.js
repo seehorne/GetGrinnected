@@ -171,6 +171,16 @@ async function getAccount(username){
     return account[0]; 
 }
 
+async function getAccountByEmail(email) {
+    const [account] = await pool.query(`
+        SELECT * 
+        FROM accounts
+        WHERE email = ?
+         `, [email]);
+     
+     return account[0]; 
+}
+
 /**
  * Create a new account with a username and email.
  * 
@@ -273,6 +283,7 @@ if (require.main === module) {
         createAccount,
         dropExpiredEvents,
         getAccount,
+        getAccountByEmail,
         getEvents,
         getEventsBetween,
         getEventsBetweenWithTags,
