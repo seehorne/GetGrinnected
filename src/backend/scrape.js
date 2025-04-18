@@ -39,32 +39,39 @@ function processExisting(path) {
  * @param {*} path -> filepath to write to
  */
 async function scrapeData(url, path) {
-  existingIDs = await processExisting(path);
+  //existingIDs = await processExisting(path);
+  existingIDs = new Set()
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
   const events = await response.json();
-  existingEvents = fs.readFileSync(path, 'utf-8');
-  lines = existingEvents.split('\n');
-  console.log(lines.length);
-  anyExistingEvents = lines.length > 4;
-  zeroEventsNotCorrupt = lines.length === 4;
-  updatedLines = lines.slice(0, -2); //remove last two lines
-  fs.writeFileSync(path, updatedLines.join('\n'));
+  // existingEvents = fs.readFileSync(path, 'utf-8');
+  // lines = existingEvents.split('\n');
+  // console.log(lines.length);
+  // anyExistingEvents = lines.length > 4;
+  // zeroEventsNotCorrupt = lines.length === 4;
+  // updatedLines = lines.slice(0, -2); //remove last two lines
+  fs.writeFileSync(path, OPENFILE);
   maxPage = events.meta.total_pages; //how many pages
   url = url + '?page=' //add ending to look at different pages
+  //firstPage = true;
   for(let i = 1; i <= maxPage; i++){
     pageURL = url+i.toString();
     console.log(pageURL)
-    await scrapePage(pageURL, path, anyExistingEvents, zeroEventsNotCorrupt);
-    lineTracker = fs.readFileSync(path, 'utf-8').split('\n').length;
-    if (!anyExistingEvents){
-      didAdd = lineTracker > 4;
-      anyExistingEvents = didAdd
-      }
-    if (zeroEventsNotCorrupt){
-      stillNone = lineTracker === 4;
-      zeroEventsNotCorrupt = stillNone;
+    if (i==1){
+      existingIDs = await scrapePage(pageURL, path, existingIDs, true);
     }
+    else{
+      existingIDs = await scrapePage(pageURL, path, existingIDs, false);
+    }
+    lineTracker = fs.readFileSync(path, 'utf-8').split('\n').length;
+    // if (!anyExistingEvents){
+    //   didAdd = lineTracker > 4;
+    //   anyExistingEvents = didAdd
+    //   }
+    // if (zeroEventsNotCorrupt){
+    //   stillNone = lineTracker === 4;
+    //   zeroEventsNotCorrupt = stillNone;
+    // }
   }
     fs.appendFileSync(path, CLOSEFILE);
 }
@@ -81,7 +88,7 @@ async function scrapeData(url, path) {
  * @param {*} anyExistingEvents -> boolean, json currently have events
  * @param {*} zeroEventsNotCorrupt -> bool, json eventless rn but not corrupt
  */
-async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
+async function scrapePage(url, path, existingIDs, firstEvent) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const events = await response.json();
@@ -109,11 +116,12 @@ async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
         eventInfo["Tags"]= event.tags;
         eventInfo["ID"]= event.id;
         stringifyEvent = JSON.stringify(eventInfo);
-        if (anyExistingEvents||counter !=0){ //not first event to be added ever
+        if (!firstEvent){ //not first event to be added ever
           stringifyEvent = ',\n'+stringifyEvent;
         }
-        else if (zeroEventsNotCorrupt){
-          stringifyEvent = '\n'+stringifyEvent;
+        else{
+          //stringifyEvent = '\n'+stringifyEvent;
+          firstEvent = false; //no other event should be the first event
         }
         fs.appendFileSync(path, stringifyEvent);
         console.log("Adding "+ event.title + " " + event.id + " " + event.date)
@@ -122,6 +130,7 @@ async function scrapePage(url, path, anyExistingEvents, zeroEventsNotCorrupt) {
       }
     );
     }
+    return existingIDs;
 }
 
 /**
