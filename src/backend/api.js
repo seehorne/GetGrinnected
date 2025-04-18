@@ -1,6 +1,6 @@
 const db = require('./db_connect.js');
 const express = require('express');
-const fs = require('fs');
+const validator = require('express-validator');
 const http = require('http');
 const https = require('https');
 
@@ -187,7 +187,7 @@ async function getEventsBetween(req, res, _next) {
   // These will look like 'YYYY-MM-DD HH:MM:00.000Z'
   start = start.toISOString();
   end = end.toISOString();
-  
+
   // If there are no tags query the DB normally,
   // if there are tags query for them
   const tags = parseQueryTags(req.query.tag);
@@ -210,24 +210,90 @@ async function getEventsBetween(req, res, _next) {
  * @param {*} _next  Error handler function for async (unused)
  */
 async function checkUsernameExists(req, res, _next) {
-  // Ask the database to find a user with that username
-  const db_result = await db.getAccount(req.params.username);
+  // Query the database, then send the result.
+  const result = await dbHasUsername(req.params.username);
+  res.json({ result: result });
 
-  // Database returns a JSON object if the account exists,
-  // or `undefined` if it does not exist
-  const exists = !(db_result === undefined)
-
-  // Send the result through the response object
-  res.json({ result: exists });
 }
 
+/**
+ * Request to sign up a new user account.
+ * 
+ * @param {*} req  Express request. Body should contain:
+ * - username to be created
+ * - email to associate with that username
+ * @param {*} res  Express response. Will be sent either a message
+ * that the request succeeded (and a passcode has been sent) or that there
+ * was an error.
+ * @param {*} _next  Error handler function for async (unused)
+ */
 async function signUpNewUser(req, res, _next) {
-  // Read the authorization header and return an error if it does not exist
+  // Make sure the request provided a username. If it does not,
+  // return an HTTP 400 which indicates a badly-formed request.
+  const username = req.body.username;
+  if (username === undefined) {
+    res.status(400).json({
+      'error': 'No username',
+      'message': 'A username must be provided in the body of the request.'
+    })
+    return;
+  }
 
-  // Send those credentials to the DB
+  // Do the same check to make sure an email is included in the request body.
+  if (req.body.email === undefined) {
+    res.status(400).json({
+      'error': 'No email',
+      'message': 'An email must be provided in the body of the request.'
+    });
+    return;
+  }
+
+  // TODO: I REALLY NEED TO USE THAT EXPRESS-VALIDATOR THING FOR THESE INSTEAD THAT WOULD BE BETTER.
+  // TODO: AAAGHHHHHHH I HATE IT HEREEEE
+
+  // Make sure the username provided doesn't break any format rules.
+  // If not, return HTTP 400 again.
+  const valid = validUsername(username);
+  if (!valid.result) {
+    // reuse the reason returned by validUsername if the check fails,
+    // so we can have a more descriptive error
+    res.status(400).json({
+      'error': 'Invalid username',
+      'message': valid.reason
+    })
+    return;
+  }
+
+  // Make sure that user doesn't already exist.
+  // If they do, we can't sign them up--they need to login.
+  if (await dbHasUsername(username)) {
+    res.status(400).json({
+      'error': 'Username exists',
+      'message': `A user with username ${username} already exists.`
+    });
+    return;
+  }
+
+  // Having passed all the checks, we can now create that user.
+  // First, create an account for them in the database.
+  db.createNewAccount(username, req.body.email)
+
+  // Then, send them a one-time code to log in.
 }
 
+/**
+ * Request to log in an existing user account.
+ * 
+ * @param {*} req  Express request. Body should contain EITHER:
+ * - username to log into
+ * @param {*} res 
+ * @param {*} _next 
+ */
 async function logInUser(req, res, _next) {
+  // Make sure the user already exists. If it does not, return a HTTP 404 error.
+  // That signifies "resource not found", which is appropriate here.
+
+  // 
 }
 
 /**
@@ -312,6 +378,96 @@ function parseQueryTags(queryTags) {
   // This is because of the way the tags are stored as JSON in the database.
   const tags = queryTags.map((x) => '"' + x + '"');
   return tags;
+}
+
+/**
+ * Check if the database has a username stored.
+ * 
+ * @param {string} username  The username to check.
+ * @returns  true if it is present, false if not.
+ */
+async function dbHasUsername(username) {
+  // Ask the database to find a user with that username
+  const db_result = await db.getAccount(username);
+
+  // Database returns a JSON object if the account exists,
+  // or `undefined` if it does not exist
+  const exists = !(db_result === undefined)
+  return exists;
+}
+
+/**
+ * Determine whether a username is valid.
+ * 
+ * @param {string} username  The username to check.
+ * @returns  An object with these keys:
+ * - result: true if username is valid, false if not
+ * - reason: if result is false, the reason why.
+ */
+function validateUsername(username) {
+  // Make sure the username is within the right length (8-20 chars)
+  const minLength = 8;
+  const maxLength = 20;
+  if (username.length < minLength || username.length > maxLength) {
+    return {
+      result: false,
+      reason: `Username must be ${minLength}-${maxLength} characters long.`
+    };
+  }
+
+  // Count the letters in the username.
+  //   the `|| []` is because a failed match returns null, but
+  //   we need the result object to have a length of 0.
+  const letters = username.match(/[A-Za-z]/g) || [];
+
+  // If there are too few letters, the username is invalid.
+  const minLetters = 5;
+  if (letters.length < minLetters) {
+    return {
+      result: false,
+      reason: `Username must contain at least ${minLetters} letters.`
+    };
+  }
+
+  // Construct a regular expression that checks if every char is allowed.
+  const allowedChars = "A-Za-z0-9._"
+  const allowedCharsRegex = new RegExp(
+    "^[" +          // must start at start of string
+    allowedChars +  // only allow characters in our allowed list
+    "]+$"           // must go all the way to end of string
+  );
+
+  // If that regular expression does not match, return the username is invalid
+  if (!allowedCharsRegex.test(username)) {
+    return {
+      result: false,
+      reason: `Username may only contain characters in the set [${allowedChars}].`
+    };
+  }
+
+  // Make sure username doesn't start or end with _ or .
+  if (username.startsWith('.') || username.startsWith('_')
+    || username.endsWith('.') || username.endsWith('_')) {
+    return {
+      result: false,
+      reason: 'Username must not start or end with . or _'
+    };
+  }
+
+  // Make sure username doesn't contain doubles of any separators
+  if (username.includes('..') || username.includes('__') 
+    || username.includes('._') || username.includes('_.')) {
+    return {
+      result: false,
+      reason: 'Username must not contain .., __, ._, or _.'
+    };
+  }
+
+  // After all these checks, we can be confident the username is valid
+  return {
+    result: true,
+    reason: ''
+  };
 }
 
 /*
