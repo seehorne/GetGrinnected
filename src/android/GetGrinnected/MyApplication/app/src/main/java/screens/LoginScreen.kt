@@ -17,10 +17,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,18 +29,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.myapplication.DataStoreSettings
+import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitApiClient
+import com.example.myapplication.DataStoreSettings
 import kotlinx.coroutines.launch
 
 /**
@@ -56,21 +56,38 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(modifier: Modifier, navController: NavController) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    val context = LocalContext.current // The current context of our app
-    val coroutineScope = rememberCoroutineScope() // Used to launch background tasks and processes
+    // Email input by user
+    var email by remember { mutableStateOf("") }
+    // Error Message to be displayed
+    var errMsg by remember { mutableStateOf("") }
+    // Process to launch background tasks
+    val coroutineScope = rememberCoroutineScope()
+    // Boolean to track whether our api is messaging and we need to halt input
+    var isLoading by remember { mutableStateOf(false)}
+    // Boolean associated with specifically a email error to shift field color
+    var errEmail by remember { mutableStateOf(false) }
+    // Flag sent to the verification function to indicate a login process (false means login true means signup)
+    val signUp = false
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
+  
 
+    // Manages Keyboard focus and allows us to pull to specific locations
     val focusManager = LocalFocusManager.current
+
+    // This sets up the general look of the entire screen
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()) // This makes our app scrollable
             .padding(16.dp)
             .imePadding(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // This is our app logo image
         Image(
             painter = painterResource(id = R.drawable.gg_logo_2),
             contentDescription = "App Logo",
@@ -81,40 +98,32 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(text = "Welcome Back", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Welcome Back",
+            style = typography.headlineMedium,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text = "Login to your account")
+        Text(text = "Login to your account",
+            style = typography.bodyLarge,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Username") },
+        // This is our textbox to handle users email input
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it
+                            errEmail = false},
+            label = { Text("Email", style = typography.labelLarge) },
+            isError = errEmail,
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
+                // This makes it so the enter key is a done button instead of enter
+                imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
-                onNext ={
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
-                    ),
-            keyboardActions = KeyboardActions(
                 onDone ={
+                    // Clear focus makes it so we are no longer focused on the field and can close the
+                    // keyboard on the phone
                     focusManager.clearFocus()
                 }
             )
@@ -122,30 +131,85 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // This handles displaying the specific errors of note
+        if (errMsg.isNotEmpty()) {
+            Text(
+                text = errMsg,
+                color = colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        // This is our login button handles an api request for login and if successful navigates
+        // to main screen if not gives an error message
         Button(onClick = {
-            // Sets our logged in state to true
-            coroutineScope.launch{
-                DataStoreSettings.setLoggedIn(context, true)
+            coroutineScope.launch {
+                errMsg = ""
+                // This does general field validation to insure stuff has at least been entered
+                if (email.isBlank()){
+                    errMsg = "Please enter email"
+                    errEmail = true
+                    return@launch // Escapes launch due to missing username
+                }
+
+
+                isLoading = true
+                try {
+                    // Makes the api login request
+                  //  val emailResponse = RetrofitApiClient.apiModel.checkemail(
+                    //    EmailRequest(email)
+                    //)
+                    // Assess if the request and validation of login was successful if so
+                    // nav to main if not show login failure.
+                    //if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
+                        // TODO SEND EMAIL HERE
+                        navController.navigate("verification/${email}/${signUp}/str") {
+                            popUpTo(0) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    //} else {
+                      //  errMsg = emailResponse.body()?.message ?: "Email Not Found"
+                    //}
+                    // Failure specifically with a network connection ie couldn't leave our app
+               // } catch (e: Exception) {
+                 //   errMsg = "Network error: ${e.localizedMessage}"
+                } finally {
+                    isLoading = false
+                }
             }
-            navController.navigate("main"){
-            popUpTo(0){inclusive = true}
-            launchSingleTop = true
-        }
-        }) {
-            Text("Login")
+        },
+            enabled = !isLoading
+        ) {
+            Text(if (isLoading) "Logging in..." else "Login", style = typography.labelLarge)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(text = "Forgot Password?", modifier = Modifier.clickable {  })
+        Text(text = "Forgot Password?",
+            style = typography.bodyMedium,
+            color = colorScheme.onBackground,
+            modifier = Modifier.clickable { /* TODO Logic to handle forgot password */})
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // This is to properly align our link to signup page with a intuitive message.
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
-            Text(text = "New to GetGrinnected?")
-            TextButton(onClick = {navController.navigate("signup")}) { Text(text = "Join now")}
+            Text(text = "New to GetGrinnected?",
+                style = typography.bodyMedium,
+                color = colorScheme.onBackground)
+            TextButton(onClick = {navController.navigate("signup")}) {
+                Text(text = "Join now",
+                    style = typography.labelLarge,
+                    color = colorScheme.onBackground)}
         }
         Spacer(modifier = Modifier.height(200.dp))
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview(){
+    LoginScreen(modifier = Modifier, navController = rememberNavController())
 }

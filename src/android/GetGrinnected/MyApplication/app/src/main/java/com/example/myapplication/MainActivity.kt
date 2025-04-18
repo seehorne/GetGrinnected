@@ -8,20 +8,14 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import javax.net.ssl.HttpsURLConnection
 
 /**
  * Our main used to run and create our app. Currently utilizes the AppNavigator function at
@@ -34,17 +28,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            // This chunk till just past events handles reading in events from the api.
-            val url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
-            val result = withContext(Dispatchers.IO) {
-                getDataFromUrl(url)
+            val response = withContext(Dispatchers.IO) {
+                RetrofitApiClient.apiModel.getEvents()
             }
-            var current = 0
-            val gson = Gson()
-            val listType = object : TypeToken<List<Event>>() {}.type
-            val events: List<Event> = gson.fromJson(result, listType) ?: emptyList()
-            val length = events.size
-            var eventssorted = events.sortedBy { it.event_time }
+
+            val events = response.body() ?: emptyList()
+            val eventssorted = events.sortedBy { it.event_time }
+            val length = eventssorted.size
             // val eventsTimeFixed = fixTime(eventssorted,length)
 
             // These get our persistent state values for whether the user is logged in
@@ -74,34 +64,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-fun getDataFromUrl(url: String): String? {
-    var connection: HttpsURLConnection? = null
-    return try {
-        val urlObj = URL(url)
-        connection = urlObj.openConnection() as HttpsURLConnection
-        connection.requestMethod = "GET"
-
-        val responseCode = connection.responseCode
-        if (responseCode == HttpsURLConnection.HTTP_OK) {
-            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-            val response = StringBuilder()
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                response.append(line)
-            }
-            reader.close()
-            response.toString()
-        } else {
-            null
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    } finally {
-        connection?.disconnect()
     }
 }
 
