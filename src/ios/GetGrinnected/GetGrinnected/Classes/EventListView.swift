@@ -79,7 +79,7 @@ struct EventListView: View {
                 EventCard(event: event, isExpanded: (event.eventid! == selectedEvent))
                     .onTapGesture {//change expansion to ture to make card larger
                         //add animation to the tap gesture!
-                        withAnimation(.easeInOut) { // this animation should be chnaged: The best way to change this may include changing the structure of our Event Card
+                        withAnimation(.easeInOut) { // this animation should be changed: The best way to change this may include changing the structure of our Event Card
                             //HERE WE ARE NOT CHECKING FOR OPTIONAL
                             //however, ALL events DO have an id
                             //if have an error, check here, though

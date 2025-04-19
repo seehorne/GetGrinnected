@@ -49,7 +49,6 @@ struct EventCard: View {
     let isExpanded: Bool//The single card does not need a @binding or @state tag
     //simply based on this value, the expansion will show and not.
     
-    
     //body is how this is rendered
     
     var body: some View{
@@ -102,9 +101,7 @@ struct EventCard: View {
                         }
                         
                         
-                        
                         //We want date and time on the same line, so we..
-                        
                         if((event.event_date != nil) && (event.event_time != nil)){ //check if both are not nil, then..
                             Text("\(event.event_date!) • \(event.event_time!)") //print out both strings and create a text bullet point inbetween the date and time
                                 .font(.caption)
@@ -128,7 +125,7 @@ struct EventCard: View {
                                 .frame(alignment: .leading)//specifically adding leading alignment to get
                                 .lineLimit(1000, reservesSpace: false)
                         }
-                        
+                      //Add event tags, checking both if expanded and event tags
                         if(isExpanded && !event.tags!.isEmpty) {
                             //join the array with a ", "
                             Text("Tags: \(event.tags!.joined(separator: ", "))")
