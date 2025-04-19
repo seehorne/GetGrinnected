@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 import * as db from '../../db_connect.js';
 import * as util from '../utils.mjs';
