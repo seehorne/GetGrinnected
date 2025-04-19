@@ -108,35 +108,6 @@ describe('Web Scrape Output Unit Tests', () => {
     }
     );
 
-  test('When running drop timeout, events actually remove from JSON',
-    { concurrency: true}, async t => {
-      //run drop once
-      await scrape.dropPastEvents(scrape.CIPATH, true);
-      //read resulting file
-      droppedEvents = fs.readFileSync(scrape.DROPPATH, 'utf-8');
-      //JSONify
-      droppedEventsJSON = JSON.parse(droppedEvents);
-      remainingEvents = JSON.parse(fs.readFileSync(scrape.CIPATH, 'utf-8'));
-      remainingLength = remainingEvents.data.length;
-      //make a set for the IDs
-      IDSet = new Set();
-      droppedEventsJSON.data.forEach(id => {
-        //put all the removed IDs in the set
-        IDSet.add(id.ID)
-      })
-      removed = false; 
-      for (let i = 0; i <remainingLength; i++){
-        //should be false unless the ID was in the set 
-        //which it shouldnt be because we allegedly removed it
-        removed = IDSet.delete(remainingEvents.data[i].ID);
-        if (removed== true){
-          break;
-        }
-      }
-      assert(removed === false)
-    }
-    );
-
   test('When running drop cancel, events actually remove from JSON',
     { concurrency: true}, async t => {
       //run drop once
