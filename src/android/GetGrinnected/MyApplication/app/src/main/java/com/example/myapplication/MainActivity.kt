@@ -98,6 +98,7 @@ class MainActivity : ComponentActivity() {
 fun fixTime(aba: List<Event>): List<Event>{
     var current = 0
     val done = mutableListOf<Event>()
+    // creates a variable to represent null as it cant be directly called
     var why = null
     repeat(aba.size){
         done.add(aba[current].copy(
