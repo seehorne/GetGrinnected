@@ -102,7 +102,7 @@ fun fixTime(aba: List<Event>): List<Event>{
     var why = null
     repeat(aba.size){
         done.add(aba[current].copy(
-            // Takes care of null cases so that java can be turned into kotlin
+            // Takes care of null case so that java can be turned into kotlin
             event_image = if(aba[current].event_image == why){
                 "0"
             }
