@@ -81,6 +81,16 @@ export async function signUpNewUser(req, res, _next) {
     return;
   }
 
+  // Also make sure no user with that email exists. 
+  // We don't want one person to have two accounts.
+  if (await db.getAccountByEmail(email)) {
+    res.status(400).json({
+      'error': 'Email exists',
+      'message': 'A user with that email already exists.'
+    });
+    return;
+  }
+
   // Having passed all the checks, we can now create that user in the database
   await db.createAccount(username, email);
 
