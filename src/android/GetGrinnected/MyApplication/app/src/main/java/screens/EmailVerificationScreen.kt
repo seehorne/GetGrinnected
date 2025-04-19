@@ -1,6 +1,7 @@
 package screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -68,133 +69,145 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
 
     // This sets up all of our elements in a column layout
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(colorScheme.background)
     ) {
-        // This is our app logo image
-        Image(
-            painter = painterResource(id = R.drawable.gg_logo_2),
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(250.dp)
-        )
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // This is our app logo image
+            Image(
+                painter = painterResource(id = R.drawable.gg_logo_2),
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(250.dp)
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Text(
-            text = "Enter the 6-digit verification code sent to your email",
-            style = typography.titleLarge,
-            color = colorScheme.onBackground,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
+            Text(
+                text = "Enter the 6-digit verification code sent to your email",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // This is the text field they enter the verification code into
-        OutlinedTextField(
-            value = codeInput,
-            onValueChange = {
-                if (it.length <= 6) codeInput = it
-            },
-            label = { Text("Verification Code", style = typography.labelLarge) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            singleLine = true
-        )
+            // This is the text field they enter the verification code into
+            OutlinedTextField(
+                value = codeInput,
+                onValueChange = {
+                    if (it.length <= 6) codeInput = it
+                },
+                label = { Text("Verification Code", style = typography.labelLarge) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true
+            )
 
-        // This handles displaying of errors
-        if (errMsg.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = errMsg,
-                color = colorScheme.error,
-                style = typography.bodySmall)
-        }
+            // This handles displaying of errors
+            if (errMsg.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = errMsg,
+                    color = colorScheme.error,
+                    style = typography.bodySmall
+                )
+            }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        // This is our verify button
-        Button (onClick = {
-            if (codeInput == validCode) {
-                coroutineScope.launch {
-                  //  try {
-                        if (flag){
+            // This is our verify button
+            Button(onClick = {
+                if (codeInput == validCode) {
+                    coroutineScope.launch {
+                        //  try {
+                        if (flag) {
                             // Makes the api signup request
-                          //  val response = RetrofitApiClient.apiModel.signup(
+                            //  val response = RetrofitApiClient.apiModel.signup(
                             //    SignupRequest(email = email, account_username = username)
-                           // )
+                            // )
                             // Assess if the request and creation of account was successful if so
                             // nav to main if not show signup failure.
-                          //  if (response.isSuccessful && response.body()?.success == true) {
-                                DataStoreSettings.setLoggedIn(context, true)
-                                navController.navigate("main") {
-                                    popUpTo(0) { inclusive = true }
-                                    launchSingleTop = true
-                                }
-                           // } else {
-                           //     errMsg = response.body()?.message ?: "Sign up failed"
-                           // }
+                            //  if (response.isSuccessful && response.body()?.success == true) {
+                            DataStoreSettings.setLoggedIn(context, true)
+                            navController.navigate("main") {
+                                popUpTo(0) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                            // } else {
+                            //     errMsg = response.body()?.message ?: "Sign up failed"
+                            // }
                         } else {
                             // Makes the api login request
-                       //     val response = RetrofitApiClient.apiModel.login(
-                         //       LoginRequest(email = email)
-                         //   )
+                            //     val response = RetrofitApiClient.apiModel.login(
+                            //       LoginRequest(email = email)
+                            //   )
                             // Assess if the request for login was successful if so
                             // nav to main if not show login failure.
-                         //   if (response.isSuccessful && response.body()?.success == true) {
+                            //   if (response.isSuccessful && response.body()?.success == true) {
                             // This is here so I remember how to handle this
-                                DataStoreSettings.setLoggedIn(context, true)
-                                navController.navigate("main") {
-                                    popUpTo(0) { inclusive = true }
-                                    launchSingleTop = true
-                                }
-                          //  } else {
+                            DataStoreSettings.setLoggedIn(context, true)
+                            navController.navigate("main") {
+                                popUpTo(0) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                            //  } else {
                             //    errMsg = response.body()?.message ?: "login failed"
-                           // }
+                            // }
                         }
                         // Failure specifically with a network connection ie couldn't leave our app
-                //    } catch (e: Exception) {
-                  //      errMsg = "Network error: ${e.localizedMessage}"
-                 //   }
+                        //    } catch (e: Exception) {
+                        //      errMsg = "Network error: ${e.localizedMessage}"
+                        //   }
+                    }
+                } else {
+                    errMsg = "Incorrect code. Please try again."
                 }
-            } else {
-                errMsg = "Incorrect code. Please try again."
+            }) {
+                Text("Verify", style = typography.labelLarge)
             }
-        }) {
-            Text("Verify", style = typography.labelLarge)
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // This is our resend code button that will resend the verification code
-        TextButton (onClick = {
-            // TODO: LOGIC TO RESEND CODE
-            errMsg = "A new code has been sent to your email."
-        }) {
-            Text("Resend Code",
-                style = typography.labelLarge,
-                color = colorScheme.primary)
-        }
-
-        // This is our cancel button that navigates back to the sign up page
-        TextButton(onClick = {
-            if(flag) {
-                navController.navigate("signup") {
-                    popUpTo("verification") { inclusive = true }
-                }
-            } else{
-                navController.navigate("login") {
-                    popUpTo("verification") { inclusive = true }
-                }
+            // This is our resend code button that will resend the verification code
+            TextButton(onClick = {
+                // TODO: LOGIC TO RESEND CODE
+                errMsg = "A new code has been sent to your email."
+            }) {
+                Text(
+                    "Resend Code",
+                    style = typography.labelLarge,
+                    color = colorScheme.primary
+                )
             }
-        }) {
-            Text("Cancel",
-                style = typography.labelLarge,
-                color = colorScheme.primary)
+
+            // This is our cancel button that navigates back to the sign up page
+            TextButton(onClick = {
+                if (flag) {
+                    navController.navigate("signup") {
+                        popUpTo("verification") { inclusive = true }
+                    }
+                } else {
+                    navController.navigate("login") {
+                        popUpTo("verification") { inclusive = true }
+                    }
+                }
+            }) {
+                Text(
+                    "Cancel",
+                    style = typography.labelLarge,
+                    color = colorScheme.primary
+                )
+            }
         }
     }
 }

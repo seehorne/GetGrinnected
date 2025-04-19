@@ -89,7 +89,7 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
                 Icon(
                     imageVector = if (isFollowed.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "Follow Icon",
-                    tint = if (isFollowed.value) colorScheme.primary else colorScheme.onSurface,
+                    tint = if (isFollowed.value) colorScheme.primary else colorScheme.primary,
                     modifier = Modifier
                         .size(32.dp)
                         .clickable {
