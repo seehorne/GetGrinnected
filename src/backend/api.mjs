@@ -27,26 +27,31 @@ export function run() {
 
   // Create a regular HTTP server.
   // Default to 8080 so non-root users can run it.
+  // If it is set to -1, do not run a HTTP server at all.
   const http_port = Number(process.env.HTTP_PORT) || 8080;
-  http_server = http.createServer(app).listen(http_port, () => {
-    console.log(`http server listening on port  ${http_port}`);
-  });
-
-  // Read our SSL credentials from the environment (loaded from dotenv)
-  const credentials = {
-    key: process.env.SSL_KEY,
-    ca: process.env.SSL_CA,
-    cert: process.env.SSL_CERT,
-  };
-
-  // Create an HTTPS server serving the application.
-  // Default to 4443 so non-root users can run it.
-  const https_port = Number(process.env.HTTPS_PORT) || 4443;
-  https_server = https
-    .createServer(credentials, app)
-    .listen(https_port, () => {
-      console.log(`https server listening on port ${https_port}`);
+  if (http_port !== -1) {
+    http_server = http.createServer(app).listen(http_port, () => {
+      console.log(`http server listening on port ${http_port}`);
     });
+  }
+
+  // If HTTPS_PORT is defined (and not -1), run an HTTPS server on it. If it is not defined,
+  // do not attempt to run a server.
+  const https_port = Number(process.env.HTTPS_PORT) || -1;
+  if (https_port !== -1) {
+    // Read our SSL credentials from the environment (loaded from dotenv)
+    const credentials = {
+      key: process.env.SSL_KEY,
+      ca: process.env.SSL_CA,
+      cert: process.env.SSL_CERT,
+    };
+
+    https_server = https
+      .createServer(credentials, app)
+      .listen(https_port, () => {
+        console.log(`https server listening on port ${https_port}`);
+      });
+  }
 
   /*
    * API routes (URLs that users can reach) get created below.
