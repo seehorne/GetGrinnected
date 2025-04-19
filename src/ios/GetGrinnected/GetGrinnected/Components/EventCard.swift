@@ -45,7 +45,9 @@ import SwiftUI
 struct EventCard: View {
     
     //Event is the struct we defined in "Event" file, stores all information of JSON
-    var event: Event
+    let event: Event
+    let isExpanded: Bool//The single card does not need a @binding or @state tag
+    //simply based on this value, the expansion will show and not.
     
     
     //body is how this is rendered
@@ -84,7 +86,7 @@ struct EventCard: View {
                         //Check if null
                         if(!event.organizations!.isEmpty) {
                             //join the array with a ", "
-                            Text("\(event.organizations!.joined(separator: ", "))")
+                            Text("By \(event.organizations!.joined(separator: ", "))")
                                 .font(.subheadline)
                                 .foregroundStyle(.textPrimary)
                             //alternatives for colors
@@ -96,6 +98,7 @@ struct EventCard: View {
                         if(event.event_location != nil){
                             Text(event.event_location!)
                                 .foregroundStyle(.textPrimary)
+                                .font(.caption)
                         }
                         
                         
@@ -117,8 +120,30 @@ struct EventCard: View {
                         }
                         
                         
+                        //Add description if our event is expanded
+                        if (isExpanded && event.event_description != nil){
+                            Text("\(event.event_description!)")
+                                .font(.caption) //determining font (make it big!)
+                                .foregroundStyle(.textPrimary)//this color is defined in assets
+                                .frame(alignment: .leading)//specifically adding leading alignment to get
+                                .lineLimit(1000, reservesSpace: false)
+                        }
+                        
+                        if(isExpanded && !event.tags!.isEmpty) {
+                            //join the array with a ", "
+                            Text("Tags: \(event.tags!.joined(separator: ", "))")
+                                .font(.caption2)
+                                .foregroundStyle(.textPrimary)
+                                .lineLimit(1000, reservesSpace: false)
+                            //alternatives for colors
+                                //.foregroundStyle(Color("textPrimary"))
+                                // .foregroundStyle(Color.textPrimary)
+                        }//organizations
+                        
+                        
                             
                     }//Vstack text
+                    //if expanded, set line limit to max, and don't reserve space!
                     .lineLimit(1, reservesSpace: true) //card wont change size thx to this.
                     .padding(.vertical, 4)
                     .padding(.leading, 8) //adding space before
@@ -185,6 +210,10 @@ struct EventCards_Previews: PreviewProvider {
     static var previews: some View {
         let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
             let myEvents = EventData.parseEvents(json: myjson)
-        EventCard(event: myEvents[0])
+        List{
+            EventCard(event: myEvents[0], isExpanded: false)
+            EventCard(event: myEvents[0], isExpanded: true)
+            
+        }
     }
 }
