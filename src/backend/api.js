@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const http = require('http');
 const https = require('https');
+const jwt = require('jsonwebtoken');
 
 /* global var to store the servers we are running,
  * so they can be shut down when needed */
@@ -371,10 +372,30 @@ async function verifyOTP(req, res, _next) {
 
   console.log(`got OTP verify request from ${email} with code ${code}`);
 
-  // TODO: CHECK CODE AGAINST LOCAL STORAGE
-  res.status(400).json({
-    'error': 'Bad code',
-    'message': 'Could not verify OTP.'
+  // // TODO: CHECK CODE AGAINST LOCAL STORAGE, RETURN BAD OTP IF NOT
+  // res.status(400).json({
+  //   'error': 'Bad code',
+  //   'message': 'Could not verify OTP.'
+  // });
+
+  // Use JSON Web Tokens to create two tokens for the user,
+  // a long-lived refresh token and a short-lived access token.
+  const refreshToken = jwt.sign(
+    { email },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '30d' }
+  );
+  const accessToken = jwt.sign(
+    { email },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
+
+  // Send those tokens back to the user in a successful response.
+  res.json({
+    'message': 'Successfully authenticated',
+    'refresh_token': refreshToken,
+    'access_token': accessToken
   });
 }
 
