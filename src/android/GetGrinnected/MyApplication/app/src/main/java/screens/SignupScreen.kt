@@ -16,10 +16,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,20 +32,21 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.myapplication.DataStoreSettings
+import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
+import com.example.myapplication.RetrofitApiClient
+import com.example.myapplication.DataStoreSettings
 import kotlinx.coroutines.launch
 
 /**
  * A composable function that represents the Signup screen of our application.
  *
- * This screen includes input fields for username, email, and password (That are all Strings),
+ * This screen includes input fields for username, email (That are all Strings),
  * along with a sign-up button (To navigate to the homepage/complete account creation)
  * and a sign in navigation option for users who already have an account.
  *
@@ -55,12 +56,31 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignupScreen(modifier: Modifier, navController: NavController) {
+    // Username input by the user
     var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    // Email input by the user
     var email by remember { mutableStateOf("") }
+    // Manages the focus of the keyboard so we can move it
     val focusManager = LocalFocusManager.current
-    val context = LocalContext.current // The current context of our app
-    val coroutineScope = rememberCoroutineScope() // Used to launch background tasks and processes
+    // Boolean associated with specifically a username error to shift field color
+    var errUsername by remember { mutableStateOf(false) }
+    // Boolean associated with specifically an email error to shift field color
+    var errEmail by remember { mutableStateOf(false) }
+    // General message of errors associated with any given issue
+    var errMsg by remember { mutableStateOf("") }
+    // Boolean to track whether our api is messaging and we need to halt input
+    var isLoading by remember { mutableStateOf(false)}
+    // Process to launch background tasks
+    val coroutineScope = rememberCoroutineScope()
+    // Flag sent to the verification function to indicate a signUp Process
+    val signUp = true
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
+
+    // This sets up the general look of the entire screen
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,6 +90,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // This is the app logo image
         Image(
             painter = painterResource(id = R.drawable.gg_logo_2),
             contentDescription = "App Logo",
@@ -80,23 +101,32 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(text = "Welcome to GetGrinnected", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Welcome to GetGrinnected",
+            style = typography.headlineMedium,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(text = "Create a free account")
+        Text(text = "Create a free account",
+            style = typography.bodyLarge,
+            color = colorScheme.onBackground)
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        // This handles the username field
+        OutlinedTextField(
             value = username,
-            onValueChange = { username = it },
-            label = { Text("Username") },
+            onValueChange = { username = it
+                            errUsername = false},
+            label = { Text("Username", style = typography.labelLarge) },
+            isError = errUsername,
             keyboardOptions = KeyboardOptions(
+                // This makes it so the enter key is a next button instead of enter
                 imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(
                 onNext ={
+                    // This moves our focus down to the next text field.
                     focusManager.moveFocus(FocusDirection.Down)
                 }
             )
@@ -104,61 +134,117 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        // This handles the email field
+        OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
+            onValueChange = { email = it.trim().lowercase()
+                            errEmail = false}, //ensures it isn't case sensitive
+            label = { Text("Email", style = typography.labelLarge) },
+            isError = errEmail,
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext ={
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
+                // This makes it so the enter key is a done button instead of enter
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone ={
+                    // Clear focus makes it so we are no longer focused on the field and can close the
+                    // keyboard on the phone
                     focusManager.clearFocus()
                 }
             )
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Handles reporting issues and errors that arise from user input
+        if (errMsg.isNotEmpty()) {
+            Text(
+                text = errMsg,
+                color = colorScheme.error,
+                style = typography.bodySmall
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick =  {
-            // Sets our logged in state to true
-            coroutineScope.launch{
-                DataStoreSettings.setLoggedIn(context, true)
+        // This is how we setup our signup button
+        Button(onClick = {
+            coroutineScope.launch {
+
+                // Checks the validation conditions
+                val emailError = validateEmail(email)
+                val missingUsername = username.isBlank()
+
+                if (missingUsername){
+                    errMsg = "Please enter username"
+                    errUsername = true
+                    return@launch // Escapes launch due to missing username
+                }
+
+                if (emailError != null){
+                    errMsg = emailError
+                    errEmail = true
+                    return@launch // Escapes launch due to non Grinnell email
+                }
+
+                isLoading = true // Set loading state to true to disable the button
+                try{
+                    // Makes the api email request check
+                 //   val emailReponse = RetrofitApiClient.apiModel.checkemail(
+                   //     EmailRequest(email)
+                   // )
+                    // Assess if the request and if the email was available
+                   // if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
+                        // TODO SEND EMAIL HERE
+                              // Sets our logged in state to true
+                        navController.navigate("verification/${email}/${signUp}/${username}") {
+                            popUpTo(0) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                   // } else {
+                     //   errMsg = emailReponse.body()?.message ?: "Email already in use"
+                   // }
+               // } catch(e: Exception) { // Handles network errors that way arise when making the api call
+                 //   errMsg = "Network error: ${e.localizedMessage}"
+                } finally{ // Set loading state to false to reenable the button
+                    isLoading = false
+                }
             }
-            navController.navigate("main"){
-                popUpTo(0){inclusive = true}
-                launchSingleTop = true
-        } }) {
-            Text("Sign up")
+        },
+            enabled = !isLoading
+            ) {
+            Text(if (isLoading) "Signing up" else "Sign up", style = typography.labelLarge)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // This creates a row that implies our sign in text button to take you to the login page
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
             verticalAlignment = Alignment.CenterVertically){
-            Text(text = "Already on GetGrinnected?")
+            Text(text = "Already on GetGrinnected?", style = typography.bodyMedium, color = colorScheme.onBackground)
             TextButton(onClick = {navController.navigate("login")}){
-                Text(text = "Sign in")
+                Text(text = "Sign in", style = typography.labelLarge)
             }
         }
 
         Spacer(modifier = Modifier.height(200.dp))
     }
+}
+
+/**
+ * Validates an email ends in @grinnell.edu
+ * @param email takes in a String representation of an email
+ * @return null which basically means it ends in @grinnell.edu otherwise
+ * it returns a string associated with the error it isn't meeting.
+ */
+fun validateEmail(email: String): String? {
+    if (!email.endsWith("@grinnell.edu")) return "Email must end with @grinnell.edu"
+    return null
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun SignupScreenPreview(){
+    SignupScreen(modifier = Modifier, navController = rememberNavController())
 }
