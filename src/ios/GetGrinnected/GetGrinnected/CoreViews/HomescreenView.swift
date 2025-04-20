@@ -38,6 +38,7 @@ struct HomescreenView: View {
                                 displayedComponents: .date
                             )
                             .labelsHidden()
+                            .padding()
                         
                             // a picker for tags
                             Picker("Tags", selection: $selectedTags){
@@ -45,6 +46,7 @@ struct HomescreenView: View {
                                     Text(tag.rawValue)
                                 }
                             }
+                            .padding()
                         } //HStack
                     
                         //Main Event List View
