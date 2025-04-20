@@ -200,13 +200,21 @@ describe('Web Scrape Output Unit Tests', () => {
 
   test('After scraping, there are as many or more events as before (no lost events)',
     { concurrency: true }, async t => {
+    //read the file with the current events
     events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    //parse the JSON that comes from reading the file
     ogEvents = JSON.parse(events);
+    //save the number of events we had prior to scraping
     beforeSize = ogEvents.data.length;
+    //perform a scrape
     await scrape.scrapeData(scrape.URL, scrape.CIPATH);
+    //read the file again, now with new events
     newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    //parse read file to JSON
     nowEvents = JSON.parse(events);
+    //save the number of events we have now after scraping
     nowSize = nowEvents.data.length;
+    //to pass, we should have as many or more events as we did previously
     assert(nowSize >= beforeSize)
   }
   ) //this no longer necessarily holds up, unless it runs after all drop tests, but should after drops
@@ -239,11 +247,18 @@ describe('Web Scrape Output Unit Tests', () => {
   );
 
   test('All events are unique by ID', { concurrency: true }, async t => {
+    //scrape to get up to date events
     await scrape.scrapeData(scrape.URL,scrape.CIPATH);
+    //read, parse to JSON
     events = fs.readFileSync(scrape.CIPATH, 'utf-8');
     currentEvents = JSON.parse(events);
+    //make a set (so no duplication) of all the IDs we have
     IDSet = scrape.processExisting(scrape.CIPATH);
-    numIDs = IDSet.size;
+    //how big is that set
+    numIDs = IDSet.size; 
+    //how many events do we have total
     numEvents = currentEvents.data.length;
+    //to pass, the number of events should match the number of IDs
+    //because we want exactly one ID per event
     assert.strictEqual(numIDs,numEvents)
   });
