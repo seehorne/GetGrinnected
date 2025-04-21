@@ -24,9 +24,9 @@ struct MainNavView: View {
                 .tabItem {
                     Label("Favorites", systemImage: "heart.fill")
                 }
-            ProfileView()
+            SettingsView()
                 .tabItem {
-                    Label("Profile", systemImage: "person.fill")
+                    Label("Settings", systemImage: "gearshape.fill")
                 }
         }
     }

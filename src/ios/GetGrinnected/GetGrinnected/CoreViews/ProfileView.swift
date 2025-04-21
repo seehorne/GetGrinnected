@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct ProfileView: View {
+struct SettingsView: View {
     @State private var email = ""
     
     var body: some View {
@@ -23,11 +23,6 @@ struct ProfileView: View {
                     //content
                     
                     VStack {
-                        Image(systemName:"person.crop.circle")
-                            .imageScale(.large)
-                            .font(.system(size: 100))
-                            .foregroundStyle(.colorPink)
-                        
                         InputView(text: $email, title: "Change Email", placeholder: "Enter your Grinnell Email")
                     } //VStack
                     .padding()
@@ -42,5 +37,5 @@ struct ProfileView: View {
 } //ProfileView
 
 #Preview {
-    ProfileView()
+    SettingsView()
 }
