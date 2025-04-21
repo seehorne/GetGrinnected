@@ -28,6 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * A composable function that creates the general look of an event card.
@@ -42,7 +45,8 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
-    val isFavorited = remember { mutableStateOf(event.is_favorited) }
+     val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
+
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
@@ -77,12 +81,14 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             ) {
                 // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = event.event_name,
-                        style = typography.titleLarge,
-                        color = colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
-                    )
+                    event.event_name?.let {
+                        Text(
+                            text = it,
+                            style = typography.titleLarge,
+                            color = colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(4.dp))
 
@@ -92,14 +98,15 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
                     Spacer(modifier = Modifier.height(2.dp))
 
-                    Text(text = event.event_location,
-                        style = typography.bodyMedium,
-                        color = colorScheme.onSurface)
+                    event.event_location?.let { Text(text = it, 
+                                                     style = typography.bodyMedium,
+                                                      color = colorScheme.onSurface)) 
+                    }
 
                     Spacer(modifier = Modifier.height(2.dp))
 
                     // If organizations is empty we won't include the output on the card
-                    if (event.organizations.isNotEmpty()) {
+                    if (event.organizations?.isNotEmpty()) {
                         Text(text = "Hosted by: ${event.organizations.joinToString()}",
                             style = typography.bodyMedium,
                             color = colorScheme.onSurface)
@@ -115,12 +122,17 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                         .size(40.dp)
                         .clickable {
                             isFavorited.value = !isFavorited.value
+                            // This tells our database to update the events favorited status
+                            CoroutineScope(Dispatchers.IO).launch {
+                                AppRepository.toggleFavorite(event.eventid, isFavorited.value)
+                            }
                         },
                 )
             }
             // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {
-                if (event.event_description.isNotEmpty()) {
+
+                if (event.event_description?.isNotEmpty()) {
                     Text(text = "Description: ${event.event_description}",
                         style = typography.bodyMedium,
                         color = colorScheme.onSurface)
@@ -128,7 +140,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                if (event.tags.isNotEmpty()) {
+                if (event.tags?.isNotEmpty() == true) {
                     Text(text = "Tags: ${event.tags.joinToString()}",
                         style = typography.bodyMedium,
                         color = colorScheme.onSurface)
@@ -141,9 +153,10 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 /**
  * Preview of event card for UI adjustment purposes only.
  */
-
+/*
 @Preview (showBackground = true)
 @Composable
 fun eventCardPreview(){
     EventCard(Event(eventid= 2, event_name = "Crafternoon", event_description =  "Lots of fun arts and crafts", event_location = "Downtown Theater", organizations = listOf("NAMI"), rsvp = 0, event_date ="2025-05-01", event_start_time = "6:30 PM", event_private = 0, event_end_time = "8:00 PM", event_time ="8:00 PM", tags =listOf("art, fun"), is_draft = 0,repeats = 0, event_image = "h", event_all_day = 0, is_favorited = true))
 }
+*/

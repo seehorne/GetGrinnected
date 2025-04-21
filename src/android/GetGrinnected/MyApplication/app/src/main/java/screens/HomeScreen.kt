@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
@@ -24,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,30 +33,38 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.AppRepository
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.Check
+import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
+import com.example.myapplication.toEvent
 import java.time.LocalDate
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 
-
+fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
+    return mutableStateListOf<T>().apply {
+        repeat(size) { add(initialValue) }
+    }
+}
 
 /**
  * Anthony Schwindt, Ethan Hughes
  *
  * A composable function that represents the Home screen of our app. (More to come)
  *
- * @param modifier Modifier to be applied to the screen layout.
  */
 
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int) {
+fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -90,10 +98,15 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
     val check3 = remember { mutableStateOf(false)}
     // path to API data
 
-
-
-
-
+    // Gets events from our repo
+    val eventEntities by AppRepository.events
+    // Converts them to event data type
+    val event = eventEntities.map { it.toEvent() }
+    // Sorts them by time
+    val events = event.sortedBy { it.event_time }
+    val eventnum = events.size
+    var tagnum = 0
+    val chosenTags = mutableListOf<String>()
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     // creates the UI field for the events
@@ -111,11 +124,19 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
     {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
-        // populates the page with model cards
+        var tagSorter = 0
+        repeat(tags.size){
+            if (tags[tagSorter].checked) {
+                chosenTags.add(tags[tagSorter].label)
+            }
+            tagSorter += 1
+        }
+        // populates the page with events
         repeat(eventnum) {
+            if (chosenTags.isEmpty()){
             if (selectedView == 0) {
-                if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -123,8 +144,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 1) {
-                if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -132,8 +153,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 2) {
-                if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -141,8 +162,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 3) {
-                if (event[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -150,8 +171,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 4) {
-                if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -159,8 +180,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 5) {
-                if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -168,13 +189,90 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if(selectedView == 6){
-                if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
                     // creates space between cards
                     Spacer(modifier = Modifier.height(8.dp))
+                }
+            }}
+            // sorts by tag
+            else {
+                var t = 0
+                repeat(chosenTags.size){
+                    if (selectedView == 0) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
+                        {
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 1) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 2) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 3) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 4) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if (selectedView == 5) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
+                        {
+                            EventCard(event = event[cardnum], modifier = Modifier
+                                .background(Color.White)
+                                .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    } else if(selectedView == 6) {
+                        if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(
+                                formatter
+                            ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                        ) {
+                            EventCard(
+                                event = event[cardnum], modifier = Modifier
+                                    .background(Color.White)
+                                    .border(2.dp, Color.Black)
+                            )
+                            // creates space between cards
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
+                    t += 1
                 }
             }
 
@@ -182,6 +280,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
             cardnum += 1
         }
         // creates a space at the bottom for visual appeal
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("No more events match filters" , fontSize = 26.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(120.dp))
     }
     // creates the top bar for the home page (I think might be erroneous with the row below
@@ -264,7 +364,7 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                         expanded.value = false
                     })
                 }}
-                // I don't know why this is necessary but wan needed to properly space tag menu
+                // I don't know why this is necessary but was needed to properly space tag menu
                 Row(
                     modifier = Modifier
                         .padding(25.dp),
@@ -278,72 +378,15 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     DropdownMenu(
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
-                        DropdownMenuItem(text = {
-                            // formats checkbox and text on same line
-                            Row(
-                                modifier = Modifier,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                            )
-                            {
-                                //creates a checkbox
-                                Checkbox(
-                                    checked = check1.value,
-                                    onCheckedChange = {
-                                        if (check1.value) {
-                                            check1.value = false }
-                                        else { check1.value = true}
-                                    })
-                                // checkbox 1 label
-                                Text ("Student Activity")}},
-                            onClick = {
-                                selectedView = 0
-                                expanded2.value = false
-                        })
-                        DropdownMenuItem(text = {
-                            // formats checkbox and text on same line
-                            Row(
-                                modifier = Modifier,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                            )
-                            {
-                                //creates a checkbox
-                                Checkbox(
-                                    checked = check2.value,
-                                    onCheckedChange = {
-                                        if (check2.value) {
-                                            check2.value = false }
-                                        else { check2.value = true}
-                                })
-                                // checkbox 2 label
-                                Text("CLS") }},
-                            onClick = {
-                                selectedView = 1
-                                expanded2.value = false
-                            })
-                        DropdownMenuItem(text = {
-                            // formats checkbox and text on same line
-                            Row(
-                                modifier = Modifier,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End,
-                            )
-                            {
-                                //creates a checkbox
-                                Checkbox(
-                                    checked = check3.value,
-                                    onCheckedChange = {
-                                        if (check3.value) {
-                                            check3.value = false }
-                                        else { check3.value = true}
-                                    })
-                                // checkbox 3 label
-                                Text("Misc") }},
-                            onClick = {
-                                selectedView = 2
-                                expanded2.value = false
-                        })
+                        repeat(tags.size){
+                        DropdownMenuItem(text = { CheckBox(
+                            check = tags[tagnum]
+                        ) },
+                            onClick = {}
+                        )
+                            tagnum += 1
+                        }
+                        Spacer(modifier = Modifier.height(60.dp))
                     }
                 }
             }

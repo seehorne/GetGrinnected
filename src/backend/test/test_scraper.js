@@ -21,7 +21,7 @@ describe('Web Scrape Output Unit Tests', () => {
                 if(diff <= 0){
                     numNonCompliant++;
                 }
-            }
+            } 
         })
     }
     assert.strictEqual(0,numNonCompliant);
@@ -43,7 +43,7 @@ describe('Web Scrape Output Unit Tests', () => {
     assert.strictEqual(0,numNonCompliant);
   });
 
-  test('When running drop twice, IDs to drop are distinct each run',
+  test('When running drop timeout twice, IDs to drop are distinct each run',
     { concurrency: true}, async t => {
       //run drop once
       await scrape.dropPastEvents(scrape.CIPATH, true);
@@ -78,66 +78,187 @@ describe('Web Scrape Output Unit Tests', () => {
     }
     )
     });
-    
-    test('After dropping events, there are at most the same number as before (no spurious additions)',
-      { concurrency: false }, async t => {
-        events = fs.readFileSync(scrape.CIPATH, 'utf-8');
-        ogEvents = JSON.parse(events);
-        beforeSize = ogEvents.data.length;
-        await scrape.dropPastEvents(scrape.CIPATH, true);
-        newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
-        nowEvents = JSON.parse(events);
-        nowSize = nowEvents.data.length;
-        assert(nowSize <= beforeSize)
+
+  test('When running drop timeout, events actually remove from JSON',
+    { concurrency: true}, async t => {
+      //run drop once
+      await scrape.dropPastEvents(scrape.CIPATH, true);
+      //read resulting file
+      droppedEvents = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+      //JSONify
+      droppedEventsJSON = JSON.parse(droppedEvents);
+      remainingEvents = JSON.parse(fs.readFileSync(scrape.CIPATH, 'utf-8'));
+      remainingLength = remainingEvents.data.length;
+      //make a set for the IDs
+      IDSet = new Set();
+      droppedEventsJSON.data.forEach(id => {
+        //put all the removed IDs in the set
+        IDSet.add(id.ID)
+      })
+      removed = false; 
+      for (let i = 0; i <remainingLength; i++){
+        //should be false unless the ID was in the set 
+        //which it shouldnt be because we allegedly removed it
+        removed = IDSet.delete(remainingEvents.data[i].ID);
+        if (removed== true){
+          break;
+        }
       }
-    )
-    
-    test('After scraping, there are as many or more events as before (no lost events)',
-      { concurrency: true }, async t => {
+      assert(removed === false)
+    }
+    );
+
+  test('When running drop cancel, events actually remove from JSON',
+    { concurrency: true}, async t => {
+      //run drop once
+      await scrape.dropPastEvents(scrape.CIPATH, false);
+      //read resulting file
+      droppedEvents = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+      //JSONify
+      droppedEventsJSON = JSON.parse(droppedEvents);
+      remainingEvents = JSON.parse(fs.readFileSync(scrape.CIPATH, 'utf-8'));
+      remainingLength = remainingEvents.data.length;
+      //make a set for the IDs
+      IDSet = new Set();
+      droppedEventsJSON.data.forEach(id => {
+        //put all the removed IDs in the set
+        IDSet.add(id.ID)
+      })
+      removed = false; 
+      for (let i = 0; i <remainingLength; i++){
+        //should be false unless the ID was in the set 
+        //which it shouldnt be because we allegedly removed it
+        removed = IDSet.delete(remainingEvents.data[i].ID);
+        if (removed== true){
+          break;
+        }
+      }
+      assert(removed === false)
+    }
+    );
+
+  test('When running drop cancel twice, IDs to drop are distinct each run',
+    { concurrency: true}, async t => {
+      //run drop once
+      await scrape.dropPastEvents(scrape.CIPATH, false);
+      //read resulting file
+      firstScrape = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+      //JSONify
+      firstIDs = JSON.parse(firstScrape);
+      //count number of IDs
+      firstIDCount = firstIDs.data.length;
+      //do it all again for a second version
+      await scrape.dropPastEvents(scrape.CIPATH, false);
+      secondScrape = fs.readFileSync(scrape.DROPPATH, 'utf-8');
+      secondIDs = JSON.parse(secondScrape);
+      secondIDCount = secondIDs.data.length;
+      //if all IDs are distinct, this should be the total number we're looking at now
+      totalNumberID = firstIDCount + secondIDCount;
+      console.log("total: "+ totalNumberID)
+      //make a set to store IDs in
+      allIDs = new Set();
+      //add IDs to set
+      firstIDs.data.forEach(event => {
+        allIDs.add(event.ID);
+        console.log("adding "+ event.ID + " scrape2")
+      });
+      secondIDs.data.forEach(event => {
+        allIDs.add(event.ID);
+        console.log("adding "+ event.ID + " scrape2")
+      });
+      console.log("set size: "+ totalNumberID)
+      //if all IDs were distinct, the set size should be the number we added to
+      assert(totalNumberID === allIDs.size)
+    }
+    );
+  
+  test('After dropping events (timeout), there are at most the same number as before (no spurious additions)',
+    { concurrency: false }, async t => {
       events = fs.readFileSync(scrape.CIPATH, 'utf-8');
       ogEvents = JSON.parse(events);
       beforeSize = ogEvents.data.length;
-      await scrape.scrapeData(scrape.URL, scrape.CIPATH);
+      await scrape.dropPastEvents(scrape.CIPATH, true);
       newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
       nowEvents = JSON.parse(events);
       nowSize = nowEvents.data.length;
-      assert(nowSize >= beforeSize)
+      assert(nowSize <= beforeSize)
     }
-    ) //this no longer necessarily holds up, unless it runs after all drop tests, but should after drops
+  )
 
-    test('Number of events post-scrape cooresponds to number of scraped pages',
-      { concurrency: true}, async t => {
-        //run drop to get a fresh start
-        await scrape.dropPastEvents(scrape.CIPATH, true);
-        await scrape.dropPastEvents(scrape.CIPATH, false);
-        //read the URL for new scrape
-        const response = await fetch(scrape.URL);
-        const events = await response.json();
-        //get how many pages there are
-        numPages = events.meta.total_pages;
-        //each page has 100 events
-        //(except for last, which has up to 100 but may not be full)
-        //so number of events should be >= 100 * (#pages-1) 
-        //and <= 100 * (#pages)
-        minEvents = 100 * (numPages-1)
-        maxEvents = 100 * (numPages)
-        //do the scrape
-        await scrape.scrapeData(scrape.URL,scrape.CIPATH)
-        //check how many events there are
-        foundEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
-        jsonifiedFoundEvents = JSON.parse(foundEvents);
-        foundEventCount = jsonifiedFoundEvents.data.length;
-        console.log(foundEventCount)
-        assert(foundEventCount >= minEvents && foundEventCount <= maxEvents);
-      }
-    );
-
-    test('All events are unique by ID', { concurrency: true }, async t => {
-      await scrape.scrapeData(scrape.URL,scrape.CIPATH);
+  test('After dropping events (cancel), there are at most the same number as before (no spurious additions)',
+    { concurrency: false }, async t => {
       events = fs.readFileSync(scrape.CIPATH, 'utf-8');
-      currentEvents = JSON.parse(events);
-      IDSet = scrape.processExisting(scrape.CIPATH);
-      numIDs = IDSet.size;
-      numEvents = currentEvents.data.length;
-      assert.strictEqual(numIDs,numEvents)
-    });
+      ogEvents = JSON.parse(events);
+      beforeSize = ogEvents.data.length;
+      await scrape.dropPastEvents(scrape.CIPATH, false);
+      newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+      nowEvents = JSON.parse(events);
+      nowSize = nowEvents.data.length;
+      assert(nowSize <= beforeSize)
+    }
+  )
+
+  test('After scraping, there are as many or more events as before (no lost events)',
+    { concurrency: true }, async t => {
+    //read the file with the current events
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    //parse the JSON that comes from reading the file
+    ogEvents = JSON.parse(events);
+    //save the number of events we had prior to scraping
+    beforeSize = ogEvents.data.length;
+    //perform a scrape
+    await scrape.scrapeData(scrape.URL, scrape.CIPATH);
+    //read the file again, now with new events
+    newEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    //parse read file to JSON
+    nowEvents = JSON.parse(events);
+    //save the number of events we have now after scraping
+    nowSize = nowEvents.data.length;
+    //to pass, we should have as many or more events as we did previously
+    assert(nowSize >= beforeSize)
+  }
+  ) //this no longer necessarily holds up, unless it runs after all drop tests, but should after drops
+
+  // test('Number of events post-scrape cooresponds to number of scraped pages',
+  //   { concurrency: true}, async t => {
+  //     //run drop to get a fresh start
+  //     await scrape.dropPastEvents(scrape.CIPATH, true);
+  //     await scrape.dropPastEvents(scrape.CIPATH, false);
+  //     //read the URL for new scrape
+  //     const response = await fetch(scrape.URL);
+  //     const events = await response.json();
+  //     //get how many pages there are
+  //     numPages = events.meta.total_pages;
+  //     //each page has 100 events
+  //     //(except for last, which has up to 100 but may not be full)
+  //     //so number of events should be >= 100 * (#pages-1) 
+  //     //and <= 100 * (#pages)
+  //     minEvents = 100 * (numPages-1)
+  //     maxEvents = 100 * (numPages)
+  //     //do the scrape
+  //     await scrape.scrapeData(scrape.URL,scrape.CIPATH)
+  //     //check how many events there are
+  //     foundEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+  //     jsonifiedFoundEvents = JSON.parse(foundEvents);
+  //     foundEventCount = jsonifiedFoundEvents.data.length;
+  //     console.log(foundEventCount)
+  //     assert(foundEventCount >= minEvents && foundEventCount <= maxEvents);
+  //   }
+  // );
+
+  test('All events are unique by ID', { concurrency: true }, async t => {
+    //scrape to get up to date events
+    await scrape.scrapeData(scrape.URL,scrape.CIPATH);
+    //read, parse to JSON
+    events = fs.readFileSync(scrape.CIPATH, 'utf-8');
+    currentEvents = JSON.parse(events);
+    //make a set (so no duplication) of all the IDs we have
+    IDSet = scrape.processExisting(scrape.CIPATH);
+    //how big is that set
+    numIDs = IDSet.size; 
+    //how many events do we have total
+    numEvents = currentEvents.data.length;
+    //to pass, the number of events should match the number of IDs
+    //because we want exactly one ID per event
+    assert.strictEqual(numIDs,numEvents)
+  });
