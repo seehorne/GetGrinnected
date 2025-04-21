@@ -8,9 +8,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.myapplication.AppNavigation
+import com.example.myapplication.Check
 import com.example.myapplication.Event
 import com.example.myapplication.MainPage
-import screens.CalendarScreen
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityKtTest {
@@ -27,6 +27,7 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
       startDestination = "welcome"
+      tags = mutableListOf<Check>()
   ) }
 
   composeTestRule.onNodeWithText("Login").performClick()
@@ -46,6 +47,8 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
       startDestination = "welcome"
+      tags = mutableListOf<Check>()
+
   ) }
 
   composeTestRule.onNodeWithText("Sign Up").performClick()
@@ -92,6 +95,8 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
       startDestination = "login"
+      tags = mutableListOf<Check>(),
+
   ) }
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
@@ -120,6 +125,7 @@ class MainActivityKtTest {
   composeTestRule.setContent {
    MainPage(
        darkTheme = false, onToggleTheme = {},
+       tags = mutableListOf<Check>(),
        navController = rememberNavController()
    )
   }
