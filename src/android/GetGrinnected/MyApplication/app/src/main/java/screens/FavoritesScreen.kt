@@ -5,14 +5,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -22,8 +25,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.AppRepository
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
+import com.example.myapplication.toEvent
 
 /**
  * A composable function that represents the Favorites screen of our app.
@@ -33,9 +38,13 @@ import com.example.myapplication.EventCard
  */
 
 @Composable
-fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
+fun FavoritesScreen(modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
+
+    val eventEntities by AppRepository.events
+    val event = eventEntities.map { it.toEvent() }
+    val events = event.sortedBy { it.event_time }
 
     val favoritedEvents = events.filter { it.is_favorited }
 
@@ -70,6 +79,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
                 EventCard(event = event, modifier = Modifier
                     .background(Color.White)
                     .border(2.dp, Color.Black))
+                Spacer(modifier = modifier.height(4.dp))
             }
         }
     }
@@ -84,5 +94,5 @@ fun FavoritesPreview() {
     val sampleEvents = listOf(
         Event(eventid= 2, event_name = "Crafternoon", event_description =  "Lots of fun arts and crafts", event_location = "Downtown Theater", organizations = listOf("NAMI"), rsvp = 0, event_date ="2025-05-01", event_start_time = "6:30 PM", event_private = 0, event_end_time = "8:00 PM", event_time ="8:00 PM", tags =listOf("art, fun"), is_draft = 0,repeats = 0, event_image = "h", event_all_day = 0, is_favorited = true))
 
-    FavoritesScreen(events = sampleEvents)
+    FavoritesScreen()
 }

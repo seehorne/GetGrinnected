@@ -34,9 +34,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.AppRepository
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
+import com.example.myapplication.toEvent
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -56,7 +58,7 @@ import androidx.compose.foundation.layout.Column as Column1
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int) {
+fun HomeScreen(modifier: Modifier = Modifier) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -90,6 +92,13 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
     val check3 = remember { mutableStateOf(false)}
     // path to API data
 
+    // Gets events from our repo
+    val eventEntities by AppRepository.events
+    // Converts them to event data type
+    val event = eventEntities.map { it.toEvent() }
+    // Sorts them by time
+    val events = event.sortedBy { it.event_time }
+    val eventnum = events.size
 
 
 
@@ -114,8 +123,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
         // populates the page with model cards
         repeat(eventnum) {
             if (selectedView == 0) {
-                if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -123,8 +132,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 1) {
-                if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -132,8 +141,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 2) {
-                if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -141,8 +150,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 3) {
-                if (event[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -150,8 +159,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 4) {
-                if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -159,8 +168,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if (selectedView == 5) {
-                if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )
@@ -168,8 +177,8 @@ fun HomeScreen(modifier: Modifier = Modifier, event: List<Event>, eventnum: Int)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             } else if(selectedView == 6){
-                if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(formatter).toString()){
-                    EventCard(event = event[cardnum], modifier = Modifier
+                if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(formatter).toString()){
+                    EventCard(event = events[cardnum], modifier = Modifier
                         .background(Color.White)
                         .border(2.dp, Color.Black)
                     )

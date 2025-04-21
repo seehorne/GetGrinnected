@@ -20,8 +20,6 @@ import screens.WelcomeScreen
  * @param darkTheme the current state of the Theme of light or dark mode
  * @param onToggleTheme a lambda function passed down from previous screen that calls back to the
  * function instated in the call the AppNavigation in the MainActivity.
- * @param event the list of events read in from the api
- * @param eventnum the integer value of the length of events
  * @param startDestination is a string that tells us which screen to start at (this depends on
  * if a user is already logged in or not)
  */
@@ -30,8 +28,6 @@ import screens.WelcomeScreen
 fun AppNavigation(modifier: Modifier = Modifier,
                   darkTheme: Boolean,
                   onToggleTheme: (Boolean) -> Unit,
-                  event: List<Event>,
-                  eventnum: Int,
                   startDestination: String){
     // This handles our navigation system with a nav controller
     val navController = rememberNavController()
@@ -53,7 +49,7 @@ fun AppNavigation(modifier: Modifier = Modifier,
         // This is our home area with our navbar it acts as our view model in a sense
         // for navigating through the various logged in app screens.
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme, event, eventnum, navController = navController)
+            MainPage(modifier, darkTheme, onToggleTheme, navController = navController)
         }
         composable(
             "verification/{email}/{flag}/{username}",

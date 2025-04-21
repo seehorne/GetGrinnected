@@ -1,10 +1,11 @@
 package com.example.myapplication
 
-import kotlinx.serialization.Serializable
-
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 
 /**
- * This class is used to define the event data type
+ * This class is used to define the event table and entity for our database
  * @property eventid: Integer associated with the unique id for an event
  * @property event_name: String the title of an event
  * @property event_description: String a description about the event
@@ -23,24 +24,25 @@ import kotlinx.serialization.Serializable
  * @property is_draft: Integer used as a 0 or 1 for whether an event is a draft or not
  * @property is_favorited: Boolean used to discern whether the current user has favorited this event
  */
-@Serializable
-data class Event(
+@Entity(tableName = "events")
+@TypeConverters(ListConverters::class)
+data class EventEntity(
+    @PrimaryKey(autoGenerate = false)
+    val eventid: Int,
     val event_all_day: Int,
-    val event_date: String?,
-    val event_description: String?,
+    val event_date: String,
+    val event_description: String,
     val event_end_time: String,
-    val event_image: String?,
-    val event_location: String?,
-    val event_name: String?,
+    val event_image: String,
+    val event_location: String,
+    val event_name: String,
     val event_private: Int,
     val event_start_time: String,
-    val event_time: String?,
-    val eventid: Int,
+    val event_time: String,
     val is_draft: Int,
-    val organizations: List<String>?,
+    val organizations: List<String>,
     val repeats: Int,
     val rsvp: Int,
-    val tags: List<String>?,
+    val tags: List<String>,
     val is_favorited: Boolean = false
 )
-

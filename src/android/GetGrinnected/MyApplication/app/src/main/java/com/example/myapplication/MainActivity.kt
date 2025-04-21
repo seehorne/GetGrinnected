@@ -8,10 +8,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -27,16 +25,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // This initializes our local Repo
+        AppRepository.initialize(applicationContext)
+
+        // This syncs the info we have from the API
         lifecycleScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                RetrofitApiClient.apiModel.getEvents()
-            }
+            AppRepository.syncFromApi()
+        }
 
-            val events = response.body() ?: emptyList()
-            val eventssorted = events.sortedBy { it.event_time }
-            val length = eventssorted.size
-            // val eventsTimeFixed = fixTime(eventssorted,length)
-
+        lifecycleScope.launch {
             // These get our persistent state values for whether the user is logged in
             // and what theme they had their app set to.
             val isLoggedIn = DataStoreSettings.getLoggedIn(applicationContext).first()
@@ -57,8 +54,6 @@ class MainActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
                             }},
-                        event = eventssorted, // sorted list of events we are passing in
-                        eventnum = length, // length of the list of events
                         startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
                 }

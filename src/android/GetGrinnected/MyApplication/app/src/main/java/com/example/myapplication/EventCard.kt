@@ -28,6 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * A composable function that creates the general look of an event card.
@@ -42,7 +45,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
-    val isFavorited = remember { mutableStateOf(event.is_favorited) }
+    val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
 
     // Sets up composable to be a card for our info
     Card(
@@ -75,10 +78,12 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             ) {
                 // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f).background(Color.White)) {
-                    Text(
-                        text = event.event_name,
-                        fontWeight = FontWeight.Bold
-                    )
+                    event.event_name?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(4.dp).background(Color.White))
 
@@ -86,12 +91,12 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
                     Spacer(modifier = Modifier.height(2.dp).background(Color.White))
 
-                    Text(text = event.event_location)
+                    event.event_location?.let { Text(text = it) }
 
                     Spacer(modifier = Modifier.height(2.dp).background(Color.White))
 
                     // If organizations is empty we won't include the output on the card
-                    if (event.organizations.isNotEmpty()) {
+                    if (event.organizations?.isNotEmpty() == true) {
                         Text(text = "Hosted by: ${event.organizations.joinToString()}")
                     }
                 }
@@ -104,18 +109,22 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                         .size(40.dp)
                         .clickable {
                             isFavorited.value = !isFavorited.value
+                            // This tells our database to update the events favorited status
+                            CoroutineScope(Dispatchers.IO).launch {
+                                AppRepository.toggleFavorite(event.eventid, isFavorited.value)
+                            }
                         },
                 )
             }
             // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {
-                if (event.event_description.isNotEmpty()) {
+                if (event.event_description?.isNotEmpty() == true) {
                     Text(text = "Description: ${event.event_description}")
                 }
 
                 Spacer(modifier = Modifier.height(8.dp).background(Color.White))
 
-                if (event.tags.isNotEmpty()) {
+                if (event.tags?.isNotEmpty() == true) {
                     Text(text = "Tags: ${event.tags.joinToString()}")
                 }
             }

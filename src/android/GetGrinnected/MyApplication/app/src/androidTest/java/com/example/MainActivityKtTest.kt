@@ -26,10 +26,6 @@ class MainActivityKtTest {
  fun welcomeScreen_LoginButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
-      event = listOf(
-       Event(eventid = 22349,event_name = "MLC Meeting", event_description = "\n  Meetings for MLC Student Leaders\n", event_location = "Rosenfield Center 209 (B&amp;C) - Academic Classroom", organizations = listOf("Affairs"), rsvp = 0, event_date = "April 8", event_time = "Noon - 1 p.m.", event_all_day = 0, event_start_time = "2025-04-08T17:00:00.000Z", event_end_time = "2025-04-08T18:00:00.000Z", tags = listOf("Multicultural","Student Activity","Students"), event_private = 0, repeats =0, event_image = "null", is_draft = 0)
-      ),
-      eventnum = 1,
       startDestination = "welcome"
   ) }
 
@@ -49,10 +45,6 @@ class MainActivityKtTest {
  fun welcomeScreen_SignUpButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
-      event = listOf(
-       Event(eventid = 22349,event_name = "MLC Meeting", event_description = "\n  Meetings for MLC Student Leaders\n", event_location = "Rosenfield Center 209 (B&amp;C) - Academic Classroom", organizations = listOf("Affairs"), rsvp = 0, event_date = "April 8", event_time = "Noon - 1 p.m.", event_all_day = 0, event_start_time = "2025-04-08T17:00:00.000Z", event_end_time = "2025-04-08T18:00:00.000Z", tags = listOf("Multicultural","Student Activity","Students"), event_private = 0, repeats =0, event_image = "null", is_draft = 0)
-      ),
-     eventnum = 1,
       startDestination = "welcome"
   ) }
 
@@ -99,10 +91,6 @@ class MainActivityKtTest {
  fun loginScreen_SignupButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
-      event = listOf(
-         Event(eventid = 22349,event_name = "MLC Meeting", event_description = "\n  Meetings for MLC Student Leaders\n", event_location = "Rosenfield Center 209 (B&amp;C) - Academic Classroom", organizations = listOf("Affairs"), rsvp = 0, event_date = "April 8", event_time = "Noon - 1 p.m.", event_all_day = 0, event_start_time = "2025-04-08T17:00:00.000Z", event_end_time = "2025-04-08T18:00:00.000Z", tags = listOf("Multicultural","Student Activity","Students"), event_private = 0, repeats =0, event_image = "null", is_draft = 0)
-      ),
-      eventnum = 1,
       startDestination = "login"
   ) }
 
@@ -132,10 +120,6 @@ class MainActivityKtTest {
   composeTestRule.setContent {
    MainPage(
        darkTheme = false, onToggleTheme = {},
-       event = listOf(
-          Event(eventid = 22349,event_name = "MLC Meeting", event_description = "\n  Meetings for MLC Student Leaders\n", event_location = "Rosenfield Center 209 (B&amp;C) - Academic Classroom", organizations = listOf("Affairs"), rsvp = 0, event_date = "April 8", event_time = "Noon - 1 p.m.", event_all_day = 0, event_start_time = "2025-04-08T17:00:00.000Z", event_end_time = "2025-04-08T18:00:00.000Z", tags = listOf("Multicultural","Student Activity","Students"), event_private = 0, repeats =0, event_image = "null", is_draft = 0)
-       ),
-       eventnum = 1,
        navController = rememberNavController()
    )
   }
