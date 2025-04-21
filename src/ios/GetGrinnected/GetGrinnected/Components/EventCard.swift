@@ -152,15 +152,18 @@ struct EventCard: View {
                         //component that can be reusable
                         CheckBox(
                             items: [CheckBoxOption(
-                                name: "-",
                                 isChecked: false,
                                 uiCompOne: "heart.fill",
                                 uiCompTwo: "heart")]
-                        )//checkbox
-                        CheckBox(items: [CheckBoxOption(name: "-", isChecked: false, uiCompOne: "bell.fill", uiCompTwo: "bell")])
-                    }//Vstack
-                    .padding(.vertical, 4)
-                    .padding(.trailing, 8)//adding space after
+                        ) //checkbox
+                        .imageScale(.large)
+                        
+                        .padding(.vertical, 4)
+                        
+                        CheckBox(items: [CheckBoxOption(isChecked: false, uiCompOne: "bell.fill", uiCompTwo: "bell")])
+                            .imageScale(.large)
+                    } //Vstack
+                    .padding(.vertical, 4)//adding space after
                     .frame(alignment: .trailing)
                     
                     

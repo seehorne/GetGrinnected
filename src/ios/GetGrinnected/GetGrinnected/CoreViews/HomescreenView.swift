@@ -48,7 +48,7 @@ struct HomescreenView: View {
                         } //HStack
                     
                         //Main Event List View
-                        EventListView(timeSpan: DateInterval(start: viewedDate, end: viewedDate.addingTimeInterval(86400)))
+                        EventListView(timeSpan: DateInterval(start: viewedDate, end: viewedDate.startOfNextDay))
 
                     } //VStack
                     .frame(minHeight: proxy.size.height)//height
