@@ -1,6 +1,7 @@
 package screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -69,7 +70,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     // General message of errors associated with any given issue
     var errMsg by remember { mutableStateOf("") }
     // Boolean to track whether our api is messaging and we need to halt input
-    var isLoading by remember { mutableStateOf(false)}
+    var isLoading by remember { mutableStateOf(false) }
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
     // Flag sent to the verification function to indicate a signUp Process
@@ -80,154 +81,174 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     val typography = MaterialTheme.typography
 
     // This sets up the general look of the entire screen
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp)
-            .imePadding(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(colorScheme.background)
     ) {
-        // This is the app logo image
-        Image(
-            painter = painterResource(id = R.drawable.gg_logo_2),
-            contentDescription = "App Logo",
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .size(250.dp)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(text = "Welcome to GetGrinnected",
-            style = typography.headlineMedium,
-            color = colorScheme.onBackground)
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(text = "Create a free account",
-            style = typography.bodyLarge,
-            color = colorScheme.onBackground)
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // This handles the username field
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it
-                            errUsername = false},
-            label = { Text("Username", style = typography.labelLarge) },
-            isError = errUsername,
-            keyboardOptions = KeyboardOptions(
-                // This makes it so the enter key is a next button instead of enter
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext ={
-                    // This moves our focus down to the next text field.
-                    focusManager.moveFocus(FocusDirection.Down)
-                }
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+                .imePadding(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // This is the app logo image
+            Image(
+                painter = painterResource(id = R.drawable.gg_logo_2),
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(250.dp)
             )
-        )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        // This handles the email field
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it.trim().lowercase()
-                            errEmail = false}, //ensures it isn't case sensitive
-            label = { Text("Email", style = typography.labelLarge) },
-            isError = errEmail,
-            keyboardOptions = KeyboardOptions(
-                // This makes it so the enter key is a done button instead of enter
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone ={
-                    // Clear focus makes it so we are no longer focused on the field and can close the
-                    // keyboard on the phone
-                    focusManager.clearFocus()
-                }
-            )
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Handles reporting issues and errors that arise from user input
-        if (errMsg.isNotEmpty()) {
             Text(
-                text = errMsg,
-                color = colorScheme.error,
-                style = typography.bodySmall
+                text = "Welcome to GetGrinnected",
+                style = typography.headlineMedium,
+                color = colorScheme.onBackground
             )
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
-        // This is how we setup our signup button
-        Button(onClick = {
-            coroutineScope.launch {
+            Text(
+                text = "Create a free account",
+                style = typography.bodyLarge,
+                color = colorScheme.onBackground
+            )
 
-                // Checks the validation conditions
-                val emailError = validateEmail(email)
-                val missingUsername = username.isBlank()
+            Spacer(modifier = Modifier.height(8.dp))
 
-                if (missingUsername){
-                    errMsg = "Please enter username"
-                    errUsername = true
-                    return@launch // Escapes launch due to missing username
-                }
+            // This handles the username field
+            OutlinedTextField(
+                value = username,
+                onValueChange = {
+                    username = it
+                    errUsername = false
+                },
+                label = { Text("Username", style = typography.labelLarge) },
+                isError = errUsername,
+                keyboardOptions = KeyboardOptions(
+                    // This makes it so the enter key is a next button instead of enter
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        // This moves our focus down to the next text field.
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }
+                )
+            )
 
-                if (emailError != null){
-                    errMsg = emailError
-                    errEmail = true
-                    return@launch // Escapes launch due to non Grinnell email
-                }
+            Spacer(modifier = Modifier.height(8.dp))
 
-                isLoading = true // Set loading state to true to disable the button
-                try{
-                    // Makes the api email request check
-                 //   val emailReponse = RetrofitApiClient.apiModel.checkemail(
-                   //     EmailRequest(email)
-                   // )
-                    // Assess if the request and if the email was available
-                   // if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
-                        // TODO SEND EMAIL HERE
-                              // Sets our logged in state to true
-                        navController.navigate("verification/${email}/${signUp}/${username}") {
-                            popUpTo(0) { inclusive = true }
-                            launchSingleTop = true
+            // This handles the email field
+            OutlinedTextField(
+                value = email,
+                onValueChange = {
+                    email = it.trim().lowercase()
+                    errEmail = false
+                }, //ensures it isn't case sensitive
+                label = { Text("Email", style = typography.labelLarge) },
+                isError = errEmail,
+                keyboardOptions = KeyboardOptions(
+                    // This makes it so the enter key is a done button instead of enter
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        // Clear focus makes it so we are no longer focused on the field and can close the
+                        // keyboard on the phone
+                        focusManager.clearFocus()
+                    }
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Handles reporting issues and errors that arise from user input
+            if (errMsg.isNotEmpty()) {
+                Text(
+                    text = errMsg,
+                    color = colorScheme.error,
+                    style = typography.bodySmall
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // This is how we setup our signup button
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+
+                        // Checks the validation conditions
+                        val emailError = validateEmail(email)
+                        val missingUsername = username.isBlank()
+
+                        if (missingUsername) {
+                            errMsg = "Please enter username"
+                            errUsername = true
+                            return@launch // Escapes launch due to missing username
                         }
-                   // } else {
-                     //   errMsg = emailReponse.body()?.message ?: "Email already in use"
-                   // }
-               // } catch(e: Exception) { // Handles network errors that way arise when making the api call
-                 //   errMsg = "Network error: ${e.localizedMessage}"
-                } finally{ // Set loading state to false to reenable the button
-                    isLoading = false
+
+                        if (emailError != null) {
+                            errMsg = emailError
+                            errEmail = true
+                            return@launch // Escapes launch due to non Grinnell email
+                        }
+
+                        isLoading = true // Set loading state to true to disable the button
+                        try {
+                            // Makes the api email request check
+                            //   val emailReponse = RetrofitApiClient.apiModel.checkemail(
+                            //     EmailRequest(email)
+                            // )
+                            // Assess if the request and if the email was available
+                            // if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
+                            // TODO SEND EMAIL HERE
+                            // Sets our logged in state to true
+                            navController.navigate("verification/${email}/${signUp}/${username}") {
+                                popUpTo(0) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                            // } else {
+                            //   errMsg = emailReponse.body()?.message ?: "Email already in use"
+                            // }
+                            // } catch(e: Exception) { // Handles network errors that way arise when making the api call
+                            //   errMsg = "Network error: ${e.localizedMessage}"
+                        } finally { // Set loading state to false to reenable the button
+                            isLoading = false
+                        }
+                    }
+                },
+                enabled = !isLoading
+            ) {
+                Text(if (isLoading) "Signing up" else "Sign up", style = typography.labelLarge)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // This creates a row that implies our sign in text button to take you to the login page
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Already on GetGrinnected?",
+                    style = typography.bodyMedium,
+                    color = colorScheme.onBackground
+                )
+                TextButton(onClick = { navController.navigate("login") }) {
+                    Text(text = "Sign in", style = typography.labelLarge)
                 }
             }
-        },
-            enabled = !isLoading
-            ) {
-            Text(if (isLoading) "Signing up" else "Sign up", style = typography.labelLarge)
+
+            Spacer(modifier = Modifier.height(200.dp))
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // This creates a row that implies our sign in text button to take you to the login page
-        Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
-            verticalAlignment = Alignment.CenterVertically){
-            Text(text = "Already on GetGrinnected?", style = typography.bodyMedium, color = colorScheme.onBackground)
-            TextButton(onClick = {navController.navigate("login")}){
-                Text(text = "Sign in", style = typography.labelLarge)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(200.dp))
     }
 }
 

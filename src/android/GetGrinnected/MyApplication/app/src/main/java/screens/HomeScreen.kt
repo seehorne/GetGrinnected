@@ -39,7 +39,6 @@ import com.example.myapplication.AppRepository
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
-import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
 import com.example.myapplication.toEvent
@@ -61,7 +60,6 @@ fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
  *
  */
 
-@OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {

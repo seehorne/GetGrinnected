@@ -1,6 +1,7 @@
 package screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -63,7 +64,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
     // Boolean to track whether our api is messaging and we need to halt input
-    var isLoading by remember { mutableStateOf(false)}
+    var isLoading by remember { mutableStateOf(false) }
     // Boolean associated with specifically a email error to shift field color
     var errEmail by remember { mutableStateOf(false) }
     // Flag sent to the verification function to indicate a login process (false means login true means signup)
@@ -72,7 +73,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
     val typography = MaterialTheme.typography
-  
+
 
     // Manages Keyboard focus and allows us to pull to specific locations
     val focusManager = LocalFocusManager.current
@@ -81,130 +82,150 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()) // This makes our app scrollable
-            .padding(16.dp)
-            .imePadding(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(colorScheme.background)
     ) {
-        // This is our app logo image
-        Image(
-            painter = painterResource(id = R.drawable.gg_logo_2),
-            contentDescription = "App Logo",
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .size(250.dp)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(text = "Welcome Back",
-            style = typography.headlineMedium,
-            color = colorScheme.onBackground)
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(text = "Login to your account",
-            style = typography.bodyLarge,
-            color = colorScheme.onBackground)
-
-        Spacer(modifier = Modifier.height(8.dp))
-        // This is our textbox to handle users email input
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it
-                            errEmail = false},
-            label = { Text("Email", style = typography.labelLarge) },
-            isError = errEmail,
-            keyboardOptions = KeyboardOptions(
-                // This makes it so the enter key is a done button instead of enter
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone ={
-                    // Clear focus makes it so we are no longer focused on the field and can close the
-                    // keyboard on the phone
-                    focusManager.clearFocus()
-                }
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()) // This makes our app scrollable
+                .padding(16.dp)
+                .imePadding(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // This is our app logo image
+            Image(
+                painter = painterResource(id = R.drawable.gg_logo_2),
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(250.dp)
             )
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        // This handles displaying the specific errors of note
-        if (errMsg.isNotEmpty()) {
             Text(
-                text = errMsg,
-                color = colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
+                text = "Welcome Back",
+                style = typography.headlineMedium,
+                color = colorScheme.onBackground
             )
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-        // This is our login button handles an api request for login and if successful navigates
-        // to main screen if not gives an error message
-        Button(onClick = {
-            coroutineScope.launch {
-                errMsg = ""
-                // This does general field validation to insure stuff has at least been entered
-                if (email.isBlank()){
-                    errMsg = "Please enter email"
-                    errEmail = true
-                    return@launch // Escapes launch due to missing username
-                }
+            Spacer(modifier = Modifier.height(4.dp))
 
+            Text(
+                text = "Login to your account",
+                style = typography.bodyLarge,
+                color = colorScheme.onBackground
+            )
 
-                isLoading = true
-                try {
-                    // Makes the api login request
-                  //  val emailResponse = RetrofitApiClient.apiModel.checkemail(
-                    //    EmailRequest(email)
-                    //)
-                    // Assess if the request and validation of login was successful if so
-                    // nav to main if not show login failure.
-                    //if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
-                        // TODO SEND EMAIL HERE
-                        navController.navigate("verification/${email}/${signUp}/str") {
-                            popUpTo(0) { inclusive = true }
-                            launchSingleTop = true
+            Spacer(modifier = Modifier.height(8.dp))
+            // This is our textbox to handle users email input
+            OutlinedTextField(
+                value = email,
+                onValueChange = {
+                    email = it
+                    errEmail = false
+                },
+                label = { Text("Email", style = typography.labelLarge) },
+                isError = errEmail,
+                keyboardOptions = KeyboardOptions(
+                    // This makes it so the enter key is a done button instead of enter
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        // Clear focus makes it so we are no longer focused on the field and can close the
+                        // keyboard on the phone
+                        focusManager.clearFocus()
+                    }
+                )
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // This handles displaying the specific errors of note
+            if (errMsg.isNotEmpty()) {
+                Text(
+                    text = errMsg,
+                    color = colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            // This is our login button handles an api request for login and if successful navigates
+            // to main screen if not gives an error message
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        errMsg = ""
+                        // This does general field validation to insure stuff has at least been entered
+                        if (email.isBlank()) {
+                            errMsg = "Please enter email"
+                            errEmail = true
+                            return@launch // Escapes launch due to missing username
                         }
-                    //} else {
-                      //  errMsg = emailResponse.body()?.message ?: "Email Not Found"
-                    //}
-                    // Failure specifically with a network connection ie couldn't leave our app
-               // } catch (e: Exception) {
-                 //   errMsg = "Network error: ${e.localizedMessage}"
-                } finally {
-                    isLoading = false
+
+
+                        isLoading = true
+                        try {
+                            // Makes the api login request
+                            //  val emailResponse = RetrofitApiClient.apiModel.checkemail(
+                            //    EmailRequest(email)
+                            //)
+                            // Assess if the request and validation of login was successful if so
+                            // nav to main if not show login failure.
+                            //if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
+                            // TODO SEND EMAIL HERE
+                            navController.navigate("verification/${email}/${signUp}/str") {
+                                popUpTo(0) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                            //} else {
+                            //  errMsg = emailResponse.body()?.message ?: "Email Not Found"
+                            //}
+                            // Failure specifically with a network connection ie couldn't leave our app
+                            // } catch (e: Exception) {
+                            //   errMsg = "Network error: ${e.localizedMessage}"
+                        } finally {
+                            isLoading = false
+                        }
+                    }
+                },
+                enabled = !isLoading
+            ) {
+                Text(if (isLoading) "Logging in..." else "Login", style = typography.labelLarge)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Text(
+                text = "Forgot Password?",
+                style = typography.bodyMedium,
+                color = colorScheme.onBackground,
+                modifier = Modifier.clickable { /* TODO Logic to handle forgot password */ })
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // This is to properly align our link to signup page with a intuitive message.
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "New to GetGrinnected?",
+                    style = typography.bodyMedium,
+                    color = colorScheme.onBackground
+                )
+                TextButton(onClick = { navController.navigate("signup") }) {
+                    Text(
+                        text = "Join now",
+                        style = typography.labelLarge,
+                    )
                 }
             }
-        },
-            enabled = !isLoading
-        ) {
-            Text(if (isLoading) "Logging in..." else "Login", style = typography.labelLarge)
+            Spacer(modifier = Modifier.height(200.dp))
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Text(text = "Forgot Password?",
-            style = typography.bodyMedium,
-            color = colorScheme.onBackground,
-            modifier = Modifier.clickable { /* TODO Logic to handle forgot password */})
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // This is to properly align our link to signup page with a intuitive message.
-        Row(horizontalArrangement = Arrangement.spacedBy(2.dp),
-            verticalAlignment = Alignment.CenterVertically){
-            Text(text = "New to GetGrinnected?",
-                style = typography.bodyMedium,
-                color = colorScheme.onBackground)
-            TextButton(onClick = {navController.navigate("signup")}) {
-                Text(text = "Join now",
-                    style = typography.labelLarge,
-                    color = colorScheme.onBackground)}
-        }
-        Spacer(modifier = Modifier.height(200.dp))
     }
 }
 
