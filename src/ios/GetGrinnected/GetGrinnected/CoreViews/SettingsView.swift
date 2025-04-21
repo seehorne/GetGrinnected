@@ -64,6 +64,7 @@ struct SettingsView: View {
     
     /*
      Changes the lightModeOn boolean based on what the current viewColorScheme is
+     Referenced from https://www.youtube.com/watch?v=JCCImOLui5E
      */
     func switchAppearance() {
         viewColorScheme = userColorScheme

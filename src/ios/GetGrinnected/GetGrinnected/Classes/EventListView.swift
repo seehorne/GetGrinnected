@@ -95,7 +95,7 @@ struct EventListView: View {
                 }
             }
                 
-        }//For all events
+        } //For all events
         .onAppear(){
             viewModel.fetchEvents()
         }
