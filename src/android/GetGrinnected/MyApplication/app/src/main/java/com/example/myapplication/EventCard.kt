@@ -116,7 +116,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                 Icon(
                     imageVector = if (isFavorited.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "Favorite Icon",
-                    tint = if (isFavorited.value) colorScheme.primary else colorScheme.primary,
+                    tint = colorScheme.primary,
                     modifier = Modifier
                         .size(40.dp)
                         .clickable {
