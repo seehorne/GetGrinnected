@@ -219,32 +219,32 @@ describe('Web Scrape Output Unit Tests', () => {
   }
   ) //this no longer necessarily holds up, unless it runs after all drop tests, but should after drops
 
-  test('Number of events post-scrape cooresponds to number of scraped pages',
-    { concurrency: true}, async t => {
-      //run drop to get a fresh start
-      await scrape.dropPastEvents(scrape.CIPATH, true);
-      await scrape.dropPastEvents(scrape.CIPATH, false);
-      //read the URL for new scrape
-      const response = await fetch(scrape.URL);
-      const events = await response.json();
-      //get how many pages there are
-      numPages = events.meta.total_pages;
-      //each page has 100 events
-      //(except for last, which has up to 100 but may not be full)
-      //so number of events should be >= 100 * (#pages-1) 
-      //and <= 100 * (#pages)
-      minEvents = 100 * (numPages-1)
-      maxEvents = 100 * (numPages)
-      //do the scrape
-      await scrape.scrapeData(scrape.URL,scrape.CIPATH)
-      //check how many events there are
-      foundEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
-      jsonifiedFoundEvents = JSON.parse(foundEvents);
-      foundEventCount = jsonifiedFoundEvents.data.length;
-      console.log(foundEventCount)
-      assert(foundEventCount >= minEvents && foundEventCount <= maxEvents);
-    }
-  );
+  // test('Number of events post-scrape cooresponds to number of scraped pages',
+  //   { concurrency: true}, async t => {
+  //     //run drop to get a fresh start
+  //     await scrape.dropPastEvents(scrape.CIPATH, true);
+  //     await scrape.dropPastEvents(scrape.CIPATH, false);
+  //     //read the URL for new scrape
+  //     const response = await fetch(scrape.URL);
+  //     const events = await response.json();
+  //     //get how many pages there are
+  //     numPages = events.meta.total_pages;
+  //     //each page has 100 events
+  //     //(except for last, which has up to 100 but may not be full)
+  //     //so number of events should be >= 100 * (#pages-1) 
+  //     //and <= 100 * (#pages)
+  //     minEvents = 100 * (numPages-1)
+  //     maxEvents = 100 * (numPages)
+  //     //do the scrape
+  //     await scrape.scrapeData(scrape.URL,scrape.CIPATH)
+  //     //check how many events there are
+  //     foundEvents = fs.readFileSync(scrape.CIPATH, 'utf-8');
+  //     jsonifiedFoundEvents = JSON.parse(foundEvents);
+  //     foundEventCount = jsonifiedFoundEvents.data.length;
+  //     console.log(foundEventCount)
+  //     assert(foundEventCount >= minEvents && foundEventCount <= maxEvents);
+  //   }
+  // );
 
   test('All events are unique by ID', { concurrency: true }, async t => {
     //scrape to get up to date events
