@@ -71,28 +71,36 @@ struct EventListView: View {
     //binding to the value we input into event card
     //@State to show that this will be passed into the
     @State var selectedEvent: Int? //An integer to represent which event we select
+    // The span of time we want to see the events in
+    @State var timeSpan: DateInterval
+    // The tags we want the events we see to have
+    @State var tags: Set<EventTags>?
     
     
     var body: some View {
         VStack{
             ForEach(viewModel.events, id: \.eventid) { event in
-                EventCard(event: event, isExpanded: (event.eventid! == selectedEvent))
-                    .onTapGesture {//change expansion to ture to make card larger
-                        //add animation to the tap gesture!
-                        withAnimation(.easeInOut) { // this animation should be changed: The best way to change this may include changing the structure of our Event Card
-                            //HERE WE ARE NOT CHECKING FOR OPTIONAL
-                            //however, ALL events DO have an id
-                            //if have an error, check here, though
-                            // near-impossible. some errors, but
-                            if(selectedEvent == event.eventid!){
-                                //if you select the same event, it unselects it
-                                selectedEvent = -1
-                            } else{
-                                //if you select something else, you select a new id
-                                selectedEvent = event.eventid!
+                // check current event is in the timeSpan
+                if event.useful_event_start_time != nil && timeSpan.contains(event.useful_event_start_time!) {
+                    // make an event card for current event
+                    EventCard(event: event, isExpanded: (event.eventid! == selectedEvent))
+                        .onTapGesture {//change expansion to ture to make card larger
+                            //add animation to the tap gesture!
+                            withAnimation(.easeInOut) { // this animation should be changed: The best way to change this may include changing the structure of our Event Card
+                                //HERE WE ARE NOT CHECKING FOR OPTIONAL
+                                //however, ALL events DO have an id
+                                //if have an error, check here, though
+                                // near-impossible. some errors, but
+                                if(selectedEvent == event.eventid!){
+                                    //if you select the same event, it unselects it
+                                    selectedEvent = -1
+                                } else{
+                                    //if you select something else, you select a new id
+                                    selectedEvent = event.eventid!
+                                }
                             }
-                        }
-                    }//tap gesture
+                        }//tap gesture
+                } //if
             }
         
             
@@ -124,6 +132,6 @@ struct EventListView: View {
 // For preview purposes (assuming Event struct exists)
 struct EventListView_Previews: PreviewProvider {
     static var previews: some View {
-        EventListView(selectedEvent: -1)
+        EventListView(selectedEvent: -1, timeSpan: DateInterval(start: Date.now, end: Date.now.addingTimeInterval(86400)))
     }
 }

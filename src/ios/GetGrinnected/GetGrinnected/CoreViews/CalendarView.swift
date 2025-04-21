@@ -33,7 +33,7 @@ struct CalendarView: View {
                             .padding(.bottom, 4)
                         
                         //event list view for all the events (may have to pass in some arguments according to the day
-                        EventListView()
+                        EventListView(timeSpan: DateInterval(start: selectedDate, end: selectedDate.addingTimeInterval(86400)))
                     }
                     .padding(.top)//padding on top
                     

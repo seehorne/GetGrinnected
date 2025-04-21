@@ -53,7 +53,7 @@ struct SettingsView: View {
             switchAppearance()
         }
         // changes the viewColorScheme when lightModeOn is changed
-        .onChange(of: lightModeOn){oldValue, newValue in
+        .onChange(of: lightModeOn){ oldValue, newValue in
             if newValue == true {
                 viewColorScheme = .light
             } else {
