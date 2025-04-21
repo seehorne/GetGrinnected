@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  SettingsView.swift
 //  GetGrinnected
 //
 //  Created by Ellie Seehorn on 3/4/25.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct SettingsView: View {
-    // the evironment color scheme
+    // access the core data to see the color scheme the device is set to
     @Environment(\.colorScheme) private var userColorScheme
     
     // our users username
