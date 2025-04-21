@@ -1,16 +1,205 @@
-import { sendCode } from '../one_time_code.mjs';
 import * as bcrypt from 'bcrypt';
+import sqlite3 from 'sqlite3';
+import { sendCode } from '../one_time_code.mjs';
+
+// generally accepted number of rounds to salt your stuff for.
+const SALT_ROUNDS = 10;
 
 export async function sendOTP(email) {
     // Send the user a one-time code by email.
     const code = sendCode(email);
 
+    // Calculate the expiration time of the OTP from right now.
+    const expiration_mins = 15;
+    const expiration_time = new Date(
+        new Date().getTime() +   // the current time (in ms)
+        expiration_mins * 60000  // add ms to get `expiration_mins` minutes forward
+    );
+
+    // Return the data from the OTP so it can be stored and verified later
+    const otpData = {
+        'email': email,
+        'code': code,
+        'expire': expiration_time.toISOString()
+    };
+    return otpData;
+}
+
+/**
+ * Save OTP code to a file for reading later.
+ * 
+ * @param {string} filename  Filename of database to save to, e.g. `otp.sqlite`
+ * @param {string} email     Email associated with OTP
+ * @param {string} code      Hashed code associated with OTP
+ * @param {string} expire    Expiration date of OTP code
+ */
+export async function otpFileSave(filename, email, code, expire) {
     // Salt and hash the code before we store it
-    const saltRounds = 10;  // generally-accepted number of rounds
-    const salt = await bcrypt.genSalt(saltRounds);
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
     const hashedCode = await bcrypt.hash(code, salt);
 
-    // TODO: STORE (email, hashed code, current time) TO CHECK LATER
+    // Open db connection
+    const db = new sqlite3.Database(filename);
+
+    // Run all these commands in sequence.
+    db.serialize(() => {
+        // Create the table if this is our first time opening the db.
+        // If it's not the first time, `IF NOT EXISTS` makes it do nothing
+        //
+        // email is the `PRIMARY KEY`, so each email can only appear once.
+        db.run(`
+            CREATE TABLE IF NOT EXISTS data(
+                email TEXT NOT NULL PRIMARY KEY,
+                hashed_code TEXT NOT NULL,
+                expire TEXT NOT NULL
+            ) STRICT
+        `);
+
+        // Attempt to insert the provided email, code, and expiration date.
+        //
+        // If we try to add one email twice it will cause a conflict because
+        // email is the primary key, and we handle that conflict in the 
+        // `ON CONFLICT` part by updating the existing entry instead.
+        db.run(
+            `INSERT INTO data (email, hashed_code, expire)
+                VALUES        (?, ?, ?)
+                ON CONFLICT (email)
+                DO UPDATE SET hashed_code=excluded.hashed_code, expire=excluded.expire`,
+            [email, hashedCode, expire]
+        );
+    });
+
+    // Close DB connection
+    db.close();
+}
+
+/**
+ * Check if a code matches the OTP database.
+ * 
+ * @param {string} filename  Filename of database to check within, e.g. `otp.sqlite`
+ * @param {string} email     Email associated with OTP
+ * @param {string} code      Hashed code associated with OTP
+ * 
+ * @returns true if the OTP exists in the file and is not expired, false if
+ * expired or nonexistent.
+ */
+export async function otpFileCheck(filename, email, code) {
+    // Define a function that gets the row matching an email.
+    // It uses a promise to structure itself because the DB runs async.
+    // If you `await getEmail`, you will successfully get an email eventually
+    function getEmail(db, email) {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT * FROM data WHERE email = ?`;
+
+            db.get(sql, email, (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
+    // Open db connection
+    const db = new sqlite3.Database(filename);
+
+    // Evaluate whether the OTP code is good or not
+    var return_value = false;
+    try {
+        // Check the db for that email. If it does not exist, just return false
+        const entry = await getEmail(db, email);
+        if (entry === undefined) {
+            return_value = false;
+        } else {
+            // Calculate the current date and the expiry date
+            const now = new Date();
+            const expiry = new Date(entry.expire);
+
+            // OTP code is valid if
+            // - the code entered matches properly
+            // - it is before the expiration date
+            return_value = (
+                bcrypt.compare(code, entry.hashed_code) &&
+                now <= expiry
+            );
+        }
+
+        // If the return value is true, delete that row from the database -- they
+        // have used their OTP code.
+        if (return_value) {
+            db.run(`DELETE FROM data WHERE email = ?`, email);
+        }
+    } catch (err) {
+        console.log('Error:' + err);
+        return_value = false;
+    } finally {
+        // Always close the db! No matter what
+        db.close();
+    }
+
+
+    // Return after we have completed our try/catch/finally, to be sure the
+    // db connection has been closed.
+    return return_value;
+}
+
+/**
+ * Clean up any expired entries in the OTP database.
+ * 
+ * @param {*} filename  Filename of database to clean, e.g. `otp.sqlite`.
+ */
+export async function otpFileClean(filename) {
+    // Define a function that deletes the row matching an email.
+    // It uses a promise to structure itself because the DB runs async.
+    // To use it, `await deleteEmail`.
+    function deleteEmail(db, email) {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM data WHERE email = ?`;
+
+            db.run(sql, email, (err, _row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+    const now = new Date();
+
+    const db = new sqlite3.Database(filename);
+
+    var to_delete = [];
+    db.serialize(() => {
+        // Find all rows that should be deleted
+        const sql = `SELECT * FROM data`
+        db.each(sql, async (err, row) => {
+            if (err) {
+                console.log('Error:' + err);
+            } else {
+                if (new Date(row.expire) < now) {
+                    to_delete.push(row.email);
+                }
+            }
+        });
+
+        // Do the actual deleting
+        const statement = db.prepare(`DELETE FROM data WHERE email = ?`);
+        for (const email of to_delete) {
+            console.log(`delete ${email}`);
+            statement.run(email);
+        }
+
+    });
+    // TODO: WRITE ME
+    // Get the current time
+
+    // Open connection to the database
+
+    // Delete all db entries that have already expired
+
+    // Close the database connection
 }
 
 /**
@@ -170,3 +359,17 @@ export function validateUsername(username) {
         reason: ''
     };
 }
+
+(async function () {
+    // define sleep fn
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+    // do operation, pause, do next operation
+    await otpFileSave('test.db', 'almond@almendra.dev', '123456', '2026-03-03');
+    await otpFileSave('test.db', 'hehe@almendra.dev', '123456', '2025-08-08');
+    await otpFileSave('test.db', 'third@almendra.dev', '123456', '2021-03-03');
+
+    await sleep(1000);
+    // console.log(await otpFileCheck('test.db', 'almond@almendra.dev', '123456'));
+    await otpFileClean('test.db')
+})()
