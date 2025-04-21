@@ -27,13 +27,17 @@ import screens.WelcomeScreen
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AppNavigation(modifier: Modifier = Modifier,
-                  darkTheme: Boolean,
-                  onToggleTheme: (Boolean) -> Unit,
-                  event: List<Event>,
-                  eventnum: Int,
-                  startDestination: String){
-    // This handles our navigation system with a nav controller
+fun AppNavigation(
+    modifier: Modifier = Modifier,
+    darkTheme: Boolean,
+    onToggleTheme: (Boolean) -> Unit,
+    event: List<Event>,
+    eventnum: Int,
+    tags: MutableList<Check>,
+    startDestination: String
+  // This handles our navigation system with a nav controller
+){
+
     val navController = rememberNavController()
     // This instantiates our nave controller with a start destination dependent on whether
     // the user is logged in or not.
@@ -53,7 +57,8 @@ fun AppNavigation(modifier: Modifier = Modifier,
         // This is our home area with our navbar it acts as our view model in a sense
         // for navigating through the various logged in app screens.
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme, event, eventnum, navController = navController)
+            MainPage(modifier, darkTheme, onToggleTheme, event, eventnum, tags, navController = navController)
+
         }
         composable(
             "verification/{email}/{flag}/{username}",
