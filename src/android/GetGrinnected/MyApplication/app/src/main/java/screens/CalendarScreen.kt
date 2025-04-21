@@ -1,5 +1,8 @@
 package screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,32 +26,45 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * A composable function that represents the Calendar screen of our app. (More to come)
  *
  * @param modifier Modifier to be applied to the screen layout.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreen(modifier: Modifier = Modifier) {
+fun CalendarScreen(event: List<Event>, modifier: Modifier = Modifier) {
     var selectedView by remember { mutableIntStateOf(2) }
     val expanded = remember { mutableStateOf(false) }
     val calendarInputList by remember {
-        mutableStateOf(createCalendarList())
+        mutableStateOf(createCalendarList(event))
     }
     var clickedCalendarElem by remember {
         mutableStateOf<CalendarInput?>(null)
     }
     val scrollState = rememberScrollState()
-
-    Column(modifier = modifier.fillMaxSize()) {
+    val currentMonth = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("MM")
+    // background color for the page
+    val gradient =
+        Brush.verticalGradient(
+            listOf(Color.Red, Color.Blue, Color.Green),
+            0.0f,
+            10000.0f,
+            TileMode.Repeated
+        )
+    Column(modifier = modifier.fillMaxSize().background(gradient)) {
         Box(modifier = modifier.padding(16.dp)) {
             Row {
                 Button(onClick = { expanded.value = true }) {
@@ -89,7 +105,43 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
                     onDayClick = { day ->
                         clickedCalendarElem = calendarInputList.first { it.day == day }
                     },
-                    month = "April"
+                    month = (
+                            if(currentMonth.format(formatter).toString() == "01"){
+                                "January"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "02"){
+                                "February"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "03"){
+                                "March"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "04"){
+                                "April"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "05"){
+                                "May"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "06"){
+                                "June"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "07"){
+                                "July"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "08"){
+                                "August"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "09"){
+                                "September"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "10"){
+                                "October"
+                            }
+                            else if (currentMonth.format(formatter).toString() == "11"){
+                                "November"
+                            }
+                            else{
+                                "December"
+                            }).toString()
                 )
                 Column(
                     modifier = Modifier
@@ -120,26 +172,26 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
  * Creates the hard coded calendar input list for use in the calendar
  * @return a list of CalendarInput values
  */
-private fun createCalendarList(): List<CalendarInput>{
+@RequiresApi(Build.VERSION_CODES.O)
+private fun createCalendarList(event: List<Event>): List<CalendarInput>{
     val calendarInputs = mutableListOf<CalendarInput>()
+    val currentDay = mutableListOf<Event>()
+    val currentMonth = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM")
     for(i in 1 .. 31){
+        for(j in event.indices){
+            if (event[j].event_start_time.substring(8, 10) == i.toString() && event[j].event_start_time.substring(5, 7) == currentMonth.format(formatter).toString())
+            {
+                currentDay.add(event[j])
+            }
+        }
         calendarInputs.add(
             CalendarInput(
                 i,
-                events = listOf(
-                    Event(eventid= 2, event_name = "Crafternoon", event_description =  "Lots of fun arts and crafts", event_location = "Downtown Theater", organizations = listOf("NAMI"), rsvp = 0, event_date ="2025-05-01", event_start_time = "6:30 PM", event_private = 0, event_end_time = "8:00 PM", event_time ="8:00 PM", tags =listOf("art, fun"), is_draft = 0,repeats = 0, event_image = "h", event_all_day = 0, is_favorited = true)
-                )
+                events = currentDay.toMutableList()
             )
-        )
+            )
+        currentDay.clear()
     }
     return calendarInputs
-}
-
-/**
- * Preview used specifically for UI design purposes
- */
-@Preview (showBackground = true)
-@Composable
-fun CalendarScreenPreview (modifier: Modifier = Modifier){
-    CalendarScreen(modifier)
 }

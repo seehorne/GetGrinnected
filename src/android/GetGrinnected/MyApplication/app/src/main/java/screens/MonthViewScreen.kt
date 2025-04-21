@@ -176,5 +176,5 @@ fun MonthViewScreen(
 
 data class CalendarInput(
     val day: Int,
-    val events: List<Event> = emptyList()
+    val events: List<Event>
 )

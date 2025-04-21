@@ -111,10 +111,8 @@ fun MainPage(
             modifier = modifier.padding(innerPadding)
         ) {
           // Set of routes to for our navbar to follow
-            composable("Home") { HomeScreen(
-                event = event, eventnum = eventnum, tags = tags
-            ) }
-            composable("Calendar") { CalendarScreen() }
+            composable("Home") { HomeScreen(event = event, eventnum = eventnum, tags = tags) }
+            composable("Calendar") { CalendarScreen(event = event) }
             composable("Favorites") { FavoritesScreen(events = sampleEvents) }
             composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "password", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
         }
