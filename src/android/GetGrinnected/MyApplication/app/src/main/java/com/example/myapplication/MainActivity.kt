@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.first
@@ -46,26 +45,19 @@ class MainActivity : ComponentActivity() {
             the state of dark theme, additionally the darktheme value traces into our
             theme file which allows us to change the whole app theme.
             */
-            val tagsString = mutableListOf<String>()
-            val tags = mutableListOf<Check>()
-            var current2 = 0
-            var tagstotal = 0
-            repeat(length){
-                tagstotal = 0
-                repeat(events[current2].tags.size){
-                    if (tagsString.contains(events[current2].tags[tagstotal]) == false) {
-                        tagsString.add(events[current2].tags[tagstotal])
-                    }
-                    tagstotal += 1
-                }
-                current2 += 1
-            }
-            var num = 0
-            repeat(tagsString.size){
-                tags.add(Check(false,tagsString[num]))
-                num += 1
-            }
+
             setContent {
+                // Gets events from Repo
+                val eventEntities = AppRepository.events.value
+                // Turns events into event data class and then sorts them by event time
+                val events = eventEntities.map { it.toEvent() }.sortedBy { it.event_time }
+
+                // We get a string set of all the distinct tags
+                val tagsString = events.flatMap { it.tags }.distinct()
+
+                // We turn this string of tags into a mutable list of check objects
+                val tags = tagsString.map { Check(false, it) }.toMutableList()
+
                 MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
                     AppNavigation(
                         darkTheme = darkTheme.value,

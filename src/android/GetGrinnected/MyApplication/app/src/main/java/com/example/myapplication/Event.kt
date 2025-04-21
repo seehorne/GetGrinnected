@@ -40,7 +40,7 @@ data class Event(
     val organizations: List<String>?,
     val repeats: Int,
     val rsvp: Int,
-    val tags: List<String>?,
+    val tags: List<String>,
     val is_favorited: Boolean = false
 )
 

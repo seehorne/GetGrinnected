@@ -26,7 +26,7 @@ class MainActivityKtTest {
  fun welcomeScreen_LoginButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
-      startDestination = "welcome"
+      startDestination = "welcome",
       tags = mutableListOf<Check>()
   ) }
 
@@ -46,7 +46,7 @@ class MainActivityKtTest {
  fun welcomeScreen_SignUpButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
-      startDestination = "welcome"
+      startDestination = "welcome",
       tags = mutableListOf<Check>()
 
   ) }
@@ -94,9 +94,8 @@ class MainActivityKtTest {
  fun loginScreen_SignupButton_NavigatesCorrectly() {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
-      startDestination = "login"
+      startDestination = "login",
       tags = mutableListOf<Check>(),
-
   ) }
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {

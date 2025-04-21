@@ -51,7 +51,7 @@ fun AppNavigation(modifier: Modifier = Modifier,
         // This is our home area with our navbar it acts as our view model in a sense
         // for navigating through the various logged in app screens.
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme, tags = tags navController = navController)
+            MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController)
         }
         composable(
             "verification/{email}/{flag}/{username}",
