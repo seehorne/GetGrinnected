@@ -60,7 +60,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
         colors = CardDefaults.cardColors(
             containerColor = colorScheme.secondaryContainer
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         // Sets up a column on our card
         Column(
