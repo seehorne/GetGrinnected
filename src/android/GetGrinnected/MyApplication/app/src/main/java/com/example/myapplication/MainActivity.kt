@@ -6,13 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -28,16 +25,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                RetrofitApiClient.apiModel.getEvents()
-            }
-            val events = response.body() ?: emptyList<Event>()
-            val eventssorted = events.sortedBy { it.event_start_time }
-            val eventsTimeFixed = fixTime(eventssorted)
-            val length = eventssorted.size
-            // val eventsTimeFixed = fixTime(eventssorted,length)
+        // This initializes our local Repo
+        AppRepository.initialize(applicationContext)
 
+        // This syncs the info we have from the API
+        lifecycleScope.launch {
+            AppRepository.syncFromApi()
+        }
+
+        lifecycleScope.launch {
             // These get our persistent state values for whether the user is logged in
             // and what theme they had their app set to.
             val isLoggedIn = DataStoreSettings.getLoggedIn(applicationContext).first()
@@ -49,26 +45,19 @@ class MainActivity : ComponentActivity() {
             the state of dark theme, additionally the darktheme value traces into our
             theme file which allows us to change the whole app theme.
             */
-            val tagsString = mutableListOf<String>()
-            val tags = mutableListOf<Check>()
-            var current2 = 0
-            var tagstotal = 0
-            repeat(length){
-                tagstotal = 0
-                repeat(events[current2].tags.size){
-                    if (tagsString.contains(events[current2].tags[tagstotal]) == false) {
-                        tagsString.add(events[current2].tags[tagstotal])
-                    }
-                    tagstotal += 1
-                }
-                current2 += 1
-            }
-            var num = 0
-            repeat(tagsString.size){
-                tags.add(Check(false,tagsString[num]))
-                num += 1
-            }
+
             setContent {
+                // Gets events from Repo
+                val eventEntities = AppRepository.events.value
+                // Turns events into event data class and then sorts them by event time
+                val events = eventEntities.map { it.toEvent() }.sortedBy { it.event_time }
+
+                // We get a string set of all the distinct tags
+                val tagsString = events.flatMap { it.tags }.distinct()
+
+                // We turn this string of tags into a mutable list of check objects
+                val tags = tagsString.map { Check(false, it) }.toMutableList()
+
                 MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
                     AppNavigation(
                         darkTheme = darkTheme.value,
@@ -77,12 +66,8 @@ class MainActivity : ComponentActivity() {
                             // Used to pass the live change setting of theme down through the app to our UI switch.
                             lifecycleScope.launch {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
-                            }
-                        },
-                        event = eventsTimeFixed, // sorted list of events we are passing in
-                        eventnum = length, // length of the list of events
-                        tags = tags,
-                        modifier = Modifier,
+                            }}, 
+                      tags = tags,
                         startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
                 }

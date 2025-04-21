@@ -1,5 +1,9 @@
 package com.example.myapplication
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+
 
 /**
  * This class is used to define the account data type
@@ -14,7 +18,10 @@ package com.example.myapplication
  * @property is_followed: Boolean used specifically for org accounts to determine if they are followed or not by a user.
  */
 
-data class User(
+@Entity(tableName = "accounts")
+@TypeConverters(ListConverters::class)
+data class AccountEntity(
+    @PrimaryKey
     val accountid: Int,
     val account_name: String,
     val email: String,
