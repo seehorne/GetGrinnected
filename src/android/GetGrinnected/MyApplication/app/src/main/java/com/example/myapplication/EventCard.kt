@@ -24,7 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -100,13 +99,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
                     event.event_location?.let { Text(text = it, 
                                                      style = typography.bodyMedium,
-                                                      color = colorScheme.onSurface)) 
+                                                      color = colorScheme.onSurface)
                     }
 
                     Spacer(modifier = Modifier.height(2.dp))
 
                     // If organizations is empty we won't include the output on the card
-                    if (event.organizations?.isNotEmpty()) {
+                    if (event.organizations?.isNotEmpty() == true) {
                         Text(text = "Hosted by: ${event.organizations.joinToString()}",
                             style = typography.bodyMedium,
                             color = colorScheme.onSurface)
@@ -132,7 +131,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {
 
-                if (event.event_description?.isNotEmpty()) {
+                if (event.event_description?.isNotEmpty() == true) {
                     Text(text = "Description: ${event.event_description}",
                         style = typography.bodyMedium,
                         color = colorScheme.onSurface)
@@ -153,10 +152,10 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 /**
  * Preview of event card for UI adjustment purposes only.
  */
-/*
+
 @Preview (showBackground = true)
 @Composable
 fun eventCardPreview(){
     EventCard(Event(eventid= 2, event_name = "Crafternoon", event_description =  "Lots of fun arts and crafts", event_location = "Downtown Theater", organizations = listOf("NAMI"), rsvp = 0, event_date ="2025-05-01", event_start_time = "6:30 PM", event_private = 0, event_end_time = "8:00 PM", event_time ="8:00 PM", tags =listOf("art, fun"), is_draft = 0,repeats = 0, event_image = "h", event_all_day = 0, is_favorited = true))
 }
-*/
+

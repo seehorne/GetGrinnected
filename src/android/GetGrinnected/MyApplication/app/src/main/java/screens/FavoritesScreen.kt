@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -20,9 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.myapplication.AppRepository
-import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.toEvent
 
@@ -43,10 +40,14 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
     val typography = MaterialTheme.typography
-    // List of on the favorited events
+
+    // Gets event Entities from local Repo
     val eventEntities by AppRepository.events
+    // Converts eventEntities to events
     val event = eventEntities.map { it.toEvent() }
+    // List of events sorted by time
     val events = event.sortedBy { it.event_time }
+    // List of on the favorited events
     val favoritedEvents = events.filter { it.is_favorited }
 
     // This sets up the screen to be a column
@@ -68,6 +69,9 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
                 color = colorScheme.onBackground,
                 modifier = Modifier.padding(top = 16.dp))
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // If they don't have any favorited events we display the text otherwise we display their events
         if (favoritedEvents.isEmpty()) {
             Column(
@@ -76,8 +80,6 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     "You haven't favorited any events yet.",
@@ -90,7 +92,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
             // For every event we fill an event card composable
             favoritedEvents.forEach { event ->
                 EventCard(event = event, modifier = Modifier)
-                Spacer(modifier = modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
             }
         }
@@ -103,8 +105,5 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
 @Preview (showBackground = true)
 @Composable
 fun FavoritesPreview() {
-    val sampleEvents = listOf(
-        Event(eventid= 2, event_name = "Crafternoon", event_description =  "Lots of fun arts and crafts", event_location = "Downtown Theater", organizations = listOf("NAMI"), rsvp = 0, event_date ="2025-05-01", event_start_time = "6:30 PM", event_private = 0, event_end_time = "8:00 PM", event_time ="8:00 PM", tags =listOf("art, fun"), is_draft = 0,repeats = 0, event_image = "h", event_all_day = 0, is_favorited = true))
-
     FavoritesScreen()
 }
