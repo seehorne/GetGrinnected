@@ -1,4 +1,4 @@
-import * as db from '../../db_connect.js';
+const db = require('../../db_connect.js');
 
 /**
  * Query the database and respond with all known events in JSON.
@@ -8,7 +8,7 @@ import * as db from '../../db_connect.js';
  * @param res  Express response object
  * @param next Error handler function
  */
-export async function getEvents(req, res, _next) {
+async function getEvents(req, res, _next) {
     // Pass any query parameters named "tag" so we can parse them into an array.
     // Could be undefined, that function will handle it.
     const tags = parseQueryTags(req.query.tag);
@@ -34,7 +34,7 @@ export async function getEvents(req, res, _next) {
  * @param res  Express response object
  * @param next Error handler function
  */
-export async function getEventsBetween(req, res, _next) {
+async function getEventsBetween(req, res, _next) {
     // Parse the required start and end parameters held in the request
     var start = parseParamDate(req.params.start);
     var end = parseParamDate(req.params.end);
@@ -103,7 +103,7 @@ export async function getEventsBetween(req, res, _next) {
  * @returns Date object representing the date. It may be an invalid date, in
  *          which case calling .valueOf() on it will return NaN.
  */
-export function parseParamDate(paramDate) {
+function parseParamDate(paramDate) {
     // these are the three features we care about in our date format.
     // "\\d" goes to the string \d, which means any digit in regex.
     const validDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d"  // YYYY-MM-DD
@@ -157,7 +157,7 @@ export function parseParamDate(paramDate) {
  * @returns an array containing each tag, or null if no tags were found.
  *                   each tag in the array will be quoted.
  */
-export function parseQueryTags(queryTags) {
+function parseQueryTags(queryTags) {
     // Don't try and parse undefined tags (which means not provided in URL)
     if (!queryTags) {
         return [];
@@ -178,4 +178,13 @@ export function parseQueryTags(queryTags) {
     // This is because of the way the tags are stored as JSON in the database.
     const tags = queryTags.map((x) => '"' + x + '"');
     return tags;
+}
+
+if (require.main !== module) {
+    module.exports = {
+        getEvents,
+        getEventsBetween,
+        parseParamDate,
+        parseQueryTags
+    };
 }

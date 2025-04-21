@@ -1,10 +1,9 @@
-import * as dotenv from 'dotenv'
-import express from 'express';
-import * as http from 'http';
-import * as https from 'https';
+const express = require('express');
+const http = require('http');
+const https = require('https');
 
 // Import routes from their files
-import * as events from './routes/events.mjs';
+const events = require('./routes/events.cjs');
 
 /* global vars to store the servers we are running,
  * so they can be shut down when needed */
@@ -16,9 +15,9 @@ var https_server = null;
  * 
  * This function will not exit on its own, 
  */
-export function run() {
+function run() {
   // Load environment vars from .env file
-  dotenv.config()
+  require('dotenv').config();
 
   // Create the app that we will serve
   const app = express();
@@ -71,12 +70,12 @@ export function run() {
  * 
  * It will only do something if you called run() before.
  */
-export function close() {
+function close() {
   // close http server
-  if (http_server != null) {
+  if (http_server !== null) {
     http_server.close((err) => {
       if (err) {
-        console.log(`http server closed with status ${err}`);
+        console.log(`http server closed with ${err}`);
       } else {
         console.log(`http server closed with no error`);
       }
@@ -84,10 +83,10 @@ export function close() {
   }
 
   // close https server
-  if (https_server != null) {
+  if (https_server !== null) {
     https_server.close((err) => {
       if (err) {
-        console.log(`https server closed with status ${err}`);
+        console.log(`https server closed with ${err}`);
       } else {
         console.log(`https server closed with no error`);
       }
@@ -107,4 +106,11 @@ function getAPIOnline(_req, res) {
 
 // run the server when we are run.
 // under MJS, we do not need to specify different behavior on import
-run();
+if (require.main === module) {
+  run();
+} else {
+  module.exports = {
+    run,
+    close
+  };
+}
