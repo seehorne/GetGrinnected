@@ -32,7 +32,9 @@ function run() {
 
   // Start up the HTTP server unless it is disabled by setting port to -1.
   // HTTP is often used when testing locally, but not for prod.
-  if (http_port !== -1) {
+  if (http_port === -1) {
+    console.log('not starting http server');
+  } else {
     http_server = http.createServer(app).listen(http_port, () => {
       console.log(`http server listening on port ${http_port}`);
     });
@@ -41,7 +43,9 @@ function run() {
   // Start up the HTTPS server unless it is disabled by setting port to -1.
   // HTTPS is used for prod, but it's not worth doing locally because we won't
   // be able to get keys and certs for it.
-  if (https_port !== -1) {
+  if (https_port === -1) {
+    console.log('not starting https server');
+  } else {
     // Read our SSL credentials from the environment (loaded by dotenv)
     const credentials = {
       key: process.env.SSL_KEY,
