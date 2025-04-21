@@ -24,28 +24,36 @@ export function run() {
   const app = express();
   app.use(express.json());
 
-  // Create a regular HTTP server.
-  // Default to 8080 so non-root users can run it
+  // Read ports for http and https servers. .env loads these values.
+  // The default ports happen if not specified, and both are chosen because
+  // non-sudo users can create them.
   const http_port = Number(process.env.HTTP_PORT) || 8080;
-  http_server = http.createServer(app).listen(http_port, () => {
-    console.log(`http server listening on port  ${http_port}`);
-  });
+  const https_port = Number(process.env.HTTPS_PORT) || 4433;
 
-  // Read our SSL credentials from the environment (loaded from dotenv)
-  const credentials = {
-    key: process.env.SSL_KEY,
-    ca: process.env.SSL_CA,
-    cert: process.env.SSL_CERT,
-  };
-
-  // Create an HTTPS server serving the application.
-  // Default to 4443 so non-root users can run it.
-  const https_port = Number(process.env.HTTPS_PORT) || 4443;
-  https_server = https
-    .createServer(credentials, app)
-    .listen(https_port, () => {
-      console.log(`https server listening on port ${https_port}`);
+  // Start up the HTTP server unless it is disabled by setting port to -1
+  if (http_port !== -1) {
+    http_server = http.createServer(app).listen(http_port, () => {
+      console.log(`http server listening on port ${http_port}`);
     });
+  }
+
+  // Start up the HTTPS server unless it is disabled by setting port to -1
+  if (https_port !== -1) {
+    // Read our SSL credentials from the environment (loaded by dotenv)
+    const credentials = {
+      key: process.env.SSL_KEY,
+      ca: process.env.SSL_CA,
+      cert: process.env.SSL_CERT,
+    };
+
+    // Create an HTTPS server serving the application.
+    // Default to 4443 so non-root users can run it.
+    https_server = https
+      .createServer(credentials, app)
+      .listen(https_port, () => {
+        console.log(`https server listening on port ${https_port}`);
+      });
+  }
 
   // Default route just shows the API is online
   app.get('/', getAPIOnline);
