@@ -2,7 +2,7 @@
 //  SettingsView.swift
 //  GetGrinnected
 //
-//  Created by Ellie Seehorn on 3/4/25.
+//  Created by Michael Paulin on 4/20/25.
 //
 
 import Foundation
