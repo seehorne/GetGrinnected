@@ -1,5 +1,5 @@
-import * as nodemailer from 'nodemailer';
-import * as dotenv from 'dotenv';
+const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
 
 /**
  * Create a nodemailer transporter for the configured gmail account.\
@@ -40,7 +40,7 @@ function genCode(length) {
  * @param {string} email Email to send.
  * @returns  The code that was sent.
  */
-export function sendCode(email) {
+function sendCode(email) {
     // Get username and password from .env
     dotenv.config();
     const account = process.env.GMAIL_ACCOUNT;
@@ -70,4 +70,10 @@ export function sendCode(email) {
     );
 
     return code;
+}
+
+if (require.main !== module) {
+    module.exports = {
+        sendCode
+    }
 }

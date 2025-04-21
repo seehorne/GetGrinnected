@@ -4,6 +4,7 @@ const https = require('https');
 
 // Import routes from their files
 const events = require('./routes/events.cjs');
+const user = require('./routes/user.cjs');
 
 /* global vars to store the servers we are running,
  * so they can be shut down when needed */
@@ -66,6 +67,19 @@ function run() {
   // Getting events between, set the URL parameter names with :start and :end.
   // Those params will get passed into the function as part of `req.params` dictionary
   app.get('/events/between/:start/:end', events.getEventsBetween);
+
+  // Check if a user exists by trying to GET them by username.
+  // :username gets passed as a parameter to the function, in `req.params`
+  app.get('/user/:username', user.checkUsernameExists);
+
+  // Login and signups will be done through POST requests, which is because you
+  // have to send information and there's the metaphor of creating something new.
+  app.post('/user/login', user.logInUser);
+  app.post('/user/signup', user.signUpNewUser);
+
+  // OTP code verification also through a POST request. If successful, it will
+  // send back the needed authentication tokens.
+  app.post('/user/verify', user.verifyOTP);
 }
 
 /**
@@ -107,8 +121,7 @@ function getAPIOnline(_req, res) {
   res.send('API online!');
 }
 
-// run the server when we are run.
-// under MJS, we do not need to specify different behavior on import
+// run the server when we are run, export otherwise.
 if (require.main === module) {
   run();
 } else {
