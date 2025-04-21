@@ -37,8 +37,6 @@ import androidx.navigation.compose.rememberNavController
  *  @param darkTheme the current state of the Theme of light or dark mode
  *  @param onToggleTheme a lambda function passed down from previous screen that calls back to the
  *  function instated in the call the AppNavigation in the MainActivity.
- *  @param event is the list of the events we read in from the api
- *  @param eventnum is the length of the list of the events
  *  @param navController this is the nav Controller to our login flow process to be used in sign out functionality
  */
 

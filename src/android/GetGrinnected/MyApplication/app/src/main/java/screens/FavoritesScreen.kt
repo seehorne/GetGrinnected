@@ -34,7 +34,6 @@ import com.example.myapplication.toEvent
  * A composable function that represents the Favorites screen of our app.
  *
  * @param modifier Modifier to be applied to the screen layout.
- * @param events List of events to be displayed on favorites screen.
  */
 
 @Composable
