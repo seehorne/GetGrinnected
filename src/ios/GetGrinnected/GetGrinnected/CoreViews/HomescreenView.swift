@@ -16,7 +16,9 @@ struct HomescreenView: View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
+                // Header is outside of scrollable so it does not move
                 Header(safeAreaTop, title: "Home", searchBarOn: true)
+                
                 ScrollView(.vertical, showsIndicators: false){
                     
                     //content
@@ -56,6 +58,7 @@ struct HomescreenView: View {
 //https://stackoverflow.com/questions/67873845/why-my-custom-views-try-to-take-all-the-available-vertical-space-in-vstack
             
         }//GeometryReaderh
+        // if the viewedDate changes update timeSpan
         .onChange(of: viewModel.viewedDate) { oldValue, newValue in
             // update start and end of time span when you are viewing a different day
             viewModel.timeSpan.start = newValue

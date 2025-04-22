@@ -21,10 +21,10 @@ struct CalendarView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             //vstack of header and events
             VStack(){
-                
+                // Header is outside of scrollable so it does not move
                 Header(safeAreaTop, title: "Calendar", searchBarOn: true)
                 
-                //vertical scroll view to see mroe events
+                //vertical scroll view to see more events
                 ScrollView(.vertical, showsIndicators: false){
                     //have search bar on here.
                     
@@ -46,6 +46,7 @@ struct CalendarView: View {
             .edgesIgnoringSafeArea(.top)
             
         }//geometry reader
+        // if the viewedDate changes update timeSpan
         .onChange(of: viewModel.viewedDate) { oldValue, newValue in
             // update start and end of time span when you are viewing a different day
             viewModel.timeSpan.start = newValue

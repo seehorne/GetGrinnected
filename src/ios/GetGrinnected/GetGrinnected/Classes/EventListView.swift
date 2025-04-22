@@ -90,7 +90,7 @@ class EventViewModel: ObservableObject {
      timeSpan: An interval of dates that you want to see events for.
      */
     func filterEventsByDateInterval(timeSpan: DateInterval) {
-        // filter based on a condition
+        // filter based on if an event in events is inside the timeSpan
         viewedEvents = events.filter { event in
             // check that the event has a start and end time
             if event.useful_event_start_time != nil && event.useful_event_end_time != nil {
@@ -148,6 +148,7 @@ struct EventListView: View {
                     Text(error)
                         .foregroundColor(.red)
                     Button("Retry") {
+                        // TODO: fix retry button
                         //viewModel.fetchEvents()
                     }
                     .padding()
@@ -159,6 +160,7 @@ struct EventListView: View {
                 
         } //For all events
         .onAppear(){
+            // background process
             Task {
                 // re-fetch events
                 await viewModel.fetchEvents()
@@ -166,6 +168,7 @@ struct EventListView: View {
                 viewModel.filterEventsByDateInterval(timeSpan: parentView.timeSpan)
             }
         }
+        // if the timeSpan changes filter events again
         .onChange(of: parentView.timeSpan) { oldValue, newValue in
             // check we have events
             if(!viewModel.events.isEmpty) {

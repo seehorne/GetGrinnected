@@ -13,19 +13,20 @@ struct FavoritesView: View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
-                    Header(safeAreaTop, title: "Favorites", searchBarOn: true)
-                    ScrollView(.vertical, showsIndicators: false){
-                    
-                    
-                    //content
-                    VStack {
-                        Image(systemName: "globe")
-                            .imageScale(.large)
-                            .foregroundStyle(.tint)
-                        Text("Hello, favorites!")
-                    }
-                    .padding()
-                    .frame(minHeight: proxy.size.height)//height
+                // Header is outside of scrollable so it does not move
+                Header(safeAreaTop, title: "Favorites", searchBarOn: true)
+                ScrollView(.vertical, showsIndicators: false){
+                
+                
+                //content
+                VStack {
+                    Image(systemName: "globe")
+                        .imageScale(.large)
+                        .foregroundStyle(.tint)
+                    Text("Hello, favorites!")
+                }
+                .padding()
+                .frame(minHeight: proxy.size.height)//height
                             
                 }
             }
