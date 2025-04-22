@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import androidx.compose.runtime.MutableState
+
 /**
  * This class is used to define the check data type
  * checked is a boolean that tracks whether the checkbox is checked or not
@@ -7,6 +9,6 @@ package com.example.myapplication
  */
 
 data class Check (
-    var checked: Boolean = false,
+    val checked: MutableState<Boolean>,
     val label: String,
 )

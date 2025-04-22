@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.first
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 val tagsString = events.flatMap { it.tags }.distinct()
 
                 // We turn this string of tags into a mutable list of check objects
-                val tags = tagsString.map { Check(false, it) }.toMutableList()
+                val tags = rememberSaveable(tagsString) { tagsString.map { Check(mutableStateOf(false), it) }.toMutableList() }
 
                 MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
                     AppNavigation(

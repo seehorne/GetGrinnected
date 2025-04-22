@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun CheckBox(check: Check) {
-    val checked = remember { mutableStateOf(check.checked) }
 
     Row(
         modifier = Modifier,
@@ -28,11 +27,9 @@ fun CheckBox(check: Check) {
     {
         //creates a checkbox
         Checkbox(
-            checked = checked.value,
-            onCheckedChange = {
-                checked.value = !checked.value
-                check.checked = !check.checked
-            })
+            checked = check.checked.value,
+            onCheckedChange = { check.checked.value = it }
+        )
         // checkbox label
         Text (check.label)
     }

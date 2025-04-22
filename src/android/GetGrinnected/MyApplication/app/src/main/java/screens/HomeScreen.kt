@@ -124,7 +124,7 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
         Spacer(modifier = Modifier.height(150.dp))
         var tagSorter = 0
         repeat(tags.size){
-            if (tags[tagSorter].checked) {
+            if (tags[tagSorter].checked.value) {
                 chosenTags.add(tags[tagSorter].label)
             }
             tagSorter += 1
