@@ -112,8 +112,8 @@ fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = M
         "December"
     }).toString()
     Column(modifier = modifier.fillMaxSize().background(gradient)) {
-        Box(modifier = modifier.padding(16.dp)) {
-            Row {
+        Box(modifier = modifier.background(Color.Black).size(width = 450.dp, height = 100.dp)) {
+            Row{
                 // adds the logo to the top
                 Image(
                     painter = painterResource(id = R.drawable.gg_logo_2),
