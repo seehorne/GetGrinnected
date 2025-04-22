@@ -2,6 +2,7 @@
 - [Login/Signup](#login-signup)
     - [Login](#login)
     - [Sign up](#sign-up)
+    - [Verification](#verification)
 - [Home](#home)
     - [View event details](#view-event-details)
     - [Favorite events](#favorite-events)
@@ -17,6 +18,9 @@
 - [Settings](#settings)
     - [Light and dark mode](#light-and-dark-mode)
     - [Change username](#change-username)
+    - [Sign out](#sign-out)
+    - [Explore organizations](#explore-organizations)
+    - [Follow and unfollow organizations](#follow-and-unfollow-organizations)
 
 
 # Login-Signup
@@ -49,6 +53,11 @@
 - Submit
     - Checks for valid Grinnell email and password (UNDER CONSTRUCTION :building_construction:)
         - Under construction because checks for valid construct, but does not yet check for if the account exists or not, waiting on local database
+- Back to [table of contents](#table-of-contents)
+
+## Verification
+- Coming soon! Stay tuned :tada:
+    - See restructuring discussed in [login](#login) and [sign up](#sign-up)
 - Back to [table of contents](#table-of-contents)
 
 # Home
@@ -138,4 +147,16 @@ _Views can be selected from a view dropdown_
 ## Change username
 - Type desired username in text box on settings page (UNDER CONSTRUCTION :building_construction:)
     - Under construction because changed username does not currently save, and updated username is not checked for validity by original username rules
+- Back to [table of contents](#table-of-contents)
+
+## Sign out
+- Coming soon! Stay tuned :tada:
+- Back to [table of contents](#table-of-contents)
+
+## Explore organizations
+- Coming soon! Stay tuned :tada:
+- Back to [table of contents](#table-of-contents)
+
+## Follow and unfollow organizations
+- Coming soon! Stay tuned :tada:
 - Back to [table of contents](#table-of-contents)
