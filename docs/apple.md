@@ -9,8 +9,14 @@
     - [Filter events by day](#filter-events-by-day)
     - [Filter events by tags](#filter-events-by-tags-home)
 - [Calendar](#calendar)
+    - [Day view](#day-view)
+    - [Week view](#week-view)
+    - [Month view](#month-view)
+    - [Filter by tags](#filter-by-tags-calendar)
 - [Favorites](#favorites)
 - [Settings](#settings)
+    - [Light and dark mode](#light-and-dark-mode)
+    - [Change username](#change-username)
 
 
 # Login-Signup
@@ -56,29 +62,69 @@ _Events are sorted in order of start time by day_
 ## Favorite events
 - Click the heart icon on an event card to add it to your favorites (UNDER CONSTRUCTION :building_construction:)
     - Under construction because while favorite status is toggleable, it does not yet write to favorites page
+- Back to [table of contents](#table-of-contents)
 
 ## Subscribe to event notifications
 - Click the bell icon on an event card to get reminders and updates about it (UNDER CONSTRUCTION :building_construction:)
     - Under construction because while notification status is toggleable, it does not yet save such that the user is actually notified
+- Back to [table of contents](#table-of-contents)
 
 ## Filter events by day
 - Click the day drop down to see events happening on a specific day (UNDER CONSTRUCTION :building_construction:)
     - Under construction because currently, selecting the day does not change which events are shown
+    - Waiting on an effective filtering approach 
 - Default view is current day
+- Can select any day within the next two weeks
+- Back to [table of contents](#table-of-contents)
 
 ## Filter events by tags (home)
 - Use checkboxes to select tags of interest (UNDER CONSTRUCTION :building_construction:)
     - Under construction because selected tags do not currently update what events are shown
+    - Waiting on an effective filtering approach 
 - Eventually...
     - No tags selected = everything will show up
     - All tags selected = everything will show up still
     - 1 to (total-1 tags selected) = only selected tags will show up
 - Back to [table of contents](#table-of-contents)
 
-
 # Calendar
 
+_Views can be selected from a view dropdown_
+
+## Day view
+- Select individual day to view (UNDER CONSTRUCTION :building_construction:)
+    - Under construction due to waiting on the same filtering approach described in [home](#home)
+- Back to [table of contents](#table-of-contents)
+
+## Week view
+- Default behavior is current week
+- Can swipe to see future weeks
+- (UNDER CONSTRUCTION :building_construction:)
+    - Waiting on the same filtering call as [day view](#day-view)
+- Back to [table of contents](#table-of-contents)
+
+## Month view
+- Can pull down a calendar to select a different month 
+    - Can also select a day within a month to transition into day view
+- (UNDER CONSTRUCTION :building_construction:)
+    - Waiting on the same filtering call as [day view](#day-view)
+- Back to [table of contents](#table-of-contents)
+
+## Filter by tags (calendar)
+- Coming soon! Stay tuned :tada:
+- Back to [table of contents](#table-of-contents)
+
 # Favorites
-(UNDER CONSTRUCTION :building_construction:)
+- Coming soon! Stay tuned :tada:
+- Back to [table of contents](#table-of-contents)
 
 # Settings
+
+## Light and dark mode
+- Use slider to toggle between light mode and dark mode
+- Back to [table of contents](#table-of-contents)
+
+## Change username
+- Type desired username in text box on settings page (UNDER CONSTRUCTION :building_construction:)
+    - Under construction because changed username does not currently save, and updated username is not checked for validity by original username rules
+- Back to [table of contents](#table-of-contents)
