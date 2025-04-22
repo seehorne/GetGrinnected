@@ -1,3 +1,8 @@
+# Android docs
+This is your guide to using GetGrinnected on an iOS device
+
+_Looking for Android guide? Click [here](android.md) for Android docs_
+
 # Table of contents
 - [General navigation](#general-navigation)
 - Pages/features
