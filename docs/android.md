@@ -14,6 +14,8 @@
 - [Settings](#settings)
     - [Sign out](#sign-out)
     - [Switch between light and dark mode](#light-and-dark-mode)
+    - [Explore organizations](#explore-org-info)
+    - [Follow and unfollow orgs](#follow-and-unfollow-orgs)
 
 
 # Login-Signup
@@ -50,9 +52,9 @@
 - Back to [table of contents](#table-of-contents)
 
 ## Verification
-- Enter code sent to your email (UNDER CONSTRUCTION)
+- Enter code sent to your email (UNDER CONSTRUCTION :building_construction:)
     - (while under construction) enter code 123456
-- Resend code (UNDER CONSTRUCTION)
+- Resend code (UNDER CONSTRUCTION :building_construction:)
     - (while under construction) does nothing
     - (eventually) sends a new code to your email
 - Click verify
@@ -62,6 +64,7 @@
 - Back to [table of contents](#table-of-contents)
 
 # Home
+_Events are sorted in order of start time by day_
 
 ## View event details
 - Click on an event to expand it and view additional details, such as description
@@ -92,13 +95,13 @@
 - Back to [table of contents](#table-of-contents)
 
 ## Sort by tags (calendar)
-- Select desired tags from page drop down (UNDER CONSTRUCTION)
+- Select desired tags from page drop down (UNDER CONSTRUCTION :building_construction:)
     - currently, need to change pages for tag filter to apply
         - if you change page, on return, calendar will be filtered by specified tags
 - Back to [table of contents](#table-of-contents)
 
 ## Switch time view
-- Switch calendar view from day to week to month (UNDER CONSTRUCTION)
+- Switch calendar view from day to week to month (UNDER CONSTRUCTION :building_construction:)
 
 # Favorites
 
@@ -117,6 +120,10 @@
 - Use slider to toggle between light mode and dark mode
 - Back to [table of contents](#table-of-contents)
 
+## Explore org info
+- Click on an org card to see details about the org (UNDER CONSTRUCTION :building_construction:)
+- Follow an org from its card (UNDER CONSTRUCTION :building_construction:)
+
 ## Follow and unfollow orgs
-- Functionality forthcoming (UNDER CONSTRUCTION)
+- Functionality forthcoming (UNDER CONSTRUCTION :building_construction:)
 - Back to [table of contents](#table-of-contents)

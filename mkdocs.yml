@@ -19,5 +19,11 @@ theme:
 plugins:
   - render_swagger
 
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
 extra_css:
   - swagger-code-colors.css
