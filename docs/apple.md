@@ -1,12 +1,12 @@
 # Table of contents
-- [Login/Signup](#Login/Signup)
-- [Home](#Home)
-- [Calendar](#Calendar)
-- [Favorites](#Favorites)
-- [Settings](#Settings)
+- [Login/Signup](#login-signup)
+- [Home](#home)
+- [Calendar](#calendar)
+- [Favorites](#favorites)
+- [Settings](#settings)
 
 
-# Login/Signup
+# Login-Signup
 
 # Home
 
