@@ -247,7 +247,10 @@ fun createCalendarList(event: List<Event>, tags: List<String>, month: String): L
             }
             else {
                 for(t in tags.indices){
-                if(event[j].event_start_time.substring(8, 10) == i.toString() && event[j].tags.contains(tags[t])){
+                if(event[j].event_start_time.substring(8, 10) == i.toString()
+                    && event[j].event_start_time.substring(5, 7) == month
+                    && event[j].tags.contains(tags[t]))
+                     {
                         currentDay.add(event[j])
                         break
                     }
