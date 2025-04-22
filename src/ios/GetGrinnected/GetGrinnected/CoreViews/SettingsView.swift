@@ -24,9 +24,10 @@ struct SettingsView: View {
         
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
-            ScrollView(.vertical, showsIndicators: false){
-                VStack(){
-                    Header(safeAreaTop, title: "Settings", searchBarOn: true)
+            VStack(){
+                Header(safeAreaTop, title: "Settings", searchBarOn: true)
+                
+                    ScrollView(.vertical, showsIndicators: false){
                     
                     
                     //content

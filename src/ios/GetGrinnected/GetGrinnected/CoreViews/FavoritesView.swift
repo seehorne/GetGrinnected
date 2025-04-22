@@ -12,9 +12,9 @@ struct FavoritesView: View {
     var body: some View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
-            ScrollView(.vertical, showsIndicators: false){
-                VStack(){
+            VStack(){
                     Header(safeAreaTop, title: "Favorites", searchBarOn: true)
+                    ScrollView(.vertical, showsIndicators: false){
                     
                     
                     //content
