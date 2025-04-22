@@ -3,6 +3,11 @@
     - [Login](#login)
     - [Sign up](#sign-up)
 - [Home](#home)
+    - [View event details](#view-event-details)
+    - [Favorite events](#favorite-events)
+    - [Subscribe to event notifications](#subscribe-to-event-notifications)
+    - [Filter events by day](#filter-events-by-day)
+    - [Filter events by tags](#filter-events-by-tags-home)
 - [Calendar](#calendar)
 - [Favorites](#favorites)
 - [Settings](#settings)
@@ -41,9 +46,39 @@
 - Back to [table of contents](#table-of-contents)
 
 # Home
+_Events are sorted in order of start time by day_
+
+## View event details
+- Click on an event to expand it and view additional details, such as description
+- To collapse an event, click it again
+- Back to [table of contents](#table-of-contents)
+
+## Favorite events
+- Click the heart icon on an event card to add it to your favorites (UNDER CONSTRUCTION :building_construction:)
+    - Under construction because while favorite status is toggleable, it does not yet write to favorites page
+
+## Subscribe to event notifications
+- Click the bell icon on an event card to get reminders and updates about it (UNDER CONSTRUCTION :building_construction:)
+    - Under construction because while notification status is toggleable, it does not yet save such that the user is actually notified
+
+## Filter events by day
+- Click the day drop down to see events happening on a specific day (UNDER CONSTRUCTION :building_construction:)
+    - Under construction because currently, selecting the day does not change which events are shown
+- Default view is current day
+
+## Filter events by tags (home)
+- Use checkboxes to select tags of interest (UNDER CONSTRUCTION :building_construction:)
+    - Under construction because selected tags do not currently update what events are shown
+- Eventually...
+    - No tags selected = everything will show up
+    - All tags selected = everything will show up still
+    - 1 to (total-1 tags selected) = only selected tags will show up
+- Back to [table of contents](#table-of-contents)
+
 
 # Calendar
 
 # Favorites
+(UNDER CONSTRUCTION :building_construction:)
 
 # Settings
