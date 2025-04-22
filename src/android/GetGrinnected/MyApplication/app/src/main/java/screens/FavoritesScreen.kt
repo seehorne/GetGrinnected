@@ -93,7 +93,6 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
             favoritedEvents.forEach { event ->
                 EventCard(event = event, modifier = Modifier)
                 Spacer(modifier = Modifier.height(16.dp))
-
             }
         }
     }

@@ -66,9 +66,10 @@ class MainActivity : ComponentActivity() {
                             // Used to pass the live change setting of theme down through the app to our UI switch.
                             lifecycleScope.launch {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
-                            }}, 
-                      tags = tags,
-                        startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
+                            }
+                        }, 
+                      tags = tags.sortedBy{ it.label},                       
+                      startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
                 }
             }
@@ -84,7 +85,7 @@ fun fixTime(aba: List<Event>): List<Event>{
     var current = 0
     val done = mutableListOf<Event>()
     // creates a variable to represent null as it cant be directly called
-    var why = null
+    val why = null
     repeat(aba.size){
         done.add(aba[current].copy(
             // Takes care of null case so that java can be turned into kotlin
@@ -120,8 +121,6 @@ fun fixTime(aba: List<Event>): List<Event>{
 }
 
 /**
- * Ethan Hughes
- *
  * a function that turns a string into a date
  *
  * @param dateFormat string in date format
@@ -137,8 +136,6 @@ fun String.toDate(
 }
 
 /**
- * Ethan Hughes
- *
  * a function that turns a string into a date
  *
  * @param dateFormat string in date format
