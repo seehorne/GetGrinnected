@@ -213,6 +213,7 @@ fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = M
                     clickedCalendarElem?.let { dayInfo ->
                         Text(
                             text = month + " (Day ${dayInfo.day})",
+                            color = Color.White,
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 8.dp)

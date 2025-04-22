@@ -89,6 +89,7 @@ fun MonthViewScreen(
     ) {
         Text(
             text = month,
+            color = Color.White,
             fontWeight = FontWeight.SemiBold,
             fontSize = 40.sp
         )
