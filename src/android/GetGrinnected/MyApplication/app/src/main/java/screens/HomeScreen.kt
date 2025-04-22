@@ -80,11 +80,6 @@ fun HomeScreen(tags: List<Check>) {
         )
     // remembers where we are scrolled to
     val state = rememberScrollState()
-    // stores whether checkboxes for tags are checked
-    val check1 = remember { mutableStateOf(false)}
-    val check2 = remember { mutableStateOf(false)}
-    val check3 = remember { mutableStateOf(false)}
-
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
