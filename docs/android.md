@@ -11,6 +11,7 @@
     - [Favorite events](#favorite-events)
     - [Sort by day](#see-events-on-specific-day)
     - [Filter by tags](#sort-by-tags-calendar)
+    - [Subscribe to event notifications](#subscribe-to-event-notifications)
 - [Calendar](#calendar)
     - [See events by day](#sort-by-day)
     - [Filter by tags](#sort-by-tags-calendar)
@@ -22,6 +23,8 @@
     - [Switch between light and dark mode](#light-and-dark-mode)
     - [Explore organizations](#explore-org-info)
     - [Follow and unfollow orgs](#follow-and-unfollow-orgs)
+    - [Change username](#change-username)
+    
 
 
 # Login-Signup
@@ -94,7 +97,12 @@ _Events are sorted in order of start time by day_
 - 1 to (total-1 tags selected) = only selected tags will show up
 - Back to [table of contents](#table-of-contents)
 
+## Subscribe to event notifications
+- Coming soon! Stay tuned :tada:
+- Back to [table of contents](#table-of-contents)
+
 # Calendar
+- Default view is month calendar, where clicking on a specific day shows events happening that day
 
 ## See events on specific day 
 - Click day in question on calendar to see events occuring that day
@@ -141,7 +149,10 @@ _Events are sorted in order of start time by day_
 - Follow an org from its card (UNDER CONSTRUCTION :building_construction:)
 - Back to [table of contents](#table-of-contents)
 
-
 ## Follow and unfollow orgs
 - Functionality forthcoming (UNDER CONSTRUCTION :building_construction:)
+- Back to [table of contents](#table-of-contents)
+
+## Change username
+- Coming soon! Stay tuned :tada:
 - Back to [table of contents](#table-of-contents)
