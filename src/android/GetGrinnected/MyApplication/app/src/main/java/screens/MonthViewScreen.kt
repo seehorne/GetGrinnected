@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,7 +65,7 @@ fun MonthViewScreen(
         mutableStateOf(Offset.Zero)
     }
     var animationRadius by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
     val scope = rememberCoroutineScope()
 

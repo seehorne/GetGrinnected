@@ -86,41 +86,21 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
             TileMode.Repeated
         )
     // sets the month based on devices local date
-    val month = (if(currentMonth == "01"){
-        "January"
-    }
-    else if (currentMonth == "02"){
-        "February"
-    }
-    else if (currentMonth == "03"){
-        "March"
-    }
-    else if (currentMonth == "04"){
-        "April"
-    }
-    else if (currentMonth == "05"){
-        "May"
-    }
-    else if (currentMonth == "06"){
-        "June"
-    }
-    else if (currentMonth == "07"){
-        "July"
-    }
-    else if (currentMonth == "08"){
-        "August"
-    }
-    else if (currentMonth == "09"){
-        "September"
-    }
-    else if (currentMonth == "10"){
-        "October"
-    }
-    else if (currentMonth == "11"){
-        "November"
-    }
-    else{
-        "December"
+    val month = (when (currentMonth) {
+        "01" -> { "January" }
+        "02" -> { "February" }
+        "03" -> { "March" }
+        "04" -> { "April" }
+        "05" -> { "May" }
+        "06" -> { "June" }
+        "07" -> { "July" }
+        "08" -> { "August" }
+        "09" -> { "September" }
+        "10" -> { "October" }
+        "11" -> { "November" }
+        else -> {
+            "December"
+        }
     }).toString()
     Column(modifier = modifier.fillMaxSize().background(gradient)) {
         Box(modifier = modifier.background(Color.Black).size(width = 450.dp, height = 100.dp)) {
@@ -152,7 +132,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                         }
                         DropdownMenu(
                             expanded = expanded2.value,
-                            onDismissRequest = { expanded2.value = false;
+                            onDismissRequest = { expanded2.value = false
                                 for (i in tags.indices){
                                     if (tags[i].checked) {
                                         chosenTags.add(tags[i].label)
@@ -173,12 +153,10 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                         }
                         Spacer(modifier = Modifier.width(30.dp))
                     Button(onClick = { expanded.value = true }) {
-                        if (selectedView == 0) {
-                            Text("Day")
-                        } else if (selectedView == 1) {
-                            Text("Week")
-                        } else {
-                            Text("Month")
+                        when (selectedView) {
+                            0 -> { Text("Day") }
+                            1 -> { Text("Week") }
+                            else -> { Text("Month") }
                         }
                     }
             DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
