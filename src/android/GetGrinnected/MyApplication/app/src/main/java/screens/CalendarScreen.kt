@@ -2,7 +2,9 @@ package screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -29,13 +33,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.Check
+import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
+import com.example.myapplication.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+
 
 /**
  * A composable function that represents the Calendar screen of our app. (More to come)
@@ -44,11 +53,13 @@ import java.time.format.DateTimeFormatter
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreen(event: List<Event>, modifier: Modifier = Modifier) {
+fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = Modifier) {
+    val chosenTags = mutableListOf<String>()
     var selectedView by remember { mutableIntStateOf(2) }
     val expanded = remember { mutableStateOf(false) }
-    val calendarInputList by remember {
-        mutableStateOf(createCalendarList(event))
+    val expanded2 = remember { mutableStateOf(false) }
+    var calendarInputList by remember {
+        mutableStateOf(createCalendarList(event, chosenTags))
     }
     var clickedCalendarElem by remember {
         mutableStateOf<CalendarInput?>(null)
@@ -64,19 +75,101 @@ fun CalendarScreen(event: List<Event>, modifier: Modifier = Modifier) {
             10000.0f,
             TileMode.Repeated
         )
+    val month = (if(currentMonth.format(formatter).toString() == "01"){
+        "January"
+    }
+    else if (currentMonth.format(formatter).toString() == "02"){
+        "February"
+    }
+    else if (currentMonth.format(formatter).toString() == "03"){
+        "March"
+    }
+    else if (currentMonth.format(formatter).toString() == "04"){
+        "April"
+    }
+    else if (currentMonth.format(formatter).toString() == "05"){
+        "May"
+    }
+    else if (currentMonth.format(formatter).toString() == "06"){
+        "June"
+    }
+    else if (currentMonth.format(formatter).toString() == "07"){
+        "July"
+    }
+    else if (currentMonth.format(formatter).toString() == "08"){
+        "August"
+    }
+    else if (currentMonth.format(formatter).toString() == "09"){
+        "September"
+    }
+    else if (currentMonth.format(formatter).toString() == "10"){
+        "October"
+    }
+    else if (currentMonth.format(formatter).toString() == "11"){
+        "November"
+    }
+    else{
+        "December"
+    }).toString()
     Column(modifier = modifier.fillMaxSize().background(gradient)) {
         Box(modifier = modifier.padding(16.dp)) {
             Row {
-                Button(onClick = { expanded.value = true }) {
-                    if (selectedView == 0) {
-                        Text("Day")
-                    } else if (selectedView == 1) {
-                        Text("Week")
-                    } else {
-                        Text("Month")
+                // adds the logo to the top
+                Image(
+                    painter = painterResource(id = R.drawable.gg_logo_2),
+                    contentDescription = "App Logo",
+                    modifier = Modifier
+                        .padding(25.dp)
+                        .background(Color.White)
+                        .size(50.dp)
+                )
+                // centers the bottons
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    // I don't know why this is necessary but was needed to properly space tag menu
+                    Row(
+                        modifier = Modifier
+                            .padding(25.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End,
+                    ) {
+                        // creates tags menu
+                        Button(onClick = { expanded2.value = true }) {
+                            Text("Tags")
+                        }
+                        DropdownMenu(
+                            expanded = expanded2.value,
+                            onDismissRequest = { expanded2.value = false;
+                                for (i in tags.indices){
+                                    if (tags[i].checked) {
+                                        chosenTags.add(tags[i].label)
+                                    }
+                                }
+                                calendarInputList = createCalendarList(event, chosenTags) }) {
+                            for (i in tags.indices) {
+                                DropdownMenuItem(
+                                    text = {
+                                        CheckBox(
+                                            check = tags[i]
+                                        )
+                                    },
+                                    onClick = {}
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(60.dp))
+                        }
+                        Spacer(modifier = Modifier.width(30.dp))
+                    Button(onClick = { expanded.value = true }) {
+                        if (selectedView == 0) {
+                            Text("Day")
+                        } else if (selectedView == 1) {
+                            Text("Week")
+                        } else {
+                            Text("Month")
+                        }
                     }
-                }
-            }
             DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
                 DropdownMenuItem(text = { Text("Day View") }, onClick = {
                     selectedView = 0
@@ -92,6 +185,9 @@ fun CalendarScreen(event: List<Event>, modifier: Modifier = Modifier) {
                 })
             }
         }
+                }
+            }
+        }
         when (selectedView) {
             0 -> DayViewScreen(modifier)
             1 -> WeekViewScreen(modifier)
@@ -105,43 +201,7 @@ fun CalendarScreen(event: List<Event>, modifier: Modifier = Modifier) {
                     onDayClick = { day ->
                         clickedCalendarElem = calendarInputList.first { it.day == day }
                     },
-                    month = (
-                            if(currentMonth.format(formatter).toString() == "01"){
-                                "January"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "02"){
-                                "February"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "03"){
-                                "March"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "04"){
-                                "April"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "05"){
-                                "May"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "06"){
-                                "June"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "07"){
-                                "July"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "08"){
-                                "August"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "09"){
-                                "September"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "10"){
-                                "October"
-                            }
-                            else if (currentMonth.format(formatter).toString() == "11"){
-                                "November"
-                            }
-                            else{
-                                "December"
-                            }).toString()
+                    month = month
                 )
                 Column(
                     modifier = Modifier
@@ -152,11 +212,17 @@ fun CalendarScreen(event: List<Event>, modifier: Modifier = Modifier) {
                 ) {
                     clickedCalendarElem?.let { dayInfo ->
                         Text(
-                            text = "April (Day ${dayInfo.day})",
+                            text = month + " (Day ${dayInfo.day})",
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
+                        for (i in tags.indices){
+                            if (tags[i].checked) {
+                                chosenTags.add(tags[i].label)
+                            }
+                        }
+                        calendarInputList = createCalendarList(event, chosenTags)
                         dayInfo.events.forEach {
                             EventCard(it)
                             Spacer(modifier = Modifier.height(4.dp))
@@ -168,22 +234,35 @@ fun CalendarScreen(event: List<Event>, modifier: Modifier = Modifier) {
     }
 }
 
+
 /**
  * Creates the hard coded calendar input list for use in the calendar
  * @return a list of CalendarInput values
  */
 @RequiresApi(Build.VERSION_CODES.O)
-private fun createCalendarList(event: List<Event>): List<CalendarInput>{
+fun createCalendarList(event: List<Event>, tags: List<String>): List<CalendarInput>{
     val calendarInputs = mutableListOf<CalendarInput>()
     val currentDay = mutableListOf<Event>()
     val currentMonth = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM")
+    val formatter = DateTimeFormatter.ofPattern("MM")
     for(i in 1 .. 31){
         for(j in event.indices){
-            if (event[j].event_start_time.substring(8, 10) == i.toString() && event[j].event_start_time.substring(5, 7) == currentMonth.format(formatter).toString())
-            {
-                currentDay.add(event[j])
+            if (tags.isEmpty()) {
+                if (event[j].event_start_time.substring(8, 10) == i.toString()
+                    && event[j].event_start_time.substring(5, 7) == currentMonth.format(formatter).toString()
+                ) {
+                    currentDay.add(event[j])
+                }
             }
+            else {
+                for(t in tags.indices){
+                if(event[j].event_start_time.substring(8, 10) == i.toString() && event[j].tags.contains(tags[t])){
+                        currentDay.add(event[j])
+                        break
+                    }
+                }
+            }
+
         }
         calendarInputs.add(
             CalendarInput(

@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         },
                         event = eventsTimeFixed, // sorted list of events we are passing in
                         eventnum = length, // length of the list of events
-                        tags = tags,
+                        tags = tags.sortedBy{ it.label},
                         modifier = Modifier,
                         startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
                     )
@@ -99,7 +99,7 @@ fun fixTime(aba: List<Event>): List<Event>{
     var current = 0
     val done = mutableListOf<Event>()
     // creates a variable to represent null as it cant be directly called
-    var why = null
+    val why = null
     repeat(aba.size){
         done.add(aba[current].copy(
             // Takes care of null case so that java can be turned into kotlin

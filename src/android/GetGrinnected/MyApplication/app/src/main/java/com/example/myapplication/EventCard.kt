@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -46,13 +48,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
     // Sets up composable to be a card for our info
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-        ),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        //elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
             .padding(horizontal = 8.dp)
             .background(Color.White)
+            .border(2.dp, Color.Black)
             .clickable
         {
                 expanded.value = !expanded.value
@@ -77,22 +79,23 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                 Column(modifier = Modifier.weight(1f).background(Color.White)) {
                     Text(
                         text = event.event_name,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
 
                     Spacer(modifier = Modifier.height(4.dp).background(Color.White))
 
-                    Text(text = "${event.event_date} at ${event.event_time}")
+                    Text(text = "${event.event_date} at ${event.event_time}", color = Color.Black)
 
                     Spacer(modifier = Modifier.height(2.dp).background(Color.White))
 
-                    Text(text = event.event_location)
+                    Text(text = event.event_location, color = Color.Black)
 
                     Spacer(modifier = Modifier.height(2.dp).background(Color.White))
 
                     // If organizations is empty we won't include the output on the card
                     if (event.organizations.isNotEmpty()) {
-                        Text(text = "Hosted by: ${event.organizations.joinToString()}")
+                        Text(text = "Hosted by: ${event.organizations.joinToString()}", color = Color.Black)
                     }
                 }
                 // This is our favorite icon that is align with the column of info but beside it
@@ -110,13 +113,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {
                 if (event.event_description.isNotEmpty()) {
-                    Text(text = "Description: ${event.event_description}")
+                    Text(text = "Description: ${event.event_description}" , color = Color.Black)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp).background(Color.White))
 
                 if (event.tags.isNotEmpty()) {
-                    Text(text = "Tags: ${event.tags.joinToString()}")
+                    Text(text = "Tags: ${event.tags.joinToString()}", color = Color.Black)
                 }
             }
         }

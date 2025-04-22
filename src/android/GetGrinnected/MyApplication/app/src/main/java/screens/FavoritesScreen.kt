@@ -67,9 +67,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
             Text("You haven't favorited any events yet.", modifier = Modifier.padding(16.dp))
         } else {
             favoritedEvents.forEach { event ->
-                EventCard(event = event, modifier = Modifier
-                    .background(Color.White)
-                    .border(2.dp, Color.Black))
+                EventCard(event = event, modifier = Modifier)
             }
         }
     }
