@@ -3,10 +3,8 @@ package screens
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,12 +45,6 @@ import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 
-fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
-    return mutableStateListOf<T>().apply {
-        repeat(size) { add(initialValue) }
-    }
-}
-
 /**
  * Anthony Schwindt, Ethan Hughes
  *
@@ -63,7 +54,7 @@ fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
 
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
+fun HomeScreen(tags: List<Check>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -79,8 +70,6 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
     val sixdays = today.plusDays(6)
     // formats the date view
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    // currently for numbering events will get rid of with real events
-    var cardnum = 0
     // background color for the page
     val gradient =
         Brush.verticalGradient(
@@ -100,15 +89,12 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
     val typography = MaterialTheme.typography
-
     // Gets events from our repo
     val eventEntities by AppRepository.events
     // Converts them to event data type
     val event = eventEntities.map { it.toEvent() }
     // Sorts them by time
     val events = event.sortedBy { it.event_time }
-    val eventnum = events.size
-    var tagnum = 0
     val chosenTags = mutableListOf<String>()
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
@@ -132,10 +118,9 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
             if (tags[tagSorter].checked.value) {
                 chosenTags.add(tags[tagSorter].label)
             }
-            tagSorter += 1
         }
         // populates the page with events
-        repeat(eventnum) {
+        for (cardnum in events.indices) {
             if (chosenTags.isEmpty()){
             if (selectedView == 0) {
                 if (events[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
@@ -189,8 +174,7 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
             }}
             // sorts by tag
             else {
-                var t = 0
-                repeat(chosenTags.size){
+                for(t in chosenTags.indices){
                     if (selectedView == 0) {
                         if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
                         {
@@ -247,12 +231,8 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
                             Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
-                    t += 1
                 }
             }
-
-            // currently helps number model events - remove later
-            cardnum += 1
         }
         // creates a space at the bottom for visual appeal
         Spacer(modifier = Modifier.height(8.dp))
@@ -290,20 +270,14 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
                 // creates day menu
                 Button(onClick = { expanded.value = true }) {
                     // displays selected day on the button
-                    if (selectedView == 0) {
-                        Text(today.format(formatter), style = typography.labelLarge)
-                    } else if (selectedView == 1) {
-                        Text(tomorrow.format(formatter), style = typography.labelLarge)
-                    } else if (selectedView == 2) {
-                        Text(twodays.format(formatter), style = typography.labelLarge)
-                    } else if (selectedView == 3) {
-                        Text(threedays.format(formatter), style = typography.labelLarge)
-                    } else if (selectedView == 4) {
-                        Text(fourdays.format(formatter), style = typography.labelLarge)
-                    } else if (selectedView == 5) {
-                        Text(fivedays.format(formatter), style = typography.labelLarge)
-                    } else {
-                        Text(sixdays.format(formatter), style = typography.labelLarge)
+                    when (selectedView) {
+                        0 -> { Text(today.format(formatter), style = typography.labelLarge) }
+                        1 -> { Text(tomorrow.format(formatter), style = typography.labelLarge) }
+                        2 -> { Text(twodays.format(formatter), style = typography.labelLarge) }
+                        3 -> { Text(threedays.format(formatter), style = typography.labelLarge) }
+                        4 -> { Text(fourdays.format(formatter), style = typography.labelLarge) }
+                        5 -> { Text(fivedays.format(formatter), style = typography.labelLarge) }
+                        else -> { Text(sixdays.format(formatter), style = typography.labelLarge) }
                     }
                 }
                 // creates dropdown menu when button is clicked
@@ -353,13 +327,8 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
                     DropdownMenu(
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
-                        repeat(tags.size){
-                        DropdownMenuItem(text = { CheckBox(
-                            check = tags[tagnum]
-                        ) },
-                            onClick = {}
-                        )
-                            tagnum += 1
+                        for (tag in tags.indices){
+                            DropdownMenuItem(text = {CheckBox(check = tags[tag])}, onClick = {})
                         }
                         Spacer(modifier = Modifier.height(60.dp))
                     }

@@ -14,9 +14,7 @@ struct HomescreenView: View {
     // the furthest date in the future we can see. default is 2 weeks
     @State private var lastDate = Date.now.addingTimeInterval(86400 * 13)
     // the tags selected to filter by. default is any
-    @State var selectedTags = EventTags.any
-    // the events we have
-    // @State var events: [EventData]
+    @State private var selectedTags = EventTags.any
     
     var body: some View {
         GeometryReader{proxy in
@@ -50,7 +48,9 @@ struct HomescreenView: View {
                         } //HStack
                     
                         //Main Event List View
-                        EventListView()
+                        EventListView(timeSpan: DateInterval(start: viewedDate, end: viewedDate.startOfNextDay))
+                        
+                        Spacer()
 
                     } //VStack
                     .frame(minHeight: proxy.size.height)//height

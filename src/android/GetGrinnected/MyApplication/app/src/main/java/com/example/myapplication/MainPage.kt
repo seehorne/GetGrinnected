@@ -9,7 +9,6 @@ import screens.SettingsScreen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -46,7 +45,7 @@ fun MainPage(
     modifier: Modifier = Modifier,
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
-    tags: MutableList<Check>,
+    tags: List<Check>,
     navController: NavController
 ) {
     // Creates our navbar
@@ -105,7 +104,7 @@ fun MainPage(
             // Set of routes to for our navbar to follow
             composable("Home") { HomeScreen(tags = tags) }
 
-            composable("Calendar") { CalendarScreen() }
+            composable("Calendar") { CalendarScreen(tags = tags) }
 
             composable("Favorites") { FavoritesScreen() }
             composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }

@@ -25,11 +25,12 @@ import screens.WelcomeScreen
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AppNavigation(modifier: Modifier = Modifier,
-                  darkTheme: Boolean,
-                  onToggleTheme: (Boolean) -> Unit,
-                  startDestination: String,
-    tags: MutableList<Check>,
+fun AppNavigation(
+    modifier: Modifier = Modifier,
+    darkTheme: Boolean,
+    onToggleTheme: (Boolean) -> Unit,
+    startDestination: String,
+    tags: List<Check>,
   // This handles our navigation system with a nav controller
 ){
     val navController = rememberNavController()
