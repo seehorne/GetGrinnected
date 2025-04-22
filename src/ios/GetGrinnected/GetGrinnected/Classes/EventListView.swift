@@ -93,9 +93,12 @@ class EventViewModel: ObservableObject {
      */
     func filterEventsByDateInterval(timeSpan: DateInterval) {
         viewedEvents = events.filter { event in
-            // check current event is in the timeSpan
-            if event.useful_event_start_time != nil && timeSpan.contains(event.useful_event_start_time!) {
-                return true
+            // check that the event has a start and end time
+            if event.useful_event_start_time != nil && event.useful_event_end_time != nil {
+                // check current events start or end is in the timeSpan
+                if timeSpan.contains(event.useful_event_start_time!) || timeSpan.contains(event.useful_event_end_time!) {
+                    return true
+                } //if
             } //if
             return false
         }
