@@ -9,7 +9,6 @@ import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.myapplication.AppNavigation
 import com.example.myapplication.Check
-import com.example.myapplication.Event
 import com.example.myapplication.MainPage
 
 @RunWith(AndroidJUnit4::class)

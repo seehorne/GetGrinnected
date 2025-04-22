@@ -26,8 +26,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,9 +66,6 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
         {
                 expanded.value = !expanded.value
             },
-        colors = CardDefaults.cardColors(
-            containerColor = colorScheme.secondaryContainer
-        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         // Sets up a column on our card
@@ -138,7 +135,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                         color = colorScheme.onSurface)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                if (event.tags?.isNotEmpty() == true) {
+                if (event.tags.isNotEmpty()) {
                     Text(text = "Tags: ${event.tags.joinToString()}",
                         style = typography.bodyMedium,
                         color = colorScheme.onSurface)

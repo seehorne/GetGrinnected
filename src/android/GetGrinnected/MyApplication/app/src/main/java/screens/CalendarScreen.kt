@@ -37,11 +37,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.AppRepository
 import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
+import com.example.myapplication.toEvent
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -53,20 +55,28 @@ import java.time.format.DateTimeFormatter
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = Modifier) {
+fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
+    // Gets events from our repo
+    val eventEntities by AppRepository.events
+    // Converts them to event data type
+    val event = eventEntities.map { it.toEvent() }
+    // Sorts them by time
+    event.sortedBy { it.event_time }
+    val date = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("MM")
+    val currentMonth = date.format(formatter).toString()
     val chosenTags = mutableListOf<String>()
     var selectedView by remember { mutableIntStateOf(2) }
+    // tracks dropdowns based on buttons
     val expanded = remember { mutableStateOf(false) }
     val expanded2 = remember { mutableStateOf(false) }
     var calendarInputList by remember {
-        mutableStateOf(createCalendarList(event, chosenTags))
+        mutableStateOf(createCalendarList(event, chosenTags, currentMonth))
     }
     var clickedCalendarElem by remember {
         mutableStateOf<CalendarInput?>(null)
     }
     val scrollState = rememberScrollState()
-    val currentMonth = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("MM")
     // background color for the page
     val gradient =
         Brush.verticalGradient(
@@ -75,37 +85,38 @@ fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = M
             10000.0f,
             TileMode.Repeated
         )
-    val month = (if(currentMonth.format(formatter).toString() == "01"){
+    // sets the month based on devices local date
+    val month = (if(currentMonth == "01"){
         "January"
     }
-    else if (currentMonth.format(formatter).toString() == "02"){
+    else if (currentMonth == "02"){
         "February"
     }
-    else if (currentMonth.format(formatter).toString() == "03"){
+    else if (currentMonth == "03"){
         "March"
     }
-    else if (currentMonth.format(formatter).toString() == "04"){
+    else if (currentMonth == "04"){
         "April"
     }
-    else if (currentMonth.format(formatter).toString() == "05"){
+    else if (currentMonth == "05"){
         "May"
     }
-    else if (currentMonth.format(formatter).toString() == "06"){
+    else if (currentMonth == "06"){
         "June"
     }
-    else if (currentMonth.format(formatter).toString() == "07"){
+    else if (currentMonth == "07"){
         "July"
     }
-    else if (currentMonth.format(formatter).toString() == "08"){
+    else if (currentMonth == "08"){
         "August"
     }
-    else if (currentMonth.format(formatter).toString() == "09"){
+    else if (currentMonth == "09"){
         "September"
     }
-    else if (currentMonth.format(formatter).toString() == "10"){
+    else if (currentMonth == "10"){
         "October"
     }
-    else if (currentMonth.format(formatter).toString() == "11"){
+    else if (currentMonth == "11"){
         "November"
     }
     else{
@@ -147,7 +158,7 @@ fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = M
                                         chosenTags.add(tags[i].label)
                                     }
                                 }
-                                calendarInputList = createCalendarList(event, chosenTags) }) {
+                                calendarInputList = createCalendarList(event, chosenTags, currentMonth) }) {
                             for (i in tags.indices) {
                                 DropdownMenuItem(
                                     text = {
@@ -218,12 +229,14 @@ fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = M
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
+                        // sorts by tags
                         for (i in tags.indices){
                             if (tags[i].checked) {
                                 chosenTags.add(tags[i].label)
                             }
                         }
-                        calendarInputList = createCalendarList(event, chosenTags)
+                        calendarInputList = createCalendarList(event, chosenTags, currentMonth)
+                        // populates events based on selected days
                         dayInfo.events.forEach {
                             EventCard(it)
                             Spacer(modifier = Modifier.height(4.dp))
@@ -241,16 +254,15 @@ fun CalendarScreen(event: List<Event>, tags: List<Check>, modifier: Modifier = M
  * @return a list of CalendarInput values
  */
 @RequiresApi(Build.VERSION_CODES.O)
-fun createCalendarList(event: List<Event>, tags: List<String>): List<CalendarInput>{
+fun createCalendarList(event: List<Event>, tags: List<String>, month: String): List<CalendarInput>{
     val calendarInputs = mutableListOf<CalendarInput>()
     val currentDay = mutableListOf<Event>()
-    val currentMonth = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("MM")
+    // sorts events
     for(i in 1 .. 31){
         for(j in event.indices){
             if (tags.isEmpty()) {
                 if (event[j].event_start_time.substring(8, 10) == i.toString()
-                    && event[j].event_start_time.substring(5, 7) == currentMonth.format(formatter).toString()
+                    && event[j].event_start_time.substring(5, 7) == month
                 ) {
                     currentDay.add(event[j])
                 }

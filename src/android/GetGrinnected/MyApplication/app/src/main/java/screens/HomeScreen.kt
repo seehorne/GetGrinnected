@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,7 +60,7 @@ fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
 
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
+fun HomeScreen(tags: List<Check>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -89,12 +88,7 @@ fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
         )
     // remembers where we are scrolled to
     val state = rememberScrollState()
-    // stores whether checkboxes for tags are checked
-    val check1 = remember { mutableStateOf(false)}
-    val check2 = remember { mutableStateOf(false)}
-    val check3 = remember { mutableStateOf(false)}
     // path to API data
-
     // Gets events from our repo
     val eventEntities by AppRepository.events
     // Converts them to event data type
