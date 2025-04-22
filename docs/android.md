@@ -123,9 +123,6 @@ _Events are sorted in order of start time by day_
 
 ## Unfavorite events
 - Remove events from your favorites (which display here) by clicking the heart again
-    - (CURRENT BUG :bug:):
-        - If you unfavorite event that has another event above it, the favorite on the event above will appear to toggle off
-        - This does **not** actually remove it from favories, the bug is purely visual
 - Back to [table of contents](#table-of-contents)
 
 ## View event details (favorites)
