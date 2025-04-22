@@ -112,9 +112,10 @@ fun HomeScreen(tags: List<Check>) {
     {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
-        val chosenTags by remember {
-            derivedStateOf {
-                tags.filter { it.checked }.map { it.label }
+        val chosenTags = mutableListOf<String>()
+        for (i in tags.indices){
+            if (tags[i].checked) {
+                chosenTags.add(tags[i].label)
             }
         }
         // populates the page with events
