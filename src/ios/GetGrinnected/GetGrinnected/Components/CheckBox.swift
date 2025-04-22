@@ -16,7 +16,7 @@ import SwiftUI
  uiCompTwo: The component that is displayed when the check box is not checked.
  */
 struct CheckBoxOption {
-    var name: String
+    var name: String?
     var isChecked: Bool
     var uiCompOne: String
     var uiCompTwo: String
@@ -36,10 +36,12 @@ struct CheckBox: View {
                             item.isChecked.toggle()
                         }
                     
-                    Text(item.name)
-                        .onTapGesture { // if text is tapped, toggle checkmark
-                            item.isChecked.toggle()
-                        }
+                    if(item.name != nil) {
+                        Text(item.name!)
+                            .onTapGesture { // if text is tapped, toggle checkmark
+                                item.isChecked.toggle()
+                            } //Text
+                    } //if
                 } //HStack
             } // ForEach
         } //VStack
