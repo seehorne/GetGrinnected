@@ -19,6 +19,42 @@ async function checkUsernameExists(req, res, _next) {
 }
 
 /**
+ * Resend an OTP code to a user.
+ * 
+ * @param {*} req  Express request. Body should contain email.
+ * @param {*} res  Express response. Will be sent status of the send.
+ * @param {*} _next  Express error handler for async, unused.
+ */
+async function resendOTP(req, res, _next) {
+  // Make sure email is included in the body
+  const email = req.body.email;
+  if (email === undefined) {
+    res.status(400).json({
+      'error': 'No email',
+      'message': 'An email must be provided in the body of the request.'
+    })
+    return;
+  }
+
+  // Make sure the user already exists. If it does not, return a HTTP 404 error.
+  // That signifies "resource not found", which is appropriate here.
+  if (!await db.getAccountByEmail(email)) {
+    res.status(404).json({
+      'error': 'No such user',
+      'message': 'No user account exists with that email.'
+    });
+    return;
+  }
+
+  // Send that user an OTP code, then respond we did it successfully!
+  // TODO: we may want sendOTP to return error and deal with that.
+  await sendOTP(email);
+  res.status(200).json({
+    'message': 'OTP successfully sent.'
+  });
+}
+
+/**
  * Request to sign up a new user account.
  * 
  * @param {*} req  Express request. Body should contain:
@@ -97,6 +133,7 @@ async function signUpNewUser(req, res, _next) {
   await db.createAccount(username, email);
 
   // With the account created, send them an email.
+  // TODO: ERROR HANDLING WOULD APPLY HERE TOO IF USED.
   await sendOTP(email);
 
   // Respond with success-- account created!
@@ -110,36 +147,12 @@ async function signUpNewUser(req, res, _next) {
  * 
  * @param {*} req    Express request. Body should contain email to log into.
  * @param {*} res    Express response. Will be send success or failure.
- * @param {*} _next  Express error handler, not used.
+ * @param {*} _next  Express error handler.
  */
-async function logInUser(req, res, _next) {
-  // Make sure email is included in the body
-  const email = req.body.email;
-  if (email === undefined) {
-    res.status(400).json({
-      'error': 'No email',
-      'message': 'An email must be provided in the body of the request.'
-    })
-    return;
-  }
-
-  // Make sure the user already exists. If it does not, return a HTTP 404 error.
-  // That signifies "resource not found", which is appropriate here.
-  if (!await db.getAccountByEmail(email)) {
-    res.status(404).json({
-      'error': 'No such user',
-      'message': 'No user account exists with that email.'
-    });
-    return;
-  }
-
-  // TODO: SEND THE CODE AND STORE IT
-  await sendOTP(email);
-
-  // Respond with success-- OTP sent!
-  res.status(200).json({
-    'message': 'OTP successfully sent.'
-  });
+async function logInUser(req, res, next) {
+  // Okay, don't tell anyone but logging in a user is secretly the same
+  // process as resending an otp -- literally has the same pre and postconditions.
+  resendOTP(req, res, next);
 }
 
 /**
@@ -291,6 +304,8 @@ async function sendOTP(email) {
         'code': code,
         'expire': expiration_time.toISOString()
     };
+
+    // TODO: HASH AND SAVE THE OTP DATA TO A FILE. THIS FUNCTION MAY AS WELL DO THAT, IT IS ALWAYS A THING.
     return otpData;
 }
 
@@ -476,6 +491,7 @@ if (require.mail !== module) {
         verifyOTP,
         logInUser,
         signUpNewUser,
+        resendOTP,
         checkUsernameExists,
         validateUsername,
         otpFileCheck,

@@ -80,6 +80,9 @@ function run() {
   // have to send information and there's the metaphor of creating something new.
   app.post('/user/login', user.logInUser);
   app.post('/user/signup', user.signUpNewUser);
+  
+  // Resend an OTP code by POSTing the email you need it sent to.
+  app.post('/user/resend-otp', user.resendOTP);
 
   // OTP code verification also through a POST request. If successful, it will
   // send back the needed authentication tokens.
