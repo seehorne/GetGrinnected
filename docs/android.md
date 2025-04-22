@@ -1,30 +1,46 @@
 # Table of contents
-- [Login/Signup](#login-signup)
-    - [Welcome](#welcome)
-        - [Log-in](#log-in)
-        - [Sign-up](#sign-up)
-    - [Login](#login)
-    - [Sign Up](#signup)
-    - [Verification](#verification)
-- [Home](#home)
-    - [View event details](#view-event-details)
-    - [Favorite events](#favorite-events)
-    - [Sort by day](#see-events-on-specific-day)
-    - [Filter by tags](#sort-by-tags-calendar)
-    - [Subscribe to event notifications](#subscribe-to-event-notifications)
-- [Calendar](#calendar)
-    - [See events by day](#sort-by-day)
-    - [Filter by tags](#sort-by-tags-calendar)
-- [Favorites](#favorites)
-    - [Unfavorite events](#unfavorite-events)
-    - [View event details](#view-event-details-favorites)
-- [Settings](#settings)
-    - [Sign out](#sign-out)
-    - [Switch between light and dark mode](#light-and-dark-mode)
-    - [Explore organizations](#explore-org-info)
-    - [Follow and unfollow orgs](#follow-and-unfollow-orgs)
-    - [Change username](#change-username)
+- [General navigation]()
+- Pages/features
+    - [Login/Signup](#login-signup)
+        - [Welcome](#welcome)
+            - [Log-in](#log-in)
+            - [Sign-up](#sign-up)
+        - [Login](#login)
+        - [Sign Up](#signup)
+        - [Verification](#verification)
+    - [Home](#home)
+        - [View event details](#view-event-details)
+        - [Favorite events](#favorite-events)
+        - [Sort by day](#see-events-on-specific-day)
+        - [Filter by tags](#sort-by-tags-calendar)
+        - [Subscribe to event notifications](#subscribe-to-event-notifications)
+    - [Calendar](#calendar)
+        - [See events by day](#sort-by-day)
+        - [Filter by tags](#sort-by-tags-calendar)
+    - [Favorites](#favorites)
+        - [Unfavorite events](#unfavorite-events)
+        - [View event details](#view-event-details-favorites)
+    - [Settings](#settings)
+        - [Sign out](#sign-out)
+        - [Switch between light and dark mode](#light-and-dark-mode)
+        - [Explore organizations](#explore-org-info)
+        - [Follow and unfollow orgs](#follow-and-unfollow-orgs)
+        - [Change username](#change-username)
+        - [Switch account](#switch-account)
     
+# General Navigation
+- Before navigating to most app features is possible, you must be logged in
+    - If you already have an account, see [login page](#login) for instructions
+    - Otherwise, see [sign up](#sign-up) for instructions
+- Upon logging in, you will default land on the [home page](#home)
+- To navigate to other pages, click on the icons in the bottom navigation bar
+    - Icons to navigate to the following pages are listed left to right in this order:
+        - [Home](#home)
+        - [Calendar](#calendar)
+        - [Favorites](#favorites)
+        - [Settings](#settings)
+    - Clicking any nav-bar icon from any page post-login navigates to the page associated with the selected icon
+- Back to [table of contents](#table-of-contents)
 
 
 # Login-Signup
@@ -35,6 +51,7 @@
 - Use this option if you already have an account
 - Press the log in button
     - You will be moved to the [log in](#login) page
+- Back to [table of contents](#table-of-contents)
 
 ### Sign-up
 - Use this option if you do not already have an account
@@ -152,4 +169,10 @@ _Events are sorted in order of start time by day_
 
 ## Change username
 - Coming soon! Stay tuned :tada:
+- Back to [table of contents](#table-of-contents)
+
+## Switch account
+- Coming soon! Stay tuned :tada:
+    - This feature will allow switching between personal accounts and org accounts
+        - Org leaders will have access to the account for their organization
 - Back to [table of contents](#table-of-contents)

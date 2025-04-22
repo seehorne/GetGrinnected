@@ -1,27 +1,42 @@
 # Table of contents
-- [Login/Signup](#login-signup)
-    - [Login](#login)
-    - [Sign up](#sign-up)
-    - [Verification](#verification)
-- [Home](#home)
-    - [View event details](#view-event-details)
-    - [Favorite events](#favorite-events)
-    - [Subscribe to event notifications](#subscribe-to-event-notifications)
-    - [Filter events by day](#filter-events-by-day)
-    - [Filter events by tags](#filter-events-by-tags-home)
-- [Calendar](#calendar)
-    - [Day view](#day-view)
-    - [Week view](#week-view)
-    - [Month view](#month-view)
-    - [Filter by tags](#filter-by-tags-calendar)
-- [Favorites](#favorites)
-- [Settings](#settings)
-    - [Light and dark mode](#light-and-dark-mode)
-    - [Change username](#change-username)
-    - [Sign out](#sign-out)
-    - [Explore organizations](#explore-organizations)
-    - [Follow and unfollow organizations](#follow-and-unfollow-organizations)
+- [General navigation](#general-navigation)
+- Pages/features
+    - [Login/Signup](#login-signup)
+        - [Login](#login)
+        - [Sign up](#sign-up)
+        - [Verification](#verification)
+    - [Home](#home)
+        - [View event details](#view-event-details)
+        - [Favorite events](#favorite-events)
+        - [Subscribe to event notifications](#subscribe-to-event-notifications)
+        - [Filter events by day](#filter-events-by-day)
+        - [Filter events by tags](#filter-events-by-tags-home)
+    - [Calendar](#calendar)
+        - [Day view](#day-view)
+        - [Week view](#week-view)
+        - [Month view](#month-view)
+        - [Filter by tags](#filter-by-tags-calendar)
+    - [Favorites](#favorites)
+    - [Settings](#settings)
+        - [Light and dark mode](#light-and-dark-mode)
+        - [Change username](#change-username)
+        - [Sign out](#sign-out)
+        - [Explore organizations](#explore-organizations)
+        - [Follow and unfollow organizations](#follow-and-unfollow-organizations)
 
+# General navigation
+- Before navigating to most app features is possible, you must be logged in
+    - If you already have an account, see [login page](#login) for instructions
+    - Otherwise, see [sign up](#sign-up) for instructions
+- Upon logging in, you will default land on the [home page](#home)
+- To navigate to other pages, click on the icons in the bottom navigation bar
+    - Icons to navigate to the following pages are listed left to right in this order:
+        - [Home](#home)
+        - [Calendar](#calendar)
+        - [Favorites](#favorites)
+        - [Settings](#settings)
+    - Clicking any nav-bar icon from any page post-login navigates to the page associated with the selected icon
+- Back to [table of contents](#table-of-contents)
 
 # Login-Signup
 
@@ -159,4 +174,10 @@ _Views can be selected from a view dropdown_
 
 ## Follow and unfollow organizations
 - Coming soon! Stay tuned :tada:
+- Back to [table of contents](#table-of-contents)
+
+## Switch account
+- Coming soon! Stay tuned :tada:
+    - This feature will allow switching between personal accounts and org accounts
+        - Org leaders will have access to the account for their organization
 - Back to [table of contents](#table-of-contents)
