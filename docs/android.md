@@ -8,8 +8,12 @@
     - [Verification](#verification)
 - [Home](#home)
 - [Calendar](#calendar)
+    - [See events by day](#see-events-on-specific-day)
+    - [Filter by tags](#sort-by-tags-calendar)
 - [Favorites](#favorites)
 - [Settings](#settings)
+    - [Sign out](#sign-out)
+    - [Switch between light and dark mode](#light-and-dark-mode)
 
 
 # Login-Signup
@@ -59,9 +63,60 @@
 
 # Home
 
+## View event details
+- Click on an event to expand it and view additional details, such as description
+- To collapse an event, click it again
+- Back to [table of contents](#table-of-contents)
+
+## Favorite events
+- Click the heart icon on an event card to add it to your favorites
+- To see all your favorites in one place, visit [the favorites page](#favorites)
+- Back to [table of contents](#table-of-contents)
+
+## Sort by day
+- Select day to view in drop down menu
+- Days in the next two weeks are available to select
+- Back to [table of contents](#table-of-contents)
+
+## Sort by tags (home)
+- Use checkboxes to select tags of interest
+- No tags selected = everything will show up
+- All tags selected = everything will show up still
+- 1-(total-1 tags selected) = only selected tags will show up
+- Back to [table of contents](#table-of-contents)
 
 # Calendar
 
+## See events on specific day 
+- Click day in question on calendar to see events occuring that day
+- Back to [table of contents](#table-of-contents)
+
+## Sort by tags (calendar)
+- Select desired tags from page drop down (UNDER CONSTRUCTION)
+    - currently, need to change pages for tag filter to apply
+        - if you change page, on return, calendar will be filtered by specified tags
+- Back to [table of contents](#table-of-contents)
+
+## Switch time view
+- Switch calendar view from day to week to month (UNDER CONSTRUCTION)
+
 # Favorites
 
+## 
+
+## 
+
 # Settings
+
+## Sign out
+- Press sign out button to log out
+- Next time you open the app, will be returned to [welcome page](#welcome)
+- Back to [table of contents](#table-of-contents)
+
+## Light and dark mode
+- Use slider to toggle between light mode and dark mode
+- Back to [table of contents](#table-of-contents)
+
+## Follow and unfollow orgs
+- Functionality forthcoming (UNDER CONSTRUCTION)
+- Back to [table of contents](#table-of-contents)
