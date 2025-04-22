@@ -49,6 +49,8 @@ struct HomescreenView: View {
                     
                         //Main Event List View
                         EventListView(timeSpan: DateInterval(start: viewedDate, end: viewedDate.startOfNextDay))
+                        
+                        Spacer()
 
                     } //VStack
                     .frame(minHeight: proxy.size.height)//height

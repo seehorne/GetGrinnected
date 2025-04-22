@@ -18,6 +18,7 @@ import SwiftUI
 //EventViewModel: Find a way to View our Events
 class EventViewModel: ObservableObject {
     @Published var events: [Event] = [] //Store Events from our API
+    @Published var viewedEvents: [Event] = [] //Store events that are viewed based on filters
     @Published var isLoading = false //check if loading
     @Published var errorMessage: String? = nil //showing the error message
      
@@ -30,7 +31,7 @@ class EventViewModel: ObservableObject {
      Returns nothing:
      once called, shows isloading ot be true, and resets error message
      */
-    func fetchEvents() {
+    func fetchEvents(timeSpan: DateInterval) {
         //reset error message, set loading to be true
         isLoading = true
         errorMessage = nil
@@ -50,6 +51,12 @@ class EventViewModel: ObservableObject {
                 await MainActor.run {
                     //set events and now that we are done, set isLoading to false
                     self.events = fetchedEvents
+                    // sort the events by start time
+                    sortEventsByStartTime()
+                    
+                    //filter events to time span
+                    filterEventsByDateInterval(timeSpan: timeSpan)
+                    
                     self.isLoading = false
                 }//await
             } catch {
@@ -63,7 +70,36 @@ class EventViewModel: ObservableObject {
         }//Task
     }//fetchEvents
     
+    /*
+     Sorts events by ascending start time.
+     */
+    func sortEventsByStartTime() {
+        events.sort { event1, event2 in
+            // check the events' start times are not nil
+            if(event1.useful_event_start_time != nil && event2.useful_event_start_time != nil){
+                // check if event1 starts before or at same time as event2
+                if (event1.useful_event_start_time! <= event2.useful_event_start_time!) {
+                    return true
+                } //if
+            } //if
+            return false
+        } //sort
+    }
     
+    /*
+     Filters the events array to only events in the time span and stores them in viewed events.
+     
+     timeSpan: An interval of dates that you want to see events for.
+     */
+    func filterEventsByDateInterval(timeSpan: DateInterval) {
+        viewedEvents = events.filter { event in
+            // check current event is in the timeSpan
+            if event.useful_event_start_time != nil && timeSpan.contains(event.useful_event_start_time!) {
+                return true
+            } //if
+            return false
+        }
+    }
 }
 
 struct EventListView: View {
@@ -74,33 +110,30 @@ struct EventListView: View {
     // The span of time we want to see the events in
     @State var timeSpan: DateInterval
     // The tags we want the events we see to have
-    @State var tags: Set<EventTags>?
+    // @Binding var tags: Set<EventTags>?
     
     
     var body: some View {
         VStack{
-            ForEach(viewModel.events, id: \.eventid) { event in
-                // check current event is in the timeSpan
-                if event.useful_event_start_time != nil && timeSpan.contains(event.useful_event_start_time!) {
-                    // make an event card for current event
-                    EventCard(event: event, isExpanded: (event.eventid! == selectedEvent))
-                        .onTapGesture {//change expansion to ture to make card larger
-                            //add animation to the tap gesture!
-                            withAnimation(.easeInOut) { // this animation should be changed: The best way to change this may include changing the structure of our Event Card
-                                //HERE WE ARE NOT CHECKING FOR OPTIONAL
-                                //however, ALL events DO have an id
-                                //if have an error, check here, though
-                                // near-impossible. some errors, but
-                                if(selectedEvent == event.eventid!){
-                                    //if you select the same event, it unselects it
-                                    selectedEvent = -1
-                                } else{
-                                    //if you select something else, you select a new id
-                                    selectedEvent = event.eventid!
-                                }
+            ForEach(viewModel.viewedEvents, id: \.eventid) { event in
+                // make an event card for current event
+                EventCard(event: event, isExpanded: (event.eventid! == selectedEvent))
+                    .onTapGesture {//change expansion to ture to make card larger
+                        //add animation to the tap gesture!
+                        withAnimation(.easeInOut) { // this animation should be changed: The best way to change this may include changing the structure of our Event Card
+                            //HERE WE ARE NOT CHECKING FOR OPTIONAL
+                            //however, ALL events DO have an id
+                            //if have an error, check here, though
+                            // near-impossible. some errors, but
+                            if(selectedEvent == event.eventid!){
+                                //if you select the same event, it unselects it
+                                selectedEvent = -1
+                            } else{
+                                //if you select something else, you select a new id
+                                selectedEvent = event.eventid!
                             }
-                        }//tap gesture
-                } //if
+                        }
+                    } //tap gesture
             }
         
             
@@ -113,7 +146,7 @@ struct EventListView: View {
                     Text(error)
                         .foregroundColor(.red)
                     Button("Retry") {
-                        viewModel.fetchEvents()
+                        viewModel.fetchEvents(timeSpan: timeSpan)
                     }
                     .padding()
                     .background(Color.blue)
@@ -124,7 +157,10 @@ struct EventListView: View {
                 
         } //For all events
         .onAppear(){
-            viewModel.fetchEvents()
+            viewModel.fetchEvents(timeSpan: timeSpan)
+        }
+        .onChange(of: timeSpan) { oldValue, newValue in
+            viewModel.fetchEvents(timeSpan: newValue)
         }
     }
 }
@@ -132,6 +168,6 @@ struct EventListView: View {
 // For preview purposes (assuming Event struct exists)
 struct EventListView_Previews: PreviewProvider {
     static var previews: some View {
-        EventListView(selectedEvent: -1, timeSpan: DateInterval(start: Date.now, end: Date.now.addingTimeInterval(86400)))
+        EventListView(selectedEvent: -1, timeSpan: DateInterval(start: Date.now, end: Date.now.startOfNextDay))
     }
 }
