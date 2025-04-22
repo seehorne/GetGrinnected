@@ -31,7 +31,7 @@ struct CheckBox: View {
             ForEach($items, id: \.name) { $item in
                 HStack {
                     Image(systemName: item.isChecked ? item.uiCompOne : item.uiCompTwo)
-                        .foregroundColor(item.isChecked ? .colorRed : Color(.gray))
+                        .foregroundColor(item.isChecked ? .colorBlue : Color(.gray))
                         .onTapGesture { // if image is tapped, toggle checkmark
                             item.isChecked.toggle()
                         }

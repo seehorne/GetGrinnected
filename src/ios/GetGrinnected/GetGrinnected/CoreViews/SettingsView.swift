@@ -38,7 +38,7 @@ struct SettingsView: View {
                     // switch for light/dark mode
                     Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
                         .padding()
-                        .tint(.colorRed)
+                        .tint(.colorBlue)
                         .frame(maxWidth: 200)
                 } //VStack
                 .padding()
