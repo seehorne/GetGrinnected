@@ -1,6 +1,8 @@
 # see https://www.mkdocs.org/user-guide/writing-your-docs/#configure-pages-and-navigation
 nav:
   - Home: index.md
+  - iOS: apple.md
+  - Android: android.md
   - API v1: api-v1.md
 
 ################################################################################

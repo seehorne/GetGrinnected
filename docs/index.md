@@ -1,5 +1,10 @@
 # Welcome to the GetGrinnected Docs!
 
-This is the place to find getting-started tutorials and guides to different functions of the app.
+This is the place to find getting-started tutorials and guides to different functions of the app. Click below for guides to the app on Android and iOS respectively.
 
-At the moment, there's nothing here. Expect more in the future, but for now this is just a demo showing that the pages can actually be deployed.
+# Android
+
+
+
+# iOS
+
