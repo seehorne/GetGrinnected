@@ -7,10 +7,16 @@
     - [Sign Up](#signup)
     - [Verification](#verification)
 - [Home](#home)
+    - [View event details](#view-event-details)
+    - [Favorite events](#favorite-events)
+    - [Sort by day](#see-events-on-specific-day)
+    - [Filter by tags](#sort-by-tags-calendar)
 - [Calendar](#calendar)
-    - [See events by day](#see-events-on-specific-day)
+    - [See events by day](#sort-by-day)
     - [Filter by tags](#sort-by-tags-calendar)
 - [Favorites](#favorites)
+    - [Unfavorite events](#unfavorite-events)
+    - [View event details](#view-event-details-favorites)
 - [Settings](#settings)
     - [Sign out](#sign-out)
     - [Switch between light and dark mode](#light-and-dark-mode)
@@ -85,7 +91,7 @@ _Events are sorted in order of start time by day_
 - Use checkboxes to select tags of interest
 - No tags selected = everything will show up
 - All tags selected = everything will show up still
-- 1-(total-1 tags selected) = only selected tags will show up
+- 1 to (total-1 tags selected) = only selected tags will show up
 - Back to [table of contents](#table-of-contents)
 
 # Calendar
@@ -102,12 +108,22 @@ _Events are sorted in order of start time by day_
 
 ## Switch time view
 - Switch calendar view from day to week to month (UNDER CONSTRUCTION :building_construction:)
+- Back to [table of contents](#table-of-contents)
+
 
 # Favorites
 
-## 
+## Unfavorite events
+- Remove events from your favorites (which display here) by clicking the heart again
+    - (CURRENT BUG :bug:):
+        - If you unfavorite event that has another event above it, the favorite on the event above will appear to toggle off
+        - This does **not** actually remove it from favories, the bug is purely visual
+- Back to [table of contents](#table-of-contents)
 
-## 
+## View event details (favorites)
+- Click on an event to expand it and view additional details, such as description
+- To collapse an event, click it again
+- Back to [table of contents](#table-of-contents)
 
 # Settings
 
@@ -123,6 +139,8 @@ _Events are sorted in order of start time by day_
 ## Explore org info
 - Click on an org card to see details about the org (UNDER CONSTRUCTION :building_construction:)
 - Follow an org from its card (UNDER CONSTRUCTION :building_construction:)
+- Back to [table of contents](#table-of-contents)
+
 
 ## Follow and unfollow orgs
 - Functionality forthcoming (UNDER CONSTRUCTION :building_construction:)
