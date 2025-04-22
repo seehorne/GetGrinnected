@@ -46,7 +46,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
-     val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
+    var isFavorited = event.is_favorited
 
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
@@ -55,13 +55,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
     // Sets up composable to be a card for our info
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.primaryContainer),
         //elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
             .padding(horizontal = 8.dp)
-            .background(Color.White)
-            .border(2.dp, Color.Black)
+            .background(color = colorScheme.primaryContainer)
+            .border(2.dp, color = colorScheme.primary)
             .clickable
         {
                 expanded.value = !expanded.value
@@ -113,16 +113,15 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                 // This is our favorite icon that is align with the column of info but beside it
                 // as it is in a row.
                 Icon(
-                    imageVector = if (isFavorited.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "Favorite Icon",
                     tint = colorScheme.primary,
                     modifier = Modifier
                         .size(40.dp)
                         .clickable {
-                            isFavorited.value = !isFavorited.value
                             // This tells our database to update the events favorited status
                             CoroutineScope(Dispatchers.IO).launch {
-                                AppRepository.toggleFavorite(event.eventid, isFavorited.value)
+                                AppRepository.toggleFavorite(event.eventid, !isFavorited)
                             }
                         },
                 )

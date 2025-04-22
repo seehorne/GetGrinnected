@@ -34,7 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.AppRepository
-import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.derivedStateOf
 import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.EventCard
@@ -95,7 +95,6 @@ fun HomeScreen(tags: List<Check>) {
     val event = eventEntities.map { it.toEvent() }
     // Sorts them by time
     val events = event.sortedBy { it.event_time }
-    val chosenTags = mutableListOf<String>()
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
     // creates the UI field for the events
@@ -113,10 +112,9 @@ fun HomeScreen(tags: List<Check>) {
     {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
-        var tagSorter = 0
-        repeat(tags.size){
-            if (tags[tagSorter].checked.value) {
-                chosenTags.add(tags[tagSorter].label)
+        val chosenTags by remember {
+            derivedStateOf {
+                tags.filter { it.checked.value }.map { it.label }
             }
         }
         // populates the page with events
@@ -250,7 +248,7 @@ fun HomeScreen(tags: List<Check>) {
         //creates a row to align the logo and buttons on the home page
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         )
         {
             // adds the logo to the top
@@ -322,7 +320,7 @@ fun HomeScreen(tags: List<Check>) {
                 ) {
                     // creates tags menu
                     Button(onClick = { expanded2.value = true }) {
-                        Text("Tags", style = typography.labelLarge)
+                        Text("Tags", style = typography.labelLarge, maxLines = 1)
                     }
                     DropdownMenu(
                         expanded = expanded2.value,
