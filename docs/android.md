@@ -169,7 +169,7 @@ _Events are sorted in order of start time by day_
 - Back to [table of contents](#table-of-contents)
 
 ## Follow and unfollow orgs
-- Functionality forthcoming (UNDER CONSTRUCTION :building_construction:)
+- Coming soon! Stay tuned :tada:
 - Back to [table of contents](#table-of-contents)
 
 ## Change username
