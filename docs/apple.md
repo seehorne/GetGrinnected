@@ -55,8 +55,19 @@
 _Events are sorted in order of start time by day_
 
 ## View event details
-- Click on an event to expand it and view additional details, such as description
+- Click on an event to expand it and view additional details
 - To collapse an event, click it again
+- Events start in a collapsed view
+- A collapsed event displays:
+    - Event name
+    - Host organization(s) name(s)
+    - Event date
+    - Event time
+    - Event location
+- An expanded event displays:
+    - Everything displayed on a collapsed event
+    - Event description
+    - Event tags
 - Back to [table of contents](#table-of-contents)
 
 ## Favorite events
