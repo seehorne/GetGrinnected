@@ -30,7 +30,7 @@ To set up the test, do the following steps.
 6. Run the API from your checked-out directory
    ```
    npm ci
-   sudo node src/backend/api.js
+   sudo node src/backend/api/api.cjs
    ```
 
 # What to test

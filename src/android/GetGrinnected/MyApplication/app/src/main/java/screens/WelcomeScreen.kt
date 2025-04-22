@@ -1,6 +1,7 @@
 package screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,43 +41,62 @@ fun WelcomeScreen(modifier: Modifier, navController: NavController) {
     val typography = MaterialTheme.typography
 
     // Sets up the overall format of the screen in a column composable
-
     Column(
         modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize()
+            .background(colorScheme.background)
     ) {
-        // Our logo for the app.
-        Image(
-            painter = painterResource(id = R.drawable.gg_logo_2),
-            contentDescription = "App Logo",
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .size(250.dp)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(text = "Welcome to GetGrinnected",
-            style = typography.headlineMedium,
-            color = colorScheme.onBackground)
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Sets up the buttons side by side that navigate us to login and signup respectively.
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = {navController.navigate("login"){
-                popUpTo("welcome"){inclusive = true} // pops the welcome screen from the back stack
-            } }) {
-                Text("Login", style = typography.labelLarge)
-            }
-            Button(onClick = {navController.navigate("signup"){
-                popUpTo("welcome"){inclusive = true} // pops the welcome screen from the back stack
-            } }) {
-                Text("Sign Up", style = typography.labelLarge)
+            // Our logo for the app.
+            Image(
+                painter = painterResource(id = R.drawable.gg_logo_2),
+                contentDescription = "App Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(250.dp)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Welcome to GetGrinnected",
+                style = typography.headlineMedium,
+                color = colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Sets up the buttons side by side that navigate us to login and signup respectively.
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(onClick = {
+                    navController.navigate("login") {
+                        popUpTo("welcome") {
+                            inclusive = true
+                        } // pops the welcome screen from the back stack
+                    }
+                }) {
+                    Text("Login",
+                        color = colorScheme.onPrimary,
+                        style = typography.labelLarge)
+                }
+                Button(onClick = {
+                    navController.navigate("signup") {
+                        popUpTo("welcome") {
+                            inclusive = true
+                        } // pops the welcome screen from the back stack
+                    }
+                }) {
+                    Text("Sign Up",
+                        color = colorScheme.onPrimary,
+                        style = typography.labelLarge)
+                }
             }
         }
     }

@@ -34,12 +34,13 @@ import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.AppRepository
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
-import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
+import com.example.myapplication.toEvent
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import androidx.annotation.RequiresApi as RequiresApi1
@@ -58,10 +59,9 @@ fun <T> mutableStateListOfWithSize(size: Int, initialValue: T): MutableList<T> {
  *
  */
 
-@OptIn(ExperimentalLayoutApi::class)
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<Check>) {
+fun HomeScreen(modifier: Modifier = Modifier, tags: MutableList<Check>) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -90,6 +90,18 @@ fun HomeScreen(event: List<Event>, eventnum: Int, tags: List<Check>) {
     // remembers where we are scrolled to
     val state = rememberScrollState()
     // stores whether checkboxes for tags are checked
+    val check1 = remember { mutableStateOf(false)}
+    val check2 = remember { mutableStateOf(false)}
+    val check3 = remember { mutableStateOf(false)}
+    // path to API data
+
+    // Gets events from our repo
+    val eventEntities by AppRepository.events
+    // Converts them to event data type
+    val event = eventEntities.map { it.toEvent() }
+    // Sorts them by time
+    val events = event.sortedBy { it.event_time }
+    val eventnum = events.size
     var tagnum = 0
     val chosenTags = mutableListOf<String>()
     // makes the page scrollable
