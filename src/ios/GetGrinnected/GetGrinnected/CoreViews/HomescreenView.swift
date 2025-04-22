@@ -9,20 +9,17 @@ import Foundation
 import SwiftUI
 
 struct HomescreenView: View {
-    // the date is currently being viewed. default is today
-    @State private var viewedDate = Date.now
-    // the furthest date in the future we can see. default is 2 weeks
-    @State private var lastDate = Date.now.addingTimeInterval(86400 * 13)
-    // the tags selected to filter by. default is any
-    @State private var selectedTags = EventTags.any
+    // the parent model used for updating our event list
+    @StateObject private var viewModel = EventListParentViewModel()
     
     var body: some View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
-            ScrollView(.vertical, showsIndicators: false){
-                VStack(){
-                    Header(safeAreaTop, title: "Home", searchBarOn: true)
-                    
+            VStack(){
+                // Header is outside of scrollable so it does not move
+                Header(safeAreaTop, title: "Home", searchBarOn: true)
+                
+                ScrollView(.vertical, showsIndicators: false){
                     
                     //content
                     VStack {
@@ -31,36 +28,42 @@ struct HomescreenView: View {
                             // a picker for date
                             DatePicker(
                                 "Currently viewing date: ",
-                                selection: $viewedDate,
-                                in: Date.now...lastDate,
+                                selection: $viewModel.viewedDate,
+                                in: Date.now...Date.distantFuture,
                                 displayedComponents: .date
                             )
                             .labelsHidden()
                             .padding()
-                        
+                            
                             // a picker for tags
-                            Picker("Tags", selection: $selectedTags){
+                            Picker("Tags", selection: $viewModel.selectedTags){
                                 ForEach(EventTags.allCases, id: \.self) { tag in
                                     Text(tag.rawValue)
                                 }
                             }
                             .padding()
                         } //HStack
-                    
-                        //Main Event List View
-                        EventListView(timeSpan: DateInterval(start: viewedDate, end: viewedDate.startOfNextDay))
                         
-                        Spacer()
-
-                    } //VStack
+                        //Main Event List View
+                        EventListView(parentView: viewModel)
+                        
+                        Spacer() // KEEPS DATE, TAGS, AND EVENTS AT TOP
+                        
+                    } //Scroll view
                     .frame(minHeight: proxy.size.height)//height
-                            
+                    
                 }
-            }//Scroll view
+            } //VStack
             .edgesIgnoringSafeArea(.top)
 //https://stackoverflow.com/questions/67873845/why-my-custom-views-try-to-take-all-the-available-vertical-space-in-vstack
             
         }//GeometryReaderh
+        // if the viewedDate changes update timeSpan
+        .onChange(of: viewModel.viewedDate) { oldValue, newValue in
+            // update start and end of time span when you are viewing a different day
+            viewModel.timeSpan.start = newValue
+            viewModel.timeSpan.end = newValue.startOfNextDay
+        }
     } //body
 } //HomescreenView
 
