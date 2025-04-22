@@ -50,7 +50,7 @@ struct LoginView: View {
                     .foregroundColor(.white)
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                 }//Button
-                    .background (Color.appRed)
+                .background (.colorBlue)
                     .cornerRadius (10)
                     .padding(.top, 24)
                 
@@ -62,7 +62,7 @@ struct LoginView: View {
                     Text("Don't have an account?")
                         .foregroundColor(Color.appTextSecondary)
                         .padding(.top, 4)
-                }//
+                }
                 
                 //signin button
                 
