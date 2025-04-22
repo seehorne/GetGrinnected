@@ -4,5 +4,4 @@ This is the place to find getting-started tutorials and guides to different func
 
 # [Android](android.md)
 
-
 # [iOS](apple.md)
