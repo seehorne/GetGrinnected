@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3');
 
 const db = require('../../db_connect.js');
 const { sendCode } = require('../../one_time_code.cjs')
+const DBPATH = './src/backend/Database/localOTP.db'
 
 /**
  * Check if a user exists by username,
@@ -306,6 +307,8 @@ async function sendOTP(email) {
     };
 
     // TODO: HASH AND SAVE THE OTP DATA TO A FILE. THIS FUNCTION MAY AS WELL DO THAT, IT IS ALWAYS A THING.
+    // attempting to do this here
+    await otpFileSave(DBPATH, otpData.email, otpData.code, otpData.expire);
     return otpData;
 }
 
@@ -345,10 +348,10 @@ async function otpFileSave(filename, email, code, expire) {
         // email is the primary key, and we handle that conflict in the 
         // `ON CONFLICT` part by updating the existing entry instead.
         db.run(
-            `INSERT INTO data (email, hashed_code, expire)
+            `INSERT INTO otpAccts (email, hashed_code, expire)
                 VALUES        (?, ?, ?)
                 ON CONFLICT (email)
-                DO UPDATE SET hashed_code=excluded.hashed_code, expire=excluded.expire`,
+                DO UPDATE SET hashedCode=excluded.hashed_code, expire=excluded.expire`,
             [email, hashedCode, expire]
         );
     });
