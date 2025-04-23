@@ -66,27 +66,27 @@ function run() {
   app.get('/', getAPIOnline);
 
   // Getting all events takes no parameters
-  app.get('/events', events.getEvents);
+  app.get('/events', events.routeGetEvents);
 
   // Getting events between, set the URL parameter names with :start and :end.
   // Those params will get passed into the function as part of `req.params` dictionary
-  app.get('/events/between/:start/:end', events.getEventsBetween);
+  app.get('/events/between/:start/:end', events.routeGetEventsBetween);
 
   // Check if a user exists by trying to GET them by username.
   // :username gets passed as a parameter to the function, in `req.params`
-  app.get('/user/:username', user.checkUsernameExists);
+  app.get('/user/:username', user.routeCheckUsernameExists);
 
   // Login and signups will be done through POST requests, which is because you
   // have to send information and there's the metaphor of creating something new.
   app.post('/user/login', user.routeSendOTP);
-  app.post('/user/signup', user.signUpNewUser);
+  app.post('/user/signup', user.routeSignUpNewUser);
   
   // Resend an OTP code by POSTing the email you need it sent to.
   app.post('/user/resend-otp', user.routeSendOTP);
 
   // OTP code verification also through a POST request. If successful, it will
   // send back the needed authentication tokens.
-  app.post('/user/verify', user.verifyOTP);
+  app.post('/user/verify', user.routeVerifyOTP);
 }
 
 /**

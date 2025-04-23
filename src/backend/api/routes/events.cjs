@@ -9,7 +9,7 @@ const util = require('../utils.cjs')
  * @param res  Express response object
  * @param next Error handler function
  */
-async function getEvents(req, res, _next) {
+async function routeGetEvents(req, res, _next) {
     // Pass any query parameters named "tag" so we can parse them into an array.
     // Could be undefined, that function will handle it.
     const tags = util.parseQueryTags(req.query.tag);
@@ -35,7 +35,7 @@ async function getEvents(req, res, _next) {
  * @param res  Express response object
  * @param next Error handler function
  */
-async function getEventsBetween(req, res, _next) {
+async function routeGetEventsBetween(req, res, _next) {
     // Parse the required start and end parameters held in the request
     var start = util.parseParamDate(req.params.start);
     var end = util.parseParamDate(req.params.end);
@@ -101,7 +101,7 @@ async function getEventsBetween(req, res, _next) {
 
 if (require.main !== module) {
     module.exports = {
-        getEvents,
-        getEventsBetween,
+        routeGetEvents,
+        routeGetEventsBetween,
     };
 }

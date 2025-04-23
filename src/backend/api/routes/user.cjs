@@ -14,7 +14,7 @@ const DBPATH = './src/backend/Database/localOTP.db'
  * @param {*} res    Express response to send output to
  * @param {*} _next  Error handler function for async (unused)
  */
-async function checkUsernameExists(req, res, _next) {
+async function routeCheckUsernameExists(req, res, _next) {
   // Query the database, then send the result.
   const result = await db.getAccount(req.params.username);
   res.json({ result: result !== undefined });
@@ -67,7 +67,7 @@ async function routeSendOTP(req, res, _next) {
  * was an error.
  * @param {*} _next  Error handler function for async (unused)
  */
-async function signUpNewUser(req, res, _next) {
+async function routeSignUpNewUser(req, res, _next) {
   // Make sure the request provided a username. If it does not,
   // return an HTTP 400 which indicates a badly-formed request.
   const username = req.body.username;
@@ -153,7 +153,7 @@ async function signUpNewUser(req, res, _next) {
  * @param {*} res  Express response, will be sent success or failure.
  * @param {*} _next  Express error handler, not used.
  */
-async function verifyOTP(req, res, _next) {
+async function routeVerifyOTP(req, res, _next) {
   // Get the email and OTP sent from the body,
   // and make sure they were actually sent.
   const email = req.body.email;
@@ -218,9 +218,9 @@ async function verifyOTP(req, res, _next) {
 
 if (require.mail !== module) {
     module.exports = {
-        verifyOTP,
-        signUpNewUser,
+        routeVerifyOTP,
+        routeSignUpNewUser,
         routeSendOTP,
-        checkUsernameExists,
+        routeCheckUsernameExists,
     };
 }
