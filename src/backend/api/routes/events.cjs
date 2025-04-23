@@ -1,4 +1,5 @@
 const db = require('../../db_connect.js');
+const util = require('../utils.cjs')
 
 /**
  * Query the database and respond with all known events in JSON.
@@ -11,7 +12,7 @@ const db = require('../../db_connect.js');
 async function getEvents(req, res, _next) {
     // Pass any query parameters named "tag" so we can parse them into an array.
     // Could be undefined, that function will handle it.
-    const tags = parseQueryTags(req.query.tag);
+    const tags = util.parseQueryTags(req.query.tag);
 
     // If there are no tags query the DB normally,
     // if there are tags query for them
@@ -36,8 +37,8 @@ async function getEvents(req, res, _next) {
  */
 async function getEventsBetween(req, res, _next) {
     // Parse the required start and end parameters held in the request
-    var start = parseParamDate(req.params.start);
-    var end = parseParamDate(req.params.end);
+    var start = util.parseParamDate(req.params.start);
+    var end = util.parseParamDate(req.params.end);
 
     // Return descriptive error on failure to parse stard and/or end date
     //
@@ -84,7 +85,7 @@ async function getEventsBetween(req, res, _next) {
 
     // If there are no tags query the DB normally,
     // if there are tags query for them
-    const tags = parseQueryTags(req.query.tag);
+    const tags = util.parseQueryTags(req.query.tag);
     if (tags.length === 0) {
         const events = await db.getEventsBetween(start, end);
         res.json(events);
@@ -96,95 +97,11 @@ async function getEventsBetween(req, res, _next) {
     }
 }
 
-/**
- * Parse from a time URL parameter to a Unix timestamp.
- *
- * @param timeParam String representing a date.
- * @returns Date object representing the date. It may be an invalid date, in
- *          which case calling .valueOf() on it will return NaN.
- */
-function parseParamDate(paramDate) {
-    // these are the three features we care about in our date format.
-    // "\\d" goes to the string \d, which means any digit in regex.
-    const validDate = "\\d\\d\\d\\d-\\d\\d-\\d\\d"  // YYYY-MM-DD
-    const validTime = "T\\d\\d:\\d\\d"              // THH:MM, no seconds
-    const validTimeZone = "[+-]\\d\\d\\d\\d"        // Timezone, eg -0500 or +1230
 
-    // MATCHES: YYYY-MM-DDTHH:MM-ZZZZ or YYYY-MM-DDTHH:MM+ZZZZ
-    // CHANGES: nothing
-    const allFeaturesRegex = new RegExp(
-        '^' +                                    // matches start of string
-        validDate + validTime + validTimeZone +  // main body of regex
-        '$'                                      // matches end of string
-    );
-    if (allFeaturesRegex.test(paramDate)) {
-        return new Date(paramDate);
-    }
-
-    // MATCHES: YYYY-MM-DDTHH:MM
-    // CHANGES: adds default timezone of UTC-5 (grinnell)
-    const dateTimeRegex = new RegExp('^' + validDate + validTime + '$');
-    if (dateTimeRegex.test(paramDate)) {
-        paramDate = paramDate.concat('-0500');
-        return new Date(paramDate);
-    }
-
-    // MATCHES: YYYY-MM-DD
-    // CHANGES: adds default time of midnight
-    //          adds default timezone of UTC-5 (grinnell)
-    const dateOnlyRegex = new RegExp('^' + validDate + '$');
-    if (dateOnlyRegex.test(paramDate)) {
-        paramDate = paramDate.concat('T00:00-0500');
-        return new Date(paramDate);
-    }
-
-    // If none of those attempts to figure out the format worked,
-    // return a date that we know is definitely invalid to match the return type.
-    return new Date('purposefully invalid date string');
-}
-
-/**
- * Parse from a query tag object to a well-formed list of individual tags. Tags
- * with commas will be split to support queries like `?tag=a,b,c,d`.
- * 
- * These are the possible values for queryTags to take when coming from Express:
- *   not specified      -> undefined
- *   single instance    -> a string
- *   multiple instances -> an array of strings
- *
- * @param queryTags a query tag object, which can be
- *                  either a list of strings or a string.
- * @returns an array containing each tag, or null if no tags were found.
- *                   each tag in the array will be quoted.
- */
-function parseQueryTags(queryTags) {
-    // Don't try and parse undefined tags (which means not provided in URL)
-    if (!queryTags) {
-        return [];
-    }
-
-    // If there is only one element,
-    // we need to put it in an array for the next step to work
-    if (!Array.isArray(queryTags)) {
-        queryTags = [queryTags];
-    }
-
-    // Split any comma-separated items to make the array flat. See example.
-    queryTags = queryTags          // ["a", "b,c"]
-        .map((x) => x.split(','))  // -> [["a"], ["b", "c"]]
-        .flat();                   // -> ["a", "b", "c"]
-
-    // For the DB query to find tags, we must put quotation marks on each tag.
-    // This is because of the way the tags are stored as JSON in the database.
-    const tags = queryTags.map((x) => '"' + x + '"');
-    return tags;
-}
 
 if (require.main !== module) {
     module.exports = {
         getEvents,
         getEventsBetween,
-        parseParamDate,
-        parseQueryTags
     };
 }
