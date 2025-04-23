@@ -179,26 +179,38 @@ async function verifyOTP(req, res, _next) {
   //   'error': 'Bad code',
   //   'message': 'Could not verify OTP.'
   // });
+  
+  //boolean that checks if the code is right
+  validCode = await otpFileCheck(DBPATH, email, code) 
 
-  // Use JSON Web Tokens to create two tokens for the user,
-  // a long-lived refresh token and a short-lived access token.
-  const refreshToken = jwt.sign(
-    { email },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '30d' }
-  );
-  const accessToken = jwt.sign(
-    { email },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' }
-  );
-
-  // Send those tokens back to the user in a successful response.
-  res.json({
-    'message': 'Successfully authenticated',
-    'refresh_token': refreshToken,
-    'access_token': accessToken
-  });
+  if (validCode){
+    res.status(400).json({
+      'error': 'Bad code',
+      'message': 'Could not verify OTP.'
+    });
+    return
+  }
+  else{
+    // Use JSON Web Tokens to create two tokens for the user,
+    // a long-lived refresh token and a short-lived access token.
+    const refreshToken = jwt.sign(
+      { email },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: '30d' }
+    );
+    const accessToken = jwt.sign(
+      { email },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '15m' }
+    );
+      // Send those tokens back to the user in a successful response.
+    res.json({
+      'message': 'Successfully authenticated',
+      'refresh_token': refreshToken,
+      'access_token': accessToken
+    });
+    return
+  }
 }
 
 
@@ -337,7 +349,7 @@ async function otpFileSave(filename, email, code, expire) {
         // email is the primary key, and we handle that conflict in the 
         // `ON CONFLICT` part by updating the existing entry instead.
         db.run(
-            `INSERT INTO otpAccts (email, hashedCode, expire)
+            `INSERT INTO data (email, hashedCode, expire)
                 VALUES        (?, ?, ?)
                 ON CONFLICT (email)
                 DO UPDATE SET hashedCode=excluded.hashedCode, expire=excluded.expire`,
