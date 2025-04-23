@@ -495,7 +495,6 @@ async function otpFileClean(filename) {
 if (require.mail !== module) {
     module.exports = {
         verifyOTP,
-        logInUser,
         signUpNewUser,
         routeSendOTP,
         checkUsernameExists,

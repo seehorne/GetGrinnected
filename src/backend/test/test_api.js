@@ -12,6 +12,7 @@ const arrayXOR = require('lodash/xor');
 const db = require('../db_connect'); // so we can mock it with sinon
 const api = require('../api/api.cjs');
 const events = require('../api/routes/events.cjs');
+const user = require('../api/routes/user.cjs');
 
 // return true if the arrays have all the same elements
 function arraysEqual(array1, array2) {
