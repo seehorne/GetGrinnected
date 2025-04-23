@@ -20,7 +20,7 @@ struct LoginView: View {
         NavigationStack{
             VStack {
                 //image logo with overlaid circle underneath
-                Logo(size: 250)
+                Logo(size: 200)
                 
                 //Signin Email Text Field
                 InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
