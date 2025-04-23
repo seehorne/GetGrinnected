@@ -14,6 +14,7 @@ extension Color {
     static let appPink = Color("ColorPink")
     static let appPurple = Color("ColorPurple")
     static let appRed = Color("ColorRed")
+    static let appLightBlue = Color("ColorLightBlue")
     
     // Semantic Colors
     static let appBackground = Color("ColorBackground")

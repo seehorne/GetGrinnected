@@ -63,7 +63,7 @@ struct DayView: View {
         }
         //if the day is today, we make the color red
         if isToday {
-            return .colorBlue
+            return .appLightBlue
         }
         //then if the color is weekend, we make the color
         // our primary color, and if not secondary.
@@ -74,7 +74,7 @@ struct DayView: View {
     private var borderColor: Color {
         //if selected, return red
         if isSelected {
-            return .colorBlue
+            return .appLightBlue
         }
         
         //if today, the app border will be black as opposed to our app's red color.
