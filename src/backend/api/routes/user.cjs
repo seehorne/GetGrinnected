@@ -26,7 +26,7 @@ async function checkUsernameExists(req, res, _next) {
  * @param {*} res  Express response. Will be sent status of the send.
  * @param {*} _next  Express error handler for async, unused.
  */
-async function resendOTP(req, res, _next) {
+async function routeSendOTP(req, res, _next) {
   // Make sure email is included in the body
   const email = req.body.email;
   if (email === undefined) {
@@ -143,18 +143,6 @@ async function signUpNewUser(req, res, _next) {
   });
 }
 
-/**
- * Request to log in an existing user account.
- * 
- * @param {*} req    Express request. Body should contain email to log into.
- * @param {*} res    Express response. Will be send success or failure.
- * @param {*} _next  Express error handler.
- */
-async function logInUser(req, res, next) {
-  // Okay, don't tell anyone but logging in a user is secretly the same
-  // process as resending an otp -- literally has the same pre and postconditions.
-  resendOTP(req, res, next);
-}
 
 /**
  * Verify an OTP code.
@@ -326,6 +314,7 @@ async function otpFileSave(filename, email, code, expire) {
     const hashedCode = await bcrypt.hash(code, salt);
 
     // Open db connection
+    // if the file does not exist it will be created
     const db = new sqlite3.Database(filename);
 
     // Run all these commands in sequence.
@@ -337,7 +326,7 @@ async function otpFileSave(filename, email, code, expire) {
         db.run(`
             CREATE TABLE IF NOT EXISTS data(
                 email TEXT NOT NULL PRIMARY KEY,
-                hashed_code TEXT NOT NULL,
+                hashedCode TEXT NOT NULL,
                 expire TEXT NOT NULL
             ) STRICT
         `);
@@ -348,10 +337,10 @@ async function otpFileSave(filename, email, code, expire) {
         // email is the primary key, and we handle that conflict in the 
         // `ON CONFLICT` part by updating the existing entry instead.
         db.run(
-            `INSERT INTO otpAccts (email, hashed_code, expire)
+            `INSERT INTO otpAccts (email, hashedCode, expire)
                 VALUES        (?, ?, ?)
                 ON CONFLICT (email)
-                DO UPDATE SET hashedCode=excluded.hashed_code, expire=excluded.expire`,
+                DO UPDATE SET hashedCode=excluded.hashedCode, expire=excluded.expire`,
             [email, hashedCode, expire]
         );
     });
@@ -407,7 +396,7 @@ async function otpFileCheck(filename, email, code) {
             // - the code entered matches properly
             // - it is before the expiration date
             return_value = (
-                bcrypt.compare(code, entry.hashed_code) &&
+                bcrypt.compare(code, entry.hashedCode) &&
                 now <= expiry
             );
         }
@@ -479,6 +468,8 @@ async function otpFileClean(filename) {
         }
 
     });
+    //alphabetically sort? some sort of db call to that effect
+
     // TODO: WRITE ME
     // Get the current time
 
@@ -494,7 +485,7 @@ if (require.mail !== module) {
         verifyOTP,
         logInUser,
         signUpNewUser,
-        resendOTP,
+        routeSendOTP,
         checkUsernameExists,
         validateUsername,
         otpFileCheck,

@@ -78,11 +78,11 @@ function run() {
 
   // Login and signups will be done through POST requests, which is because you
   // have to send information and there's the metaphor of creating something new.
-  app.post('/user/login', user.logInUser);
+  app.post('/user/login', user.routeSendOTP);
   app.post('/user/signup', user.signUpNewUser);
   
   // Resend an OTP code by POSTing the email you need it sent to.
-  app.post('/user/resend-otp', user.resendOTP);
+  app.post('/user/resend-otp', user.routeSendOTP);
 
   // OTP code verification also through a POST request. If successful, it will
   // send back the needed authentication tokens.
