@@ -21,7 +21,7 @@ struct EventListView: View {
     //@State to show that this will be passed into the
     @State var selectedEvent: Int? //An integer to represent which event we select
     // the parent model used for updating our event list
-    @ObservedObject var parentView: EventListParentViewModel
+    @ObservedObject var parentView: ParentViewModel
     
     
     var body: some View {
@@ -90,5 +90,5 @@ struct EventListView: View {
 
 
 #Preview {
-    EventListView(selectedEvent: -1, parentView: EventListParentViewModel())
+    EventListView(selectedEvent: -1, parentView: ParentViewModel())
 }

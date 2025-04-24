@@ -29,6 +29,7 @@
 		4CCCD6C82DA5DBB400F1A806 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6C62DA5DBB400F1A806 /* Event.swift */; };
 		4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */; };
 		4CCCD6CD2DA5DE3E00F1A806 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CC2DA5DE3E00F1A806 /* EventData.swift */; };
+		4CEF9BB62DBAD3E600BD6211 /* CheckBoxPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEF9BB52DBAD3E600BD6211 /* CheckBoxPicker.swift */; };
 		CA0EB8C52DB00AAC005898BA /* DayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C42DB00A9F005898BA /* DayCard.swift */; };
 		CA0EB8C92DB2AA63005898BA /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C82DB2AA61005898BA /* WeekView.swift */; };
 		CA6DF83F2DA5FC2700EFE10A /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6DF83E2DA5FC1D00EFE10A /* EventListView.swift */; };
@@ -130,6 +131,7 @@
 		4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organizations.swift; sourceTree = "<group>"; };
 		4CCCD6CC2DA5DE3E00F1A806 /* EventData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CEF9BB52DBAD3E600BD6211 /* CheckBoxPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxPicker.swift; sourceTree = "<group>"; };
 		CA0EB8C42DB00A9F005898BA /* DayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCard.swift; sourceTree = "<group>"; };
 		CA0EB8C82DB2AA61005898BA /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		CA6DF83E2DA5FC1D00EFE10A /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				CACCD4482DA31696001D31C0 /* ColorTheme.swift */,
 				CACCD4492DA31696001D31C0 /* InputField.swift */,
 				4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */,
+				4CEF9BB52DBAD3E600BD6211 /* CheckBoxPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -501,6 +504,7 @@
 				CACCD45C2DA31696001D31C0 /* SettingsView.swift in Sources */,
 				CACCD45D2DA31696001D31C0 /* EventCreationView.swift in Sources */,
 				CACCD45E2DA31696001D31C0 /* InputField.swift in Sources */,
+				4CEF9BB62DBAD3E600BD6211 /* CheckBoxPicker.swift in Sources */,
 				CA6DF83F2DA5FC2700EFE10A /* EventListView.swift in Sources */,
 				CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */,
 				4CA0C5772DA5D16200059803 /* Header.swift in Sources */,

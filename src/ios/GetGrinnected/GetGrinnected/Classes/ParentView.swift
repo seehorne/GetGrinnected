@@ -16,7 +16,7 @@ import Foundation
  timeSpan: the time span we want to see events for. default is now to the start of tomorrow
  
  */
-class EventListParentViewModel: ObservableObject {
+class ParentViewModel: ObservableObject {
     @Published var viewedDate = Date.now
     @Published var lastDate = Date.now.addingTimeInterval(86400 * 13)
     @Published var selectedTags: Set<EventTags> = []

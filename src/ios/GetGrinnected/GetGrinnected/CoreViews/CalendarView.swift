@@ -11,7 +11,7 @@ import SwiftUI
 //Calendar view
 struct CalendarView: View {
     // the parent model used for updating our event list
-    @StateObject private var viewModel = EventListParentViewModel()
+    @StateObject private var viewModel = ParentViewModel()
     
     //Main view body
     var body: some View {

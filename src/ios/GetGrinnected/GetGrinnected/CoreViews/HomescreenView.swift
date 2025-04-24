@@ -10,7 +10,7 @@ import SwiftUI
 
 struct HomescreenView: View {
     // the parent model used for updating our event list
-    @StateObject private var viewModel = EventListParentViewModel()
+    @StateObject private var viewModel = ParentViewModel()
     
     var body: some View {
         GeometryReader{proxy in
