@@ -31,7 +31,7 @@ import android.content.Context
  */
 
 @Composable
-fun FavoritesScreen(modifier: Modifier = Modifier, context: Context) {
+fun FavoritesScreen(modifier: Modifier = Modifier) {
     // Handles the scrolling state
     val scrollState = rememberScrollState()
     // Allows our screen to be scrollable
@@ -92,7 +92,7 @@ fun FavoritesScreen(modifier: Modifier = Modifier, context: Context) {
         } else {
             // For every event we fill an event card composable
             favoritedEvents.forEach { event ->
-                EventCard(event = event, modifier = Modifier, context = context)
+                EventCard(event = event, modifier = Modifier)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }

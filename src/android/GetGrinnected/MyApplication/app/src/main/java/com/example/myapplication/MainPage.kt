@@ -49,7 +49,6 @@ fun MainPage(
     onToggleTheme: (Boolean) -> Unit,
     tags: List<Check>,
     navController: NavController,
-    context: Context,
     account: AccountEntity
 ) {
     // Creates our navbar
@@ -106,12 +105,12 @@ fun MainPage(
             modifier = modifier.padding(innerPadding)
         ) {
             // Set of routes to for our navbar to follow
-            composable("Home") { HomeScreen(tags = tags, context = context) }
+            composable("Home") { HomeScreen(tags = tags) }
 
-            composable("Calendar") { CalendarScreen(tags = tags, context = context) }
+            composable("Calendar") { CalendarScreen(tags = tags) }
 
 
-            composable("Favorites") { FavoritesScreen(context = context) }
+            composable("Favorites") { FavoritesScreen() }
             composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
 
         }

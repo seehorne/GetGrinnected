@@ -77,11 +77,10 @@ class MainActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
                             }
-                        }, 
-                        tags = tags.sortedBy{ it.label},
-                        startDestination = if (isLoggedIn) "main" else "welcome", // What screen to launch the app on
-                        context = LocalContext.current
-                    )
+                        },
+                        tags = tags.sortedBy { it.label },
+                        startDestination = if (isLoggedIn) "main" else "welcome",
+                    ) // What screen to launch the app on
                 }
             }
         }

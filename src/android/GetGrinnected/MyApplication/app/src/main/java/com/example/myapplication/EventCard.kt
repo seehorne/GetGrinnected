@@ -41,6 +41,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
 
 /**
  * A composable function that creates the general look of an event card.
@@ -53,15 +54,14 @@ import androidx.annotation.RequiresApi
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
+fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
-
     val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
     // Boolean to track if card should cause notification
     val isNotification = remember(event.is_notification) { mutableStateOf(event.is_notification) }
-
+    val context = LocalContext.current
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme

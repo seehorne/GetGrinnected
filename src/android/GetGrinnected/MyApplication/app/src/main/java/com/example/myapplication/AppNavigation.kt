@@ -31,8 +31,7 @@ fun AppNavigation(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     startDestination: String,
-    tags: List<Check>,
-    context: Context
+    tags: List<Check>
   // This handles our navigation system with a nav controller
 ){
 
@@ -60,7 +59,7 @@ fun AppNavigation(
         composable("main"){
             // Makes sure account is not null just since it could be to start as someone who hasn't logged in
             if (account != null) {
-                MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, account = account, context = context)
+                MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, account = account)
             }
         }
         composable(

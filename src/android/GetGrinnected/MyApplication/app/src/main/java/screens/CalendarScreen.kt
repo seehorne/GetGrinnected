@@ -62,7 +62,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Context) {
+fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
     // Gets events from our repo
     val eventEntities by AppRepository.events
     // Converts them to event data type
@@ -111,13 +111,6 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Co
         else -> { "December" }
     }
     ).toString()
-    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-    val notificationHandler = NotificationHandler(context)
-    LaunchedEffect(key1 = true) {
-        if (!postNotificationPermission.status.isGranted) {
-            postNotificationPermission.launchPermissionRequest()
-        }
-    }
     // sets the background for the page for us to build our other elements on
     Column(modifier = modifier.fillMaxSize().background(gradient)) {
         Box(modifier = modifier.background(Color.Black).fillMaxWidth().size(100.dp)) {
@@ -233,7 +226,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Co
                         calendarInputList = createCalendarList(event, chosenTags, currentMonth)
                         // populates events based on selected days
                         dayInfo.events.forEach {
-                            EventCard(it, context = context)
+                            EventCard(it)
                             Spacer(modifier = Modifier.height(4.dp))
                         }
                     }
