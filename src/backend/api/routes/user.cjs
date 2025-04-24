@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
-
+const SALT_ROUNDS = 10;
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
 const { sendCode } = require('../../one_time_code.cjs')
@@ -137,7 +137,7 @@ async function routeSignUpNewUser(req, res, _next) {
 
   // With the account created, send them an email.
   // TODO: ERROR HANDLING WOULD APPLY HERE TOO IF USED.
-  await sendOTP(email);
+  await util.sendOTP(email);
 
   // Respond with success-- account created!
   res.status(201).json({
