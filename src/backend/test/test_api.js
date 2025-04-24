@@ -85,8 +85,6 @@ describe('Test API', () => {
                     return 'getEventsBetweenWithTags';
                 }
             );
-
-            console.log(`here is one of my env items, MYSQL_HOST: ${process.env.MYSQL_HOST}`)
         });
 
         it('should call getEventsBetween when no tags are provided', async () => {
