@@ -136,7 +136,7 @@ async function routeSignUpNewUser(req, res, _next) {
 
   // With the account created, send them an email.
   // TODO: ERROR HANDLING WOULD APPLY HERE TOO IF USED.
-  await sendOTP(email);
+  await util.sendOTP(email);
 
   // Respond with success-- account created!
   res.status(201).json({
