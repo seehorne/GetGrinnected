@@ -18,7 +18,7 @@ class NotificationHandler(private val context: Context) {
             .setContentText(event.event_time)
             .setSmallIcon(R.drawable.gg_logo_2)
             .setPriority(NotificationManager.IMPORTANCE_HIGH)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .build()  // finalizes the creation
 
         notificationManager.notify(Random.nextInt(), notification)
