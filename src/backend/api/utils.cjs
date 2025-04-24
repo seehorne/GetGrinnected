@@ -2,6 +2,7 @@ const { sendCode } = require('../one_time_code.cjs')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
+const DBPATH = './src/backend/Database/localOTP.db'
 
 
 /**
