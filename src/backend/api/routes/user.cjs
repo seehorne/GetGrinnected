@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
-
+const SALT_ROUNDS = 10;
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
 const { sendCode } = require('../../one_time_code.cjs')
@@ -95,7 +95,8 @@ async function routeSignUpNewUser(req, res, _next) {
     res.status(400).json({
       'error': 'Invalid email',
       'message': 'Email must end with @grinnell.edu.'
-    })
+    });
+    return;
   }
 
   // Make sure the username provided doesn't break any format rules.
@@ -136,7 +137,7 @@ async function routeSignUpNewUser(req, res, _next) {
 
   // With the account created, send them an email.
   // TODO: ERROR HANDLING WOULD APPLY HERE TOO IF USED.
-  await sendOTP(email);
+  await util.sendOTP(email);
 
   // Respond with success-- account created!
   res.status(201).json({
@@ -189,7 +190,7 @@ async function routeVerifyOTP(req, res, _next) {
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
     });
-    return
+    return;
   }
   else{
     // Use JSON Web Tokens to create two tokens for the user,
