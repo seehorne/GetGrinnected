@@ -9,6 +9,10 @@ import Foundation
 import SwiftUI
 
 struct FavoritesView: View {
+    // the parent model used for updating our event list
+    @StateObject private var viewModel = EventListParentViewModel()
+    
+    
     var body: some View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
@@ -16,17 +20,13 @@ struct FavoritesView: View {
                 // Header is outside of scrollable so it does not move
                 Header(safeAreaTop, title: "Favorites")
                 ScrollView(.vertical, showsIndicators: false){
-                
-                
+                    
+                /**
+                 if favorited, add to favorited list
+                 */
+                    
                 //content
-                VStack {
-                    Image(systemName: "globe")
-                        .imageScale(.large)
-                        .foregroundStyle(.tint)
-                    Text("Hello, favorites!")
-                }
-                .padding()
-                .frame(minHeight: proxy.size.height)//height
+                    EventList(selectedEvent: -1, parentView: viewModel, searchString: "")
                             
                 }
             }

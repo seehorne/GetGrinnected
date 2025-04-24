@@ -27,7 +27,6 @@ final class EventModel: Identifiable {
     var organizations: [String]?
     var startTime: Date?
     var endTime: Date?
-    
     var rsvp: Int?
     var all_day: Int?
     var usefulStartTime: Date?
@@ -37,6 +36,11 @@ final class EventModel: Identifiable {
     var repeats: Int?
     var imageURL: String?
     var is_draft: Int?
+    
+    /**
+     NOT in eventDTO
+     */
+//    var favorited: Bool
     
     // Constructor that converts from your DTO
     init(from dto: EventDTO) {
@@ -76,6 +80,10 @@ final class EventModel: Identifiable {
         self.imageURL = dto.event_image ?? ""
         self.is_draft = dto.is_draft ?? 0
         
+        /**
+         NOT in eventDTO
+         */
+//        self.favorited = dto.favorited
     }//initialize from an eventDTO
     
     // Empty initializer required by SwiftData
@@ -100,6 +108,7 @@ final class EventModel: Identifiable {
         self.repeats = 0
         self.imageURL = ""
         self.is_draft = 0
+//        self.favorited = false
         
         
         

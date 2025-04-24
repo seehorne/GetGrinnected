@@ -14,12 +14,12 @@ struct EventList: View {
     //only initialized value that is a query
     @Query(sort: \EventModel.startTime) private var events: [EventModel]
     
-    
     //parentview that observes values if change
     @ObservedObject var parentView: EventListParentViewModel
     
     //selected event
     @State var selectedEvent: Int? //An integer to represent which event we select
+    
     
 //    
 //    init(selectedEvent: Int?, parentView: EventListParentViewModel){
@@ -46,37 +46,34 @@ struct EventList: View {
     
     //the initializer for the eventlist is the sorting function!
     
-    init(selectedEvent: Int?, parentView: EventListParentViewModel, sortOrder: [SortDescriptor<EventModel>] = [], searchString: String){
+    init(selectedEvent: Int?, parentView: EventListParentViewModel, sortOrder: [SortDescriptor<EventModel>] = [], searchString: String, filterToday: Bool = false){
         self.selectedEvent = selectedEvent
         self._parentView = ObservedObject(wrappedValue: parentView)
         
-        //checking predicate of searching
-        //        let predicate = searchString.isEmpty ? nil: #Predicate<EventModel> {
-        //            //we are unwrapping it, though maybe it's important to check whether or not name exists
-        //            $0.name!.localizedStandardContains(searchString) ||
-        //            //same for organizations
-        //            $0.organizations!.contains(where: { $0.localizedStandardContains(searchString) })
-        //        }
-        
-        
+        let timeSpanStart = parentView.timeSpan.start
+        let timeSpanEnd = parentView.timeSpan.end
         
         //apply sort order, default if no title or organization provided
         let finalSortOrder = sortOrder.isEmpty ? [SortDescriptor(\EventModel.name)] : sortOrder
         
         //initialize events according to those sorting specificatinos
-        _events = Query(filter: #Predicate {
-            if searchString.isEmpty {
-                return true
-            } else {
-                return $0.name.localizedStandardContains(searchString)
-            }
-        }, sort: finalSortOrder)
+        _events = Query(filter: #Predicate { event in
+            //The query only requires one singular predicate, so we have to use something like this:
+            (filterToday
+             ? event.startTime.flatMap { $0 >= timeSpanStart && $0 <= timeSpanEnd } ?? false //check the dates, otherwise false (not in that date)
+             : true) //if not filtering for today, return true
+            &&
+            (searchString.isEmpty || event.name.localizedStandardContains(searchString)) //if search string is empty, or if it contains the value, then return true
+        },
+                        sort: finalSortOrder)//sort by name
     }//init
+    
     
     
     var body: some View {
             VStack{
                 ForEach(events) { event in
+                    //checks if favorited page
                     EventCard(event: event, isExpanded: (event.id == selectedEvent))
                         .onTapGesture {
                             withAnimation(.easeInOut) {

@@ -37,7 +37,7 @@ struct CalendarView: View {
                                 .padding(.top, 120)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText)
+                            EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, filterToday: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                         
