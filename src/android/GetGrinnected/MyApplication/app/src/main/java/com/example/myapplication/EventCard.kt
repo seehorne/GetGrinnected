@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,6 +35,11 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.Manifest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import android.content.Context
 
 /**
  * A composable function that creates the general look of an event card.
@@ -43,8 +49,9 @@ import kotlinx.coroutines.launch
  * @param modifier Modifier to be applied to the card layout.
  */
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun EventCard(event: Event, modifier: Modifier = Modifier) {
+fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
@@ -55,7 +62,14 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
     val typography = MaterialTheme.typography
+    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val notificationHandler = NotificationHandler(context)
 
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+    }
     // Sets up composable to be a card for our info
     Card(
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -138,8 +152,9 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                             .clickable {
                                 isNotification.value = !isNotification.value
                                 // This tells our database to update the events favorited status
+                                notificationHandler.showSimpleNotification()
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    //AppRepository.toggleNotification(event.eventid, isNotification.value)
+                                    AppRepository.toggleNotification(event.eventid, isNotification.value)
                                 }
                             },
                     )

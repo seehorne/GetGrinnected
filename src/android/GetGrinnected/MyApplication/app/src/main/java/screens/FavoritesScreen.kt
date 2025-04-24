@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.AppRepository
 import com.example.myapplication.EventCard
 import com.example.myapplication.toEvent
+import android.content.Context
 
 /**
  * A composable function that represents the Favorites screen of our app.
@@ -30,7 +31,7 @@ import com.example.myapplication.toEvent
  */
 
 @Composable
-fun FavoritesScreen(modifier: Modifier = Modifier) {
+fun FavoritesScreen(modifier: Modifier = Modifier, context: Context) {
     // Handles the scrolling state
     val scrollState = rememberScrollState()
     // Allows our screen to be scrollable
@@ -91,18 +92,10 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
         } else {
             // For every event we fill an event card composable
             favoritedEvents.forEach { event ->
-                EventCard(event = event, modifier = Modifier)
+                EventCard(event = event, modifier = Modifier, context = context)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
 }
 
-/**
- * Preview used specifically for UI design purposes
- */
-@Preview (showBackground = true)
-@Composable
-fun FavoritesPreview() {
-    FavoritesScreen()
-}

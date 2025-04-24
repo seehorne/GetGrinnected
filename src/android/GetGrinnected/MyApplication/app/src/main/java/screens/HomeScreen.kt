@@ -1,5 +1,6 @@
 package screens
 
+import android.Manifest
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import com.example.myapplication.AppRepository
 import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.EventCard
+import com.example.myapplication.NotificationHandler
 import com.example.myapplication.R
 import com.example.myapplication.toEvent
 import java.time.LocalDate
@@ -44,6 +46,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
+import android.content.Context
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -54,7 +57,7 @@ import androidx.compose.foundation.layout.Column as Column1
 
 @RequiresApi1(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen(tags: List<Check>) {
+fun HomeScreen(tags: List<Check>, context: Context) {
     // remembers what page the app is on
     var selectedView by remember { mutableIntStateOf(0) }
     // holds whether the dropdown menu's are up or down
@@ -118,43 +121,43 @@ fun HomeScreen(tags: List<Check>) {
             if (chosenTags.isEmpty()){
                 if (selectedView == 0) {
                     if (events[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
-                        EventCard(event = events[cardnum], modifier = Modifier)
+                        EventCard(event = events[cardnum], context = context)
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 } else if (selectedView == 1) {
                     if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString()){
-                        EventCard(event = events[cardnum], modifier = Modifier)
+                        EventCard(event = events[cardnum], context = context)
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 } else if (selectedView == 2) {
                     if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString()){
-                        EventCard(event = events[cardnum], modifier = Modifier)
+                        EventCard(event = events[cardnum], context = context)
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 } else if (selectedView == 3) {
                     if (events[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString()){
-                        EventCard(event = events[cardnum], modifier = Modifier)
+                        EventCard(event = events[cardnum], context = context)
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 } else if (selectedView == 4) {
                     if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString()){
-                        EventCard(event = events[cardnum], modifier = Modifier)
+                        EventCard(event = events[cardnum], context = context)
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 } else if (selectedView == 5) {
                     if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
-                        EventCard(event = events[cardnum], modifier = Modifier)
+                        EventCard(event = events[cardnum], context = context)
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 } else if(selectedView == 6){
                     if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(formatter).toString()){
-                        EventCard(event = events[cardnum], modifier = Modifier)
+                        EventCard(event = events[cardnum], context = context)
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -166,35 +169,35 @@ fun HomeScreen(tags: List<Check>) {
                     if (selectedView == 0) {
                         if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
                         {
-                            EventCard(event = event[cardnum], modifier = Modifier)
+                            EventCard(event = event[cardnum], context = context)
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
                         }
                     } else if (selectedView == 1) {
                         if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum], modifier = Modifier)
+                            EventCard(event = event[cardnum], context = context)
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
                         }
                     } else if (selectedView == 2) {
                         if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum], modifier = Modifier)
+                            EventCard(event = event[cardnum], context = context)
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
                         }
                     } else if (selectedView == 3) {
                         if (event[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum], modifier = Modifier)
+                            EventCard(event = event[cardnum], context = context)
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
                         }
                     } else if (selectedView == 4) {
                         if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum], modifier = Modifier)
+                            EventCard(event = event[cardnum], context = context)
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
@@ -202,7 +205,7 @@ fun HomeScreen(tags: List<Check>) {
                     } else if (selectedView == 5) {
                         if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
                         {
-                            EventCard(event = event[cardnum], modifier = Modifier)
+                            EventCard(event = event[cardnum], context = context)
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
@@ -212,9 +215,7 @@ fun HomeScreen(tags: List<Check>) {
                                 formatter
                             ).toString() && event[cardnum].tags.contains(chosenTags[t])
                         ) {
-                            EventCard(
-                                event = event[cardnum], modifier = Modifier
-                            )
+                            EventCard(event = event[cardnum], context = context)
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
@@ -325,6 +326,7 @@ fun HomeScreen(tags: List<Check>) {
             }
         }
     }
+
 
 
 /*

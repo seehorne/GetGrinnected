@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 
 /**
  * Our main used to run and create our app. Currently utilizes the AppNavigator function at
@@ -68,8 +70,9 @@ class MainActivity : ComponentActivity() {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
                             }
                         }, 
-                      tags = tags.sortedBy{ it.label},                       
-                      startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
+                        tags = tags.sortedBy{ it.label},
+                        startDestination = if (isLoggedIn) "main" else "welcome", // What screen to launch the app on
+                        context = LocalContext.current
                     )
                 }
             }

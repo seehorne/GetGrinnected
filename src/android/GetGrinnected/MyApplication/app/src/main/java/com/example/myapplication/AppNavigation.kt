@@ -13,6 +13,7 @@ import screens.EmailVerificationScreen
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
+import android.content.Context
 
 /**
  * A composable function that is utilized for smooth navigation through login/signup process
@@ -31,6 +32,7 @@ fun AppNavigation(
     onToggleTheme: (Boolean) -> Unit,
     startDestination: String,
     tags: List<Check>,
+    context: Context
   // This handles our navigation system with a nav controller
 ){
     val navController = rememberNavController()
@@ -52,7 +54,7 @@ fun AppNavigation(
         // This is our home area with our navbar it acts as our view model in a sense
         // for navigating through the various logged in app screens.
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController)
+            MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, context = context)
         }
         composable(
             "verification/{email}/{flag}/{username}",

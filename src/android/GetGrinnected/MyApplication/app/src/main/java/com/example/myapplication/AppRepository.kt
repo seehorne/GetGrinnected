@@ -56,9 +56,9 @@ object AppRepository {
     }
 
     // Function to toggle notification state, used when user wants a notification for an event.
-    //suspend fun toggleNotification(eventId: Int, isNotification: Boolean) {
-    //    dao.updateNotificationStatus(eventId, isNotification)
-    //}
+    suspend fun toggleNotification(eventId: Int, isNotification: Boolean) {
+        dao.updateNotificationStatus(eventId, isNotification)
+    }
 }
 
 /**

@@ -1,5 +1,7 @@
 package screens
 
+import android.Manifest
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -23,6 +25,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -42,20 +45,24 @@ import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
+import com.example.myapplication.NotificationHandler
 import com.example.myapplication.R
 import com.example.myapplication.toEvent
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
 
 /**
  * A composable function that represents the Calendar screen of our app. (More to come)
  *
  * @param modifier Modifier to be applied to the screen layout.
  */
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
+fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Context) {
     // Gets events from our repo
     val eventEntities by AppRepository.events
     // Converts them to event data type
@@ -98,10 +105,17 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
         "09" -> { "September" }
         "10" -> { "October" }
         "11" -> { "November" }
-        else -> {
-            "December"
+        else -> { "December" }
+    }
+    ).toString()
+    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val notificationHandler = NotificationHandler(context)
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
         }
-    }).toString()
+    }
+
     Column(modifier = modifier.fillMaxSize().background(gradient)) {
         Box(modifier = modifier.background(Color.Black).size(width = 450.dp, height = 100.dp)) {
             Row{
@@ -216,7 +230,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                         calendarInputList = createCalendarList(event, chosenTags, currentMonth)
                         // populates events based on selected days
                         dayInfo.events.forEach {
-                            EventCard(it)
+                            EventCard(it, context = context)
                             Spacer(modifier = Modifier.height(4.dp))
                         }
                     }
