@@ -24,24 +24,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Shut down default MySQL
-      run: sudo service mysql stop
+    - name: Start MySQL
+      run: sudo service mysql start
 
-    - name: Set up custom MySQL
-      uses: mirromutth/mysql-action@v1.1
-      with:
-        character set server: 'utf8mb3'
-        collation server: 'utf8mb4_unicode_ci'
-        mysql version: '9.2'
-        mysql database: 'GetGrinnected'
-        mysql root password: ${{ secrets.MYSQL_CI_ROOT_PASSWORD }}
+    # - name: Set up custom MySQL
+    #   uses: mirromutth/mysql-action@v1.1
+    #   with:
+    #     character set server: 'utf8mb3'
+    #     collation server: 'utf8mb4_unicode_ci'
+    #     mysql version: '9.2'
+    #     mysql database: 'GetGrinnected'
+    #     mysql root password: ${{ secrets.MYSQL_CI_ROOT_PASSWORD }}
 
-    - name: Initialize mysql database from CI file
-      # This will warn us not to use a secret on the command line,
-      # but it's fine because this db doesn't store anything real
-      run: |
-        mysql -uroot -p${{ secrets.MYSQL_CI_ROOT_PASSWORD }} GetGrinnected < \
-        ${GITHUB_WORKSPACE}/src/backend/Database/GetGrinnected_CI_Data.sql
+    # - name: Initialize mysql database from CI file
+    #   # This will warn us not to use a secret on the command line,
+    #   # but it's fine because this db doesn't store anything real
+    #   run: |
+    #     mysql -uroot -p${{ secrets.MYSQL_CI_ROOT_PASSWORD }} GetGrinnected < \
+    #     ${GITHUB_WORKSPACE}/src/backend/Database/GetGrinnected_CI_Data.sql
 
     - name: Test with npm
       uses: actions/setup-node@v4
@@ -63,5 +63,5 @@ jobs:
         # connection to the database
         MYSQL_HOST: localhost
         MYSQL_USER: root
-        MYSQL_PASSWORD: ${{ secrets.MYSQL_CI_ROOT_PASSWORD }}
+        MYSQL_PASSWORD: root
         MYSQL_DATABASE: GetGrinnected
