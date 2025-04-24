@@ -185,7 +185,7 @@ async function routeVerifyOTP(req, res, _next) {
   //boolean that checks if the code is right
   validCode = await util.otpFileCheck(DBPATH, email, code) 
 
-  if (validCode){
+  if (!validCode){
     res.status(400).json({
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
