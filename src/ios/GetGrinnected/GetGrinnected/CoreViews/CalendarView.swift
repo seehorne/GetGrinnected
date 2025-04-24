@@ -12,6 +12,7 @@ import SwiftUI
 struct CalendarView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
+    @State private var searchText = ""
     
     //Main view body
     var body: some View {
@@ -20,30 +21,35 @@ struct CalendarView: View {
             //no safe area so the header goes all the way to the top
             let safeAreaTop = proxy.safeAreaInsets.top
             //vstack of header and events
-            VStack(){
-                // Header is outside of scrollable so it does not move
-                Header(safeAreaTop, title: "Calendar", searchBarOn: true)
-                
-                //vertical scroll view to see more events
-                ScrollView(.vertical, showsIndicators: false){
-                    //have search bar on here.
+            NavigationStack{
+                VStack(){
+                    // Header is outside of scrollable so it does not move
+                    Header(safeAreaTop, title: "Calendar")
                     
+                    Spacer()
                     
-                    //vstack to have some spacing between header and main compoments
-                    VStack(spacing: 16) {
+                    //vertical scroll view to see more events
+                    ScrollView(.vertical, showsIndicators: false){
+                        //have search bar on here.
                         
-                        WeekView(selectedDate: $viewModel.viewedDate)
-                            .padding(.bottom, 4)
                         
-                        //event list view for all the events (may have to pass in some arguments according to the day
-                        EventListView(parentView: viewModel)
+                        //vstack to have some spacing between header and main compoments
+                        VStack(spacing: 16) {
+                            
+                            WeekView(selectedDate: $viewModel.viewedDate)
+                                .padding(.bottom, 4)
+                            
+                            //event list view for all the events (may have to pass in some arguments according to the day
+                            EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText)
+                                .searchable(text: $searchText)
+                        }
+                        .padding(.top)//padding on top
+                        
                     }
-                    .padding(.top)//padding on top
                     
-                }
-                
-            }//scroll view
-            .edgesIgnoringSafeArea(.top)
+                }//scroll view
+                .edgesIgnoringSafeArea(.top)
+            }
             
         }//geometry reader
         // if the viewedDate changes update timeSpan

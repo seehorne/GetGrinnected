@@ -14,7 +14,7 @@ struct FavoritesView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(safeAreaTop, title: "Favorites", searchBarOn: true)
+                Header(safeAreaTop, title: "Favorites")
                 ScrollView(.vertical, showsIndicators: false){
                 
                 

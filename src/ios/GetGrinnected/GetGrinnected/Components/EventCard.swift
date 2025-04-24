@@ -73,12 +73,11 @@ struct EventCard: View {
                         //Vstack contains the text of the event.
                         VStack(alignment: .leading) {
                             //event name, check if null
-                            if(event.name != nil){
-                                
+                            if(event.name != "Unnamed Event"){
                                 //because it's optional type, we have to use ! to
                                 //tell the code that we are SURE it exists
                                 //putting variable into strings is "\(variable)"
-                                Text("\(event.name!)")
+                                Text("\(event.name)")
                                     .font(.headline) //determining font (make it big!)
                                     .foregroundStyle(.textPrimary)//this color is defined in assets
                                     .frame(alignment: .leading)//specifically adding leading alignment to get
@@ -98,7 +97,7 @@ struct EventCard: View {
                             
                             //Check if null
                             if(event.location != nil){
-                                Text(event.event_location!)
+                                Text(event.location!)
                                     .foregroundStyle(.textPrimary)
                                     .font(.caption)
                             }
@@ -124,8 +123,8 @@ struct EventCard: View {
                             
                             
                             //Add description if our event is expanded
-                            if (isExpanded && event.event_description != nil){
-                                Text("\(event.event_description!)")
+                            if (isExpanded && event.descr != nil){
+                                Text("\(event.descr!)")
                                     .font(.caption) //determining font (make it big!)
                                     .foregroundStyle(.textPrimary)//this color is defined in assets
                                     .frame(alignment: .leading)//specifically adding leading alignment to get
@@ -224,16 +223,20 @@ struct EventCard: View {
  Preview type doesn't run when you run emulator
  */
 
-//the preview is to test specific components
-struct EventCards_Previews: PreviewProvider {
-    static var previews: some View {
-        let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
-            let myEvents = EventData.parseEvents(json: myjson)
-        List{
-            EventCard(event: myEvents[0], isExpanded: false)
-            EventCard(event: myEvents[0], isExpanded: true)
-            
-        }
-    }
-}
 
+/**
+Remove preview for testing purposes
+ */
+////the preview is to test specific components
+//struct EventCards_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
+//            let myEvents = EventData.parseEvents(json: myjson)
+//        
+//        List{
+//            EventCard(event: myEvents[0], isExpanded: false)
+//            EventCard(event: myEvents[0], isExpanded: true)
+//        }
+//    }
+//}
+//
