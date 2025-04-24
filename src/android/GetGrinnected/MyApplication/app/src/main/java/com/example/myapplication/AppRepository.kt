@@ -55,6 +55,10 @@ object AppRepository {
         dao.updateFavoriteStatus(eventId, isFavorited)
     }
 
+    // Function to toggle notification state, used when user wants a notification for an event.
+    //suspend fun toggleNotification(eventId: Int, isNotification: Boolean) {
+    //    dao.updateNotificationStatus(eventId, isNotification)
+    //}
 }
 
 /**
@@ -70,14 +74,15 @@ fun Event.toEventEntity(): EventEntity = EventEntity(
     event_date = this.event_date?: "",
     event_time = this.event_time?: "",
     event_all_day = this.event_all_day,
-    event_start_time = this.event_start_time?: "",
-    event_end_time = this.event_end_time?: "",
+    event_start_time = this.event_start_time,
+    event_end_time = this.event_end_time,
     tags = this.tags,
     event_private = this.event_private,
     repeats = this.repeats,
     event_image = this.event_image ?: "",
     is_draft = this.is_draft,
-    is_favorited = this.is_favorited
+    is_favorited = this.is_favorited,
+    is_notification = this.is_notification
 )
 
 /**
@@ -100,6 +105,7 @@ fun EventEntity.toEvent(): Event = Event(
     repeats = this.repeats,
     event_image = this.event_image,
     is_draft = this.is_draft,
-    is_favorited = this.is_favorited
+    is_favorited = this.is_favorited,
+    is_notification = this.is_notification
 )
 

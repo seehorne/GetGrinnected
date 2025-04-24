@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 espressoCoreVersion = "3.5.0"
 gson = "2.11.0"
 gsonVersion = "2.12.1"

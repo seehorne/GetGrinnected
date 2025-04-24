@@ -139,7 +139,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                                 isNotification.value = !isNotification.value
                                 // This tells our database to update the events favorited status
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    //AppRepository.toggleFavorite(event.eventid, isNotification.value)
+                                    //AppRepository.toggleNotification(event.eventid, isNotification.value)
                                 }
                             },
                     )
