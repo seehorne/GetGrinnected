@@ -32,7 +32,7 @@ func Header(_ safeAreaTop: CGFloat, title: String, searchBarOn: Bool) -> some Vi
     .padding(.top, safeAreaTop + 10)
     .background{
         Rectangle()
-            .fill(.colorRed)
+            .fill(.colorBlue)
     }
 }
 
@@ -50,24 +50,15 @@ func SearchBar() -> some View{
         .padding(.horizontal, 15)
         .background{
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(.black)
-                .opacity(0.15)
+                .fill(.white)
+                .opacity(0.35)
         }//background
         
         Button{
             
         } label: {
             //image
-            Image("gglogo_nt")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 35, height: 35)
-                .clipShape(Circle())
-                .background{
-                    Circle()
-                        .fill(.white)
-                        .padding(-2)
-                }
+            Logo(size: 35)
         }
     }//HStack for searching
 }

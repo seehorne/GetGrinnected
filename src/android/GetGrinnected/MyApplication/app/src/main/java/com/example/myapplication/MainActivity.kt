@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.first
@@ -48,6 +49,13 @@ class MainActivity : ComponentActivity() {
             theme file which allows us to change the whole app theme.
             */
 
+            // Gets the account id that we have stored
+            val accountId = DataStoreSettings.getLoggedInAccountId(applicationContext).first()
+            if (accountId != null) {
+                // Sets our current active account in the repo to the stored account value
+                AppRepository.setCurrentAccountById(accountId)
+            }
+
             setContent {
                 // Gets events from Repo
                 val eventEntities = AppRepository.events.value
@@ -58,7 +66,7 @@ class MainActivity : ComponentActivity() {
                 val tagsString = events.flatMap { it.tags }.distinct()
 
                 // We turn this string of tags into a mutable list of check objects
-                val tags = tagsString.map { Check(false, it) }.toMutableList()
+                val tags = rememberSaveable(tagsString) { tagsString.map { Check(mutableStateOf(false), it) }.toMutableList() }
 
                 MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
                     AppNavigation(

@@ -35,6 +35,10 @@ fun AppNavigation(
     context: Context
   // This handles our navigation system with a nav controller
 ){
+
+    // Gets current active account from App Repository
+    val account = AppRepository.currentAccount.value
+
     val navController = rememberNavController()
     // This instantiates our nave controller with a start destination dependent on whether
     // the user is logged in or not.
@@ -54,7 +58,10 @@ fun AppNavigation(
         // This is our home area with our navbar it acts as our view model in a sense
         // for navigating through the various logged in app screens.
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, context = context)
+            // Makes sure account is not null just since it could be to start as someone who hasn't logged in
+            if (account != null) {
+                MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, account = account, context = context)
+            }
         }
         composable(
             "verification/{email}/{flag}/{username}",

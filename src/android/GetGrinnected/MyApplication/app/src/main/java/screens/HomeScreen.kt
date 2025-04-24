@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.AppRepository
+import androidx.compose.runtime.derivedStateOf
 import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.EventCard
@@ -110,6 +111,7 @@ fun HomeScreen(tags: List<Check>, context: Context) {
     {
         // creates a visual spacer for the top of the page
         Spacer(modifier = Modifier.height(150.dp))
+
         val chosenTags = mutableListOf<String>()
         for (i in tags.indices){
             if (tags[i].checked) {
@@ -161,6 +163,7 @@ fun HomeScreen(tags: List<Check>, context: Context) {
                         // creates space between cards
                         Spacer(modifier = Modifier.height(16.dp))
                     }
+
                 }
             }
             // sorts by tag
@@ -201,6 +204,7 @@ fun HomeScreen(tags: List<Check>, context: Context) {
                             // creates space between cards
                             Spacer(modifier = Modifier.height(16.dp))
                             break
+
                         }
                     } else if (selectedView == 5) {
                         if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))

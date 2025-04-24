@@ -15,103 +15,13 @@ import SwiftUI
  https://www.reddit.com/r/SwiftUI/comments/10e8lu6/swiftui_networking_using_mvvm_pattern/
  
  */
-//EventViewModel: Find a way to View our Events
-class EventViewModel: ObservableObject {
-    @Published var events: [Event] = [] //Store Events from our API
-    @Published var viewedEvents: [Event] = [] //Store events that are viewed based on filters
-    @Published var isLoading = false //check if loading
-    @Published var errorMessage: String? = nil //showing the error message
-     
-    //HERE IS OUR API link
-    private let urlString = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
-    
-    
-    //Function Fetch Events
-    /**
-     Returns nothing:
-     once called, shows isloading ot be true, and resets error message
-     */
-    func fetchEvents(timeSpan: DateInterval) {
-        //reset error message, set loading to be true
-        isLoading = true
-        errorMessage = nil
-        
-        //in a task: do-catch outline..
-        Task {
-            do {
-                //get our json string using EventData's fetch-data
-                let jsonString = try await EventData.fetchData(urlString: urlString)
-                //print out string for testing
-                //print("String: \(jsonString)")
-                
-                //parse events into fetchedEvents from that string
-                let fetchedEvents = EventData.parseEvents(json: jsonString)
-                
-                // Update on main thread since we're changing published properties
-                await MainActor.run {
-                    //set events and now that we are done, set isLoading to false
-                    self.events = fetchedEvents
-                    // sort the events by start time
-                    sortEventsByStartTime()
-                    
-                    //filter events to time span
-                    filterEventsByDateInterval(timeSpan: timeSpan)
-                    
-                    self.isLoading = false
-                }//await
-            } catch {
-                //if error..
-                await MainActor.run {
-                    //show error
-                    self.errorMessage = "Failed to load events: \(error.localizedDescription)"
-                    self.isLoading = false
-                }
-            }// do-catch
-        }//Task
-    }//fetchEvents
-    
-    /*
-     Sorts events by ascending start time.
-     */
-    func sortEventsByStartTime() {
-        events.sort { event1, event2 in
-            // check the events' start times are not nil
-            if(event1.useful_event_start_time != nil && event2.useful_event_start_time != nil){
-                // check if event1 starts before or at same time as event2
-                if (event1.useful_event_start_time! <= event2.useful_event_start_time!) {
-                    return true
-                } //if
-            } //if
-            return false
-        } //sort
-    }
-    
-    /*
-     Filters the events array to only events in the time span and stores them in viewed events.
-     
-     timeSpan: An interval of dates that you want to see events for.
-     */
-    func filterEventsByDateInterval(timeSpan: DateInterval) {
-        viewedEvents = events.filter { event in
-            // check that the event has a start and end time
-            if event.useful_event_start_time != nil && event.useful_event_end_time != nil {
-                // check current events start or end is in the timeSpan
-                if timeSpan.contains(event.useful_event_start_time!) || timeSpan.contains(event.useful_event_end_time!) {
-                    return true
-                } //if
-            } //if
-            return false
-        }
-    }
-}
-
 struct EventListView: View {
     @StateObject private var viewModel = EventViewModel()
     //binding to the value we input into event card
     //@State to show that this will be passed into the
     @State var selectedEvent: Int? //An integer to represent which event we select
-    // The span of time we want to see the events in
-    @State var timeSpan: DateInterval
+    // the parent model used for updating our event list
+    @ObservedObject var parentView: EventListParentViewModel
     // The tags we want the events we see to have
     // @Binding var tags: Set<EventTags>?
     
@@ -149,7 +59,8 @@ struct EventListView: View {
                     Text(error)
                         .foregroundColor(.red)
                     Button("Retry") {
-                        viewModel.fetchEvents(timeSpan: timeSpan)
+                        // TODO: fix retry button
+                        //viewModel.fetchEvents()
                     }
                     .padding()
                     .background(Color.blue)
@@ -160,17 +71,26 @@ struct EventListView: View {
                 
         } //For all events
         .onAppear(){
-            viewModel.fetchEvents(timeSpan: timeSpan)
+            // background process
+            Task {
+                // re-fetch events
+                await viewModel.fetchEvents()
+                // filter events to time span
+                viewModel.filterEventsByDateInterval(timeSpan: parentView.timeSpan)
+            }
         }
-        .onChange(of: timeSpan) { oldValue, newValue in
-            viewModel.fetchEvents(timeSpan: newValue)
+        // if the timeSpan changes filter events again
+        .onChange(of: parentView.timeSpan) { oldValue, newValue in
+            // check we have events
+            if(!viewModel.events.isEmpty) {
+                // filter events to time span
+                viewModel.filterEventsByDateInterval(timeSpan: parentView.timeSpan)
+            }
         }
     }
 }
 
-// For preview purposes (assuming Event struct exists)
-struct EventListView_Previews: PreviewProvider {
-    static var previews: some View {
-        EventListView(selectedEvent: -1, timeSpan: DateInterval(start: Date.now, end: Date.now.startOfNextDay))
-    }
+
+#Preview {
+    EventListView(selectedEvent: -1, parentView: EventListParentViewModel())
 }

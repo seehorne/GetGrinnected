@@ -63,7 +63,7 @@ struct DayView: View {
         }
         //if the day is today, we make the color red
         if isToday {
-            return .colorRed
+            return .appLightBlue
         }
         //then if the color is weekend, we make the color
         // our primary color, and if not secondary.
@@ -74,11 +74,11 @@ struct DayView: View {
     private var borderColor: Color {
         //if selected, return red
         if isSelected {
-            return .colorRed
+            return .appLightBlue
         }
         
         //if today, the app border will be black as opposed to our app's red color.
-        return isToday ? .colorRed : .appBorder
+        return isToday ? .colorBlue : .appBorder
     }
     
     //Main body view
@@ -100,7 +100,7 @@ struct DayView: View {
         .padding(.vertical, 8) //padding all around 8.
         .background( //set background color
             ZStack {
-                Color(isSelected ? .colorRed : .appContainer) //if selected, set background to red
+                Color(isSelected ? .colorBlue : .appContainer) //if selected, set background to red
                 RoundedRectangle(cornerRadius: 10) //create the background as a rectangle that matches the card
                     .stroke(borderColor, lineWidth: isToday ? 2 : 1) //according to the color.
             }
@@ -114,12 +114,12 @@ struct DayView: View {
     let date = Date()
 
     //add a date for every week
-    var date1 = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-    var date2 = Calendar.current.date(byAdding: .day, value: 2, to: date)!
-    var date3 = Calendar.current.date(byAdding: .day, value: 3, to: date)!
-    var date4 = Calendar.current.date(byAdding: .day, value: 4, to: date)!
-    var date5 = Calendar.current.date(byAdding: .day, value: 5, to: date)!
-    var date6 = Calendar.current.date(byAdding: .day, value: 6, to: date)!
+    let date1 = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+    let date2 = Calendar.current.date(byAdding: .day, value: 2, to: date)!
+    let date3 = Calendar.current.date(byAdding: .day, value: 3, to: date)!
+    let date4 = Calendar.current.date(byAdding: .day, value: 4, to: date)!
+    let date5 = Calendar.current.date(byAdding: .day, value: 5, to: date)!
+    let date6 = Calendar.current.date(byAdding: .day, value: 6, to: date)!
     
     //today's views
     HStack{

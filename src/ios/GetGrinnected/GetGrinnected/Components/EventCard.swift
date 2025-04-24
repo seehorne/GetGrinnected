@@ -61,124 +61,140 @@ struct EventCard: View {
         VStack (alignment: .leading, spacing: 12) {
             //location of title
             //Creates the box
-            GroupBox { // the box that surrounds
-                
-                //horizontal stack
-                //filled with two VStacks that are horizontally aligned
-                HStack(alignment: .center){ //for contents
-                    
-                    //Vstack contains the text of the event.
-                    VStack(alignment: .leading) {
-                        
-                        //Check if null
-                        if(event.event_name != nil){
-                            
-                            //because it's optional type, we have to use ! to
-                            //tell the code that we are SURE it exists
-                            //putting variable into strings is "\(variable)"
-                            Text("\(event.event_name!)")
-                                .font(.headline) //determining font (make it big!)
-                                .foregroundStyle(.textPrimary)//this color is defined in assets
-                                .frame(alignment: .leading)//specifically adding leading alignment to get
-                        }//event name
-                        
-                        //Check if null
-                        if(!event.organizations!.isEmpty) {
-                            //join the array with a ", "
-                            Text("By \(event.organizations!.joined(separator: ", "))")
-                                .font(.subheadline)
-                                .foregroundStyle(.textPrimary)
-                            //alternatives for colors
-                                //.foregroundStyle(Color("textPrimary"))
-                                // .foregroundStyle(Color.textPrimary)
-                        }//organizations
-                        
-                        //Check if null
-                        if(event.event_location != nil){
-                            Text(event.event_location!)
-                                .foregroundStyle(.textPrimary)
-                                .font(.caption)
-                        }
-                        
-                        
-                        //We want date and time on the same line, so we..
-                        if((event.event_date != nil) && (event.event_time != nil)){ //check if both are not nil, then..
-                            Text("\(event.event_date!) • \(event.event_time!)") //print out both strings and create a text bullet point inbetween the date and time
-                                .font(.caption)
-                                .foregroundStyle(.textPrimary)
-                        } else if(event.event_date != nil){//otherwise, we check if ONLY the date is not nil.
-                            Text("\(event.event_date!)") //print out date
-                                .font(.caption)
-                                .foregroundStyle(.textPrimary)
-                        } else if(event.event_time != nil){ //lastly, check if ONLY the time is not nil.
-                            Text("\(event.event_time!)")
-                                .font(.caption)
-                                .foregroundStyle(.textPrimary)
-                        }
-                        
-                        
-                        //Add description if our event is expanded
-                        if (isExpanded && event.event_description != nil){
-                            Text("\(event.event_description!)")
-                                .font(.caption) //determining font (make it big!)
-                                .foregroundStyle(.textPrimary)//this color is defined in assets
-                                .frame(alignment: .leading)//specifically adding leading alignment to get
-                                .lineLimit(1000, reservesSpace: false)
-                        }
-                      //Add event tags, checking both if expanded and event tags
-                        if(isExpanded && !event.tags!.isEmpty) {
-                            //join the array with a ", "
-                            Text("Tags: \(event.tags!.joined(separator: ", "))")
-                                .font(.caption2)
-                                .foregroundStyle(.textPrimary)
-                                .lineLimit(1000, reservesSpace: false)
-                            //alternatives for colors
-                                //.foregroundStyle(Color("textPrimary"))
-                                // .foregroundStyle(Color.textPrimary)
-                        }//organizations
-                        
-                        
-                            
-                    }//Vstack text
-                    //if expanded, set line limit to max, and don't reserve space!
-                    .lineLimit(1, reservesSpace: true) //card wont change size thx to this.
-                    .padding(.vertical, 4)
-                    .padding(.leading, 8) //adding space before
-                    
-                    Spacer()//adding a spacer between the two Vstacks, takes up maximum space
-                    
-                    
-                    VStack {
-                        //component that can be reusable
-                        CheckBox(
-                            items: [CheckBoxOption(
-                                isChecked: false,
-                                uiCompOne: "heart.fill",
-                                uiCompTwo: "heart")]
-                        ) //checkbox
-                        .imageScale(.large)
-                        
-                        .padding(.vertical, 4)
-                        
-                        CheckBox(items: [CheckBoxOption(isChecked: false, uiCompOne: "bell.fill", uiCompTwo: "bell")])
-                            .imageScale(.large)
-                    } //Vstack
-                    .padding(.vertical, 4)//adding space after
-                    .frame(alignment: .trailing)
-                    
-                    
-                }//Hstack (outer)
-                .foregroundStyle(Color(.white))
-                .frame(width: UIScreen.main.bounds.width - 90)//the whole event card, WONT reach the edge of the screen
+            ZStack {
+                //groupbox tutorial:
                 /**
-                 source: https://stackoverflow.com/questions/69633018/how-do-i-extend-the-width-of-my-button-component-in-my-swiftui-view
+                 https://www.youtube.com/watch?v=NvE3SaGGurQ&ab_channel=SeanAllen
                  */
-            }//title group box
-            .foregroundStyle(Color(.container))
+                GroupBox { // the box that surrounds
+                    //filled with two VStacks that are horizontally aligned
+                    HStack(alignment: .center){ //for contents
+                        
+                        //Vstack contains the text of the event.
+                        VStack(alignment: .leading) {
+                            //event name, check if null
+                            if(event.event_name != nil){
+                                
+                                //because it's optional type, we have to use ! to
+                                //tell the code that we are SURE it exists
+                                //putting variable into strings is "\(variable)"
+                                Text("\(event.event_name!)")
+                                    .font(.headline) //determining font (make it big!)
+                                    .foregroundStyle(.textPrimary)//this color is defined in assets
+                                    .frame(alignment: .leading)//specifically adding leading alignment to get
+                            }//event name
+                            
+                            
+                            //Check if null
+                            if(!event.organizations!.isEmpty) {
+                                //join the array with a ", "
+                                Text("By \(event.organizations!.joined(separator: ", "))")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.textPrimary)
+                                //alternatives for colors
+                                    //.foregroundStyle(Color("textPrimary"))
+                                    // .foregroundStyle(Color.textPrimary)
+                            }//organizations
+                            
+                            //Check if null
+                            if(event.event_location != nil){
+                                Text(event.event_location!)
+                                    .foregroundStyle(.textPrimary)
+                                    .font(.caption)
+                            }
+                            
+                            
+                            //We want date and time on the same line, so we..
+                            if((event.event_date != nil) && (event.event_time != nil)){ //check if both are not nil, then..
+                                Text("\(event.event_date!) • \(event.event_time!)") //print out both strings and create a text bullet point inbetween the date and time
+                                    .font(.caption)
+                                    .foregroundStyle(.textPrimary)
+                            } else if(event.event_date != nil){//otherwise, we check if ONLY the date is not nil.
+                                Text("\(event.event_date!)") //print out date
+                                    .font(.caption)
+                                    .foregroundStyle(.textPrimary)
+                            } else if(event.event_time != nil){ //lastly, check if ONLY the time is not nil.
+                                Text("\(event.event_time!)")
+                                    .font(.caption)
+                                    .foregroundStyle(.textPrimary)
+                            }
+                            
+                            
+                            //Add description if our event is expanded
+                            if (isExpanded && event.event_description != nil){
+                                Text("\(event.event_description!)")
+                                    .font(.caption) //determining font (make it big!)
+                                    .foregroundStyle(.textPrimary)//this color is defined in assets
+                                    .frame(alignment: .leading)//specifically adding leading alignment to get
+                                    .lineLimit(1000, reservesSpace: false)
+                            }
+                          //Add event tags, checking both if expanded and event tags
+                            if(isExpanded && !event.tags!.isEmpty) {
+                                //join the array with a ", "
+                                Text("Tags: \(event.tags!.joined(separator: ", "))")
+                                    .font(.caption2)
+                                    .foregroundStyle(.textPrimary)
+                                    .lineLimit(1000, reservesSpace: false)
+                                //alternatives for colors
+                                    //.foregroundStyle(Color("textPrimary"))
+                                    // .foregroundStyle(Color.textPrimary)
+                            }//organizations
+                            
+                            
+                                
+                        }//Vstack text
+                        //if expanded, set line limit to max, and don't reserve space!
+                        .lineLimit(1, reservesSpace: true) //card wont change size thx to this.
+                        .padding(.leading, 8) //adding space before
+                        
+                        Spacer()//adding a spacer between the two Vstacks, takes up maximum space
+                        
+                        
+                        VStack {
+                            //component that can be reusable
+                            CheckBox(
+                                items: [CheckBoxOption(
+                                    isChecked: false,
+                                    uiCompOne: "heart.fill",
+                                    uiCompTwo: "heart",
+                                    fillColor: .border )]
+                            ) //checkbox
+                            .imageScale(.large)
+                            
+                            .padding(.vertical, 4)
+                            
+                            CheckBox(items: [CheckBoxOption(
+                                isChecked: false,
+                                uiCompOne: "bell.fill",
+                                uiCompTwo: "bell",
+                                fillColor: .border)])
+                                .imageScale(.large)
+                        } //Vstack
+                        .padding(.vertical, 4)//adding space after
+                        .frame(alignment: .trailing)
+                        
+                        
+                    }//Hstack (outer)
+                    .foregroundStyle(Color(.white))
+                    .frame(width: UIScreen.main.bounds.width - 90)//the whole event card, WONT reach the edge of the screen
+                    /**
+                     source: https://stackoverflow.com/questions/69633018/how-do-i-extend-the-width-of-my-button-component-in-my-swiftui-view
+                     */
+                }
+                .foregroundStyle(Color(.container))
+                .cornerRadius(20)//make the corner radius small enough
+                .overlay( /// apply a rounded border
+                    ///even if you use .border, it makes the border pointed.. so this is a bad part about swiftui
+                    RoundedRectangle(cornerRadius: 20)// apply curvature
+                        .stroke(.border, lineWidth: 1) //apply border and color and a thickness of 1
+                        .opacity(0.75) //change opacity of the the border to 0.75
+                )
+                    
+            }
+            
         }//Vstack
     }
 }
-    
     
 
 /**
@@ -217,3 +233,4 @@ struct EventCards_Previews: PreviewProvider {
         }
     }
 }
+

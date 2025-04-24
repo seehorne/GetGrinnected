@@ -40,6 +40,8 @@ import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
 import com.example.myapplication.SignupRequest
 import kotlinx.coroutines.launch
+import com.example.myapplication.AppRepository
+import com.example.myapplication.AccountEntity
 
 /**
  * A composable function that represents the email verification screen of our application.
@@ -138,6 +140,26 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                             // Assess if the request and creation of account was successful if so
                             // nav to main if not show signup failure.
                             //  if (response.isSuccessful && response.body()?.success == true) {
+                            // Creates a new accountEntity thus a new account to be added to our local repo
+                            val newAccount = AccountEntity(
+                                accountid = email.hashCode(), // this is just a temp id system for now till we get api stuff
+                                account_name = username,
+                                email = email,
+                                profile_picture = "", // Leaving this just in the event we decide to have profile pictures
+                                favorited_events = listOf(),
+                                drafted_events = listOf(),
+                                favorited_tags = listOf(),
+                                account_description = "",
+                                account_role = 0
+                            )
+
+                            // Upserts the account into the repo
+                            AppRepository.upsertAccount(newAccount)
+                            // Sets our current account from the given id
+                            AppRepository.setCurrentAccountById(newAccount.accountid)
+                            // Sets a persistent state for our logged in account via the id to reference else where in the app
+                            DataStoreSettings.setLoggedInAccountId(context, newAccount.accountid)
+
                             DataStoreSettings.setLoggedIn(context, true)
                             navController.navigate("main") {
                                 popUpTo(0) { inclusive = true }

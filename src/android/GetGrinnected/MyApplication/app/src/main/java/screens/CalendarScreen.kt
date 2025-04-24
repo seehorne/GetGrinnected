@@ -151,7 +151,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Co
                             expanded = expanded2.value,
                             onDismissRequest = { expanded2.value = false
                                 for (i in tags.indices){
-                                    if (tags[i].checked) {
+                                    if (tags[i].checked.value) {
                                         chosenTags.add(tags[i].label)
                                     }
                                 }
@@ -226,7 +226,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Co
                         )
                         // sorts by tags
                         for (i in tags.indices){
-                            if (tags[i].checked) {
+                            if (tags[i].checked.value) {
                                 chosenTags.add(tags[i].label)
                             }
                         }

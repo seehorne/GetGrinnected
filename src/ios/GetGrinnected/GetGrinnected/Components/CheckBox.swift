@@ -20,6 +20,7 @@ struct CheckBoxOption {
     var isChecked: Bool
     var uiCompOne: String
     var uiCompTwo: String
+    var fillColor: Color
 }
 
 struct CheckBox: View {
@@ -31,7 +32,7 @@ struct CheckBox: View {
             ForEach($items, id: \.name) { $item in
                 HStack {
                     Image(systemName: item.isChecked ? item.uiCompOne : item.uiCompTwo)
-                        .foregroundColor(item.isChecked ? .colorRed : Color(.gray))
+                        .foregroundColor(item.isChecked ? item.fillColor : Color(.gray))
                         .onTapGesture { // if image is tapped, toggle checkmark
                             item.isChecked.toggle()
                         }
@@ -49,6 +50,6 @@ struct CheckBox: View {
 } // CheckBox
 
 #Preview {
-    CheckBox(items: [CheckBoxOption(name: "Not checked", isChecked: false, uiCompOne: "checkmark.square.fill", uiCompTwo: "square"),
-                     CheckBoxOption(name: "Checked", isChecked: true, uiCompOne: "checkmark.square.fill", uiCompTwo: "square" )])
+    CheckBox(items: [CheckBoxOption(name: "Not checked", isChecked: false, uiCompOne: "checkmark.square.fill", uiCompTwo: "square", fillColor: .appRed),
+                     CheckBoxOption(name: "Checked", isChecked: true, uiCompOne: "checkmark.square.fill", uiCompTwo: "square", fillColor: .border)])
 }

@@ -26,6 +26,11 @@ node_modules
 .env
 
 #
+# VSCode
+#
+.vscode/**
+
+#
 # Things that should live exclusively server side
 #
 ./src/backend/event_data.json

@@ -55,9 +55,11 @@ fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
-    val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
+
+    var isFavorited = event.is_favorited
     // Boolean to track if card should cause notification
     val isNotification = remember(event.is_notification) { mutableStateOf(event.is_notification) }
+
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
@@ -72,13 +74,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
     }
     // Sets up composable to be a card for our info
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.primaryContainer),
         //elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
             .padding(horizontal = 8.dp)
-            .background(Color.White)
-            .border(2.dp, Color.Black)
+            .background(color = colorScheme.primaryContainer)
+            .border(2.dp, color = colorScheme.primary)
             .clickable
         {
                 expanded.value = !expanded.value
@@ -125,6 +127,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
                             color = colorScheme.onSurface)
                     }
                 }
+                
                 // this is the Column for icons
                 Column {
                     // This is our favorite icon
@@ -159,6 +162,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
                             },
                     )
                 }
+
             }
             // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {

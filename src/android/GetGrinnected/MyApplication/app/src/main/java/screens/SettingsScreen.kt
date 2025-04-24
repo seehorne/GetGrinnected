@@ -28,6 +28,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,11 +41,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.AppRepository
 import com.example.myapplication.DataStoreSettings
 import com.example.myapplication.OrgCard
 import com.example.myapplication.R
 import com.example.myapplication.User
 import kotlinx.coroutines.launch
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.OutlinedTextField
+import com.example.myapplication.toAccountEntity
 
 /**
  * A composable function that represents the Settings screen of our app.
@@ -79,6 +86,13 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     val context = LocalContext.current
     // Used to launch background tasks and processes
     val coroutineScope = rememberCoroutineScope()
+
+    // Boolean associated with whether the editing for the username needs to display or not
+    var showEditDialog by remember { mutableStateOf(false) }
+    // String associated with storing and changing the username of an account when we edit
+    var newUsername by remember { mutableStateOf(account.account_name) }
+
+    var usernameError by remember { mutableStateOf<String?>(null) }
 
     // Sets up our ui to follow a box layout
     Box(modifier = modifier.fillMaxSize()) {
@@ -171,7 +185,9 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 )
 
                 // Button to edit the username
-                IconButton(onClick = { /* TODO handle username edit */ }) {
+                IconButton(onClick = {
+                    newUsername = account.account_name
+                    showEditDialog = true }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit Username",
@@ -179,6 +195,69 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         tint = colorScheme.primary
                     )
                 }
+            }
+
+            // We check to see if showEdit dialog is set to true and if it is we display the editing username
+            if (showEditDialog) {
+                AlertDialog(
+                    // When we dismiss with our dismiss button we set our show boolean to false
+                    onDismissRequest = { showEditDialog = false },
+                    title = { Text("Edit Username", color = colorScheme.onBackground, style = typography.titleLarge) },
+                    text = {
+                        Column{
+                            // Makes the text field to enter the input
+                            OutlinedTextField(
+                                value = newUsername,
+                                onValueChange = {
+                                    newUsername = it
+                                    // Check that the username is valid
+                                    usernameError = validateUsername(it)
+                                },
+                                singleLine = true,
+                                isError = usernameError != null,
+                                label = {
+                                    Text("Username",
+                                        color = colorScheme.onBackground,
+                                        style = typography.labelLarge)
+                                }
+                            )
+                            // If we have a validation issue with username we display the issue with
+                            // the associated error
+                            if (usernameError != null) {
+                                Text(text = usernameError ?: "",
+                                    color = colorScheme.error,
+                                    style = typography.bodySmall)
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        // Button to save the edited username
+                        TextButton(onClick = {
+                            coroutineScope.launch {
+                                // Makes a new account entity with the new name
+                                val updatedAccount = account.copy(account_name = newUsername)
+                                // Upserts ie updates the account name
+                                AppRepository.upsertAccount(updatedAccount.toAccountEntity())
+                                // Sets our current active account to the given account
+                                AppRepository.setCurrentAccountById(updatedAccount.accountid)
+                                // Closes the editing dialog
+                                showEditDialog = false
+                            }
+                        },
+                            // If username is valid the button will be enabled otherwise it will be disabled
+                            enabled = usernameError == null) {
+                            Text("Save", color = colorScheme.primary, style = typography.labelLarge)
+                        }
+                    },
+                    dismissButton = {
+                        // This is our button to cancel the editing to the username
+                        TextButton(onClick = {
+                            showEditDialog = false
+                        }) {
+                            Text("Cancel", color = colorScheme.primary, style = typography.labelLarge)
+                        }
+                    }
+                )
             }
 
             Spacer(modifier = modifier.height(8.dp))
@@ -210,6 +289,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 onClick = {  // Sets our logged in state to false
                     coroutineScope.launch{
                         DataStoreSettings.setLoggedIn(context, false)
+                        DataStoreSettings.setLoggedInAccountId(context, 0)
+                        // 0 will be our effective null state of account since no account will have accountID 0
                     }
                     navController.navigate("welcome"){ // takes us to the welcome screen
                         popUpTo(0){inclusive = true} // pops the back stack
