@@ -12,10 +12,10 @@ class NotificationHandler(private val context: Context) {
     private val notificationChannelID = "notification_channel_id"
 
     // SIMPLE NOTIFICATION
-    fun showSimpleNotification() {
+    fun showSimpleNotification(event: Event) {
         val notification = NotificationCompat.Builder(context, notificationChannelID)
-            .setContentTitle("Simple Notification")
-            .setContentText("Message or text with notification")
+            .setContentTitle(event.event_name)
+            .setContentText(event.event_time)
             .setSmallIcon(R.drawable.gg_logo_2)
             .setPriority(NotificationManager.IMPORTANCE_HIGH)
             .setAutoCancel(true)
