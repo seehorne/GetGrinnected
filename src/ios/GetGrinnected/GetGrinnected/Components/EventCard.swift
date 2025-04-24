@@ -45,7 +45,7 @@ import SwiftUI
 struct EventCard: View {
     
     //Event is the struct we defined in "Event" file, stores all information of JSON
-    let event: Event
+    let event: EventModel
     let isExpanded: Bool//The single card does not need a @binding or @state tag
     //simply based on this value, the expansion will show and not.
     
@@ -73,12 +73,12 @@ struct EventCard: View {
                         //Vstack contains the text of the event.
                         VStack(alignment: .leading) {
                             //event name, check if null
-                            if(event.event_name != nil){
+                            if(event.name != nil){
                                 
                                 //because it's optional type, we have to use ! to
                                 //tell the code that we are SURE it exists
                                 //putting variable into strings is "\(variable)"
-                                Text("\(event.event_name!)")
+                                Text("\(event.name!)")
                                     .font(.headline) //determining font (make it big!)
                                     .foregroundStyle(.textPrimary)//this color is defined in assets
                                     .frame(alignment: .leading)//specifically adding leading alignment to get
@@ -97,24 +97,27 @@ struct EventCard: View {
                             }//organizations
                             
                             //Check if null
-                            if(event.event_location != nil){
+                            if(event.location != nil){
                                 Text(event.event_location!)
                                     .foregroundStyle(.textPrimary)
                                     .font(.caption)
                             }
                             
                             
+                            /**
+                             MUST CHANGE STARTTIME IN EVENTMODEL TO INCLUDE DATE
+                             */
                             //We want date and time on the same line, so we..
-                            if((event.event_date != nil) && (event.event_time != nil)){ //check if both are not nil, then..
-                                Text("\(event.event_date!) • \(event.event_time!)") //print out both strings and create a text bullet point inbetween the date and time
+                            if((event.date != nil) && (event.startTime != nil)){ //check if both are not nil, then..
+                                Text("\(event.date!) • \(event.startTime!)") //print out both strings and create a text bullet point inbetween the date and time
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
-                            } else if(event.event_date != nil){//otherwise, we check if ONLY the date is not nil.
-                                Text("\(event.event_date!)") //print out date
+                            } else if(event.date != nil){//otherwise, we check if ONLY the date is not nil.
+                                Text("\(event.date!)") //print out date
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
-                            } else if(event.event_time != nil){ //lastly, check if ONLY the time is not nil.
-                                Text("\(event.event_time!)")
+                            } else if(event.startTime != nil){ //lastly, check if ONLY the time is not nil.
+                                Text("\(event.startTime!)")
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
                             }

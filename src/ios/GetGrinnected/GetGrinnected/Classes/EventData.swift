@@ -64,7 +64,7 @@ class EventData{
         
         do {
             // Attempt to decode the JSON data into an Event object
-            let myEventData = try decoder.decode(Event.self, from: data)
+            let myEventData = try decoder.decode(EventDTO.self, from: data)
             if(myEventData.event_name != nil){
                 print("Successfully decoded event: \(myEventData.event_name!)")
             }
@@ -81,7 +81,7 @@ class EventData{
      parses all events in the string, and returns an array of Events.
      This can be then turned into UI components using the EventCards function
      */
-    static func parseEvents(json: String) -> [Event] {
+    static func parseEvents(json: String) -> [EventDTO] {
         
         // Convert string to data
         guard let data = json.data(using: .utf8) else {
@@ -92,7 +92,7 @@ class EventData{
         
         do {
             // Decode to Events struct which contains an array of Event
-            let events = try decoder.decode([Event].self, from: data)
+            let events = try decoder.decode([EventDTO].self, from: data)
             print("Successfully decoded \(events.count) events")
             return events
         } catch{
