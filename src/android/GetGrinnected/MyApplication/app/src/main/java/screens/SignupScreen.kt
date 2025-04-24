@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -38,10 +37,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
-import com.example.myapplication.DataStoreSettings
+import com.example.myapplication.SignupRequest
 import kotlinx.coroutines.launch
 
 /**
@@ -204,22 +202,21 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                         isLoading = true // Set loading state to true to disable the button
                         try {
                             // Makes the api email request check
-                            //   val emailReponse = RetrofitApiClient.apiModel.checkemail(
-                            //     EmailRequest(email)
-                            // )
+                            val response = RetrofitApiClient.apiModel.signup(
+                                SignupRequest(username = username, email = email)
+                            )
                             // Assess if the request and if the email was available
-                            // if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
-                            // TODO SEND EMAIL HERE
+                            if (response.isSuccessful) {
                             // Sets our logged in state to true
                             navController.navigate("verification/${email}/${signUp}/${username}") {
                                 popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
                             }
-                            // } else {
-                            //   errMsg = emailReponse.body()?.message ?: "Email already in use"
-                            // }
-                            // } catch(e: Exception) { // Handles network errors that way arise when making the api call
-                            //   errMsg = "Network error: ${e.localizedMessage}"
+                            } else {
+                              errMsg = response.errorBody()?.string() ?: "Signup failed"
+                            }
+                            } catch(e: Exception) { // Handles network errors that way arise when making the api call
+                               errMsg = "Network error: ${e.localizedMessage}"
                         } finally { // Set loading state to false to reenable the button
                             isLoading = false
                         }
@@ -251,7 +248,6 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         }
     }
 }
-
 /**
  * Validates an email ends in @grinnell.edu
  * @param email takes in a String representation of an email
@@ -262,7 +258,6 @@ fun validateEmail(email: String): String? {
     if (!email.endsWith("@grinnell.edu")) return "Email must end with @grinnell.edu"
     return null
 }
-
 
 @Preview(showBackground = true)
 @Composable
