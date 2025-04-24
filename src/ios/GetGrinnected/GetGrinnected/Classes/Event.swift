@@ -24,6 +24,7 @@ struct Event: Codable {
     var event_all_day: Int?
     var event_start_time: String?
     var useful_event_start_time: Date? {
+        // format start time into a date for better use
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -31,12 +32,30 @@ struct Event: Codable {
     } // referenced from https://stackoverflow.com/questions/36861732/convert-string-to-date-in-swift
     var event_end_time: String?
     var useful_event_end_time: Date? {
+        // format end time into a date for better use
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         return dateFormatter.date(from:event_end_time!)!
     }
     var tags: [String]?
+    var useful_tags: Set<EventTags>? {
+        // turn the string from the tags into enum
+        var set: Set<EventTags> = []
+        if tags != nil {
+            // look at each tag in tags
+            for tag in tags! {
+                // compare to each tag enum
+                for tagEnum in EventTags.allCases {
+                    // check if they are equal
+                    if tag == tagEnum.rawValue {
+                        set.insert(tagEnum)
+                    } //if
+                } //for
+            } //for
+        } //if
+        return set
+    }
     var event_private: Int?
     var repeats: Int?
     var event_image: String?

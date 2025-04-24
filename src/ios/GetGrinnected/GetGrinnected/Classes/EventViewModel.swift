@@ -100,8 +100,11 @@ class EventViewModel: ObservableObject {
             // filter based on if an event has a selected tag
             viewedEvents = events.filter { event in
                 // check the event has tags
-                if event.tags != nil && !event.tags!.isEmpty {
-                    
+                if event.useful_tags != nil && !event.useful_tags!.isEmpty {
+                    // check if the event has any of the selected tags
+                    if selectedTags.isSubset(of: event.useful_tags!) {
+                        return true
+                    }
                 } //if
                 return false
             } //filter
