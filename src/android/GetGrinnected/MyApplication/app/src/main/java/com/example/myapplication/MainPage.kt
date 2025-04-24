@@ -49,7 +49,7 @@ fun MainPage(
     onToggleTheme: (Boolean) -> Unit,
     tags: List<Check>,
     navController: NavController,
-    context: Context
+    context: Context,
     account: AccountEntity
 ) {
     // Creates our navbar

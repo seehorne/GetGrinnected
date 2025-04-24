@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +39,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 /**
  * A composable function that creates the general look of an event card.
@@ -49,6 +50,7 @@ import android.content.Context
  * @param modifier Modifier to be applied to the card layout.
  */
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
@@ -56,7 +58,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier, context: Context) {
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
 
-    var isFavorited = event.is_favorited
+    val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
     // Boolean to track if card should cause notification
     val isNotification = remember(event.is_notification) { mutableStateOf(event.is_notification) }
 

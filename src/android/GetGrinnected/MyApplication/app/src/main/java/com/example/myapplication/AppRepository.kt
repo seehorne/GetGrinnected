@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+//import com.example.myapplication.AppRepository.toUser
 
 /**
  * This is our App Repository it is a singleton object so that we can access tables seamlessly through
@@ -115,6 +116,7 @@ object AppRepository {
     // 
     suspend fun toggleNotification(eventId: Int, isNotification: Boolean) {
         dao.updateNotificationStatus(eventId, isNotification)
+    }
 
     /**
      * Function to set our account Id of the current active account of the user
@@ -196,7 +198,7 @@ fun AccountEntity.toUser(): User = User(
     favorited_tags = this.favorited_tags,
     account_description = this.account_description,
     account_role = this.account_role,
-    is_followed = this.is_followed
+    is_followed = this.is_followed,
 )
 
 /**
@@ -212,5 +214,5 @@ fun User.toAccountEntity(): AccountEntity = AccountEntity(
     favorited_tags = this.favorited_tags,
     account_description = this.account_description,
     account_role = this.account_role,
-    is_followed = this.is_followed
+    is_followed = this.is_followed,
 )

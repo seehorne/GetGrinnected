@@ -48,6 +48,7 @@ import java.util.Locale
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 import android.content.Context
+import androidx.annotation.RequiresApi
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -56,7 +57,7 @@ import android.content.Context
  *
  */
 
-@RequiresApi1(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun HomeScreen(tags: List<Check>, context: Context) {
     // remembers what page the app is on
@@ -114,7 +115,7 @@ fun HomeScreen(tags: List<Check>, context: Context) {
 
         val chosenTags = mutableListOf<String>()
         for (i in tags.indices){
-            if (tags[i].checked) {
+            if (tags[i].checked.value) {
                 chosenTags.add(tags[i].label)
             }
         }
