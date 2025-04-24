@@ -85,6 +85,8 @@ describe('Test API', () => {
                     return 'getEventsBetweenWithTags';
                 }
             );
+
+            console.log(`here is one of my env items, MYSQL_HOST: ${process.env.MYSQL_HOST}`)
         });
 
         it('should call getEventsBetween when no tags are provided', async () => {
@@ -161,18 +163,6 @@ describe('Test API', () => {
         });
 
     });
-
-    /*
-    describe('GET /events/between', () => {
-
-    });
-
-    todo: between valid dates, assuming that parseParamDate already works
-
-    make sure to try invalid start + end dates to show you get the right errr
-
-    do also dates in the wrong order, also to get the right err
-    */
 });
 
 

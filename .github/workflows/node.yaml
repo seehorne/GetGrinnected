@@ -23,10 +23,45 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
+    - name: Shut down default MySQL
+      run: sudo service mysql stop
+
+    - name: Set up custom MySQL
+      uses: mirromutth/mysql-action@v1.1
+      with:
+        character set server: 'utf8mb3'
+        collation server: 'utf8mb4_unicode_ci'
+        mysql version: '9.2'
+        mysql database: 'GetGrinnected'
+        mysql root password: ${{ secrets.MYSQL_CI_ROOT_PASSWORD }}
+
+    - name: Initialize mysql database from CI file
+      # This will warn us not to use a secret on the command line,
+      # but it's fine because this db doesn't store anything real
+      run: |
+        mysql -uroot -p${{ secrets.MYSQL_CI_ROOT_PASSWORD }} GetGrinnected < \
+        ${GITHUB_WORKSPACE}/src/backend/Database/GetGrinnected_CI_Data.sql
+
     - name: Test with npm
       uses: actions/setup-node@v4
       with:
         node-version: 22.x
         cache: 'npm'
-    - run: npm ci
-    - run: npm test
+
+    - name: Fresh-install packages
+      run: npm ci
+
+    - name: Run tests
+      run: npm test
+      # set the env so it runs correctly, this replaces a .env file
+      env:
+        # secrets for JWT tokens only they're not very secret because they
+        # are only for CI
+        REFRESH_TOKEN_SECRET: "test_test_test_test_test_test_te"
+        ACCESS_TOKEN_SECRET: "ci_ci_ci_ci_ci_ci_ci_ci_ci_ci_ci"
+        # connection to the database
+        MYSQL_HOST: localhost
+        MYSQL_USER: root
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_CI_ROOT_PASSWORD }}
+        MYSQL_DATABASE: GetGrinnected
