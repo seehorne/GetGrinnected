@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
-
+const SALT_ROUNDS = 10;
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
 const { sendCode } = require('../../one_time_code.cjs')
