@@ -19,13 +19,9 @@ struct CalendarView: View {
         //geomtry view to have header
         GeometryReader{proxy in
             //no safe area so the header goes all the way to the top
-            let safeAreaTop = proxy.safeAreaInsets.top
             //vstack of header and events
             NavigationStack{
                 VStack(){
-                    // Header is outside of scrollable so it does not move
-                    Header(safeAreaTop, title: "Calendar")
-                    
                     Spacer()
                     
                     //vertical scroll view to see more events
@@ -38,18 +34,21 @@ struct CalendarView: View {
                             
                             WeekView(selectedDate: $viewModel.viewedDate)
                                 .padding(.bottom, 4)
+                                .padding(.top, 120)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
                             EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText)
-                                .searchable(text: $searchText)
                         }
                         .padding(.top)//padding on top
                         
                     }
+                    .searchable(text: $searchText, placement: .toolbar)
                     
                 }//scroll view
                 .edgesIgnoringSafeArea(.top)
             }
+            .navigationTitle("Calendar")
+            .headerProminence(.increased)
             
         }//geometry reader
         // if the viewedDate changes update timeSpan
