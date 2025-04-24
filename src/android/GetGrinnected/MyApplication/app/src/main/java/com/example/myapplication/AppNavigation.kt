@@ -13,6 +13,7 @@ import screens.EmailVerificationScreen
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
+import android.content.Context
 
 /**
  * A composable function that is utilized for smooth navigation through login/signup process
@@ -30,7 +31,7 @@ fun AppNavigation(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     startDestination: String,
-    tags: List<Check>,
+    tags: List<Check>
   // This handles our navigation system with a nav controller
 ){
 

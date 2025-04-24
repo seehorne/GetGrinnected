@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+//import com.example.myapplication.AppRepository.toUser
 
 /**
  * This is our App Repository it is a singleton object so that we can access tables seamlessly through
@@ -108,6 +109,16 @@ object AppRepository {
     }
 
     /**
+     * Function to toggle notification state, used when user wants a notification for an event.
+     * @param eventId id of the event to be toggled
+     * @param isNotifications a boolean associated with whether the event should notify
+     */
+    // 
+    suspend fun toggleNotification(eventId: Int, isNotification: Boolean) {
+        dao.updateNotificationStatus(eventId, isNotification)
+    }
+
+    /**
      * Function to set our account Id of the current active account of the user
      * @param accountId id of the account we are setting our active account to
      */
@@ -122,6 +133,7 @@ object AppRepository {
      */
     suspend fun upsertAccount(account: AccountEntity) {
         dao.upsertAccount(account)
+
     }
 }
 
@@ -138,14 +150,15 @@ fun Event.toEventEntity(): EventEntity = EventEntity(
     event_date = this.event_date?: "",
     event_time = this.event_time?: "",
     event_all_day = this.event_all_day,
-    event_start_time = this.event_start_time?: "",
-    event_end_time = this.event_end_time?: "",
+    event_start_time = this.event_start_time,
+    event_end_time = this.event_end_time,
     tags = this.tags,
     event_private = this.event_private,
     repeats = this.repeats,
     event_image = this.event_image ?: "",
     is_draft = this.is_draft,
-    is_favorited = this.is_favorited
+    is_favorited = this.is_favorited,
+    is_notification = this.is_notification
 )
 
 /**
@@ -168,7 +181,8 @@ fun EventEntity.toEvent(): Event = Event(
     repeats = this.repeats,
     event_image = this.event_image,
     is_draft = this.is_draft,
-    is_favorited = this.is_favorited
+    is_favorited = this.is_favorited,
+    is_notification = this.is_notification
 )
 
 /**
@@ -184,7 +198,7 @@ fun AccountEntity.toUser(): User = User(
     favorited_tags = this.favorited_tags,
     account_description = this.account_description,
     account_role = this.account_role,
-    is_followed = this.is_followed
+    is_followed = this.is_followed,
 )
 
 /**
@@ -200,5 +214,5 @@ fun User.toAccountEntity(): AccountEntity = AccountEntity(
     favorited_tags = this.favorited_tags,
     account_description = this.account_description,
     account_role = this.account_role,
-    is_followed = this.is_followed
+    is_followed = this.is_followed,
 )

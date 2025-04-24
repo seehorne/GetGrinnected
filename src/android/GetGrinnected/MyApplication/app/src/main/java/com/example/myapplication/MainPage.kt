@@ -25,6 +25,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import android.content.Context
+
 
 /**
  * A composable function that displays the main page of the app with a bottom navbar.
@@ -107,8 +109,10 @@ fun MainPage(
 
             composable("Calendar") { CalendarScreen(tags = tags) }
 
+
             composable("Favorites") { FavoritesScreen() }
             composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
+
         }
     }
 }
