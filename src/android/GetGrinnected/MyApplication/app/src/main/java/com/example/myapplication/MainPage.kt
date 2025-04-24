@@ -46,7 +46,8 @@ fun MainPage(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     tags: List<Check>,
-    navController: NavController
+    navController: NavController,
+    account: AccountEntity
 ) {
     // Creates our navbar
     val bottomNavController = rememberNavController()
@@ -107,7 +108,7 @@ fun MainPage(
             composable("Calendar") { CalendarScreen(tags = tags) }
 
             composable("Favorites") { FavoritesScreen() }
-            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
+            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
         }
     }
 }

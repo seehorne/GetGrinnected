@@ -7,6 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.myapplication.AccountEntity
 import com.example.myapplication.AppNavigation
 import com.example.myapplication.Check
 import com.example.myapplication.MainPage
@@ -122,9 +123,20 @@ class MainActivityKtTest {
 
   composeTestRule.setContent {
    MainPage(
-       darkTheme = false, onToggleTheme = {},
+       darkTheme = false,
+       onToggleTheme = {},
        tags = mutableListOf<Check>(),
-       navController = rememberNavController()
+       navController = rememberNavController(),
+       account = AccountEntity(accountid = 1,
+      account_name = "Test",
+      email = "",
+      profile_picture = "",
+      favorited_events = emptyList(),
+      drafted_events = emptyList(),
+      favorited_tags = emptyList(),
+      account_description = "",
+      account_role = 0,
+      is_followed = false)
    )
   }
 

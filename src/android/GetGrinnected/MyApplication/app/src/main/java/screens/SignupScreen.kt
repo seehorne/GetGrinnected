@@ -187,12 +187,12 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
                         // Checks the validation conditions
                         val emailError = validateEmail(email)
-                        val missingUsername = username.isBlank()
+                        val usernameError = validateUsername(username)
 
-                        if (missingUsername) {
-                            errMsg = "Please enter username"
+                        if (usernameError != null) {
+                            errMsg = usernameError
                             errUsername = true
-                            return@launch // Escapes launch due to missing username
+                            return@launch // Escapes launch due to invalid username
                         }
 
                         if (emailError != null) {
@@ -268,4 +268,38 @@ fun validateEmail(email: String): String? {
 @Composable
 fun SignupScreenPreview(){
     SignupScreen(modifier = Modifier, navController = rememberNavController())
+}
+
+/**
+ * Validates username meets our general requirements (see docs)
+ * @param username is the username to be validated
+ * @return either null if we pass validation or a string reporting the associated error
+ */
+fun validateUsername(username: String): String? {
+    // Set of allowed characters Alphabetical and periods and underscores
+    val allowedChars = Regex("^[a-zA-Z._]+$")
+    // If the username contains characters that aren't allowed we display the following error
+    if (!allowedChars.matches(username)) {
+        return "Username can only include letters, '.', and '_'"
+    }
+    // If username has consecutive periods return the following error
+    if (username.contains("..")) return "Username cannot contain two or more '.' in a row"
+    // If username has consecutive underscores return the following error
+    if (username.contains("__")) return "Username cannot contain two or more '_' in a row"
+    // If username has a period followed by an underscore return the following error
+    if (username.contains("._")) return "Username cannot contain a '.' followed by a '_'"
+    // If username has an underscore followed by a period return the following error
+    if (username.contains("_.") && !username.contains("._")) return "Username cannot contain a '_' followed by a '.'"
+    // If username starts with a period or underscore return the following error
+    if (username.startsWith(".") || username.startsWith("_")) {
+        return "Username cannot start with '.' or '_'"
+    }
+    // If username ends with a period or underscore return the following error
+    if (username.endsWith(".") || username.endsWith("_")) {
+        return "Username cannot end with '.' or '_'"
+    }
+    // If username is not at least 8 characters long return the following error
+    if (username.length < 8) return "Username must be at least 8 characters long"
+
+    return null // means we passed validation
 }
