@@ -46,12 +46,11 @@ fun MainPage(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     tags: List<Check>,
-    navController: NavController
+    navController: NavController,
+    account: AccountEntity
 ) {
     // Creates our navbar
     val bottomNavController = rememberNavController()
-    // Gets current active account from App Repository
-    val account = AppRepository.currentAccount.value
 
     // Creates a list of navItems including a name and an icon associated to display on the navbar
     val navItemList = listOf(
@@ -109,12 +108,7 @@ fun MainPage(
             composable("Calendar") { CalendarScreen(tags = tags) }
 
             composable("Favorites") { FavoritesScreen() }
-            composable("Settings") {
-                // Makes sure account is not null just since it could be to start as someone who hasn't logged in
-                if (account != null) {
-                    SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController )
-                }
-            }
+            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
         }
     }
 }
