@@ -8,19 +8,21 @@ const CLOSEFILE = '\n]\n}'
 const OPENFILE = '{\n\"data\" : [\n'
 
 function removeHTMLRelics(input, isArray){
-  if (isArray){
+  if (isArray){//go through the array if input is an array
     num_elements = input.length;
     for (let i = 0; i <  num_elements; i++) {
-      currentString = input[i].replace(/&amp;/g, "&");
-      currentString = currentString.replace(/&#160/g, " ");
+      currentString = input[i].replace(/&amp;/g, "&");//replace HTML ampersand with ampersand
+      currentString = currentString.replace(/&#160/g, " ");//replace HTML nonbreaking space with space
+      //capitalize first letter
       finalString = String(currentString).charAt(0).toUpperCase() + String(currentString).slice(1)
       input[i] = finalString
     }
     return input;
   }
-  else{
-    input = input.replace(/&amp;/g, "&");
-    input = input.replace(/&#160/g, " ");
+  else{//otherwise its just a string so treat it like one
+    input = input.replace(/&amp;/g, "&"); //replace HTML ampersand with ampersand
+    input = input.replace(/&#160/g, " ");//replace HTML nonbreaking space with space
+    //capitalize first letter
     inputCaps = String(input).charAt(0).toUpperCase() + String(input).slice(1);
     return inputCaps;
   }
