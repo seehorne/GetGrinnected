@@ -69,10 +69,13 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Co
     val event = eventEntities.map { it.toEvent() }
     // Sorts them by time
     event.sortedBy { it.event_time }
+    // grabs devices current date
     val date = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("MM")
     val currentMonth = date.format(formatter).toString()
+    // grabs selected tags
     val chosenTags = mutableListOf<String>()
+    // tracks what day we are on
     var selectedView by remember { mutableIntStateOf(2) }
     // tracks dropdowns based on buttons
     val expanded = remember { mutableStateOf(false) }
@@ -87,9 +90,9 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Co
     // background color for the page
     val gradient =
         Brush.verticalGradient(
-            listOf(Color.Red, Color.Blue, Color.Green),
+            listOf(Color.Blue, Color.Magenta, Color.Cyan),
             0.0f,
-            10000.0f,
+            5000.0f,
             TileMode.Repeated
         )
     // sets the month based on devices local date
@@ -115,9 +118,9 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier, context: Co
             postNotificationPermission.launchPermissionRequest()
         }
     }
-
+    // sets the background for the page for us to build our other elements on
     Column(modifier = modifier.fillMaxSize().background(gradient)) {
-        Box(modifier = modifier.background(Color.Black).size(width = 450.dp, height = 100.dp)) {
+        Box(modifier = modifier.background(Color.Black).fillMaxWidth().size(100.dp)) {
             Row{
                 // adds the logo to the top
                 Image(
@@ -251,8 +254,11 @@ fun createCalendarList(event: List<Event>, tags: List<String>, month: String): L
     val currentDay = mutableListOf<Event>()
     // sorts events
     for(i in 1 .. 31){
+        // checks each event
         for(j in event.indices){
+            // checks if tags are selected
             if (tags.isEmpty()) {
+                // checks event is the correct day and the correct month
                 if (event[j].event_start_time.substring(8, 10) == i.toString()
                     && event[j].event_start_time.substring(5, 7) == month
                 ) {
@@ -261,13 +267,13 @@ fun createCalendarList(event: List<Event>, tags: List<String>, month: String): L
             }
             else {
                 for(t in tags.indices){
-                if(event[j].event_start_time.substring(8, 10) == i.toString()
-                    && event[j].event_start_time.substring(5, 7) == month
-                    && event[j].tags.contains(tags[t]))
-                     {
-                        currentDay.add(event[j])
-                        break
-                    }
+                    // checks event is the correct day and the correct month
+                    if(event[j].event_start_time.substring(8, 10) == i.toString()
+                        && event[j].event_start_time.substring(5, 7) == month
+                        && event[j].tags.contains(tags[t])) {
+                            currentDay.add(event[j])
+                            break
+                        }
                 }
             }
 
