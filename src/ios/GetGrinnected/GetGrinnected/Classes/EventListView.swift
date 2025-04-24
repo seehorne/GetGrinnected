@@ -22,8 +22,6 @@ struct EventListView: View {
     @State var selectedEvent: Int? //An integer to represent which event we select
     // the parent model used for updating our event list
     @ObservedObject var parentView: EventListParentViewModel
-    // The tags we want the events we see to have
-    // @Binding var tags: Set<EventTags>?
     
     
     var body: some View {

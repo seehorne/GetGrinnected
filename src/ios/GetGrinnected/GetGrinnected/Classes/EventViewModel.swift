@@ -93,4 +93,18 @@ class EventViewModel: ObservableObject {
            return false
        } //filter
    }
+    
+    func filterEventsBySelectedTags(selectedTags: Set<EventTags>) {
+        // check if there are any tags
+        if !selectedTags.isEmpty {
+            // filter based on if an event has a selected tag
+            viewedEvents = events.filter { event in
+                // check the event has tags
+                if event.tags != nil && !event.tags!.isEmpty {
+                    
+                } //if
+                return false
+            } //filter
+        } //if
+    }
 }
