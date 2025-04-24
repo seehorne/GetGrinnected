@@ -7,12 +7,20 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
+
+
 /**
  Class for creating a new user profile. For now, we will keep isPowerUser and isAdmin both false.
  New userProfile created only in SIGNUP
+ 
+ A SwiftData file that saves data of the user, SECURELY..
  */
 
-class UserProfile: ObservableObject {
+//add model attribute to make it persistent.
+//for now no model
+//@Model
+final class UserProfile: ObservableObject {
     //set email and set password after validating them
     @Published private(set) var emailText = ""
     
@@ -21,14 +29,23 @@ class UserProfile: ObservableObject {
     @Published private(set) var usernameText = ""
     
     
-    //private storage for password
-    private var _password: String = ""
+    //basic initializer, temporary placeholder for now, no model
+//    init(emailText: String = "", isPasswordValid: Bool, usernameText: String = "", isPowerUser: Bool = false, isAdmin: Bool = false) {
+//        self.emailText = emailText
+//        self.isPasswordValid = isPasswordValid
+//        self.usernameText = usernameText
+//        self.isPowerUser = isPowerUser
+//        self.isAdmin = isAdmin
+//    }
     
     
     //For now, we do not need this but I have this here just in case.
     //these could also inherit from this class, but for now there's no need.
     private var isPowerUser = false
     private var isAdmin = false
+    
+    //initialize password
+    private var _password = ""
     
     /**Setters*/
     
@@ -46,6 +63,7 @@ class UserProfile: ObservableObject {
     func setUsername(_ newUsername: String){
         usernameText = newUsername
     }
+    
     
     func setPassword(_ newPassword: String) -> Bool {
         if validatePassword(newPassword){
@@ -78,9 +96,4 @@ class UserProfile: ObservableObject {
 
 
 }
-
-
-let exampleUser = UserProfile()
-let emailSuccess = exampleUser.setEmail("thijmbud@grinnell.edu")
-let passwordSuccess = exampleUser.setPassword("Password123")
 
