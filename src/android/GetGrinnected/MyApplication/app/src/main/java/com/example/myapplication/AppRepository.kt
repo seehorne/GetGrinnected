@@ -186,3 +186,19 @@ fun AccountEntity.toUser(): User = User(
     account_role = this.account_role,
     is_followed = this.is_followed
 )
+
+/**
+ * Used to convert a User to an accountEntity
+ */
+fun User.toAccountEntity(): AccountEntity = AccountEntity(
+    accountid = this.accountid,
+    account_name = this.account_name,
+    email = this.email,
+    profile_picture = this.profile_picture,
+    favorited_events = this.favorited_events,
+    drafted_events = this.drafted_events,
+    favorited_tags = this.favorited_tags,
+    account_description = this.account_description,
+    account_role = this.account_role,
+    is_followed = this.is_followed
+)
