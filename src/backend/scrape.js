@@ -7,6 +7,25 @@ const DROPPATH = './src/backend/drop_ids.json'
 const CLOSEFILE = '\n]\n}'
 const OPENFILE = '{\n\"data\" : [\n'
 
+function removeHTMLRelics(input, isArray){
+  if (isArray){
+    num_elements = input.length;
+    for (let i = 0; i <  num_elements; i++) {
+      currentString = input[i].replace(/&amp;/g, "&");
+      currentString = currentString.replace(/&#160/g, " ");
+      finalString = String(currentString).charAt(0).toUpperCase() + String(currentString).slice(1)
+      input[i] = finalString
+    }
+    return input;
+  }
+  else{
+    input = input.replace(/&amp;/g, "&");
+    input = input.replace(/&#160/g, " ");
+    inputCaps = String(input).charAt(0).toUpperCase() + String(input).slice(1);
+    return inputCaps;
+  }
+}
+
 /**
  * processExisting
  * 
@@ -92,6 +111,9 @@ async function scrapePage(url, path, existingIDs, firstEvent) {
         existingIDs.add(event.id); //add id to list
         eventInfo = {}; //make dictionary to JSONify event
         eventInfo["Title"] = event.title;
+        if (eventInfo.Title != null){
+          eventInfo["Title"] = removeHTMLRelics(eventInfo.Title, false);
+        }
         eventInfo["Date"] = event.date;
         eventInfo["Time"] = event.date_time;
         eventInfo["StartTimeISO"]= event.date_iso;
@@ -105,10 +127,25 @@ async function scrapePage(url, path, existingIDs, firstEvent) {
           eventInfo["AllDay?"] = false;
         }
         eventInfo["Location"] = event.location;
+        if (eventInfo.Location != null){
+          eventInfo["Location"] = removeHTMLRelics(eventInfo.Location, false);
+        }
         eventInfo["Description"] = event.description ? event.description.replace(/<[^>]+>/g, '') : 'No description available';
+        if (eventInfo.Description != null){
+          eventInfo["Description"] = removeHTMLRelics(eventInfo.Description, false);
+        }
         eventInfo["Audience"] = event.event_types_audience;
+        if (eventInfo.Audience != null){
+          eventInfo["Audience"] = removeHTMLRelics(eventInfo.Audience, true);
+        }
         eventInfo["Org"] = event.custom_organization;
+        if (eventInfo.Org != null){
+          eventInfo["Org"] = removeHTMLRelics(eventInfo.Org, false);
+        }
         eventInfo["Tags"]= event.tags;
+        if (eventInfo.Tags != null){
+          eventInfo["Tags"] = removeHTMLRelics(eventInfo.Tags, true);
+        }
         eventInfo["ID"]= event.id;
         stringifyEvent = JSON.stringify(eventInfo);
         if (!firstEvent){ //not first event to be added ever
