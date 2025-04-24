@@ -7,6 +7,14 @@ const DROPPATH = './src/backend/drop_ids.json'
 const CLOSEFILE = '\n]\n}'
 const OPENFILE = '{\n\"data\" : [\n'
 
+/**
+ * removeHTMLRelics
+ * cleans up HTML relics from and capitalizes first letter of string(s)
+ * 
+ * @param {*} input -> String or array of strings to remove relics from
+ * @param {*} isArray -> boolean marking if its an array (true) or string (false)
+ * @returns the cleaned, capitalized string or array of them
+ */
 function removeHTMLRelics(input, isArray){
   if (isArray){//go through the array if input is an array
     num_elements = input.length;
