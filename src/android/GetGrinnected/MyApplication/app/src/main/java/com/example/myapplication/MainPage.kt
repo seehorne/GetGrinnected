@@ -50,6 +50,8 @@ fun MainPage(
 ) {
     // Creates our navbar
     val bottomNavController = rememberNavController()
+    // Gets current active account from App Repository
+    val account = AppRepository.currentAccount.value
 
     // Creates a list of navItems including a name and an icon associated to display on the navbar
     val navItemList = listOf(
@@ -107,7 +109,12 @@ fun MainPage(
             composable("Calendar") { CalendarScreen(tags = tags) }
 
             composable("Favorites") { FavoritesScreen() }
-            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
+            composable("Settings") {
+                // Makes sure account is not null just since it could be to start as someone who hasn't logged in
+                if (account != null) {
+                    SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController )
+                }
+            }
         }
     }
 }
