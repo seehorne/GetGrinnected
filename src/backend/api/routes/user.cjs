@@ -95,7 +95,8 @@ async function routeSignUpNewUser(req, res, _next) {
     res.status(400).json({
       'error': 'Invalid email',
       'message': 'Email must end with @grinnell.edu.'
-    })
+    });
+    return;
   }
 
   // Make sure the username provided doesn't break any format rules.
@@ -189,7 +190,7 @@ async function routeVerifyOTP(req, res, _next) {
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
     });
-    return
+    return;
   }
   else{
     // Use JSON Web Tokens to create two tokens for the user,
