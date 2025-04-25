@@ -87,7 +87,28 @@ struct VerifyView: View {
                     .cornerRadius (10)
                     .padding(.top, 24)
                 
-                
+                Button{
+                    userProfile.resendOTP(email: email) { result in
+                        switch result {
+                        case .success(let output):
+                            print("API Response: \(output)")
+                            success=true
+                        case .failure(let error):
+                            print("API call failed: \(error.localizedDescription)")
+                            success=false
+                        }
+                    }
+                }label: {
+                    HStack {
+                        Text("resend code")
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.colorBlue)
+                    .frame(width: UIScreen.main.bounds.width - 48, height: 32)
+                }//Button
+                .background (.white)
+                    .cornerRadius (10)
+                    .padding(.top, 24)
 //                //Navigation to Signup
 //                NavigationLink{
 //                    SignUpView(isLoggedIn: $isLoggedIn)
