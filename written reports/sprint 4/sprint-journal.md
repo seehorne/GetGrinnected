@@ -202,3 +202,23 @@ Using AI to read all the event tags as had a huge impact. I saved a bunch of tim
 ### To what extent did this impact match goals and expectations?
 
 The impact matched my goals and expectation very well. In fact, it was even more helpful than I originally thought. I was pretty skeptical of it to start with.
+
+## Understanding how to utilize persistent states and local databases in Kotlin
+
+This experiment was done by Anthony.
+
+### What were initial goals and expectations?
+
+My initial goal was to create a schema to store states, event information, etc. that would persist after the app had been closed and swiped up on. After prior research explained in later sections I had the expectation that utilizing AI would allow me to have a deeper and more connected understanding of creating this storage within the framework of our app.
+
+### How was AI used?
+
+To do this I had done some prior research to the experiment on what resources might exist (google searches "how would I keep app preferences post closing app in Jetpack Compose Kotlin?", Tutorials "Caching data from an API in jetpack compose", etc.) and after I felt like I had a general understanding of what resources were available I started by doing what I could with the understanding I had to implement this into our app. When I hit a hiccup where I felt confused or not fully clear what I was missing I would ask ChatGPT "This is how I understand x y and z in jetpack composed, without providing code can you explain the gaps in my understanding?" I asked likely 50 plus questions like this or similar like "Do you have resources that may be able to fill these gaps?" to do my best to fill these gaps in understanding. Sometime it was helpful and other times googling helped significantly more.
+
+### What impact did it have?
+
+The impact was pretty significant as it allowed me to ask pretty specific questions and since I could provide a specific background about our projects and some of the languages we were using to implement our app it was able to give my very specified feedback on my understanding and how to go about these connections or the libraries that exist. In the end it allowed us to have an app with persisting states and information so the overall product impact was quite high.
+
+### To what extent did this impact match goals and expectations?
+
+I actually generally expected it to help less than it did. It was really a lot better and providing more specific feedback to really help me when I hit a specific gap in knowledge. Additionally, I feel as though I was expecting to begin to curate my messages/prompts to the degree that I did. I feel like I learned a lot about prompts for example if starting a chat you want to provide as much background info about your topic as possible and provide as much detail as you can about your understanding or specific use case for some new thing you want to implement. "I am making an events app for grinnell college, currently I have persisting states using datastores for certain app preferences like darkmode light mode, login state, etc. Currently I am working on a Room Database and currently I have an API I get my events from, but when I try to upsert these events to my Room DB it doesn't upsert. What are reasons maybe with how I am creating my events table that might cause an upsert to not occur? (Please just explain do not code)" This prompt gave me pivotal information about the need for type convertors for certain data types in Room DB tables. Curation of similar prompts and my learning of how to curate these questions really evolved and I think that really surprised me during this process.
