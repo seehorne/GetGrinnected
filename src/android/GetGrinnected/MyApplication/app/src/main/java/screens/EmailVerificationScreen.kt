@@ -66,6 +66,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
     val typography = MaterialTheme.typography
     // The current context of our app
     val context = LocalContext.current
+    // Boolean associated with specifically a code error to shift field color
+    var errCode by remember { mutableStateOf(false) }
 
     // This sets up all of our elements in a column layout
     Column(
@@ -107,8 +109,10 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                 value = codeInput,
                 onValueChange = {
                     if (it.length <= 6) codeInput = it
+                    errCode = false
                 },
                 label = { Text("Verification Code", style = typography.labelLarge) },
+                isError = errCode,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
@@ -129,6 +133,12 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
             Button(onClick = {
                 coroutineScope.launch {
                     //  try {
+                    if (codeInput.length < 6) {
+                        errMsg = "Please enter 6-digit code"
+                        errCode = true
+                        return@launch // Escapes launch due to missing username
+                    }
+
                     try {
                         // Contact the api to see if our OTP is correct
                         val response = RetrofitApiClient.apiModel.verifyOTP(
@@ -183,7 +193,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                             }
                             // Handles error if we couldn't verify the code or it was wrong
                         } else {
-                            errMsg = response.errorBody()?.string() ?: "Could not verify code"
+                            errMsg = "Incorrect code"
+                            errCode = true
                         }
                         // Failure specifically with a network connection ie couldn't leave our app
                     } catch (e: Exception) {
