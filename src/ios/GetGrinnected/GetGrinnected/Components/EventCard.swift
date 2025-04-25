@@ -43,6 +43,7 @@ import SwiftUI
  The difference is object-oriented (struct structName: View) versus functional (@Viewbuilder \n func functionName(){})
  */
 struct EventCard: View {
+    @Environment(\.modelContext) private var modelContext
     
     //Event is the struct we defined in "Event" file, stores all information of JSON
     let event: EventModel
@@ -154,14 +155,14 @@ struct EventCard: View {
                         
                         VStack {
                             //component that can be reusable
-                            CheckBox(
-                                items: [CheckBoxOption(
-                                    isChecked: false,
-                                    uiCompOne: "heart.fill",
-                                    uiCompTwo: "heart",
-                                    fillColor: .border )]
-                            ) //checkbox
-                            .imageScale(.large)
+                            Button(action: {
+                                event.favorited.toggle()
+                                try? modelContext.save()
+                            }) {
+                                Image(systemName: event.favorited ? "heart.fill" : "heart")
+                                    .foregroundColor(.border)
+                                    .imageScale(.large)
+                            }
                             
                             .padding(.vertical, 4)
                             

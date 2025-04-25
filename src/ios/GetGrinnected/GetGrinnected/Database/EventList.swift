@@ -46,7 +46,7 @@ struct EventList: View {
     
     //the initializer for the eventlist is the sorting function!
     
-    init(selectedEvent: Int?, parentView: EventListParentViewModel, sortOrder: [SortDescriptor<EventModel>] = [], searchString: String, filterToday: Bool = false){
+    init(selectedEvent: Int?, parentView: EventListParentViewModel, sortOrder: [SortDescriptor<EventModel>] = [], searchString: String, filterToday: Bool = false, showFavorites: Bool = false){
         self.selectedEvent = selectedEvent
         self._parentView = ObservedObject(wrappedValue: parentView)
         
@@ -59,11 +59,14 @@ struct EventList: View {
         //initialize events according to those sorting specificatinos
         _events = Query(filter: #Predicate { event in
             //The query only requires one singular predicate, so we have to use something like this:
-            (filterToday
-             ? event.startTime.flatMap { $0 >= timeSpanStart && $0 <= timeSpanEnd } ?? false //check the dates, otherwise false (not in that date)
-             : true) //if not filtering for today, return true
+            
+                (filterToday
+                 ? event.startTime.flatMap { $0 >= timeSpanStart && $0 <= timeSpanEnd } ?? false //check the dates, otherwise false (not in that date)
+                 : true) //if not filtering for today, return true
+                &&
+                (searchString.isEmpty || event.name.localizedStandardContains(searchString))
             &&
-            (searchString.isEmpty || event.name.localizedStandardContains(searchString)) //if search string is empty, or if it contains the value, then return true
+            (showFavorites ? event.favorited : true)
         },
                         sort: finalSortOrder)//sort by name
     }//init

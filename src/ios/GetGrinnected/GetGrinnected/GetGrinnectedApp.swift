@@ -10,17 +10,18 @@ import SwiftData
 
 @main
 struct GetGrinnectedApp: App {
-    //container for persistent states
-    var sharedModelContainer: ModelContainer = {
-           let schema = Schema([EventModel.self]) //removing profile for now , UserProfile.self
-           let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-           
-           do {
-               return try ModelContainer(for: schema, configurations: [modelConfiguration])
-           } catch {
-               fatalError("Could not create ModelContainer: \(error)")
-           }
-       }()
+    let container: ModelContainer
+    
+    init() {
+        do {
+            container = try ModelContainer(
+                for: EventModel.self,
+                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+            )
+        } catch{
+            fatalError("Failed to create ModelContainer: \(error)")
+        }//catch
+    }
     
     //initialize array of events
     var events = [EventDTO]()
@@ -31,6 +32,6 @@ struct GetGrinnectedApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)//set container to model container
+        .modelContainer(container)//set container to model container
     }
 }

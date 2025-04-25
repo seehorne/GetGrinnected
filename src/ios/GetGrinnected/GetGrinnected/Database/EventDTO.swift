@@ -47,7 +47,6 @@ struct EventDTO: Codable {
     var repeats: Int?
     var event_image: String?
     var is_draft: Int?
-//    var favorited = false
     
     
     /**

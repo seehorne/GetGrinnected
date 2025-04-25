@@ -46,7 +46,7 @@ struct HomescreenView: View {
                         } //HStack
                         
                         //Main Event List View
-                        EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText)
+                        EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: false)
                             .searchable(text: $searchText)
                         
                         Spacer() // KEEPS DATE, TAGS, AND EVENTS AT TOP
