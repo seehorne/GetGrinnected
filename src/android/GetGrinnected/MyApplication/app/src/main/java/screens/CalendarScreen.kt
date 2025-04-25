@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -91,7 +92,6 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
         }
     }).toString()
     // grabs selected tags
-
     val chosenTags = mutableListOf<String>()
     // tracks what day we are on
     var selectedView by remember { mutableIntStateOf(2) }
@@ -113,20 +113,26 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
             5000.0f,
             TileMode.Repeated
         )
+
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
+    
     // sets the background for the page for us to build our other elements on
-    Column(modifier = modifier.fillMaxSize().background(gradient)) {
-        Box(modifier = modifier.background(Color.Black).fillMaxWidth().size(100.dp)) {
+    Column(modifier = modifier.fillMaxSize().background(color = colorScheme.background)) {
+        Box(modifier = modifier.background(color = colorScheme.primaryContainer).fillMaxWidth().size(100.dp)) {
             Row{
                 // adds the logo to the top
                 Image(
-                    painter = painterResource(id = R.drawable.gg_logo_2),
+                    painter = painterResource(id = R.drawable.getgrinnected_logo),
                     contentDescription = "App Logo",
                     modifier = Modifier
                         .padding(25.dp)
                         .background(Color.White)
                         .size(50.dp)
                 )
-                // centers the bottons
+                // centers the buttons
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End

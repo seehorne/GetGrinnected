@@ -15,8 +15,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 
 /**
  * Our main used to run and create our app. Currently utilizes the AppNavigator function at

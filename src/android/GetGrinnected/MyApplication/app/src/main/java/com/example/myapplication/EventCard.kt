@@ -57,8 +57,6 @@ import androidx.compose.ui.platform.LocalContext
 fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
-    // Boolean to track whether a card is favorited
-    val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
     // Boolean to track if card should cause notification
     val isNotification = remember(event.is_notification) { mutableStateOf(event.is_notification) }
     val context = LocalContext.current
@@ -81,8 +79,6 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
             .padding(horizontal = 8.dp)
-            .background(color = colorScheme.primaryContainer)
-            .border(2.dp, color = colorScheme.primary)
             .clickable
         {
                 expanded.value = !expanded.value
@@ -134,16 +130,15 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                 Column {
                     // This is our favorite icon
                     Icon(
-                        imageVector = if (isFavorited.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        imageVector = if (event.is_favorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite Icon",
                         tint = colorScheme.primary,
                         modifier = Modifier
                             .size(40.dp)
                             .clickable {
-                                isFavorited.value = !isFavorited.value
                                 // This tells our database to update the events favorited status
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    AppRepository.toggleFavorite(event.eventid, isFavorited.value)
+                                    AppRepository.toggleFavorite(event.eventid, !event.is_favorited)
                                 }
                             },
                     )

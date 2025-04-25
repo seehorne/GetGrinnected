@@ -270,7 +270,7 @@ fun HomeScreen(tags: List<Check>) {
         {
             // adds the logo to the top
             Image(
-                painter = painterResource(id = R.drawable.gg_logo_2),
+                painter = painterResource(id = R.drawable.getgrinnected_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
                     .padding(25.dp)

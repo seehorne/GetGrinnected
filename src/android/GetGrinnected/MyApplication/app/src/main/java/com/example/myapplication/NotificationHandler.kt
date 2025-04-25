@@ -20,7 +20,7 @@ class NotificationHandler(private val context: Context) {
         val notification = NotificationCompat.Builder(context, notificationChannelID)
             .setContentTitle(event.event_name)
             .setContentText(event.event_time)
-            .setSmallIcon(R.drawable.gg_logo_2)
+            .setSmallIcon(R.drawable.getgrinnected_logo)
             .setPriority(NotificationManager.IMPORTANCE_HIGH)
             .setAutoCancel(false)
             .build()  // finalizes the creation

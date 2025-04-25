@@ -56,7 +56,7 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
                 expanded.value = !expanded.value // Toggles expanded state when card is clicked
             },
         colors = CardDefaults.cardColors(
-            containerColor = colorScheme.secondaryContainer
+            containerColor = colorScheme.primaryContainer
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
