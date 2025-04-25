@@ -74,7 +74,25 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
     val date = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("MM")
     val currentMonth = date.format(formatter).toString()
+    // sets the month based on devices local date
+    val month = (when (currentMonth) {
+        "01" -> { "January" }
+        "02" -> { "February" }
+        "03" -> { "March" }
+        "04" -> { "April" }
+        "05" -> { "May" }
+        "06" -> { "June" }
+        "07" -> { "July" }
+        "08" -> { "August" }
+        "09" -> { "September" }
+        "10" -> { "October" }
+        "11" -> { "November" }
+        else -> {
+            "December"
+        }
+    }).toString()
     // grabs selected tags
+
     val chosenTags = mutableListOf<String>()
     // tracks what day we are on
     var selectedView by remember { mutableIntStateOf(2) }
@@ -96,6 +114,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
             5000.0f,
             TileMode.Repeated
         )
+
     // To access our theme colors
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
@@ -117,6 +136,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
         else -> { "December" }
     }
     ).toString()
+    
     // sets the background for the page for us to build our other elements on
     Column(modifier = modifier.fillMaxSize().background(color = colorScheme.background)) {
         Box(modifier = modifier.background(color = colorScheme.primaryContainer).fillMaxWidth().size(100.dp)) {
@@ -155,6 +175,12 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                                     }
                                 }
                                 calendarInputList = createCalendarList(event, chosenTags, currentMonth) }) {
+                            DropdownMenuItem(
+                                text = {Text("Unselect All")},
+                                onClick = {for (t in tags.indices){
+                                    tags[t].checked.value = false}
+                                },
+                            )
                             for (i in tags.indices) {
                                 DropdownMenuItem(
                                     text = {
@@ -162,7 +188,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                                             check = tags[i]
                                         )
                                     },
-                                    onClick = {}
+                                    onClick = {tags[i].checked.value = !tags[i].checked.value}
                                 )
                             }
                             Spacer(modifier = Modifier.height(60.dp))
