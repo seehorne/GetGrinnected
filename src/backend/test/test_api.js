@@ -12,6 +12,8 @@ const arrayXOR = require('lodash/xor');
 const db = require('../db_connect'); // so we can mock it with sinon
 const api = require('../api/api.cjs');
 const events = require('../api/routes/events.cjs');
+const user = require('../api/routes/user.cjs');
+const util = require('../api/utils.cjs');
 
 // return true if the arrays have all the same elements
 function arraysEqual(array1, array2) {
@@ -185,63 +187,63 @@ describe('parseParamDate', () => {
     it('should accept ISO-8601 time unchanged', () => {
         const input = '2025-04-05T22:19-0500';
         const expected = new Date(input);
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should respect non-Grinnell ISO-8601 timezones', () => {
         const input = '2022-03-12T10:32+1230';
         const expected = new Date(input);
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should assume Grinnell time if timezone unspecified', () => {
         const input = '1999-01-01T08:19';
         const expected = new Date(input + '-0500');
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should assume Grinnell midnight if no time specified', () => {
         const input = '2025-08-04';
         const expected = new Date(input + 'T00:00-0500');
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
     it('should reject clearly malformed time', () => {
         const input = 'this is not a date'
         const expected = NaN;
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject date with seconds', () => {
         const input = '2021-05-10T10:30:53-0500'
         const expected = NaN;
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject dates with no separator', () => {
         const input = '20250405'
         const expected = NaN;
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject Unix time', () => {
         const input = '1743909495';
         const expected = NaN;
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
     it('should reject natural language formatted dates', () => {
         const input = 'March 3, 2002';
         const expected = NaN;
-        const actual = events.parseParamDate(input);
+        const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 });
@@ -250,7 +252,7 @@ describe('parseQueryTags', () => {
     it('should ignore empty tags', () => {
         const input = null;
         const expected = [];
-        const actual = events.parseQueryTags(input);
+        const actual = util.parseQueryTags(input);
         assert.ok(
             arraysEqual(expected, actual),
             `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
@@ -260,7 +262,7 @@ describe('parseQueryTags', () => {
     it('should accept one tag', () => {
         const input = 'a';
         const expected = ['"a"'];
-        const actual = events.parseQueryTags(input);
+        const actual = util.parseQueryTags(input);
         assert.ok(
             arraysEqual(expected, actual),
             `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
@@ -270,7 +272,7 @@ describe('parseQueryTags', () => {
     it('should split one tag, comma separated', () => {
         const input = 'a,b,c';
         const expected = ['"a"', '"b"', '"c"'];
-        const actual = events.parseQueryTags(input);
+        const actual = util.parseQueryTags(input);
         assert.ok(
             arraysEqual(expected, actual),
             `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
@@ -280,7 +282,7 @@ describe('parseQueryTags', () => {
     it('should accept multiple tags, in a list', () => {
         const input = ['a', 'b', 'c'];
         const expected = ['"a"', '"b"', '"c"'];
-        const actual = events.parseQueryTags(input);
+        const actual = util.parseQueryTags(input);
         assert.ok(
             arraysEqual(expected, actual),
             `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
@@ -290,7 +292,7 @@ describe('parseQueryTags', () => {
     it('should split a mix of list and comma-separated tags', () => {
         const input = ['a', 'b,c', 'd'];
         const expected = ['"a"', '"b"', '"c"', '"d"'];
-        const actual = events.parseQueryTags(input);
+        const actual = util.parseQueryTags(input);
         assert.ok(
             arraysEqual(expected, actual),
             `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`

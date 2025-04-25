@@ -47,6 +47,13 @@ class MainActivity : ComponentActivity() {
             theme file which allows us to change the whole app theme.
             */
 
+            // Gets the account id that we have stored
+            val accountId = DataStoreSettings.getLoggedInAccountId(applicationContext).first()
+            if (accountId != null) {
+                // Sets our current active account in the repo to the stored account value
+                AppRepository.setCurrentAccountById(accountId)
+            }
+
             setContent {
                 // Gets events from Repo
                 val eventEntities = AppRepository.events.value
@@ -68,10 +75,10 @@ class MainActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
                             }
-                        }, 
-                      tags = tags.sortedBy{ it.label},                       
-                      startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
-                    )
+                        },
+                        tags = tags.sortedBy { it.label },
+                        startDestination = if (isLoggedIn) "main" else "welcome",
+                    ) // What screen to launch the app on
                 }
             }
         }

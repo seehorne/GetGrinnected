@@ -1,0 +1,55 @@
+diff --git a/src/backend/api.js b/src/backend/api.js
+index 9748f87..ad65f76 100644
+--- a/src/backend/api.js
++++ b/src/backend/api.js
+@@ -1,10 +1,10 @@
+ const db = require('./db_connect.js');
+ const express = require('express');
+-const fs = require('fs');
+ const http = require('http');
+ const https = require('https');
+ 
+-/* global var to store the servers we are running,
++/* global vars exit on its own,
++ * you need to call `close()` from this file asto store the servers we are running,
+  * so they can be shut down when needed */
+ var http_server = null;
+ var https_server = null;
+@@ -12,7 +12,8 @@ var https_server = null;
+ /**
+  * Run the API.
+  * 
+- * This function will not exit on its own, 
++ * This function will not exit on its own,
++ * you need to call `close()` from this file as well.
+  */
+ function run() {
+   // Load environment vars from .env file
+@@ -110,7 +111,7 @@ function getAPIOnline(req, res) {
+  * Query the database and respond with all known events in JSON.
+  * Supports querying for tags with query parameter `tag`.
+  *
+- * @param req  Express request object
++ * @param req  Express request object. Query may contain `tag`.
+  * @param res  Express response object
+  * @param next Error handler function
+  */
+@@ -136,7 +137,8 @@ async function getEvents(req, res, _next) {
+  * Query the database and respond with all events between two dates.
+  * Supports querying for tags with query parameter `tag`.
+  *
+- * @param req  Express request object
++ * @param req  Express request. Params must contain start and end, and query
++ *             may contain `tag`.
+  * @param res  Express response object
+  * @param next Error handler function
+  */
+@@ -205,7 +207,7 @@ async function getEventsBetween(req, res, _next) {
+ /**
+  * Check if a user exists by username,
+  * 
+- * @param {*} req    Express request containing parameters
++ * @param {*} req    Express request. Params must contain the username to check.
+  * @param {*} res    Express response to send output to
+  * @param {*} _next  Error handler function for async (unused)
+  */

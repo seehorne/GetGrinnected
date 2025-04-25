@@ -110,9 +110,7 @@ _Events are sorted in order of start time by day_
 - Back to [table of contents](#table-of-contents)
 
 ## Filter events by day
-- Click the day drop down to see events happening on a specific day (UNDER CONSTRUCTION :building_construction:)
-    - Under construction because currently, selecting the day does not change which events are shown
-    - Waiting on an effective filtering approach 
+- Click the day drop down to see events happening on a specific day
 - Default view is current day
 - Can select any day within the next two weeks
 - Back to [table of contents](#table-of-contents)
@@ -132,22 +130,19 @@ _Events are sorted in order of start time by day_
 _Views can be selected from a view dropdown_
 
 ## Day view
-- Select individual day to view (UNDER CONSTRUCTION :building_construction:)
-    - Under construction due to waiting on the same filtering approach described in [home](#home)
+- Select individual day to view
 - Back to [table of contents](#table-of-contents)
 
 ## Week view
 - Default behavior is current week
 - Can swipe to see future weeks
-- (UNDER CONSTRUCTION :building_construction:)
-    - Waiting on the same filtering call as [day view](#day-view)
 - Back to [table of contents](#table-of-contents)
 
 ## Month view
 - Can pull down a calendar to select a different month 
     - Can also select a day within a month to transition into day view
 - (UNDER CONSTRUCTION :building_construction:)
-    - Waiting on the same filtering call as [day view](#day-view)
+    - Calendar pull down not yet implemented
 - Back to [table of contents](#table-of-contents)
 
 ## Filter by tags (calendar)
