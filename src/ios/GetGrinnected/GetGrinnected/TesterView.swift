@@ -43,6 +43,6 @@ struct TesterView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        TesterView()
+        TesterView
     }
 }

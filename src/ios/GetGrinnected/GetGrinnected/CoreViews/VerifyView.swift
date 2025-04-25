@@ -1,21 +1,27 @@
 //
-//  LoginView.swift
+//  VerifyView.swift
 //  GetGrinnected
 //
-//  Created by Budhil Thijm on 4/1/25.
+//  Created by Ellie Seehorn on 4/25/25.
 //
+
+import SwiftUI
 
 import Foundation
 import SwiftUI
 
-struct LoginView: View {
-    @Binding var isLoggedIn: Bool
-    
-    @State private var email = ""
-    @State private var password = ""
+struct VerifyView: View {
+    @State private var isLoggedIn: Bool
+    @State private var code = ""
+    @State private var email: String
     @State private var errorMessage = ""
     @State private var success = Bool()
     @StateObject private var userProfile = UserProfile()
+    
+    init(email: String) {
+        self.email = email
+        self.isLoggedIn = false
+    }
     
     var body: some View {
         
@@ -25,7 +31,7 @@ struct LoginView: View {
                 Logo(size: 200)
                 
                 //Signin Email Text Field
-                InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
+                InputView(text: $code, title: "Type your code here", placeholder: "Hint: its six digits long and went to your email")
                 
 //                //Signin Password Text Fields
 //                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
@@ -41,20 +47,20 @@ struct LoginView: View {
 //                        print("\(errorMessage)")
 //                    }
                     
-                    userProfile.loginUser(email: email) { result in
+                    userProfile.verifyUser(email: email, code: code) { result in
                         switch result {
                         case .success(let output):
                             print("API Response: \(output)")
-                            success = true
+                            success=true
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
-                            success = false
+                            success=false
                         }
                     }
                     //once successfully logged in, jump to main viewport
                 } label: {
                     HStack {
-                        Text("SIGN IN")
+                        Text("start getting grinnected")
                             .fontWeight(.semibold)
                         Image (systemName: "arrow.right")
                     }
@@ -66,30 +72,28 @@ struct LoginView: View {
                     .padding(.top, 24)
                 
                 
-                //Navigation to Signup
-                NavigationLink{
-                    SignUpView(isLoggedIn: $isLoggedIn)
-                } label : {
-                    Text("Don't have an account?")
-                        .foregroundColor(Color.appTextSecondary)
-                        .padding(.top, 4)
-                }
-                
+//                //Navigation to Signup
+//                NavigationLink{
+//                    SignUpView(isLoggedIn: $isLoggedIn)
+//                } label : {
+//                    Text("Don't have an account?")
+//                        .foregroundColor(Color.appTextSecondary)
+//                        .padding(.top, 4)
+//                }
+//                
                 //signin button
-                // NavigationLink to VerifyView when login is successful
-                .navigationDestination(isPresented: $success) {
-                    VerifyView(email: email)
-                }
-
                 
             }
             .padding()
+            
+            .navigationDestination(isPresented: $success) {
+                MainNavView()
+            }
         } //navigation
     } //body
 }//LoginView
 
+
 #Preview {
     LoginView(isLoggedIn: .constant(false))
 }
-
-

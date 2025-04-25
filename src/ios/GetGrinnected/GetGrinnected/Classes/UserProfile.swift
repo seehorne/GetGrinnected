@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 /**
  Class for creating a new user profile. For now, we will keep isPowerUser and isAdmin both false.
  New userProfile created only in SIGNUP
@@ -16,9 +17,11 @@ class UserProfile: ObservableObject {
     //set email and set password after validating them
     @Published private(set) var emailText = ""
     
-    @Published private(set) var isPasswordValid: Bool = false
+//    @Published private(set) var isPasswordValid: Bool = false
     
     @Published private(set) var usernameText = ""
+    
+    @StateObject private var userProfile = UserProfile()
     
     
     //private storage for password
@@ -42,20 +45,151 @@ class UserProfile: ObservableObject {
         }//if
     }//function set email
     
-    
     func setUsername(_ newUsername: String){
         usernameText = newUsername
     }
     
-    func setPassword(_ newPassword: String) -> Bool {
-        if validatePassword(newPassword){
-            _password = newPassword
-            isPasswordValid = true
-            return true
-        } else {
-            return false
+    func loginUser(email: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/login")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "email": email
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    completion(.failure(decodedResponse.message as! Error))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
         }
-    }//setpassword
+        task.resume()
+    }
+    
+    func verifyUser(email: String, code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/verify")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "email": email,
+            "code": code
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    completion(.failure(decodedResponse.message as! Error))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
+        }
+        task.resume()
+    }
+    
+    
+    func signUpUser(email: String, user: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/signup")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "email": email,
+            "username": user
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    completion(.failure(decodedResponse.message as! Error))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
+        }
+        task.resume()
+    }
+    
+    struct APIResponse: Codable {
+        let error: String?
+        let message: String?
+        let refresh_token: String?
+        let access_token: String?
+    }
+//    func setPassword(_ newPassword: String) -> Bool {
+//        if validatePassword(newPassword){
+//            _password = newPassword
+//            isPasswordValid = true
+//            return true
+//        } else {
+//            return false
+//        }
+//    }//setpassword
     
     
     /*Validation functino for the email, username, and password*/
@@ -79,8 +213,26 @@ class UserProfile: ObservableObject {
 
 }
 
+/*
+ ASSOCIATED ERRORS WITH API CALLING
+ (named so as to not conflict with existing parent classes)
+ */
+/// Custom errors (
+enum APIError: Swift.Error, CustomLocalizedStringResourceConvertible {
+    case badEmail
+    case invalidResponse
+    case decoderError
+    var localizedStringResource: LocalizedStringResource {
+        switch self {
+        case .badEmail: return "Email wrong:";
+        case .invalidResponse: return "Invalid response from server";
+        case .decoderError: return "Could not decode JSON"}
+    }
+}
+
+
 
 let exampleUser = UserProfile()
 let emailSuccess = exampleUser.setEmail("thijmbud@grinnell.edu")
-let passwordSuccess = exampleUser.setPassword("Password123")
+//let passwordSuccess = exampleUser.setPassword("Password123")
 
