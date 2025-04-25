@@ -13,14 +13,19 @@ struct GetGrinnectedApp: App {
     let container: ModelContainer
     
     init() {
+        
+        ArrayTransformer.register()
         do {
+            print("Attempting to create container…")
             container = try ModelContainer(
                 for: EventModel.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                configurations: ModelConfiguration(isStoredInMemoryOnly: false)
             )
-        } catch{
+            print("Container created successfully!")
+        } catch {
+            print("❌ ModelContainer init failed: \(error.localizedDescription)")
             fatalError("Failed to create ModelContainer: \(error)")
-        }//catch
+        }
     }
     
     //initialize array of events

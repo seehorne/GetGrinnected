@@ -1,5 +1,5 @@
 //
-//  Event.swift
+//  EventDTO.swift
 //  GetGrinnected
 //
 //  Created by Budhil Thijm on 4/8/25.
@@ -30,17 +30,19 @@ struct EventDTO: Codable {
     var event_all_day: Int?
     var event_start_time: String?
     var useful_event_start_time: Date? {
+        guard let timeString = event_start_time else { return nil }
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        return dateFormatter.date(from:event_start_time!)!
+        return dateFormatter.date(from: timeString)
     } // referenced from https://stackoverflow.com/questions/36861732/convert-string-to-date-in-swift
     var event_end_time: String?
     var useful_event_end_time: Date? {
+        guard let timeString = event_end_time else { return nil }
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        return dateFormatter.date(from:event_end_time!)!
+        return dateFormatter.date(from: timeString)
     }
     var tags: [String]?
     var event_private: Int?

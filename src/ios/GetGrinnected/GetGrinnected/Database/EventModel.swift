@@ -16,120 +16,86 @@ import SwiftData
 import Foundation
 
 @Model
-final class EventModel: Hashable { //conforming to hashable to prevent duplicates
-//    @Attribute
-//    var lastUpdated: Date?//tell when the events were last updated so not updated too often
+final class EventModel: Hashable {
     var id: Int
-    var name: String
+    var name: String?
     var descr: String?
     var date: String?
     var location: String?
-    @Attribute var organizations: [String]?
     var startTime: Date?
     var endTime: Date?
     var rsvp: Int?
     var all_day: Int?
-    var usefulStartTime: Date?
-    var usefulEndTime: Date?
-    @Attribute var tags: [String]?
     var event_private: Int?
     var repeats: Int?
     var imageURL: String?
     var is_draft: Int?
-    
-    /**
-     NOT in eventDTO
-     */
+
+    @Attribute(.transformable(by: ArrayTransformer.self))
+    var tags: [String]
+
+    @Attribute(.transformable(by: ArrayTransformer.self))
+    var organizations: [String]
+
     var favorited: Bool
-    var notified: Bool
-    var lastUpdated: Date //checks when last updated as to not update every single time!
-    
-    // Constructor that converts from your DTO
+    var lastUpdated: Date
+
+    // UI-only flags (not persisted in SwiftData)
+    @Transient var notified: Bool = false
+    @Transient var isSelected: Bool = false
+
     init(from dto: EventDTO) {
         self.id = dto.eventid ?? 0
-        self.name = dto.event_name ?? "Unnamed Event"
-        self.date = dto.event_date ?? "Undated Event"
-        self.descr = dto.event_description ?? "No Description"
+        self.name = dto.event_name
+        self.date = dto.event_date
+        self.descr = dto.event_description
         self.location = dto.event_location
-        self.organizations = dto.organizations ?? []
-        
-        // Parse dates using the same formatter you're using
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        
-        if let startTimeString = dto.event_start_time {
-            self.startTime = dateFormatter.date(from: startTimeString)!
-        } else {
-            self.startTime = Date() // default to today
-        }
-        
-        if let endTimeString = dto.event_end_time {
-            self.endTime = dateFormatter.date(from: endTimeString)!
-        } else {
-            self.endTime = Date() // default to today
-        }
-        
         self.tags = dto.tags ?? []
-        self.imageURL = dto.event_image ?? ""
-        self.rsvp = dto.rsvp ?? 0
-        self.all_day = dto.event_all_day ?? 0
-        self.usefulStartTime = dto.useful_event_start_time ?? Date()
-        self.usefulEndTime = dto.useful_event_end_time ?? Date()
-        self.event_private = dto.event_private ?? 0
-        self.repeats = dto.repeats ?? 0
-        self.imageURL = dto.event_image ?? ""
-        self.is_draft = dto.is_draft ?? 0
-        
-        
-        /**
-         NOT in eventDTO
-         */
+        self.organizations = dto.organizations ?? []
+
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+
+        self.startTime = dto.event_start_time.flatMap { formatter.date(from: $0) }
+        self.endTime = dto.event_end_time.flatMap { formatter.date(from: $0) }
+
+        self.imageURL = dto.event_image
+        self.rsvp = dto.rsvp
+        self.all_day = dto.event_all_day
+        self.event_private = dto.event_private
+        self.repeats = dto.repeats
+        self.is_draft = dto.is_draft
         self.favorited = false
-        self.notified = false
-        self.lastUpdated = Date() //set initial timestamp for later API updating
-    }//initialize from an eventDTO
-    
-    // Empty initializer required by SwiftData
+        self.lastUpdated = Date()
+    }
+
+    // Required by SwiftData
     init() {
         self.id = 0
-        self.name = ""
-        self.location = ""
-        self.descr = ""
+        self.name = nil
+        self.descr = nil
+        self.date = nil
+        self.location = nil
+        self.startTime = nil
+        self.endTime = nil
+        self.rsvp = nil
+        self.all_day = nil
+        self.event_private = nil
+        self.repeats = nil
+        self.imageURL = nil
+        self.is_draft = nil
+        self.tags = []
         self.organizations = []
-        self.tags = []
-        self.startTime = Date()
-        self.endTime = Date()
-        self.tags = []
-        self.imageURL = ""
-        self.date = ""
-        self.rsvp = 0
-        self.all_day = 0
-        self.usefulStartTime = Date()
-        self.usefulEndTime = Date()
-        self.event_private = 0
-        self.repeats = 0
-        self.imageURL = ""
-        self.is_draft = 0
         self.favorited = false
-        self.notified = false
         self.lastUpdated = Date()
-        
-        
-        
-        
-        
-    }//empty initializer, required by SwiftData
-    
-    
-    //hasher, add more to make the hasher more unique
-    public func hash(into hasher: inout Hasher){
+    }
+
+    func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
-    public static func ==(lhs: EventModel, rhs: EventModel) -> Bool {
+
+    static func ==(lhs: EventModel, rhs: EventModel) -> Bool {
         return lhs.id == rhs.id
     }
-    
-    
-}//Model
+}

@@ -50,9 +50,6 @@ struct CalendarView: View {
             viewModel.timeSpan.start = viewModel.viewedDate
             viewModel.timeSpan.end = viewModel.viewedDate.startOfNextDay
             
-            //forcerefresh, by setting lastfetched to nil
-            viewModel.forceRefresh()
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 viewModel.forceRefresh() //add a small delay to ensure eventlist is fully initialized
             }

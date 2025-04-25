@@ -28,6 +28,7 @@
 		4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */; };
 		CA0EB8C52DB00AAC005898BA /* DayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C42DB00A9F005898BA /* DayCard.swift */; };
 		CA0EB8C92DB2AA63005898BA /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C82DB2AA61005898BA /* WeekView.swift */; };
+		CA3B0A462DBB583500A270FA /* DateFormatter+apiDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0A452DBB582A00A270FA /* DateFormatter+apiDateFormatter.swift */; };
 		CA6DF8412DA6116500EFE10A /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6DF8402DA6116300EFE10A /* Logo.swift */; };
 		CAA8FE8A2DB92AF3005C6BBE /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA8FE882DB92AF3005C6BBE /* ParentView.swift */; };
 		CACCD4562DA31696001D31C0 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4532DA31696001D31C0 /* SignUpView.swift */; };
@@ -42,6 +43,7 @@
 		CACCD4612DA31696001D31C0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4502DA31696001D31C0 /* LoginView.swift */; };
 		CACCD4622DA31696001D31C0 /* HomescreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44F2DA31696001D31C0 /* HomescreenView.swift */; };
 		CACCD4652DA318F3001D31C0 /* EventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4642DA318EE001D31C0 /* EventCard.swift */; };
+		CAE884192DBB6B5100AC9401 /* ArrayTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE884182DBB6B4900AC9401 /* ArrayTransformer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +124,7 @@
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA0EB8C42DB00A9F005898BA /* DayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCard.swift; sourceTree = "<group>"; };
 		CA0EB8C82DB2AA61005898BA /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
+		CA3B0A452DBB582A00A270FA /* DateFormatter+apiDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+apiDateFormatter.swift"; sourceTree = "<group>"; };
 		CA6DF8402DA6116300EFE10A /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		CAA8FE882DB92AF3005C6BBE /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
 		CACCD4482DA31696001D31C0 /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 		CACCD4522DA31696001D31C0 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		CACCD4532DA31696001D31C0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		CACCD4642DA318EE001D31C0 /* EventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCard.swift; sourceTree = "<group>"; };
+		CAE884182DBB6B4900AC9401 /* ArrayTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTransformer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -254,6 +258,8 @@
 		CACCD4472DA31696001D31C0 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CAE884182DBB6B4900AC9401 /* ArrayTransformer.swift */,
+				CA3B0A452DBB582A00A270FA /* DateFormatter+apiDateFormatter.swift */,
 				CAA8FE882DB92AF3005C6BBE /* ParentView.swift */,
 				4C02ED372DB68CF40023BCF5 /* DateExtension.swift */,
 			);
@@ -470,12 +476,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA3B0A462DBB583500A270FA /* DateFormatter+apiDateFormatter.swift in Sources */,
 				CA0EB8C52DB00AAC005898BA /* DayCard.swift in Sources */,
 				CA0EB8C92DB2AA63005898BA /* WeekView.swift in Sources */,
 				CACCD4562DA31696001D31C0 /* SignUpView.swift in Sources */,
 				CAA8FE8A2DB92AF3005C6BBE /* ParentView.swift in Sources */,
 				CACCD4572DA31696001D31C0 /* FavoritesView.swift in Sources */,
 				4C02ED382DB68CF40023BCF5 /* DateExtension.swift in Sources */,
+				CAE884192DBB6B5100AC9401 /* ArrayTransformer.swift in Sources */,
 				CACCD4592DA31696001D31C0 /* ColorTheme.swift in Sources */,
 				CACCD45A2DA31696001D31C0 /* CalendarView.swift in Sources */,
 				CACCD45B2DA31696001D31C0 /* MainNavView.swift in Sources */,

@@ -21,7 +21,6 @@ struct EventList: View {
     @State var selectedEvent: Int? //An integer to represent which event we select
     @State private var refreshTimer: Timer?
     @State private var isLoading = false //set loading states
-    @State private var initialLoadingComplete = false //to ensure initial view appears
     
     
     //the initializer for the eventlist is the sorting function!
@@ -50,47 +49,65 @@ struct EventList: View {
         
         //initialize events according to those sorting specificatinos
         _events = Query(
-            filter: #Predicate { event in
-                //The query only requires one singular predicate, so we have to use something like this:
-                
-                (
-                    filterToday
-                    ? event.startTime
-                        .flatMap {
-                            $0 >= timeSpanStart && $0 <= timeSpanEnd
-                        } ?? false //check the dates, otherwise false (not in that date)
-                    : true) //if not filtering for today, return true
-                &&
-                (
-                    searchString.isEmpty || event.name
-                        .localizedStandardContains(searchString)
-                )
-                &&
-                (showFavorites ? event.favorited : true)
-            },
+            filter: buildFilterPredicate(
+                timeSpanStart: timeSpanStart,
+                timeSpanEnd: timeSpanEnd,
+                filterToday: filterToday,
+                searchString: searchString,
+                showFavorites: showFavorites
+            ),
             sort: finalSortOrder,
-            animation: .default)//sort by name default animation
-    }//init
+            animation: .default
+        )//sort by name default animation
+    } //init
     
     
+    private func buildFilterPredicate(
+        timeSpanStart: Date,
+        timeSpanEnd: Date,
+        filterToday: Bool,
+        searchString: String,
+        showFavorites: Bool
+    ) -> Predicate<EventModel> {
+        return #Predicate<EventModel> { event in
+            // Time filter condition
+            return (
+                filterToday
+                ? event.startTime
+                    .flatMap {
+                        $0 >= timeSpanStart && $0 <= timeSpanEnd
+                    } ?? false //check the dates, otherwise false (not in that date)
+                : true) //if not filtering for today, return true
+            &&
+            (
+                searchString.isEmpty || event.name!
+                    .localizedStandardContains(searchString)
+            )
+            &&
+            (showFavorites ? event.favorited : true)
+        }
+    }
     
     var body: some View {
         VStack{
+            if events.isEmpty{
+                Text("No Events in this time period")
+                    .padding()
+                
+            }
             
-            if isLoading && !initialLoadingComplete {
+            
+            if isLoading {
                 //progress View
                 ProgressView("Loading Events...")
                     .padding()
-            } else if events.isEmpty{
-                Text("No Events in this time period")
-                    .padding()
             } else {
-                ForEach(events, id: \.self) { event in
+                ForEach(events, id: \.id) { event in
                     //checks if favorited page
-                    EventCard(event: event, isExpanded: (event.id == selectedEvent))
+                    EventCard(event: event, isExpanded: (event.isSelected))
                         .onTapGesture {
                             withAnimation(.easeInOut) {
-                                selectedEvent = selectedEvent == event.id ? -1 : event.id
+                                event.isSelected.toggle()
                             }
                         }//tap each event, and it sets id = to that event
                     
@@ -98,17 +115,10 @@ struct EventList: View {
             }//if loading, else, fetch.
             
         }//vstack
-        .onChange(of: parentView.timeSpan) {oldValue, newValue in
-            //change predicate of searching
-            parentView.timeSpan = newValue
-        }
         .onAppear{
             //fetch events on appear
             Task {
                 await fetchEvents()
-                await MainActor.run {
-                    initialLoadingComplete = true
-                }
             }
             
             //refrehs on timer
@@ -146,7 +156,7 @@ struct EventList: View {
      */
     private func fetchEvents() async {
         //determine if we should fetch
-        let shouldFetch = parentView.lastFetched == nil || !initialLoadingComplete || Date().timeIntervalSince(parentView.lastFetched!) >= parentView.cacheExpiration
+        let shouldFetch = parentView.lastFetched == nil || Date().timeIntervalSince(parentView.lastFetched!) >= parentView.cacheExpiration || parentView.forceRefreshRequested
         
         //use cache data
         if !shouldFetch{
@@ -154,110 +164,136 @@ struct EventList: View {
             return
         }
         
-        print("Fetching data from API, updating cache")
-        
         //if loading, set to true
         await MainActor.run {
             isLoading = true
         }
         
-        // do-catch outline..
-        do {
-            // Update on main thread since we're changing published properties
-            let url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
+        //remove duplicates
+        await MainActor.run {
+            removeDuplicates()
+        }
+        
+        print("Fetching data from API, updating cache")
+        
+        // Update on main thread since we're changing published properties
+        let url = "https://node16049-csc324--spring2025.us.reclaim.cloud/events"
             
-            //decode JSON into DTOs
-            guard let jsonString = try? await EventData.fetchData(urlString: url) else {
-                print("Failed to fetch data")
-                await MainActor.run { isLoading = false} //set to false if you failed to fetch data
-                return
-            }//guard let
+        //decode JSON into DTOs
+        guard let jsonString = try? await EventData.fetchData(urlString: url) else {
+            print("Failed to fetch data")
+            await MainActor
+                .run {
+                    isLoading = false
+                } //set to false if you failed to fetch data
+            return
+        }//guard let
             
             
-            //parse events
-            let eventDTOs = EventData.parseEvents(json: jsonString)
+        //parse events
+        let eventDTOs = EventData.parseEvents(json: jsonString)
             
             
-            // Update on main thread since we're changing published properties
-            await MainActor.run {
-                //add all existing ids to events
-                var processedEventIds = Set<Int>()
+        // Update on main thread since we're changing published properties
+        await MainActor.run {
+            //add all existing ids to events
+            var processedEventIds = Set<Int>()
                 
-                //process each event from API
-                for dto in eventDTOs {
-                    //checks if that ID exists
-                    guard let dtoID = dto.eventid else { continue }
+            //process each event from API
+            for dto in eventDTOs {
+                //checks if that ID exists
+                guard let dtoID = dto.eventid, dtoID > 0 else { continue }
                     
                     
-                    //if the events can fetch the descriptor from the modelcontext, and if they exist..
-                    if processedEventIds.contains(dtoID){
-                        continue
-                    }//If contains, continue, if not..
-                    processedEventIds.insert(dtoID)//add it to the list of processed IDs
+                //if the events can fetch the descriptor from the modelcontext, and if they exist..
+                if processedEventIds.contains(dtoID){
+                    continue
+                }//If contains, continue, if not..
+                processedEventIds
+                    .insert(dtoID)//add it to the list of processed IDs
                     
-                    // Check if this event already exists in the database
-                    let existingEvent = events.first(where: { $0.id == dtoID })
+                // Check if this event already exists in the database
+                let existingEvent = events.first(where: { $0.id == dtoID })
                     
-                    if let existing = existingEvent{
-                        //update all values if already existing!
-                        existing.name = dto.event_name ?? existing.name
-                        existing.imageURL = dto.event_image ?? existing.imageURL
-                        existing.location = dto.event_location ?? existing.location
-                        existing.organizations = dto.organizations ?? existing.organizations
-                        existing.tags = dto.tags ?? existing.tags
-                        existing.lastUpdated = Date() //update last-updated date
-                        //print("Update existing event: \(existing.name) (ID: \(existing.id))")
-                    } else {
-                        //create new event
-                        let eventModel = EventModel(from: dto)
+                if let existing = existingEvent{
+                    //update all values if already existing!
+                    existing.name = dto.event_name ?? existing.name
+                    existing.imageURL = dto.event_image ?? existing.imageURL
+                    existing.location = dto.event_location ?? existing.location
                         
-                        //add a new persistent event model to our local database utilizing swiftdata
-                        modelContext.insert(eventModel)
-                        //print("added new event: \(eventModel.name) (ID: \(eventModel.id))")//
-                    } //if there isn't an event with that ID, create one.
-                } //if there is an event with that ID
+                    //handle arrays carefully
+                    if let newOrgs = dto.organizations{
+                        existing.organizations = newOrgs
+                    }
+                    if let newTags = dto.tags{
+                        existing.tags = newTags
+                    }
+                        
+                    //update dates
+                    if let startTimeString = dto.event_start_time{
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.locale = Locale(
+                            identifier: "en_US_POSIX"
+                        )
+                        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                        existing.startTime = dateFormatter
+                            .date(
+                                from: startTimeString
+                            ) ?? existing.startTime
+                    }//setting starttime
+                        
+                    if let endTimeString = dto.event_end_time {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+                        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                        existing.endTime = dateFormatter
+                            .date(from: endTimeString) ?? existing.endTime
+                    }
+                        
+                    //change url
+                    existing.imageURL = dto.event_image ?? existing.imageURL
+                    existing.lastUpdated = Date() //update last-updated date
+                    //print("Update existing event: \(existing.name) (ID: \(existing.id))")
+                } else {
+                    //create new event
+                    let newEvent = EventModel(from: dto)
+                        
+                    //add a new persistent event model to our local database utilizing swiftdata
+                    modelContext.insert(newEvent)
+                    //print("added new event: \(eventModel.name) (ID: \(eventModel.id))")//
+                } //if there isn't an event with that ID, create one.
+            } //if there is an event with that ID
                 
                 
-                //cleanup old Events (older than a week) from events
-                let weekAgo = Calendar.current.date(
-                    byAdding: .day,
-                    value: -7,
-                    to: Date()
-                )!
+            //cleanup old Events (older than a week) from events
+            let weekAgo = Calendar.current.date(
+                byAdding: .day,
+                value: -7,
+                to: Date()
+            )!
                 
-                //delete all values older than a week
-                let oldPredicate = #Predicate<EventModel> {
-                    $0.lastUpdated < weekAgo
-                } //defining predicate
-                try? modelContext
-                    .delete(model: EventModel.self, where: oldPredicate)
+            //delete all values older than a week
+            let oldPredicate = #Predicate<EventModel> {
+                $0.lastUpdated < weekAgo
+            } //defining predicate
+            try? modelContext
+                .delete(model: EventModel.self, where: oldPredicate)
                 
-                // a little inefficient, however..
-                removeDuplicates()
+            // a little inefficient, however..
+            removeDuplicates()
                 
+            //save context after adding all events
+            try? modelContext.save()
                 
+            // update timestamps
+            parentView.lastFetched = Date()
+            parentView.forceRefreshRequested = false
                 
-                // update timestamps
-                parentView.lastFetched = Date()
-                print("API fetch completed at \(Date())")
-                
-                
-                
-                //save context after adding all events
-                try? modelContext.save()
-                
-                //turn off loading state
-                isLoading = false
-            } // await MainActor
-        } catch {
-            //if error..
-            await MainActor.run {
-                isLoading = false
-                print(
-                    "Failed to fetch events: \(error.localizedDescription)"
-                )
-            }//main actor error
-        } // do-catch only run if updated
+            //turn off loading state
+            isLoading = false
+            print("API fetch completed at \(Date())")
+        } // await MainActor
+        
         
         
         await MainActor.run {
@@ -267,18 +303,19 @@ struct EventList: View {
     
     
     private func removeDuplicates() {
-        let uniqueIDs = Set(events.map { $0.id })
+        //group events by ID and find duplicates
+        let eventsByID = Dictionary(grouping: events, by: { $0.id })
         
-        for id in uniqueIDs {
-            let duplicates = events.filter { $0.id == id }
-            if duplicates.count > 1 {
-                //sort by last updated
-                let sortedDuplicates = duplicates.sorted { $0.lastUpdated > $1.lastUpdated}
+        for (_, duplicates) in eventsByID  where duplicates.count > 1{
+            //sort by last updated
+            let sortedDuplicates = duplicates.sorted {
+                $0.lastUpdated > $1.lastUpdated
+            }
                 
-                //remove duplicates, except the first
-                for duplicate in sortedDuplicates.dropFirst() {
-                    modelContext.delete(duplicate)
-                }
+            //remove duplicates, except the first
+            for duplicate in sortedDuplicates.dropFirst() {
+                modelContext.delete(duplicate)
+                
             }
             
         }//double for loop to delet eduplicates

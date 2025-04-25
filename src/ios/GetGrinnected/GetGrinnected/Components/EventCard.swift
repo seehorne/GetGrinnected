@@ -78,7 +78,7 @@ struct EventCard: View {
                                 //because it's optional type, we have to use ! to
                                 //tell the code that we are SURE it exists
                                 //putting variable into strings is "\(variable)"
-                                Text("\(event.name)")
+                                Text("\(event.name!)")
                                     .font(.headline) //determining font (make it big!)
                                     .foregroundStyle(.textPrimary)//this color is defined in assets
                                     .frame(alignment: .leading)//specifically adding leading alignment to get
@@ -86,9 +86,9 @@ struct EventCard: View {
                             
                             
                             //Check if null
-                            if(!event.organizations!.isEmpty) {
+                            if(!event.organizations.isEmpty) {
                                 //join the array with a ", "
-                                Text("By \(event.organizations!.joined(separator: ", "))")
+                                Text("By \(event.organizations.joined(separator: ", "))")
                                     .font(.subheadline)
                                     .foregroundStyle(.textPrimary)
                                 //alternatives for colors
@@ -132,9 +132,9 @@ struct EventCard: View {
                                     .lineLimit(1000, reservesSpace: false)
                             }
                           //Add event tags, checking both if expanded and event tags
-                            if(isExpanded && !event.tags!.isEmpty) {
+                            if(isExpanded && !event.tags.isEmpty) {
                                 //join the array with a ", "
-                                Text("Tags: \(event.tags!.joined(separator: ", "))")
+                                Text("Tags: \(event.tags.joined(separator: ", "))")
                                     .font(.caption2)
                                     .foregroundStyle(.textPrimary)
                                     .lineLimit(1000, reservesSpace: false)
