@@ -102,7 +102,8 @@ function run() {
   /*
    * USER DATA ROUTES
    *
-   * These routes are protected, since they correspond to a particular user.
+   * These routes are protected by JWT verification (the middlewareVerifyJWT function)
+   * since they correspond to a particular user.
    */
 
   // Get your own data by requesting it with a GET request.
@@ -154,19 +155,25 @@ function routeShowOnline(_req, res) {
 
 /**
  * Middleware to verify that a JWT is valid before doing a request.
- * Based on https://www.slingacademy.com/article/authentication-authorization-expressjs-jwt/
  * 
- * It looks at the Bearer header included with the request, and tries to
- * verify that value as a JWT authorization token.
+ * Verifies the JWT token contained in the `Bearer` header of the request. On any
+ * error, responds to the request with failure.
  * 
- * TODO: document more and better
+ * On success, the `req.email` variable will be set corresponding to the
+ * authorized user, which the route using this middleware will be able to access.
+ * 
+ * > Based on https://www.slingacademy.com/article/authentication-authorization-expressjs-jwt/.
+ * 
+ * @param {*} req   Express request object, contains the headers.
+ * @param {*} res   Express response object.
+ * @param {*} next  Express callback. Since this is a middleware, `next()` will
+ *                  call the function *after* the middleware.
  */
 function middlewareVerifyJWT(req, res, next) {
-  // Get the contents of the Bearer header.
+  // Get the contents of the Bearer header sent along with the request
   const token = req.get('Bearer');
 
-  // If the token IS empty, immediately send that response.
-  // Use HTTP 401 since it specifically means "Unauthorized"
+  // If that header doesn't exist, fail with HTTP 401 which means "Unauthorized".
   if (!token) {
     res.status(401).json({
       'error': 'Token required',
@@ -175,11 +182,10 @@ function middlewareVerifyJWT(req, res, next) {
     return;
   }
 
-  // Verify the token.
-  // Since we provide a callback, this will run async and call next() 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-    // For any error, send back a response that says the token is invalid.
-    // HTTP 403 means "forbidden".
+  // Use the jwt library to verify. The callback we provide will be run async
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+    // If JWT verify fails, stop the request now and return a 403 error.
+    // That error is generally agreed to mean "you need to reauthorize".
     if (err) {
       res.status(403).json({
         'error': 'Invalid or expired token',
