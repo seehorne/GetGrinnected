@@ -96,7 +96,7 @@ Each experiment will be an h2 (`##`) below, with individual questions under h3s 
 
 ## Exploring Authorization Possibilities
 
-This was done almond on their own.
+This was done by almond on their own.
 
 ### What were initial goals and expectations?
 
@@ -165,7 +165,7 @@ I ended up deciding not to ask for any sort of diagram, since I decided this was
 
 ### Optional Questions
 
-For this response I'll answer them, but not in complete sentences. The goal is to make discussion easier without requiring a lot of extra work.
+For this response I'll answer them, but not with as much text as if I were turning them in. The goal is to make discussion easier without requiring a lot of extra work.
 
 6. Helped learning, avoided sifting through generated and slop articles which are all I get trying to search this stuff up.
 
