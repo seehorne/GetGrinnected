@@ -139,6 +139,12 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                                     }
                                 }
                                 calendarInputList = createCalendarList(event, chosenTags, currentMonth) }) {
+                            DropdownMenuItem(
+                                text = {Text("Unselect All")},
+                                onClick = {for (t in tags.indices){
+                                    tags[t].checked.value = false}
+                                },
+                            )
                             for (i in tags.indices) {
                                 DropdownMenuItem(
                                     text = {
@@ -146,7 +152,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                                             check = tags[i]
                                         )
                                     },
-                                    onClick = {}
+                                    onClick = {tags[i].checked.value = !tags[i].checked.value}
                                 )
                             }
                             Spacer(modifier = Modifier.height(60.dp))

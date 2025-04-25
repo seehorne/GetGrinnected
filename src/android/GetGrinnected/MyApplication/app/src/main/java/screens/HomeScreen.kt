@@ -325,8 +325,14 @@ fun HomeScreen(tags: List<Check>) {
                     DropdownMenu(
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
+                        DropdownMenuItem(
+                            text = {Text("Unselect All")},
+                            onClick = {for (t in tags.indices){
+                                tags[t].checked.value = false}
+                            },
+                        )
                         for (tag in tags.indices){
-                            DropdownMenuItem(text = {CheckBox(check = tags[tag])}, onClick = {})
+                            DropdownMenuItem(text = {CheckBox(check = tags[tag])}, onClick = {tags[tag].checked.value = !tags[tag].checked.value})
                         }
                         Spacer(modifier = Modifier.height(60.dp))
                     }
