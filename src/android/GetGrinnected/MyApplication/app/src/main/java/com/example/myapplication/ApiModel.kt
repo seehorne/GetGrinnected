@@ -11,11 +11,11 @@ import retrofit2.http.POST
  */
 interface ApiModel {
     // Async function for login request
-    @POST("login")
-    suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
+    @POST("user/login")
+    suspend fun login(@Body request: EmailRequest): Response<AuthResponse>
 
     // Async function for signup request
-    @POST("signup")
+    @POST("user/signup")
     suspend fun signup(@Body request: SignupRequest): Response<AuthResponse>
 
     // Async function to check if an email is available
@@ -24,5 +24,8 @@ interface ApiModel {
 
     @GET("events")
     suspend fun getEvents(): Response<List<Event>>
+
+    @POST("user/verify")
+    suspend fun verifyOTP(@Body request: VerifyRequest): Response<AuthResponse>
 
 }
