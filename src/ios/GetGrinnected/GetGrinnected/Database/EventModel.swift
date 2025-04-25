@@ -17,7 +17,7 @@ import Foundation
 
 @Model
 final class EventModel: Hashable {
-    var id: Int
+    @Attribute(.unique) var id: Int
     var name: String?
     var descr: String?
     var date: String?
@@ -31,14 +31,17 @@ final class EventModel: Hashable {
     var imageURL: String?
     var is_draft: Int?
 
-    @Attribute(.transformable(by: ArrayTransformer.self))
-    var tags: [String]
+    
+    // To this:
+    @Attribute(.externalStorage)
+    var tags: [String] = []
+    
+    @Attribute(.externalStorage)
+    var organizations: [String] = []
+    
 
-    @Attribute(.transformable(by: ArrayTransformer.self))
-    var organizations: [String]
-
-    var favorited: Bool
-    var lastUpdated: Date
+    var favorited: Bool = false
+    var lastUpdated: Date = Date()
 
     // UI-only flags (not persisted in SwiftData)
     @Transient var notified: Bool = false
@@ -73,22 +76,6 @@ final class EventModel: Hashable {
     // Required by SwiftData
     init() {
         self.id = 0
-        self.name = nil
-        self.descr = nil
-        self.date = nil
-        self.location = nil
-        self.startTime = nil
-        self.endTime = nil
-        self.rsvp = nil
-        self.all_day = nil
-        self.event_private = nil
-        self.repeats = nil
-        self.imageURL = nil
-        self.is_draft = nil
-        self.tags = []
-        self.organizations = []
-        self.favorited = false
-        self.lastUpdated = Date()
     }
 
     func hash(into hasher: inout Hasher) {

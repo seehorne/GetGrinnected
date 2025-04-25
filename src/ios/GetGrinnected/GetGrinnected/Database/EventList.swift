@@ -303,24 +303,29 @@ struct EventList: View {
     
     
     private func removeDuplicates() {
-        //group events by ID and find duplicates
+        // Group events by ID and find duplicates
         let eventsByID = Dictionary(grouping: events, by: { $0.id })
         
-        for (_, duplicates) in eventsByID  where duplicates.count > 1{
-            //sort by last updated
+        for (_, duplicates) in eventsByID where duplicates.count > 1 {
+            // Sort by last updated
             let sortedDuplicates = duplicates.sorted {
                 $0.lastUpdated > $1.lastUpdated
             }
-                
-            //remove duplicates, except the first
-            for duplicate in sortedDuplicates.dropFirst() {
-                modelContext.delete(duplicate)
-                
-            }
             
-        }//double for loop to delet eduplicates
+            // Keep the most recently updated one and delete the rest
+            for duplicate in sortedDuplicates.dropFirst() {
+                // The issue is here - before deleting, make sure we're not
+                // trying to access or modify the tags property
+                modelContext.delete(duplicate)
+            }
+        }
         
-        try? modelContext.save()
+        // Try to save the context and handle potential errors
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error saving context after removing duplicates: \(error)")
+        }
     }
     
     

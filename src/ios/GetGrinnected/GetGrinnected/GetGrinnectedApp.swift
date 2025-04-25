@@ -17,10 +17,15 @@ struct GetGrinnectedApp: App {
         ArrayTransformer.register()
         do {
             print("Attempting to create container…")
-            container = try ModelContainer(
-                for: EventModel.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: false)
-            )
+            let schema = Schema([
+                            EventModel.self
+                        ])
+            let config = ModelConfiguration(
+                         schema: schema,
+                         isStoredInMemoryOnly: false,
+                         allowsSave: true
+                     )
+            container = try ModelContainer(for: schema, configurations: [config])
             print("Container created successfully!")
         } catch {
             print("❌ ModelContainer init failed: \(error.localizedDescription)")
