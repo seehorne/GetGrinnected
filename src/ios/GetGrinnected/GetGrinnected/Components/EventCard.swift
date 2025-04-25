@@ -157,6 +157,7 @@ struct EventCard: View {
                             //component that can be reusable
                             Button(action: {
                                 event.favorited.toggle()
+                                event.lastUpdated = Date() // mark as modified
                                 try? modelContext.save()
                             }) {
                                 Image(systemName: event.favorited ? "heart.fill" : "heart")

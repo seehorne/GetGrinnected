@@ -21,4 +21,13 @@ class EventListParentViewModel: ObservableObject {
     @Published var lastDate = Date.now.addingTimeInterval(86400 * 13)
     @Published var selectedTags = EventTags.any
     @Published var timeSpan = DateInterval(start: Date.now, end: Date.now.startOfNextDay)
+    @Published var lastFetched: Date?
+    @Published var cacheExpiration: TimeInterval = 3600
+    
+    func forceRefresh() {
+        self.lastFetched = nil
+        
+        print("Force refresh triggered")
+    }
+    
 }

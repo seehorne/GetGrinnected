@@ -27,7 +27,6 @@ struct FavoritesView: View {
                     
                 //content
                     EventList(selectedEvent: -1, parentView: viewModel, searchString: "", showFavorites: true)
-                            
                 }
             }
             .edgesIgnoringSafeArea(.top)

@@ -13,6 +13,7 @@ struct CalendarView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
     @State private var searchText = ""
+    @State private var isLoading = true
     
     //Main view body
     var body: some View {
@@ -26,12 +27,8 @@ struct CalendarView: View {
                     
                     //vertical scroll view to see more events
                     ScrollView(.vertical, showsIndicators: false){
-                        //have search bar on here.
-                        
-                        
                         //vstack to have some spacing between header and main compoments
                         VStack(spacing: 16) {
-                            
                             WeekView(selectedDate: $viewModel.viewedDate)
                                 .padding(.bottom, 4)
                                 .padding(.top, 120)
@@ -40,10 +37,8 @@ struct CalendarView: View {
                             EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, filterToday: searchText.isEmpty, showFavorites: false)
                         }
                         .padding(.top)//padding on top
-                        
                     }
                     .searchable(text: $searchText, placement: .toolbar)
-                    
                 }//scroll view
                 .edgesIgnoringSafeArea(.top)
             }
@@ -51,6 +46,18 @@ struct CalendarView: View {
             .headerProminence(.increased)
             
         }//geometry reader
+        .onAppear{
+            viewModel.timeSpan.start = viewModel.viewedDate
+            viewModel.timeSpan.end = viewModel.viewedDate.startOfNextDay
+            
+            //forcerefresh, by setting lastfetched to nil
+            viewModel.forceRefresh()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                viewModel.forceRefresh() //add a small delay to ensure eventlist is fully initialized
+            }
+            
+        }
         // if the viewedDate changes update timeSpan
         .onChange(of: viewModel.viewedDate) { oldValue, newValue in
             // update start and end of time span when you are viewing a different day

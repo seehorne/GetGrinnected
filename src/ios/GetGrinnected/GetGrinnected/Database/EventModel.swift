@@ -1,5 +1,5 @@
 //
-//  Persistence.swift
+//  EventModel.swift
 //  GetGrinnected
 //
 //  Created by Budhil Thijm on 4/23/25.
@@ -16,7 +16,7 @@ import SwiftData
 import Foundation
 
 @Model
-final class EventModel: Identifiable {
+final class EventModel: Hashable { //conforming to hashable to prevent duplicates
 //    @Attribute
 //    var lastUpdated: Date?//tell when the events were last updated so not updated too often
     var id: Int
@@ -24,14 +24,14 @@ final class EventModel: Identifiable {
     var descr: String?
     var date: String?
     var location: String?
-    var organizations: [String]?
+    @Attribute var organizations: [String]?
     var startTime: Date?
     var endTime: Date?
     var rsvp: Int?
     var all_day: Int?
     var usefulStartTime: Date?
     var usefulEndTime: Date?
-    var tags: [String]?
+    @Attribute var tags: [String]?
     var event_private: Int?
     var repeats: Int?
     var imageURL: String?
@@ -42,6 +42,7 @@ final class EventModel: Identifiable {
      */
     var favorited: Bool
     var notified: Bool
+    var lastUpdated: Date //checks when last updated as to not update every single time!
     
     // Constructor that converts from your DTO
     init(from dto: EventDTO) {
@@ -75,7 +76,6 @@ final class EventModel: Identifiable {
         self.all_day = dto.event_all_day ?? 0
         self.usefulStartTime = dto.useful_event_start_time ?? Date()
         self.usefulEndTime = dto.useful_event_end_time ?? Date()
-        self.tags = dto.tags ?? []
         self.event_private = dto.event_private ?? 0
         self.repeats = dto.repeats ?? 0
         self.imageURL = dto.event_image ?? ""
@@ -87,6 +87,7 @@ final class EventModel: Identifiable {
          */
         self.favorited = false
         self.notified = false
+        self.lastUpdated = Date() //set initial timestamp for later API updating
     }//initialize from an eventDTO
     
     // Empty initializer required by SwiftData
@@ -106,18 +107,29 @@ final class EventModel: Identifiable {
         self.all_day = 0
         self.usefulStartTime = Date()
         self.usefulEndTime = Date()
-        self.tags = []
         self.event_private = 0
         self.repeats = 0
         self.imageURL = ""
         self.is_draft = 0
         self.favorited = false
         self.notified = false
+        self.lastUpdated = Date()
         
         
         
         
         
     }//empty initializer, required by SwiftData
+    
+    
+    //hasher, add more to make the hasher more unique
+    public func hash(into hasher: inout Hasher){
+        hasher.combine(id)
+    }
+    
+    public static func ==(lhs: EventModel, rhs: EventModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     
 }//Model
