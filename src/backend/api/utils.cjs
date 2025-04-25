@@ -199,10 +199,9 @@ async function otpFileCheck(filename, email, code) {
             // OTP code is valid if
             // - the code entered matches properly
             // - it is before the expiration date
-            return_value = (
-                bcrypt.compare(code, entry.hashedCode) &&
-                now <= expiry
-            );
+            const code_match = await bcrypt.compare(code, entry.hashedCode);
+            const not_expired = now <= expiry;
+            return_value = code_match && not_expired;
         }
 
         // If the return value is true, delete that row from the database -- they
