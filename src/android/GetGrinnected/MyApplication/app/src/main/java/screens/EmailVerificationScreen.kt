@@ -83,7 +83,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
         ) {
             // This is our app logo image
             Image(
-                painter = painterResource(id = R.drawable.gg_logo_2),
+                painter = painterResource(id = R.drawable.getgrinnected_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
                     .fillMaxWidth()

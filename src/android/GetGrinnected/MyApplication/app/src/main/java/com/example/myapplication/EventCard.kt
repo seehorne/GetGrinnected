@@ -81,8 +81,6 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
             .padding(horizontal = 8.dp)
-            .background(color = colorScheme.primaryContainer)
-            .border(2.dp, color = colorScheme.primary)
             .clickable
         {
                 expanded.value = !expanded.value
