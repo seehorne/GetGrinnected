@@ -80,8 +80,7 @@ struct EventList: View {
                 : true) //if not filtering for today, return true
             &&
             (
-                searchString.isEmpty || event.name!
-                    .localizedStandardContains(searchString)
+                searchString.isEmpty || event.name.localizedStandardContains(searchString)
             )
             &&
             (showFavorites ? event.favorited : true)
@@ -104,10 +103,15 @@ struct EventList: View {
             } else {
                 ForEach(events, id: \.id) { event in
                     //checks if favorited page
-                    EventCard(event: event, isExpanded: (event.isSelected))
+                    EventCard(event: event, isExpanded: (event.id == selectedEvent))
                         .onTapGesture {
                             withAnimation(.easeInOut) {
-                                event.isSelected.toggle()
+                                //select event
+                                if (event.id == selectedEvent){
+                                    selectedEvent = -1
+                                } else {
+                                    selectedEvent = event.id
+                                }
                             }
                         }//tap each event, and it sets id = to that event
                     

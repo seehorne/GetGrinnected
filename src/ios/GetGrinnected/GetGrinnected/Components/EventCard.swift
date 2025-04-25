@@ -78,7 +78,7 @@ struct EventCard: View {
                                 //because it's optional type, we have to use ! to
                                 //tell the code that we are SURE it exists
                                 //putting variable into strings is "\(variable)"
-                                Text("\(event.name!)")
+                                Text("\(event.name)")
                                     .font(.headline) //determining font (make it big!)
                                     .foregroundStyle(.textPrimary)//this color is defined in assets
                                     .frame(alignment: .leading)//specifically adding leading alignment to get

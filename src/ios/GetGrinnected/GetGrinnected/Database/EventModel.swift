@@ -18,7 +18,7 @@ import Foundation
 @Model
 final class EventModel: Hashable {
     @Attribute(.unique) var id: Int
-    var name: String?
+    var name: String
     var descr: String?
     var date: String?
     var location: String?
@@ -45,11 +45,11 @@ final class EventModel: Hashable {
 
     // UI-only flags (not persisted in SwiftData)
     @Transient var notified: Bool = false
-    @Transient var isSelected: Bool = false
+//    @Transient var isSelected: Bool = false
 
     init(from dto: EventDTO) {
         self.id = dto.eventid ?? 0
-        self.name = dto.event_name
+        self.name = dto.event_name ?? ""
         self.date = dto.event_date
         self.descr = dto.event_description
         self.location = dto.event_location
@@ -71,11 +71,16 @@ final class EventModel: Hashable {
         self.is_draft = dto.is_draft
         self.favorited = false
         self.lastUpdated = Date()
+//        self.isSelected = false
+        self.notified = false
     }
 
     // Required by SwiftData
     init() {
         self.id = 0
+        self.name = ""
+//        self.isSelected = false
+        self.notified = false
     }
 
     func hash(into hasher: inout Hasher) {
