@@ -12,27 +12,13 @@ const DBPATH = './src/backend/Database/localOTP.db'
  * @param {*} _next  Error handler function for async (unused)
  */
 async function routeGetUserData(req, res, _next) {
-  // TODO: get either username or email, whichever makes sense, from the request.
+  // Take the email from the request, which will be loaded by the middleware.
   const email = req.email;
-  console.log(`the email we got is ${email}`);
-  res.send('nothing here yet');
-  return;
 
-  // // TODO: query the database for that account.
-  // const account = undefined; // await db.getAccount();
-
-  // // TODO: if that account doesn't exist (somehow) return that as an error
-  // if (account === undefined) {
-  //   console.log(`ERROR: routeGetUserData called by nonexistent user ${email}`);
-  //   res.status(404).json({
-  //     'error': 'Nonexistent user',
-  //     'message': `No user exists with email ${email}, \
-  //         even though you are authenticated as them. \
-  //         This is an error on our end.`
-  //   });
-  //   return;
-  // }
-  // res.json({ result: result !== undefined });
+  // Query the DB for the account corresponding to that email.
+  // Since the middleware checks if the account exists, we can just return the data.
+  const account = await db.getAccountByEmail(email);
+  res.json(account);
 }
 
 /**
