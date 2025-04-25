@@ -19,7 +19,8 @@ object DataStoreSettings {
     private val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
     // Preference key for dark mode value that we store within our datastore file
     private val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
-
+    // Preference key for Logged in account id to track the current logged in account
+    private val LOGGED_IN_ACCOUNT_ID = intPreferencesKey("logged_in_account_id")
     /**
      * Setter for logged in value
      * @param context is the current context our app is running
@@ -58,6 +59,26 @@ object DataStoreSettings {
      */
     fun getDarkMode(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { it[IS_DARK_MODE] ?: false }
+    }
+
+    /**
+     * Setter for accountId value
+     * @param context is the current context our app is running
+     * @param accountId is the boolean we are setting our isDarkMode preference to
+     */
+    suspend fun setLoggedInAccountId(context: Context, accountId: Int) {
+        context.dataStore.edit { it[LOGGED_IN_ACCOUNT_ID] = accountId }
+    }
+
+    /**
+     * Getter for AccountID value
+     * @param context is the current context our app is running
+     * @return Flow<Int> this basically is a reactive value of the event id that allows us to
+     * update our app in real time without needing to pass the value down through functions
+     * it is simply accessible anywhere in our app.
+     */
+    fun getLoggedInAccountId(context: Context): Flow<Int?> {
+        return context.dataStore.data.map { it[LOGGED_IN_ACCOUNT_ID] }
     }
 
 }

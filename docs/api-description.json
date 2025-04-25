@@ -11,10 +11,369 @@
   ],
   "tags": [
     {
-      "name": "events"
+      "name": "events",
+      "description": "Getting calendar events."
+    },
+    {
+      "name": "user",
+      "description": "Logging in and changing user settings."
     }
   ],
   "paths": {
+    "/user/{username}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Check if user exists.",
+        "description": "Check if a user exists with the specified username.",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the user exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Log in.",
+        "description": "Log in an existing user, which will send a one-time code to their email. \n\nWill fail with status `400` if no email address is provided in request body.\n\nWill fail with status `404` if the user you are attempting to log in does not exist.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@grinnell.edu"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "boolean",
+                      "example": "OTP successfully sent."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ],
+                  "properties": {
+                    "error": {
+                      "example": "No email"
+                    },
+                    "message": {
+                      "example": "An email must be provided in the body of the request."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ],
+                  "properties": {
+                    "error": {
+                      "example": "No such user"
+                    },
+                    "message": {
+                      "example": "No user account exists with that email."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/signup": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Sign up.",
+        "description": "Sign up a new user account. \n\nWill fail with status `400` if any of these errors are present.\n- Username or email are not provided in request body\n- Username or email are already associated with an account\n- Email does not end with @grinnell.edu\n- Username does not follow rules (TODO: DO THOSE GO HERE?)\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@grinnell.edu"
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "example_user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "boolean",
+                      "example": "Account created, and OTP successfully sent."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ],
+                  "properties": {
+                    "error": {
+                      "example": "Invalid username"
+                    },
+                    "message": {
+                      "example": "Username must not contain the sequences '_.', '._', '..', or '__'."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/resend-otp": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Resend OTP code for login/signup.",
+        "description": "Resend an OTP code to a user, such as if they do not recieve their code when logging in.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@grinnell.edu"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "boolean",
+                      "example": "OTP successfully sent."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ],
+                  "properties": {
+                    "error": {
+                      "example": "No email"
+                    },
+                    "message": {
+                      "example": "An email must be provided in the body of the request."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ],
+                  "properties": {
+                    "error": {
+                      "example": "No such user"
+                    },
+                    "message": {
+                      "example": "No user account exists with that email."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/verify": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Verify recieved OTP code.",
+        "description": "Verify the OTP code that has been sent to a user's email. If the code is correct and has not expired, an authorization and a refresh token will be sent back.\n\nThe authorization token should be sent with all authenticated requests, and expires after 15 minutes.\n\nThe refresh token can be used to refresh itself and the authorization token, and expires after 30 days unless refreshed.\n",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "example@grinnell.edu"
+                  },
+                  "code": {
+                    "type": "string",
+                    "example": 123456
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful verification.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully authenticated"
+                    },
+                    "refresh_token": {
+                      "$ref": "#/components/schemas/AuthToken"
+                    },
+                    "access_token": {
+                      "$ref": "#/components/schemas/AuthToken"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ],
+                  "properties": {
+                    "error": {
+                      "example": "Bad code"
+                    },
+                    "message": {
+                      "example": "Could not verify OTP."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/events": {
       "get": {
         "tags": [
@@ -104,6 +463,15 @@
         "required": false,
         "schema": {
           "$ref": "#/components/schemas/Tags"
+        }
+      },
+      "auth_token": {
+        "name": "authorization_token",
+        "in": "header",
+        "description": "Authorization token.",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/AuthToken"
         }
       }
     },
@@ -239,6 +607,11 @@
           "description": "Tag names.",
           "type": "string"
         }
+      },
+      "AuthToken": {
+        "type": "string",
+        "description": "Authorization or refresh token.",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
       },
       "Error": {
         "type": "object",

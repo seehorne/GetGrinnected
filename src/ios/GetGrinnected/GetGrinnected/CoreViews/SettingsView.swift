@@ -24,23 +24,24 @@ struct SettingsView: View {
         
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
-            ScrollView(.vertical, showsIndicators: false){
-                VStack(){
-                    Header(safeAreaTop, title: "Settings", searchBarOn: true)
+            VStack(){
+                // Header is outside of scrollable so it does not move
+                Header(safeAreaTop, title: "Settings", searchBarOn: true)
+                
+                ScrollView(.vertical, showsIndicators: false){
+                
+                //content
+                VStack {
+                    InputView(text: $username, title: "Change Username", placeholder: "Username")
+                        .padding()
                     
-                    
-                    //content
-                    VStack {
-                        InputView(text: $username, title: "Change Username", placeholder: "Username")
-                            .padding()
-                        
-                        // switch for light/dark mode
-                        Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
-                            .padding()
-                            .tint(.colorRed)
-                            .frame(maxWidth: 200)
-                    } //VStack
-                    .padding()
+                    // switch for light/dark mode
+                    Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
+                        .padding()
+                        .tint(.colorBlue)
+                        .frame(maxWidth: 200)
+                } //VStack
+                .padding()
                             
                 }//vstack
             }//Scroll view

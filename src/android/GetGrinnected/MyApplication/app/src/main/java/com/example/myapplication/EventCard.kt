@@ -15,23 +15,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.Manifest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
 
 /**
  * A composable function that creates the general look of an event card.
@@ -41,18 +51,29 @@ import kotlinx.coroutines.launch
  * @param modifier Modifier to be applied to the card layout.
  */
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
     // Boolean to track whether a card is favorited
-    var isFavorited = event.is_favorited
-
+    val isFavorited = remember(event.is_favorited) { mutableStateOf(event.is_favorited) }
+    // Boolean to track if card should cause notification
+    val isNotification = remember(event.is_notification) { mutableStateOf(event.is_notification) }
+    val context = LocalContext.current
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
     val typography = MaterialTheme.typography
+    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val notificationHandler = NotificationHandler(context)
 
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+    }
     // Sets up composable to be a card for our info
     Card(
         colors = CardDefaults.cardColors(containerColor = colorScheme.primaryContainer),
@@ -82,7 +103,6 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     .fillMaxWidth()
             ) {
                 // Makes a column within the row to display the name of the event
-
                 Column(modifier = Modifier.weight(1f)) {
                     event.event_name?.let {
                         Text(
@@ -102,7 +122,6 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                                                       color = colorScheme.onSurface)
                     }
                     Spacer(modifier = Modifier.height(2.dp))
-
                     // If organizations is empty we won't include the output on the card
                     if (event.organizations?.isNotEmpty() == true) {
                         Text(text = "Hosted by: ${event.organizations.joinToString()}",
@@ -110,21 +129,42 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                             color = colorScheme.onSurface)
                     }
                 }
-                // This is our favorite icon that is align with the column of info but beside it
-                // as it is in a row.
-                Icon(
-                    imageVector = if (isFavorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favorite Icon",
-                    tint = colorScheme.primary,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clickable {
-                            // This tells our database to update the events favorited status
-                            CoroutineScope(Dispatchers.IO).launch {
-                                AppRepository.toggleFavorite(event.eventid, !isFavorited)
-                            }
-                        },
-                )
+                
+                // this is the Column for icons
+                Column {
+                    // This is our favorite icon
+                    Icon(
+                        imageVector = if (isFavorited.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Favorite Icon",
+                        tint = colorScheme.primary,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clickable {
+                                isFavorited.value = !isFavorited.value
+                                // This tells our database to update the events favorited status
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    AppRepository.toggleFavorite(event.eventid, isFavorited.value)
+                                }
+                            },
+                    )
+                    // This is our notification icon
+                    Icon(
+                        imageVector = if (isNotification.value) Icons.Filled.Notifications else Icons.Outlined.Notifications,
+                        contentDescription = "Notification Icon",
+                        tint = colorScheme.primary,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clickable {
+                                isNotification.value = !isNotification.value
+                                // This tells our database to update the events favorited status
+                                notificationHandler.showSimpleNotification(event)
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    AppRepository.toggleNotification(event.eventid, isNotification.value)
+                                }
+                            },
+                    )
+                }
+
             }
             // This is our expanded view if the value is expanded we show the following info
             if (expanded.value) {

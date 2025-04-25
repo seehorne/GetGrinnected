@@ -8,20 +8,21 @@ import SwiftUI
 
 //Logo Struct
 struct Logo: View {
-    var size: Int
+    var size: CGFloat
+    
     
     var body: some View{
             // logo on toolbar. copied from budhil
             Image("white_circle")
                 .resizable()
                 .scaledToFill()
-                .frame(width: 40, height: 40)
+                .frame(width: size, height: size)
                 .padding(.vertical, 32)
                 .overlay(
-                    Image("gglogo_nt")
+                    Image("GetGrinnected_Logo")
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 40, height: 40)
+                        .frame(width: (size * 0.8), height: (size * 0.8))
                         .padding(.vertical, 32)
                 )
         

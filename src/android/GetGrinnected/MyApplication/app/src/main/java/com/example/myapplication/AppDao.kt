@@ -43,7 +43,9 @@ interface AppDao {
     @Query("UPDATE events SET is_favorited = :isFavorited WHERE eventid = :eventId")
     suspend fun updateFavoriteStatus(eventId: Int, isFavorited: Boolean)
 
-
+    // Updates whether an event is favorited or not basically flips the symbol
+    @Query("UPDATE events SET is_notification = :isNotification WHERE eventid = :eventId")
+    suspend fun updateNotificationStatus(eventId: Int, isNotification: Boolean)
 
     // Account Operations
     // Upserts an account into the account table

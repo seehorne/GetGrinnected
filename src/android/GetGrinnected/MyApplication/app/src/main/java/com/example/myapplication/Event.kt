@@ -41,6 +41,7 @@ data class Event(
     val repeats: Int,
     val rsvp: Int,
     val tags: List<String>,
-    val is_favorited: Boolean = false
+    val is_favorited: Boolean = false,
+    val is_notification: Boolean = false
 )
 
