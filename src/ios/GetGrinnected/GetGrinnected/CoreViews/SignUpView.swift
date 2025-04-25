@@ -60,8 +60,20 @@ struct SignUpView: View{
                     switch result {
                     case .success(let output):
                         print("API Response: \(output)")
+                        success=true
                     case .failure(let error):
                         print("API call failed: \(error.localizedDescription)")
+                        if let apiError = error as? APIError {
+                                        switch apiError {
+                                        case .signInError(let message):
+                                            signupError = message
+                                        default:
+                                            signupError = apiError.localizedDescription
+                                        }
+                                    } else {
+                                        signupError = error.localizedDescription
+                                    }
+                        success=false
                     }
                 }
                     

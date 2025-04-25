@@ -77,7 +77,7 @@ class UserProfile: ObservableObject {
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
                     completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
-                    return
+                    return 
                 }
 
                 // Success
