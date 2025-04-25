@@ -16,6 +16,7 @@ struct VerifyView: View {
     @State private var email: String
     @State private var errorMessage = ""
     @State private var success = Bool()
+    @State private var verifyError = ""
     @StateObject private var userProfile = UserProfile()
     
     init(email: String) {
@@ -32,6 +33,11 @@ struct VerifyView: View {
                 
                 //Signin Email Text Field
                 InputView(text: $code, title: "Type your code here", placeholder: "Hint: its six digits long and went to your email")
+                if !verifyError.isEmpty{
+                    Text(verifyError)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
                 
 //                //Signin Password Text Fields
 //                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
@@ -55,6 +61,16 @@ struct VerifyView: View {
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
                             success=false
+                            if let apiError = error as? APIError {
+                                            switch apiError {
+                                            case .signInError(let message):
+                                                verifyError = message
+                                            default:
+                                                verifyError = apiError.localizedDescription
+                                            }
+                                        } else {
+                                            errorMessage = error.localizedDescription
+                                        }
                         }
                     }
                     //once successfully logged in, jump to main viewport

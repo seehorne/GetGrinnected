@@ -26,6 +26,11 @@ struct LoginView: View {
                 
                 //Signin Email Text Field
                 InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
+                if !errorMessage.isEmpty{
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
                 
 //                //Signin Password Text Fields
 //                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
@@ -40,7 +45,7 @@ struct LoginView: View {
 //                    } else{
 //                        print("\(errorMessage)")
 //                    }
-                    
+                    errorMessage = ""
                     userProfile.loginUser(email: email) { result in
                         switch result {
                         case .success(let output):
@@ -49,6 +54,16 @@ struct LoginView: View {
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
                             success = false
+                            if let apiError = error as? APIError {
+                                            switch apiError {
+                                            case .signInError(let message):
+                                                errorMessage = message
+                                            default:
+                                                errorMessage = apiError.localizedDescription
+                                            }
+                                        } else {
+                                            errorMessage = error.localizedDescription
+                                        }
                         }
                     }
                     //once successfully logged in, jump to main viewport
