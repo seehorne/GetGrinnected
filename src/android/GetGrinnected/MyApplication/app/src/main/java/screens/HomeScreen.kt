@@ -71,6 +71,25 @@ fun HomeScreen(tags: List<Check>) {
     // formats the date view
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     // background color for the page
+    val formatter2 = DateTimeFormatter.ofPattern("MM")
+    val currentMonth = today.format(formatter2).toString()
+    // sets the month based on devices local date
+    val month = (when (currentMonth) {
+        "01" -> { "Jan" }
+        "02" -> { "Feb" }
+        "03" -> { "Mar" }
+        "04" -> { "Apr" }
+        "05" -> { "May" }
+        "06" -> { "Jun" }
+        "07" -> { "Jul" }
+        "08" -> { "Aug" }
+        "09" -> { "Sep" }
+        "10" -> { "Oct" }
+        "11" -> { "Nov" }
+        else -> {
+            "Dec"
+        }
+    }).toString()
     val gradient =
         Brush.verticalGradient(
             listOf(Color.Red, Color.Blue, Color.Green),

@@ -65,6 +65,23 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
     val date = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("MM")
     val currentMonth = date.format(formatter).toString()
+    // sets the month based on devices local date
+    val month = (when (currentMonth) {
+        "01" -> { "January" }
+        "02" -> { "February" }
+        "03" -> { "March" }
+        "04" -> { "April" }
+        "05" -> { "May" }
+        "06" -> { "June" }
+        "07" -> { "July" }
+        "08" -> { "August" }
+        "09" -> { "September" }
+        "10" -> { "October" }
+        "11" -> { "November" }
+        else -> {
+            "December"
+        }
+    }).toString()
     val chosenTags = mutableListOf<String>()
     var selectedView by remember { mutableIntStateOf(2) }
     // tracks dropdowns based on buttons
@@ -85,23 +102,6 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
             10000.0f,
             TileMode.Repeated
         )
-    // sets the month based on devices local date
-    val month = (when (currentMonth) {
-        "01" -> { "January" }
-        "02" -> { "February" }
-        "03" -> { "March" }
-        "04" -> { "April" }
-        "05" -> { "May" }
-        "06" -> { "June" }
-        "07" -> { "July" }
-        "08" -> { "August" }
-        "09" -> { "September" }
-        "10" -> { "October" }
-        "11" -> { "November" }
-        else -> {
-            "December"
-        }
-    }).toString()
     Column(modifier = modifier.fillMaxSize().background(gradient)) {
         Box(modifier = modifier.background(Color.Black).size(width = 450.dp, height = 100.dp)) {
             Row{
