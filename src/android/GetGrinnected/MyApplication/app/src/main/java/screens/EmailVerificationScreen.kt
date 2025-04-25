@@ -135,7 +135,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                             VerifyRequest(email = email, code = codeInput)
                         )
                         // If it is we continue
-                        if (response.isSuccessful) {
+                        if (response.isSuccessful && response.body()?.access_token != null) {
                             if (flag) {
                                 // Creates a new accountEntity thus a new account to be added to our local repo
                                 val newAccount = AccountEntity(
