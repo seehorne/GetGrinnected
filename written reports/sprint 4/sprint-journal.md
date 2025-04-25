@@ -176,3 +176,29 @@ For this response I'll answer them, but not in complete sentences. The goal is t
 8. It's good at planning stuff, but also I really really hate to recommend people use AI under pretty much any circumstance.
 
 9. I think current policies are good because they require citation. I don't really care about the difference for using AI for one purpose versus another though, so that distinction has never had much of an impact on how I approach the course.
+
+## Understanding how to make a Swift view update when a value changes in another view
+
+This experiment was done by Michael.
+
+### What were initial goals and expectations?
+
+My initial goal was to understand how to update our event list view when the date we were looking at changed. I needed to do this because where the date we were looking at was stored in a different view than the event list.
+
+I expected the AI to at least give me an easier to understand explantion of how to do what I wanted than all the documentation online.
+
+### How was AI used?
+
+I started by asking ChatGPT how to update a view in Swift when a value in another view changed. This gave me a decent explanation, but I still did not know how to fully implement it. So, I pasted in a portion of my code into ChatGPT and it was able to give me an explanation that was in the context of my code.
+
+I also ended up using ChatGPT to read a bunch of event JSON data and give me a list of the tags in alphabetical order. This was used to make my event tags enum.
+
+### What impact did it have?
+
+This had a very large impact. I had been stuck on this problem for hours and could not find anything helpful online. It helped me more fully understand how I should set up my code and what things like @Binding and @Published meant in Swift.
+
+Using AI to read all the event tags as had a huge impact. I saved a bunch of time by not doing it manually.
+
+### To what extent did this impact match goals and expectations?
+
+The impact matched my goals and expectation very well. In fact, it was even more helpful than I originally thought. I was pretty skeptical of it to start with.
