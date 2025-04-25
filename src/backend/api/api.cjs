@@ -4,6 +4,7 @@ const https = require('https');
 const jwt = require('jsonwebtoken');
 
 // Import routes from their files
+const db = require('../db_connect.js');
 const events = require('./routes/events.cjs');
 const user = require('./routes/user.cjs');
 
@@ -188,8 +189,22 @@ or has expired. Please request a new token.`
       return;
     }
 
-    req.email = payload.email;
-    console.log(`jwt verified with email ${req.email}`);
+    // Ensure that an account exists with that email. This makes sure we're okay
+    // if someone deletes their accounts but continues trying to make requests.
+    const email = payload.email;
+    const account = await db.getAccountByEmail(email);
+    if (account === undefined) {
+      res.status(404).json({
+        'error': 'No such user',
+        'message': `You are verified with email ${email}, but no user exists with \
+that address.`
+      });
+      return;
+    }
+
+    // Store the email from the payload for access,
+    // then call `next()` to make the route using this middleware run.
+    req.email = email;
     next()
   });
 }
