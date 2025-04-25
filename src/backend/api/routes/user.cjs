@@ -7,6 +7,10 @@ const util = require('../utils.cjs');
 const { sendCode } = require('../../one_time_code.cjs')
 const DBPATH = './src/backend/Database/localOTP.db'
 
+function middlewareVerifyJWT() {
+  // TODO: 
+}
+
 /**
  * Check if a user exists by username,
  * 
@@ -14,7 +18,7 @@ const DBPATH = './src/backend/Database/localOTP.db'
  * @param {*} res    Express response to send output to
  * @param {*} _next  Error handler function for async (unused)
  */
-async function routeCheckUsernameExists(req, res, _next) {
+async function routeGetUserData(req, res, _next) {
   // Query the database, then send the result.
   const result = await db.getAccount(req.params.username);
   res.json({ result: result !== undefined });
@@ -174,25 +178,18 @@ async function routeVerifyOTP(req, res, _next) {
     return;
   }
 
-  console.log(`got OTP verify request from ${email} with code ${code}`);
-
-  // // TODO: CHECK CODE AGAINST LOCAL STORAGE, RETURN BAD OTP IF NOT
-  // res.status(400).json({
-  //   'error': 'Bad code',
-  //   'message': 'Could not verify OTP.'
-  // });
-  
-  //boolean that checks if the code is right
-  validCode = await util.otpFileCheck(DBPATH, email, code) 
-
-  if (!validCode){
+  // Check the OTP code the user entered against the codes we have stored.
+  // If it does not match (wrong code or expired), return the same error with
+  // HTTP status 400.
+  validCode = await util.otpFileCheck(DBPATH, email, code)
+  if (!validCode) {
     res.status(400).json({
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
     });
     return;
   }
-  else{
+  else {
     // Use JSON Web Tokens to create two tokens for the user,
     // a long-lived refresh token and a short-lived access token.
     const refreshToken = jwt.sign(
@@ -205,7 +202,8 @@ async function routeVerifyOTP(req, res, _next) {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '15m' }
     );
-      // Send those tokens back to the user in a successful response.
+    
+    // Send those tokens back to the user in a successful response.
     res.json({
       'message': 'Successfully authenticated',
       'refresh_token': refreshToken,
@@ -215,13 +213,12 @@ async function routeVerifyOTP(req, res, _next) {
   }
 }
 
-
-
-if (require.mail !== module) {
-    module.exports = {
-        routeVerifyOTP,
-        routeSignUpNewUser,
-        routeSendOTP,
-        routeCheckUsernameExists,
-    };
+if (require.main !== module) {
+  module.exports = {
+    middlewareVerifyJWT,
+    routeGetUserData,
+    routeSendOTP,
+    routeSignUpNewUser,
+    routeVerifyOTP,
+  };
 }
