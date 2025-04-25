@@ -166,12 +166,15 @@ struct EventCard: View {
                             
                             .padding(.vertical, 4)
                             
-                            CheckBox(items: [CheckBoxOption(
-                                isChecked: false,
-                                uiCompOne: "bell.fill",
-                                uiCompTwo: "bell",
-                                fillColor: .border)])
-                                .imageScale(.large)
+                            
+                            Button(action: {
+                                event.notified.toggle()
+                                try? modelContext.save()
+                            }) {
+                                Image(systemName: event.notified ? "bell.fill" : "bell")
+                                    .foregroundColor(.border)
+                                    .imageScale(.large)
+                            }
                         } //Vstack
                         .padding(.vertical, 4)//adding space after
                         .frame(alignment: .trailing)

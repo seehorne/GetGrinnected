@@ -41,6 +41,7 @@ final class EventModel: Identifiable {
      NOT in eventDTO
      */
     var favorited: Bool
+    var notified: Bool
     
     // Constructor that converts from your DTO
     init(from dto: EventDTO) {
@@ -80,10 +81,12 @@ final class EventModel: Identifiable {
         self.imageURL = dto.event_image ?? ""
         self.is_draft = dto.is_draft ?? 0
         
+        
         /**
          NOT in eventDTO
          */
         self.favorited = false
+        self.notified = false
     }//initialize from an eventDTO
     
     // Empty initializer required by SwiftData
@@ -109,6 +112,7 @@ final class EventModel: Identifiable {
         self.imageURL = ""
         self.is_draft = 0
         self.favorited = false
+        self.notified = false
         
         
         
