@@ -92,10 +92,8 @@ struct VerifyView: View {
                         switch result {
                         case .success(let output):
                             print("API Response: \(output)")
-                            success=true
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
-                            success=false
                         }
                     }
                 }label: {
