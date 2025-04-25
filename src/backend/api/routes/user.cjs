@@ -1,27 +1,38 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const sqlite3 = require('sqlite3');
-const SALT_ROUNDS = 10;
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
-const { sendCode } = require('../../one_time_code.cjs')
 const DBPATH = './src/backend/Database/localOTP.db'
 
-function middlewareVerifyJWT() {
-  // TODO: 
-}
-
 /**
- * Check if a user exists by username,
+ * Check if a user exists by username. This route is protected, and
+ * you must prove you are that user in order to use it.
  * 
  * @param {*} req    Express request containing parameters
  * @param {*} res    Express response to send output to
  * @param {*} _next  Error handler function for async (unused)
  */
 async function routeGetUserData(req, res, _next) {
-  // Query the database, then send the result.
-  const result = await db.getAccount(req.params.username);
-  res.json({ result: result !== undefined });
+  // TODO: get either username or email, whichever makes sense, from the request.
+  const email = req.email;
+  console.log(`the email we got is ${email}`);
+  res.send('nothing here yet');
+  return;
+
+  // // TODO: query the database for that account.
+  // const account = undefined; // await db.getAccount();
+
+  // // TODO: if that account doesn't exist (somehow) return that as an error
+  // if (account === undefined) {
+  //   console.log(`ERROR: routeGetUserData called by nonexistent user ${email}`);
+  //   res.status(404).json({
+  //     'error': 'Nonexistent user',
+  //     'message': `No user exists with email ${email}, \
+  //         even though you are authenticated as them. \
+  //         This is an error on our end.`
+  //   });
+  //   return;
+  // }
+  // res.json({ result: result !== undefined });
 }
 
 /**
@@ -200,9 +211,9 @@ async function routeVerifyOTP(req, res, _next) {
     const accessToken = jwt.sign(
       { email },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '1d' } // TODO: SET DOWN LOWER WHEN NOT DEVELOPING
     );
-    
+
     // Send those tokens back to the user in a successful response.
     res.json({
       'message': 'Successfully authenticated',
@@ -215,7 +226,6 @@ async function routeVerifyOTP(req, res, _next) {
 
 if (require.main !== module) {
   module.exports = {
-    middlewareVerifyJWT,
     routeGetUserData,
     routeSendOTP,
     routeSignUpNewUser,

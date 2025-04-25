@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const https = require('https');
+const jwt = require('jsonwebtoken');
 
 // Import routes from their files
 const events = require('./routes/events.cjs');
@@ -62,8 +63,14 @@ function run() {
       });
   }
 
-  // Default route just shows the API is online
-  app.get('/', getAPIOnline);
+  // Default route just shows the API is online.
+  app.get('/', routeShowOnline);
+
+  /*
+   * EVENTS ROUTES
+   *
+   * TODO: when frontends implement JWTs, these routes should become protected.
+   */
 
   // Getting all events takes no parameters
   app.get('/events', events.routeGetEvents);
@@ -72,9 +79,12 @@ function run() {
   // Those params will get passed into the function as part of `req.params` dictionary
   app.get('/events/between/:start/:end', events.routeGetEventsBetween);
 
-  // Check if a user exists by trying to GET them by username.
-  // :username gets passed as a parameter to the function, in `req.params`
-  app.get('/user/:username', user.routeCheckUsernameExists);
+  /*
+   * SIGN-UP / LOGIN ROUTES
+   *
+   * These routes are not protected, since they are how you get authorization
+   * in the first place.
+   */
 
   // Login and signups will be done through POST requests, which is because you
   // have to send information and there's the metaphor of creating something new.
@@ -83,11 +93,23 @@ function run() {
   
   // Resend an OTP code by POSTing the email you need it sent to.
   app.post('/user/resend-otp', user.routeSendOTP);
-  console.log('Registering POST /user/resend-otp'); 
 
   // OTP code verification also through a POST request. If successful, it will
   // send back the needed authentication tokens.
   app.post('/user/verify', user.routeVerifyOTP);
+
+  /*
+   * USER DATA ROUTES
+   *
+   * These routes are protected, since they correspond to a particular user.
+   */
+
+  // Get your own data by requesting it with a GET request.
+  app.get('/user/data', middlewareVerifyJWT, user.routeGetUserData);
+
+  // TODO: Update parts of your data (favorites, followed, etc) with POST requests.
+
+
 }
 
 /**
@@ -125,8 +147,51 @@ function close() {
  * @param _req  Express request object (unused)
  * @param res   Express response object - where we send our result.
  */
-function getAPIOnline(_req, res) {
+function routeShowOnline(_req, res) {
   res.send('API online!');
+}
+
+/**
+ * Middleware to verify that a JWT is valid before doing a request.
+ * Based on https://www.slingacademy.com/article/authentication-authorization-expressjs-jwt/
+ * 
+ * It looks at the Bearer header included with the request, and tries to
+ * verify that value as a JWT authorization token.
+ * 
+ * TODO: document more and better
+ */
+function middlewareVerifyJWT(req, res, next) {
+  // Get the contents of the Bearer header.
+  const token = req.get('Bearer');
+
+  // If the token IS empty, immediately send that response.
+  // Use HTTP 401 since it specifically means "Unauthorized"
+  if (!token) {
+    res.status(401).json({
+      'error': 'Token required',
+      'message': 'An authorization token is required, but it was not provided.'
+    });
+    return;
+  }
+
+  // Verify the token.
+  // Since we provide a callback, this will run async and call next() 
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+    // For any error, send back a response that says the token is invalid.
+    // HTTP 403 means "forbidden".
+    if (err) {
+      res.status(403).json({
+        'error': 'Invalid or expired token',
+        'message': `The authorization token provided was not valid, \
+or has expired. Please request a new token.`
+      });
+      return;
+    }
+
+    req.email = payload.email;
+    console.log(`jwt verified with email ${req.email}`);
+    next()
+  });
 }
 
 // run the server when we are run, export otherwise.
