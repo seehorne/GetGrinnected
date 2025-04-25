@@ -83,7 +83,6 @@ function run() {
   
   // Resend an OTP code by POSTing the email you need it sent to.
   app.post('/user/resend-otp', user.routeSendOTP);
-  console.log('Registering POST /user/resend-otp'); 
 
   // OTP code verification also through a POST request. If successful, it will
   // send back the needed authentication tokens.
