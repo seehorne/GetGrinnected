@@ -92,7 +92,6 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
         }
     }).toString()
     // grabs selected tags
-
     val chosenTags = mutableListOf<String>()
     // tracks what day we are on
     var selectedView by remember { mutableIntStateOf(2) }
@@ -119,23 +118,6 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
     val typography = MaterialTheme.typography
-
-    // sets the month based on devices local date
-    val month = (when (currentMonth) {
-        "01" -> { "January" }
-        "02" -> { "February" }
-        "03" -> { "March" }
-        "04" -> { "April" }
-        "05" -> { "May" }
-        "06" -> { "June" }
-        "07" -> { "July" }
-        "08" -> { "August" }
-        "09" -> { "September" }
-        "10" -> { "October" }
-        "11" -> { "November" }
-        else -> { "December" }
-    }
-    ).toString()
     
     // sets the background for the page for us to build our other elements on
     Column(modifier = modifier.fillMaxSize().background(color = colorScheme.background)) {
