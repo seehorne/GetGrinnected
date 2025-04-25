@@ -76,7 +76,7 @@ class UserProfile: ObservableObject {
             do {
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
-                    completion(.failure(decodedResponse.message as! Error))
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
                     return
                 }
 
@@ -118,7 +118,7 @@ class UserProfile: ObservableObject {
             do {
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
-                    completion(.failure(decodedResponse.message as! Error))
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
                     return
                 }
 
@@ -161,7 +161,7 @@ class UserProfile: ObservableObject {
             do {
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
-                    completion(.failure(decodedResponse.message as! Error))
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
                     return
                 }
 
@@ -222,11 +222,14 @@ enum APIError: Swift.Error, CustomLocalizedStringResourceConvertible {
     case badEmail
     case invalidResponse
     case decoderError
+    case signInError(String)
     var localizedStringResource: LocalizedStringResource {
         switch self {
         case .badEmail: return "Email wrong:";
         case .invalidResponse: return "Invalid response from server";
-        case .decoderError: return "Could not decode JSON"}
+        case .decoderError: return "Could not decode JSON";
+        case .signInError(let message):  return "Login error \(message)"
+        }
     }
 }
 
