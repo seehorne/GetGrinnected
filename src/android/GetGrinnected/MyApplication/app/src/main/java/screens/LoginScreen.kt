@@ -176,7 +176,11 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                                 launchSingleTop = true
                             }
                             } else {
-                              errMsg =  emailResponse.errorBody()?.string() ?: "Login failed"
+                                errMsg = if(emailResponse.errorBody()?.string()?.contains("No such user") == true){
+                                    "No user found with that email"
+                                } else{
+                                    "Login Failed"
+                                }
                             }
                             // Failure specifically with a network connection ie couldn't leave our app
                             } catch (e: Exception) {
