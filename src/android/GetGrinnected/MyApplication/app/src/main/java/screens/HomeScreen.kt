@@ -42,6 +42,7 @@ import com.example.myapplication.R
 import com.example.myapplication.toEvent
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
 
@@ -72,6 +73,7 @@ fun HomeScreen(tags: List<Check>) {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     // background color for the page
     val formatter2 = DateTimeFormatter.ofPattern("MM")
+    val formatter3 = DateTimeFormatter.ofPattern("dd")
     val currentMonth = today.format(formatter2).toString()
     // sets the month based on devices local date
     val month = (when (currentMonth) {
@@ -288,44 +290,44 @@ fun HomeScreen(tags: List<Check>) {
                 Button(onClick = { expanded.value = true }) {
                     // displays selected day on the button
                     when (selectedView) {
-                        0 -> { Text(today.format(formatter), style = typography.labelLarge) }
-                        1 -> { Text(tomorrow.format(formatter), style = typography.labelLarge) }
-                        2 -> { Text(twodays.format(formatter), style = typography.labelLarge) }
-                        3 -> { Text(threedays.format(formatter), style = typography.labelLarge) }
-                        4 -> { Text(fourdays.format(formatter), style = typography.labelLarge) }
-                        5 -> { Text(fivedays.format(formatter), style = typography.labelLarge) }
-                        else -> { Text(sixdays.format(formatter), style = typography.labelLarge) }
+                        0 -> { Text(today.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + today.format(formatter3), style = typography.labelLarge) }
+                        1 -> { Text(tomorrow.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + tomorrow.format(formatter3), style = typography.labelLarge) }
+                        2 -> { Text(twodays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + twodays.format(formatter3), style = typography.labelLarge) }
+                        3 -> { Text(threedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + threedays.format(formatter3), style = typography.labelLarge) }
+                        4 -> { Text(fourdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + fourdays.format(formatter3), style = typography.labelLarge) }
+                        5 -> { Text(fivedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month+ " " + fivedays.format(formatter3), style = typography.labelLarge) }
+                        else -> { Text(sixdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month+ " " + sixdays.format(formatter3), style = typography.labelLarge) }
                     }
                 }
                 // creates dropdown menu when button is clicked
                 DropdownMenu(
                     expanded = expanded.value,
                     onDismissRequest = { expanded.value = false }) {
-                    DropdownMenuItem(text = { Text(today.format(formatter), style = typography.labelLarge) }, onClick = {
+                    DropdownMenuItem(text = { Text(today.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + today.format(formatter3), style = typography.labelLarge) }, onClick = {
                         selectedView = 0
                         expanded.value = false
                     })
-                    DropdownMenuItem(text = { Text(tomorrow.format(formatter), style = typography.labelLarge) }, onClick = {
+                    DropdownMenuItem(text = { Text(tomorrow.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + tomorrow.format(formatter3), style = typography.labelLarge) }, onClick = {
                         selectedView = 1
                         expanded.value = false
                     })
-                    DropdownMenuItem(text = { Text(twodays.format(formatter), style = typography.labelLarge) }, onClick = {
+                    DropdownMenuItem(text = { Text(twodays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + twodays.format(formatter3), style = typography.labelLarge) }, onClick = {
                         selectedView = 2
                         expanded.value = false
                     })
-                    DropdownMenuItem(text = { Text(threedays.format(formatter), style = typography.labelLarge) }, onClick = {
+                    DropdownMenuItem(text = { Text(threedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + threedays.format(formatter3), style = typography.labelLarge) }, onClick = {
                         selectedView = 3
                         expanded.value = false
                     })
-                    DropdownMenuItem(text = { Text(fourdays.format(formatter), style = typography.labelLarge) }, onClick = {
+                    DropdownMenuItem(text = { Text(fourdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + fourdays.format(formatter3), style = typography.labelLarge) }, onClick = {
                         selectedView = 4
                         expanded.value = false
                     })
-                    DropdownMenuItem(text = { Text(fivedays.format(formatter), style = typography.labelLarge) }, onClick = {
+                    DropdownMenuItem(text = { Text(fivedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + fivedays.format(formatter3), style = typography.labelLarge) }, onClick = {
                         selectedView = 5
                         expanded.value = false
                     })
-                    DropdownMenuItem(text = { Text(sixdays.format(formatter), style = typography.labelLarge) }, onClick = {
+                    DropdownMenuItem(text = { Text(sixdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + sixdays.format(formatter3), style = typography.labelLarge)}, onClick = {
                         selectedView = 6
                         expanded.value = false
                     })
