@@ -93,7 +93,7 @@ struct LoginView: View {
                 //signin button
                 // NavigationLink to VerifyView when login is successful
                 .navigationDestination(isPresented: $success) {
-                    VerifyView(email: email)
+                    VerificationView(email: email)
                 }
 
                 

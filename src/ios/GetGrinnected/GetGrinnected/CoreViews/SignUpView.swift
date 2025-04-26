@@ -97,7 +97,7 @@ struct SignUpView: View{
         .padding()
         
         .navigationDestination(isPresented: $success) {
-            VerifyView(email: email)
+            VerificationView(email: email)
         }
         
     }//Body
