@@ -39,32 +39,22 @@ struct VerifyView: View {
                         .font(.caption)
                 }
                 
-//                //Signin Password Text Fields
-//                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
-                
-                
                 // Button
                 Button {
-                    //logic that checks if user exists and password is correct
-//                    if UserProfile.checkUser(email, password, errorMessage){
-//                        print("Log in success!")
-                            //isLoggedIn = true
-//                    } else{
-//                        print("\(errorMessage)")
-//                    }
-                    
+                    //triggers API call
                     userProfile.verifyUser(email: email, code: code) { result in
                         switch result {
                         case .success(let output):
+                            //if succeeded, log it
                             print("API Response: \(output)")
-                            success=true
+                            success=true //and we are good to go to the next one
                         case .failure(let error):
-                            print("API call failed: \(error.localizedDescription)")
+                            print("API call failed:\(error.localizedDescription)")
                             success=false
-                            if let apiError = error as? APIError {
+                            if let apiError = error as? APIError {//treat the error as API error object
                                             switch apiError {
                                             case .signInError(let message):
-                                                verifyError = message
+                                                verifyError = message //use the response message if there was one
                                             default:
                                                 verifyError = apiError.localizedDescription
                                             }
@@ -87,7 +77,7 @@ struct VerifyView: View {
                     .cornerRadius (10)
                     .padding(.top, 24)
                 
-                Button{
+                Button{//this button is for resending the code
                     userProfile.resendOTP(email: email) { result in
                         switch result {
                         case .success(let output):
@@ -107,16 +97,6 @@ struct VerifyView: View {
                 .background (.white)
                     .cornerRadius (10)
                     .padding(.top, 24)
-//                //Navigation to Signup
-//                NavigationLink{
-//                    SignUpView(isLoggedIn: $isLoggedIn)
-//                } label : {
-//                    Text("Don't have an account?")
-//                        .foregroundColor(Color.appTextSecondary)
-//                        .padding(.top, 4)
-//                }
-//                
-                //signin button
                 
             }
             .padding()
