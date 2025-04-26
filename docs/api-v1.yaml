@@ -616,6 +616,14 @@ components:
             - 14
             - 20
             - 77
+        notified_events:
+          type: array
+          items:
+            type: integer
+          example:
+            - 33
+            - 2
+            - 531
         favorited_orgs:
           type: array
           items:
