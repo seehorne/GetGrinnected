@@ -1,23 +1,24 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const sqlite3 = require('sqlite3');
-const SALT_ROUNDS = 10;
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
-const { sendCode } = require('../../one_time_code.cjs')
 const DBPATH = './src/backend/Database/localOTP.db'
 
 /**
- * Check if a user exists by username,
+ * Check if a user exists by username. This route is protected, and
+ * you must prove you are that user in order to use it.
  * 
  * @param {*} req    Express request containing parameters
  * @param {*} res    Express response to send output to
  * @param {*} _next  Error handler function for async (unused)
  */
-async function routeCheckUsernameExists(req, res, _next) {
-  // Query the database, then send the result.
-  const result = await db.getAccount(req.params.username);
-  res.json({ result: result !== undefined });
+async function routeGetUserData(req, res, _next) {
+  // Take the email from the request, which will be loaded by the middleware.
+  const email = req.email;
+
+  // Query the DB for the account corresponding to that email.
+  // Since the middleware checks if the account exists, we can just return the data.
+  const account = await db.getAccountByEmail(email);
+  res.json(account);
 }
 
 /**
@@ -145,6 +146,30 @@ async function routeSignUpNewUser(req, res, _next) {
   });
 }
 
+/**
+ * Generate new user tokens for a specific email address.
+ * 
+ * @param {string} email  Email to generate the tokens for.
+ * @returns  An object with two keys:
+ * - refresh for the user's refresh token
+ * - access for the user's access token
+ */
+function generateUserTokens(email) {
+  // Use JSON Web Tokens to create two tokens for the user,
+  // a long-lived refresh token and a short-lived access token.
+  const refreshToken = jwt.sign(
+    { email },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '30d' }
+  );
+  const accessToken = jwt.sign(
+    { email },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
+
+  return { 'refresh': refreshToken, 'access': accessToken };
+}
 
 /**
  * Verify an OTP code.
@@ -174,54 +199,58 @@ async function routeVerifyOTP(req, res, _next) {
     return;
   }
 
-  console.log(`got OTP verify request from ${email} with code ${code}`);
-
-  // // TODO: CHECK CODE AGAINST LOCAL STORAGE, RETURN BAD OTP IF NOT
-  // res.status(400).json({
-  //   'error': 'Bad code',
-  //   'message': 'Could not verify OTP.'
-  // });
-  
-  //boolean that checks if the code is right
-  validCode = await util.otpFileCheck(DBPATH, email, code) 
-
-  if (!validCode){
+  // Check the OTP code the user entered against the codes we have stored.
+  // If it does not match (wrong code or expired), return the same error with
+  // HTTP status 400.
+  validCode = await util.otpFileCheck(DBPATH, email, code)
+  if (!validCode) {
     res.status(400).json({
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
     });
     return;
-  }
-  else{
-    // Use JSON Web Tokens to create two tokens for the user,
-    // a long-lived refresh token and a short-lived access token.
-    const refreshToken = jwt.sign(
-      { email },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '30d' }
-    );
-    const accessToken = jwt.sign(
-      { email },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '15m' }
-    );
-      // Send those tokens back to the user in a successful response.
+  } else {
+    // Generate tokens for that user
+    const tokens = generateUserTokens(email);
+
+    // Send those tokens back to the user in a successful response.
     res.json({
       'message': 'Successfully authenticated',
-      'refresh_token': refreshToken,
-      'access_token': accessToken
+      'refresh_token': tokens.refresh,
+      'access_token': tokens.access
     });
-    return
+    return;
   }
 }
 
+/**
+ * Refresh the authorization and refresh token of a user. This route is
+ * protected, so it can only be accessed by users who hold a valid refresh token.
+ * 
+ * @param {*} _req  Express request, unused.
+ * @param {*} res  Express response, where we will send our results.
+ * @param {*} _next  Express error handler callback for async, unused.
+ */
+async function routeRefreshTokens(req, res, _next) {
+  // Get the email of the authenticated user from the request after it was
+  // stored there by the JWT authenticator.
+  const email = req.email;
 
+  // Generate and send the new tokens
+  const tokens = generateUserTokens(email);
+  res.json({
+    'message': 'Successfully refreshed',
+    'refresh_token': tokens.refresh,
+    'access_token': tokens.access
+  });
+}
 
-if (require.mail !== module) {
-    module.exports = {
-        routeVerifyOTP,
-        routeSignUpNewUser,
-        routeSendOTP,
-        routeCheckUsernameExists,
-    };
+if (require.main !== module) {
+  module.exports = {
+    routeGetUserData,
+    routeRefreshTokens,
+    routeSendOTP,
+    routeSignUpNewUser,
+    routeVerifyOTP,
+  };
 }
