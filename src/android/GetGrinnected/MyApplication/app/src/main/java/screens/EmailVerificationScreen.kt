@@ -42,6 +42,7 @@ import com.example.myapplication.AppRepository
 import com.example.myapplication.AccountEntity
 import com.example.myapplication.LoginRequest
 import com.example.myapplication.VerifyRequest
+import com.example.myapplication.toAccountEntity
 
 /**
  * A composable function that represents the email verification screen of our application.
@@ -132,7 +133,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
             // This is our verify button
             Button(onClick = {
                 coroutineScope.launch {
-                    //  try {
+                    // Checks that the code input is at least 6 characters long
                     if (codeInput.length < 6) {
                         errMsg = "Please enter 6-digit code"
                         errCode = true
@@ -146,53 +147,47 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                         )
                         // If it is we continue
                         if (response.isSuccessful && response.body()?.access_token != null) {
-                            // If flag == True this is a sign up operation
-                            if (flag) {
-                                // Creates a new accountEntity thus a new account to be added to our local repo
-                                val newAccount = AccountEntity(
-                                    accountid = email.hashCode(), // this is just a temp id system for now till we get api stuff
-                                    account_name = username,
-                                    email = email,
-                                    profile_picture = "", // Leaving this just in the event we decide to have profile pictures
-                                    favorited_events = listOf(),
-                                    drafted_events = listOf(),
-                                    favorited_tags = listOf(),
-                                    account_description = "",
-                                    account_role = 0,
-                                    notified_events = listOf()
-                                )
-                                // Upserts the account into the repo
-                                AppRepository.upsertAccount(newAccount)
-                                // Sets our current account from the given id
-                                AppRepository.setCurrentAccountById(newAccount.accountid)
-                                // Sets a persistent state for our logged in account via the id to reference else where in the app
-                                DataStoreSettings.setLoggedInAccountId(
-                                    context,
-                                    newAccount.accountid
-                                )
-                                // It is a login operation
-                            } else{
-                                // Sets storage preference logged in to true
-                                DataStoreSettings.setLoggedIn(context, true)
-                                // Sets our current account from the given id
-                                AppRepository.setCurrentAccountById(email.hashCode())
-                                // Sets a persistent state for our logged in account via the id to reference else where in the app
-                                DataStoreSettings.setLoggedInAccountId(
-                                    context,
-                                    email.hashCode()
-                                )
+                            // Store our access token as a variable
+                            val authToken = response.body()?.access_token
+                            // Sets our access token to the token we obtained
+                            DataStoreSettings.setAccessToken(context, authToken!!)
+                            // Sets our refresh token to the token we obtained
+                            DataStoreSettings.setRefreshToken(context, response.body()?.refresh_token!!)
+                            try {
+                                // Make a second call to get the full account data
+                                val accountResponse = RetrofitApiClient.apiModel.getUserData("Bearer $authToken")
+
+                                if (accountResponse.isSuccessful)
+                                {
+                                    // Gets the response as a user data type
+                                    val userData = accountResponse.body()
+
+                                    // If what is returned is non null
+                                    if (userData != null) {
+                                        // Converts user returned to an accountEntity
+                                        val accountEntity = userData.toAccountEntity()
+                                        // Upserts the account into our local Repo
+                                        AppRepository.upsertAccount(accountEntity)
+                                        // Sets our current account from the given id
+                                        AppRepository.setCurrentAccountById(accountEntity.accountid)
+                                        // Sets a persistent state for our logged in account via the id to reference else where in the app
+                                        DataStoreSettings.setLoggedInAccountId(context, accountEntity.accountid)
+                                        // Sets storage preference logged in to true
+                                        DataStoreSettings.setLoggedIn(context, true)
+                                        // Navigates to main page
+                                        navController.navigate("main") {
+                                            popUpTo(0) { inclusive = true }
+                                            launchSingleTop = true
+                                        }
+                                    }
+                                    // Handle if we authorization
+                                } else {
+                                    errMsg = accountResponse.errorBody()?.string() ?: "Failed to get user data."
                                 }
-                                // Sets storage preference logged in to true
-                                DataStoreSettings.setLoggedIn(context, true)
-                                // Sets our access token to the token we obtained
-                                DataStoreSettings.setAccessToken(context, response.body()?.access_token!!)
-                                // Sets our refresh token to the token we obtained
-                                DataStoreSettings.setRefreshToken(context, response.body()?.refresh_token!!)
-                                // Navigates to main page
-                                navController.navigate("main") {
-                                    popUpTo(0) { inclusive = true }
-                                    launchSingleTop = true
-                                }
+                                // Handle network error if we can't leave the app for some reason
+                            } catch(e: Exception){
+                                errMsg = "Network error: ${e.localizedMessage}"
+                            }
                             // Handles error if we couldn't verify the code or it was wrong
                         } else {
                             errMsg = "Incorrect code"

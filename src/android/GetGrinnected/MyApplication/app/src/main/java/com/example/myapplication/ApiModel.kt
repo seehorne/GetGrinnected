@@ -26,4 +26,7 @@ interface ApiModel {
     @POST("user/verify")
     suspend fun verifyOTP(@Body request: VerifyRequest): Response<AuthResponse>
 
+    // Async function to get user info given an access token
+    @GET("user/data")
+    suspend fun getUserData(@retrofit2.http.Header("Authorization") token: String): Response<User>
 }
