@@ -158,7 +158,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                                     drafted_events = listOf(),
                                     favorited_tags = listOf(),
                                     account_description = "",
-                                    account_role = 0
+                                    account_role = 0,
+                                    notified_events = listOf()
                                 )
                                 // Upserts the account into the repo
                                 AppRepository.upsertAccount(newAccount)

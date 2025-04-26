@@ -130,5 +130,5 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
 @Preview (showBackground = true)
 @Composable
 fun OrgCardPreview(){
-    OrgCard(account = User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1))
+    OrgCard(account = User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1))
 }

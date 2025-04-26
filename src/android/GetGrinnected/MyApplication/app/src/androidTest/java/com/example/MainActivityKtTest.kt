@@ -142,7 +142,8 @@ class MainActivityKtTest {
       favorited_tags = emptyList(),
       account_description = "",
       account_role = 0,
-      is_followed = false)
+      is_followed = false,
+           notified_events = emptyList())
    )
   }
 
@@ -205,7 +206,7 @@ class MainActivityKtTest {
         composeTestRule.setContent {
             SettingsScreen(
                 orgs = emptyList(),
-                account = User(1, "user", "email@grinnell.edu", "", listOf(), listOf(), listOf(), "", 0),
+                account = User(1, "user", "email@grinnell.edu", "", listOf(), listOf(), listOf(), listOf(), "", 0),
                 darkTheme = darkTheme,
                 onToggleTheme = { darkTheme = it },
                 navController = rememberNavController()
