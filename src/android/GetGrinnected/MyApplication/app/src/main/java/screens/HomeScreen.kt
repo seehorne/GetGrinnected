@@ -1,6 +1,5 @@
 package screens
 
-import android.Manifest
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,20 +34,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.AppRepository
-import androidx.compose.runtime.derivedStateOf
 import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.EventCard
-import com.example.myapplication.NotificationHandler
 import com.example.myapplication.R
 import com.example.myapplication.toEvent
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import androidx.annotation.RequiresApi as RequiresApi1
 import androidx.compose.foundation.layout.Column as Column1
-import android.content.Context
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import com.example.myapplication.DataStoreSettings
+import kotlinx.coroutines.launch
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -57,6 +61,7 @@ import androidx.annotation.RequiresApi
  *
  */
 
+@OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun HomeScreen(tags: List<Check>) {
@@ -117,149 +122,45 @@ fun HomeScreen(tags: List<Check>) {
     val events = event.sortedBy { it.event_time }
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
+
+    // used to launch background tasks
+    val coroutineScope = rememberCoroutineScope()
+    // State to determine whether we are currently refreshing
+    var isRefreshing by remember { mutableStateOf(false) }
+    // The current context of our app
+    val context = LocalContext.current
+
+    // State for refreshing the API on Pull, handles the action associated with pulling
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing, // Boolean value associated with whether it is refreshing
+        onRefresh = {
+            // Launches task
+            coroutineScope.launch {
+                // Sets is refreshing to true
+                isRefreshing = true
+                // Syncs local db with api
+                AppRepository.syncFromApi()
+                // Gets the current time
+                val now = System.currentTimeMillis()
+                // Sets out last sync time to the current time
+                DataStoreSettings.setLastSyncTime(context, now)
+                // Sets is Refreshing to false
+                isRefreshing = false
+            }
+        }
+    )
+
     // creates the UI field for the events
     Column1(
-        modifier = Modifier
-            // sets the color of the background
-            .background(color = colorScheme.background)
-            .padding(horizontal = 8.dp)
-            .fillMaxSize()
-            .verticalScroll(state),
-        // centers the event cards
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    )
-    {
-        // creates a visual spacer for the top of the page
-        Spacer(modifier = Modifier.height(150.dp))
-
-        val chosenTags = mutableListOf<String>()
-        for (i in tags.indices){
-            if (tags[i].checked.value) {
-                chosenTags.add(tags[i].label)
-            }
-        }
-        // populates the page with events
-        for (cardnum in events.indices) {
-            if (chosenTags.isEmpty()){
-                if (selectedView == 0) {
-                    if (events[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString()){
-                        EventCard(event = events[cardnum])
-                        // creates space between cards
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                } else if (selectedView == 1) {
-                    if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString()){
-                        EventCard(event = events[cardnum])
-                        // creates space between cards
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                } else if (selectedView == 2) {
-                    if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString()){
-                        EventCard(event = events[cardnum])
-                        // creates space between cards
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                } else if (selectedView == 3) {
-                    if (events[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString()){
-                        EventCard(event = events[cardnum])
-                        // creates space between cards
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                } else if (selectedView == 4) {
-                    if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString()){
-                        EventCard(event = events[cardnum])
-                        // creates space between cards
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                } else if (selectedView == 5) {
-                    if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString()){
-                        EventCard(event = events[cardnum])
-                        // creates space between cards
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                } else if(selectedView == 6){
-                    if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(formatter).toString()){
-                        EventCard(event = events[cardnum])
-                        // creates space between cards
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
-                }
-            }
-            // sorts by tag
-            else {
-                for(t in chosenTags.indices){
-                    if (selectedView == 0) {
-                        if (event[cardnum].event_start_time.substring(0, 10) == today.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
-                        {
-                            EventCard(event = event[cardnum])
-                            // creates space between cards
-                            Spacer(modifier = Modifier.height(16.dp))
-                            break
-                        }
-                    } else if (selectedView == 1) {
-                        if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum])
-                            // creates space between cards
-                            Spacer(modifier = Modifier.height(16.dp))
-                            break
-                        }
-                    } else if (selectedView == 2) {
-                        if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum])
-                            // creates space between cards
-                            Spacer(modifier = Modifier.height(16.dp))
-                            break
-                        }
-                    } else if (selectedView == 3) {
-                        if (event[cardnum].event_start_time.substring(0, 10) == threedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum])
-                            // creates space between cards
-                            Spacer(modifier = Modifier.height(16.dp))
-                            break
-                        }
-                    } else if (selectedView == 4) {
-                        if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t])){
-                            EventCard(event = event[cardnum])
-                            // creates space between cards
-                            Spacer(modifier = Modifier.height(16.dp))
-                            break
-
-                        }
-                    } else if (selectedView == 5) {
-                        if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(formatter).toString() && event[cardnum].tags.contains(chosenTags[t]))
-                        {
-                            EventCard(event = event[cardnum])
-                            // creates space between cards
-                            Spacer(modifier = Modifier.height(16.dp))
-                            break
-                        }
-                    } else if(selectedView == 6) {
-                        if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(
-                                formatter
-                            ).toString() && event[cardnum].tags.contains(chosenTags[t])
-                        ) {
-                            EventCard(event = event[cardnum])
-                            // creates space between cards
-                            Spacer(modifier = Modifier.height(16.dp))
-                            break
-                        }
-                    }
-                }
-            }
-        }
-        // creates a space at the bottom for visual appeal
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("No more events match filters" , style = typography.titleLarge, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(120.dp))
-    }
-    // creates the top bar for the home page (I think might be erroneous with the row below
-    Box(
-        modifier = Modifier
-            .background(color = colorScheme.primaryContainer)
-            .size(width = 450.dp, height = 100.dp)
-            .padding(horizontal = 8.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // creates the top bar for the home page (I think might be erroneous with the row below
+        Box(
+            modifier = Modifier
+                .background(color = colorScheme.primaryContainer)
+                .fillMaxWidth()
+                .height(100.dp)
+                .padding(horizontal = 8.dp),
         )
     {
         //creates a row to align the logo and buttons on the home page
@@ -358,7 +259,204 @@ fun HomeScreen(tags: List<Check>) {
                 }
             }
         }
+        // Box is used to setup our pull to refresh
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState)
+        ) {
+            // Sets up the UI for the screen for card layout
+            Column1(
+                modifier = Modifier
+                    // sets the color of the background
+                    .background(color = colorScheme.background)
+                    .padding(horizontal = 8.dp)
+                    .fillMaxSize()
+                    .verticalScroll(state),
+                // centers the event cards
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
+            {
+                // creates a visual spacer for the top of the page
+                Spacer(modifier = Modifier.height(50.dp))
+
+                val chosenTags = mutableListOf<String>()
+                for (i in tags.indices) {
+                    if (tags[i].checked.value) {
+                        chosenTags.add(tags[i].label)
+                    }
+                }
+                // populates the page with events
+                for (cardnum in events.indices) {
+                    if (chosenTags.isEmpty()) {
+                        if (selectedView == 0) {
+                            if (events[cardnum].event_start_time.substring(0, 10) == today.format(
+                                    formatter
+                                ).toString()
+                            ) {
+                                EventCard(event = events[cardnum])
+                                // creates space between cards
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                        } else if (selectedView == 1) {
+                            if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(
+                                    formatter
+                                ).toString()
+                            ) {
+                                EventCard(event = events[cardnum])
+                                // creates space between cards
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                        } else if (selectedView == 2) {
+                            if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(
+                                    formatter
+                                ).toString()
+                            ) {
+                                EventCard(event = events[cardnum])
+                                // creates space between cards
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                        } else if (selectedView == 3) {
+                            if (events[cardnum].event_start_time.substring(0, 10) == threedays.format(
+                                    formatter
+                                ).toString()
+                            ) {
+                                EventCard(event = events[cardnum])
+                                // creates space between cards
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                        } else if (selectedView == 4) {
+                            if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(
+                                    formatter
+                                ).toString()
+                            ) {
+                                EventCard(event = events[cardnum])
+                                // creates space between cards
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                        } else if (selectedView == 5) {
+                            if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(
+                                    formatter
+                                ).toString()
+                            ) {
+                                EventCard(event = events[cardnum])
+                                // creates space between cards
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                        } else if (selectedView == 6) {
+                            if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(
+                                    formatter
+                                ).toString()
+                            ) {
+                                EventCard(event = events[cardnum])
+                                // creates space between cards
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+
+                        }
+                    }
+                    // sorts by tag
+                    else {
+                        for (t in chosenTags.indices) {
+                            if (selectedView == 0) {
+                                if (event[cardnum].event_start_time.substring(0, 10) == today.format(
+                                        formatter
+                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                ) {
+                                    EventCard(event = event[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    break
+                                }
+                            } else if (selectedView == 1) {
+                                if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(
+                                        formatter
+                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                ) {
+                                    EventCard(event = event[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    break
+                                }
+                            } else if (selectedView == 2) {
+                                if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(
+                                        formatter
+                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                ) {
+                                    EventCard(event = event[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    break
+                                }
+                            } else if (selectedView == 3) {
+                                if (event[cardnum].event_start_time.substring(
+                                        0,
+                                        10
+                                    ) == threedays.format(formatter)
+                                        .toString() && event[cardnum].tags.contains(chosenTags[t])
+                                ) {
+                                    EventCard(event = event[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    break
+                                }
+                            } else if (selectedView == 4) {
+                                if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(
+                                        formatter
+                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                ) {
+                                    EventCard(event = event[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    break
+
+                                }
+                            } else if (selectedView == 5) {
+                                if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(
+                                        formatter
+                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                ) {
+                                    EventCard(event = event[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    break
+                                }
+                            } else if (selectedView == 6) {
+                                if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(
+                                        formatter
+                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                ) {
+                                    EventCard(event = event[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+                // creates a space at the bottom for visual appeal
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    "No more events match filters",
+                    style = typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(120.dp))
+
+            }
+            // Handles the pull to refresh indicator
+            PullRefreshIndicator(
+                // Tracks the refreshing state
+                refreshing = isRefreshing,
+                // References the pulling state action we setup earlier
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
     }
+}
 
 
 
