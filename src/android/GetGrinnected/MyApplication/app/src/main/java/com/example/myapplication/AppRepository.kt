@@ -199,6 +199,7 @@ fun AccountEntity.toUser(): User = User(
     account_description = this.account_description,
     account_role = this.account_role,
     is_followed = this.is_followed,
+    notified_events = this.notified_events
 )
 
 /**
@@ -215,4 +216,5 @@ fun User.toAccountEntity(): AccountEntity = AccountEntity(
     account_description = this.account_description,
     account_role = this.account_role,
     is_followed = this.is_followed,
+    notified_events = this.notified_events
 )
