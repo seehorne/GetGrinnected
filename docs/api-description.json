@@ -764,10 +764,6 @@
             "type": "string",
             "example": "example@grinnell.edu"
           },
-          "password": {
-            "type": "string",
-            "example": null
-          },
           "profile_picture": {
             "type": "string",
             "example": null
