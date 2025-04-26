@@ -222,3 +222,33 @@ The impact was pretty significant as it allowed me to ask pretty specific questi
 ### To what extent did this impact match goals and expectations?
 
 I actually generally expected it to help less than it did. It was really a lot better and providing more specific feedback to really help me when I hit a specific gap in knowledge. Additionally, I feel as though I was expecting to begin to curate my messages/prompts to the degree that I did. I feel like I learned a lot about prompts for example if starting a chat you want to provide as much background info about your topic as possible and provide as much detail as you can about your understanding or specific use case for some new thing you want to implement. "I am making an events app for grinnell college, currently I have persisting states using datastores for certain app preferences like darkmode light mode, login state, etc. Currently I am working on a Room Database and currently I have an API I get my events from, but when I try to upsert these events to my Room DB it doesn't upsert. What are reasons maybe with how I am creating my events table that might cause an upsert to not occur? (Please just explain do not code)" This prompt gave me pivotal information about the need for type convertors for certain data types in Room DB tables. Curation of similar prompts and my learning of how to curate these questions really evolved and I think that really surprised me during this process.
+
+# (5) **Stakeholder** Meetings & Feedback
+
+## Stakeholder
+
+Regan Stambaugh on Wednesday April 23rd at 6:30pm. Regan is a student athlete, SEPC leader, Singer and 3rd year Grinnell College student.
+
+### Feedback
+
+#### Description of Test Session
+
+We treated the test session similarly to the prototype sessions where we followed a sandbox approach but this time with the docs as the supplementary material to communicate steps. Generally, Regan did not use the docs and we only provided a few nudges in certain directions for features not fully implemented (for example: verification code at the time was hard coded to 123456 so we let her know that).
+
+#### Behavoir of interacting with the documentation
+
+As mentioned previously she didn't really use the documentation much at all as it seemed the app was pretty intuitive. We left it on a laptop beside her to reference at any time but generally she was able to deduce where and how to do actions within the app (And with our feedback on when a feature wasn't fully implemented it made it pretty clear where the limitations at the time of the app were to her).
+
+#### Did they succeed or get stuck?
+
+As mentioned previously she was very successful in navigating our app aside from not entirely intuitive points (ie a not fully implemented feature) she pretty well found all of the features or tried all of the features of the app with little to know prompting.
+
+#### What feedback did they provide about documentation?
+
+She didn't really provide feedback on documentation given that she didn't really utilize it.
+
+#### What questions did we ask and what were Regan's answers?
+
+#### General Notes from meeting
+
+
