@@ -239,7 +239,7 @@ async function routeRefreshTokens(req, res, _next) {
   // Generate and send the new tokens
   const tokens = generateUserTokens(email);
   res.json({
-    'message': 'Successfully authenticated',
+    'message': 'Successfully refreshed',
     'refresh_token': tokens.refresh,
     'access_token': tokens.access
   });
