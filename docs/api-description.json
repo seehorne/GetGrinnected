@@ -374,6 +374,88 @@
         }
       }
     },
+    "/user/data": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user data when logged in.",
+        "description": "Get user data from the database.\n",
+        "security": [
+          {
+            "auth_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InvalidToken"
+          },
+          "404": {
+            "$ref": "#/components/responses/NoSuchUser"
+          }
+        }
+      }
+    },
+    "/user/token-refresh": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Refresh user tokens when logged in.",
+        "description": "Refresh user tokens using a refresh token, which you can only get by logging in previously.",
+        "security": [
+          {
+            "refresh_token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully refreshed"
+                    },
+                    "refresh_token": {
+                      "$ref": "#/components/schemas/AuthToken"
+                    },
+                    "auth_token": {
+                      "$ref": "#/components/schemas/AuthToken"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/InvalidToken"
+          },
+          "404": {
+            "$ref": "#/components/responses/NoSuchUser"
+          }
+        }
+      }
+    },
     "/events": {
       "get": {
         "tags": [
@@ -389,7 +471,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/success"
+            "$ref": "#/components/responses/EventSuccess"
           }
         }
       }
@@ -431,7 +513,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/success"
+            "$ref": "#/components/responses/EventSuccess"
           },
           "400": {
             "description": "Invalid request. Dates must follow correct format and start date must be before end date.\n",
@@ -455,6 +537,20 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "auth_token": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Authorization token, expiration 15 minutes."
+      },
+      "refresh_token": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Refresh token, expiration 30 days."
+      }
+    },
     "parameters": {
       "tags": {
         "name": "tags",
@@ -464,19 +560,10 @@
         "schema": {
           "$ref": "#/components/schemas/Tags"
         }
-      },
-      "auth_token": {
-        "name": "authorization_token",
-        "in": "header",
-        "description": "Authorization token.",
-        "required": true,
-        "schema": {
-          "$ref": "#/components/schemas/AuthToken"
-        }
       }
     },
     "responses": {
-      "success": {
+      "EventSuccess": {
         "description": "Successful operation.",
         "content": {
           "application/json": {
@@ -484,6 +571,72 @@
               "type": "array",
               "items": {
                 "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "No such user.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Error"
+                }
+              ],
+              "properties": {
+                "error": {
+                  "example": "Token required"
+                },
+                "message": {
+                  "example": "An authorization token is required, but it was not provided."
+                }
+              }
+            }
+          }
+        }
+      },
+      "InvalidToken": {
+        "description": "Invalid or expired token.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Error"
+                }
+              ],
+              "properties": {
+                "error": {
+                  "example": "Invalid or expired token"
+                },
+                "message": {
+                  "example": "The authorization token provided was not valid, or has expired. Please request a new token."
+                }
+              }
+            }
+          }
+        }
+      },
+      "NoSuchUser": {
+        "description": "No such user.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Error"
+                }
+              ],
+              "properties": {
+                "error": {
+                  "example": "No such user"
+                },
+                "message": {
+                  "example": "You are verified with email example@grinnell.edu, but no user exists with that address."
+                }
               }
             }
           }
@@ -593,6 +746,84 @@
               0,
               1
             ]
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "accountid": {
+            "type": "integer",
+            "example": 10
+          },
+          "account_name": {
+            "type": "string",
+            "example": "example_user"
+          },
+          "email": {
+            "type": "string",
+            "example": "example@grinnell.edu"
+          },
+          "password": {
+            "type": "string",
+            "example": null
+          },
+          "profile_picture": {
+            "type": "string",
+            "example": null
+          },
+          "favorited_events": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "example": [
+              14,
+              20,
+              77
+            ]
+          },
+          "favorited_orgs": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "example": [
+              12,
+              13,
+              14
+            ]
+          },
+          "drafted_events": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "example": [
+              21
+            ]
+          },
+          "favorited_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "foo",
+              "bar"
+            ]
+          },
+          "account_description": {
+            "type": "string"
+          },
+          "account_role": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ],
+            "example": 0
           }
         }
       },

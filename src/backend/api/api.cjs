@@ -121,7 +121,7 @@ function run() {
    */
 
   // When logged in, you can refresh your own tokens whenever needed.
-  app.post('/user/auth-refresh', middlewareVerifyRefresh, user.routeRefreshTokens);
+  app.post('/user/token-refresh', middlewareVerifyRefresh, user.routeRefreshTokens);
 
   // Get your own data by requesting it with a GET request.
   app.get('/user/data', middlewareVerifyAuth, user.routeGetUserData);
