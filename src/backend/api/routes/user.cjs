@@ -197,7 +197,7 @@ async function routeVerifyOTP(req, res, _next) {
     const accessToken = jwt.sign(
       { email },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '1d' } // TODO: SET DOWN LOWER WHEN NOT DEVELOPING
+      { expiresIn: '15m' }
     );
 
     // Send those tokens back to the user in a successful response.
