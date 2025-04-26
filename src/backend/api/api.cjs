@@ -75,7 +75,7 @@ function run() {
    * an auth key or a refresh key.
    */
   const middlewareVerifyAuth = (req, res, next) => {
-    middlewareVerifyJWT(process.env.AUTH_TOKEN_SECRET, req, res, next);
+    middlewareVerifyJWT(process.env.ACCESS_TOKEN_SECRET, req, res, next);
   }
   const middlewareVerifyRefresh = (req, res, next) => {
     middlewareVerifyJWT(process.env.REFRESH_TOKEN_SECRET, req, res, next);
