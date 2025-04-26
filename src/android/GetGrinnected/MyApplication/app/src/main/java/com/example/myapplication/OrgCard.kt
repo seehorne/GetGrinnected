@@ -56,7 +56,7 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
                 expanded.value = !expanded.value // Toggles expanded state when card is clicked
             },
         colors = CardDefaults.cardColors(
-            containerColor = colorScheme.primaryContainer
+            containerColor = colorScheme.secondaryContainer
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -89,7 +89,7 @@ fun OrgCard(account: User, modifier: Modifier = Modifier) {
                 Icon(
                     imageVector = if (isFollowed.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "Follow Icon",
-                    tint = colorScheme.primary,
+                    tint = colorScheme.tertiary,
                     modifier = Modifier
                         .size(32.dp)
                         .clickable {

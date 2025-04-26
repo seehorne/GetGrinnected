@@ -117,12 +117,16 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 onClick = { /* TODO handle switch account */ },
                 modifier = modifier.padding(end = 8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.ChangeCircle,
-                    contentDescription = "Switch Account",
-                    modifier = modifier.size(24.dp),
-                    tint = colorScheme.primary
-                )
+                Box(contentAlignment = Alignment.Center,
+                    modifier = Modifier.background(Color.White, shape = CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ChangeCircle,
+                        contentDescription = "Switch Account",
+                        modifier = modifier.size(24.dp),
+                        tint = colorScheme.primary
+                    )
+                }
             }
         }
 /* This is commented out for the time being as we have the profile picture as a stretch goal.

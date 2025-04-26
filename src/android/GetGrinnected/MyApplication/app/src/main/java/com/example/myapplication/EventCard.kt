@@ -74,7 +74,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     }
     // Sets up composable to be a card for our info
     Card(
-        colors = CardDefaults.cardColors(containerColor = colorScheme.primaryContainer),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.secondaryContainer),
         //elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
@@ -132,7 +132,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     Icon(
                         imageVector = if (event.is_favorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite Icon",
-                        tint = colorScheme.primary,
+                        tint = colorScheme.tertiary,
                         modifier = Modifier
                             .size(40.dp)
                             .clickable {
@@ -146,7 +146,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     Icon(
                         imageVector = if (isNotification.value) Icons.Filled.Notifications else Icons.Outlined.Notifications,
                         contentDescription = "Notification Icon",
-                        tint = colorScheme.primary,
+                        tint = colorScheme.tertiary,
                         modifier = Modifier
                             .size(40.dp)
                             .clickable {

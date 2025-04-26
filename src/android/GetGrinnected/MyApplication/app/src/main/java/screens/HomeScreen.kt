@@ -53,6 +53,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.DataStoreSettings
 import kotlinx.coroutines.launch
+import androidx.compose.material3.ButtonDefaults
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -157,7 +158,7 @@ fun HomeScreen(tags: List<Check>) {
         // creates the top bar for the home page (I think might be erroneous with the row below
         Box(
             modifier = Modifier
-                .background(color = colorScheme.primaryContainer)
+                .background(color = colorScheme.primary)
                 .fillMaxWidth()
                 .height(100.dp)
                 .padding(horizontal = 8.dp),
@@ -178,13 +179,17 @@ fun HomeScreen(tags: List<Check>) {
                     .background(Color.White)
                     .size(50.dp)
             )
-            // centers the bottons
+            // centers the buttons
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
                 // creates day menu
-                Button(onClick = { expanded.value = true }) {
+                Button(onClick = { expanded.value = true },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorScheme.secondary,
+                        contentColor = colorScheme.onPrimary),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 20.dp)) {
                     // displays selected day on the button
                     when (selectedView) {
 
@@ -239,7 +244,11 @@ fun HomeScreen(tags: List<Check>) {
                     horizontalArrangement = Arrangement.End,
                 ) {
                     // creates tags menu
-                    Button(onClick = { expanded2.value = true }) {
+                    Button(onClick = { expanded2.value = true },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorScheme.secondary,
+                            contentColor = colorScheme.onPrimary),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)){
                         Text("Tags", style = typography.labelLarge, maxLines = 1)
                     }
                     DropdownMenu(
