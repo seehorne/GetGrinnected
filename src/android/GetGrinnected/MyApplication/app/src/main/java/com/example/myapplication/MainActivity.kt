@@ -31,7 +31,21 @@ class MainActivity : ComponentActivity() {
 
         // This syncs the info we have from the API
         lifecycleScope.launch {
-            AppRepository.syncFromApi()
+            // Gets the last time we synced with the API
+            val lastSyncTime = DataStoreSettings.getLastSyncTime(applicationContext).first()
+            // Gets the current time
+            val now = System.currentTimeMillis()
+            val hours = 3 // number of hours we want to wait till we refresh cache
+
+            // If the last time we Synced is null ie we have never synced or it has been
+            // More than 3 hrs (the math calculates the hours into milliseconds)
+            // since our last sync
+            if (lastSyncTime == null || now - lastSyncTime > hours * 60 * 60 * 1000) {
+                // Syncs from API
+                AppRepository.syncFromApi()
+                // Sets the new LastSyncTime to now
+                DataStoreSettings.setLastSyncTime(applicationContext, now)
+            }
         }
 
         lifecycleScope.launch {
