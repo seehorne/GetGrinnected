@@ -156,7 +156,7 @@ function routeShowOnline(_req, res) {
 /**
  * Middleware to verify that a JWT is valid before doing a request.
  * 
- * Verifies the JWT token contained in the `Bearer` header of the request. On any
+ * Verifies the JWT token contained in the `Authorization` header of the request. On any
  * error, responds to the request with failure.
  * 
  * On success, the `req.email` variable will be set corresponding to the
@@ -170,10 +170,21 @@ function routeShowOnline(_req, res) {
  *                  call the function *after* the middleware.
  */
 function middlewareVerifyJWT(req, res, next) {
-  // Get the contents of the Bearer header sent along with the request
-  const token = req.get('Bearer');
+  // Get the contents of the Authorization header sent along with the request
+  const authHeader = req.get('Authorization');
 
-  // If that header doesn't exist, fail with HTTP 401 which means "Unauthorized".
+  // Attempt to get the token out of the header. Two important details:
+  // 
+  // - authHeader will be undefined if it was not included, so we need to use
+  //   `authHeader &&` to avoid an error and have it eval to undefined.
+  // 
+  // - we expect the contents to be `Bearer {TOKEN}`, which is why we split
+  //   and take the second element. if there is no second element (e.g. malformed
+  //   input), the expression will also evaluate to undefined.
+  const token = authHeader && authHeader.split(' ')[1];
+
+  // If token is undefined, that means we couldn't read it (see above).
+  // When this happens, respond HTTP 401 which tells the user they are not authorized
   if (!token) {
     res.status(401).json({
       'error': 'Token required',
