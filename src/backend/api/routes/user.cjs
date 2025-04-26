@@ -146,6 +146,30 @@ async function routeSignUpNewUser(req, res, _next) {
   });
 }
 
+/**
+ * Generate new user tokens for a specific email address.
+ * 
+ * @param {string} email  Email to generate the tokens for.
+ * @returns  An object with two keys:
+ * - refresh for the user's refresh token
+ * - access for the user's access token
+ */
+function generateUserTokens(email) {
+  // Use JSON Web Tokens to create two tokens for the user,
+  // a long-lived refresh token and a short-lived access token.
+  const refreshToken = jwt.sign(
+    { email },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '30d' }
+  );
+  const accessToken = jwt.sign(
+    { email },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
+
+  return { 'refresh': refreshToken, 'access': accessToken };
+}
 
 /**
  * Verify an OTP code.
@@ -185,34 +209,46 @@ async function routeVerifyOTP(req, res, _next) {
       'message': 'Could not verify OTP.'
     });
     return;
-  }
-  else {
-    // Use JSON Web Tokens to create two tokens for the user,
-    // a long-lived refresh token and a short-lived access token.
-    const refreshToken = jwt.sign(
-      { email },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '30d' }
-    );
-    const accessToken = jwt.sign(
-      { email },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '15m' }
-    );
+  } else {
+    // Generate tokens for that user
+    const tokens = generateUserTokens(email);
 
     // Send those tokens back to the user in a successful response.
     res.json({
       'message': 'Successfully authenticated',
-      'refresh_token': refreshToken,
-      'access_token': accessToken
+      'refresh_token': tokens.refresh,
+      'access_token': tokens.access
     });
-    return
+    return;
   }
+}
+
+/**
+ * Refresh the authorization and refresh token of a user. This route is
+ * protected, so it can only be accessed by users who hold a valid refresh token.
+ * 
+ * @param {*} _req  Express request, unused.
+ * @param {*} res  Express response, where we will send our results.
+ * @param {*} _next  Express error handler callback for async, unused.
+ */
+async function routeRefreshTokens(req, res, _next) {
+  // Get the email of the authenticated user from the request after it was
+  // stored there by the JWT authenticator.
+  const email = req.email;
+
+  // Generate and send the new tokens
+  const tokens = generateUserTokens(email);
+  res.json({
+    'message': 'Successfully authenticated',
+    'refresh_token': tokens.refresh,
+    'access_token': tokens.access
+  });
 }
 
 if (require.main !== module) {
   module.exports = {
     routeGetUserData,
+    routeRefreshTokens,
     routeSendOTP,
     routeSignUpNewUser,
     routeVerifyOTP,

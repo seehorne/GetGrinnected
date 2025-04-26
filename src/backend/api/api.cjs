@@ -68,6 +68,20 @@ function run() {
   app.get('/', routeShowOnline);
 
   /*
+   * JWT VERIFICATION
+   *
+   * These functions are basically aliases for middlewareVerifyJWT, but each
+   * of them has it verify using a different secret. This lets us verify either
+   * an auth key or a refresh key.
+   */
+  const middlewareVerifyAuth = (req, res, next) => {
+    middlewareVerifyJWT(process.env.REFRESH_TOKEN_SECRET, req, res, next);
+  }
+  const middlewareVerifyRefresh = (req, res, next) => {
+    middlewareVerifyJWT(process.env.REFRESH_TOKEN_SECRET, req, res, next);
+  }
+
+  /*
    * EVENTS ROUTES
    *
    * TODO: when frontends implement JWTs, these routes should become protected.
@@ -106,8 +120,11 @@ function run() {
    * since they correspond to a particular user.
    */
 
+  // When logged in, you can refresh your own tokens whenever needed.
+  app.post('/user/auth-refresh', middlewareVerifyRefresh, user.routeRefreshTokens);
+
   // Get your own data by requesting it with a GET request.
-  app.get('/user/data', middlewareVerifyJWT, user.routeGetUserData);
+  app.get('/user/data', middlewareVerifyAuth, user.routeGetUserData);
 
   // TODO: Update parts of your data (favorites, followed, etc) with POST requests.
 
@@ -154,7 +171,7 @@ function routeShowOnline(_req, res) {
 }
 
 /**
- * Middleware to verify that a JWT is valid before doing a request.
+ * Middleware to verify a JWT with an arbitrary secret key.
  * 
  * Verifies the JWT token contained in the `Authorization` header of the request. On any
  * error, responds to the request with failure.
@@ -164,12 +181,13 @@ function routeShowOnline(_req, res) {
  * 
  * > Based on https://www.slingacademy.com/article/authentication-authorization-expressjs-jwt/.
  * 
- * @param {*} req   Express request object, contains the headers.
- * @param {*} res   Express response object.
+ * @param {*} token_secret  Secret key of the JWT token to verify.
+ * @param {*} req  Express request object, contains the headers.
+ * @param {*} res  Express response object.
  * @param {*} next  Express callback. Since this is a middleware, `next()` will
- *                  call the function *after* the middleware.
+ * call the function *after* the middleware.
  */
-function middlewareVerifyJWT(req, res, next) {
+function middlewareVerifyJWT(token_secret, req, res, next) {
   // Get the contents of the Authorization header sent along with the request
   const authHeader = req.get('Authorization');
 
@@ -194,7 +212,7 @@ function middlewareVerifyJWT(req, res, next) {
   }
 
   // Use the jwt library to verify. The callback we provide will be run async
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+  jwt.verify(token, token_secret, async (err, payload) => {
     // If JWT verify fails, stop the request now and return a 403 error.
     // That error is generally agreed to mean "you need to reauthorize".
     if (err) {
