@@ -31,7 +31,19 @@ class MainActivity : ComponentActivity() {
 
         // This syncs the info we have from the API
         lifecycleScope.launch {
-            AppRepository.syncFromApi()
+            // Gets the last time we synced with the API
+            val lastSyncTime = DataStoreSettings.getLastSyncTime(applicationContext).first()
+            // Gets the current time
+            val now = System.currentTimeMillis()
+
+            // If the last time we Synced is null ie we have never synced or it has been
+            // More than 3 hrs (10,800,000 milliseconds) since our last sync
+            if (lastSyncTime == null || now - lastSyncTime > 10800000) {
+                // Syncs from API
+                AppRepository.syncFromApi()
+                // Sets the new LastSyncTime to now
+                DataStoreSettings.setLastSyncTime(applicationContext, now)
+            }
         }
 
         lifecycleScope.launch {

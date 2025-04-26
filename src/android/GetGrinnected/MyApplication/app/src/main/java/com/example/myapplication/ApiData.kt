@@ -24,13 +24,6 @@ data class AuthResponse(
 )
 
 /**
- * Data object of info sent to verify an email is available
- */
-data class EmailRequest(
-    val email: String
-)
-
-/**
  * Data object of info sent to verify a code
  */
 data class VerifyRequest(

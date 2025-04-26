@@ -40,7 +40,7 @@ import com.example.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
 import com.example.myapplication.AppRepository
 import com.example.myapplication.AccountEntity
-import com.example.myapplication.EmailRequest
+import com.example.myapplication.LoginRequest
 import com.example.myapplication.VerifyRequest
 
 /**
@@ -146,6 +146,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                         )
                         // If it is we continue
                         if (response.isSuccessful && response.body()?.access_token != null) {
+                            // If flag == True this is a sign up operation
                             if (flag) {
                                 // Creates a new accountEntity thus a new account to be added to our local repo
                                 val newAccount = AccountEntity(
@@ -168,14 +169,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                                     context,
                                     newAccount.accountid
                                 )
-                                // Sets storage preference logged in to true
-                                DataStoreSettings.setLoggedIn(context, true)
-                                // Navigates to main page
-                                navController.navigate("main") {
-                                    popUpTo(0) { inclusive = true }
-                                    launchSingleTop = true
-                                }
-                            } else {
+                                // It is a login operation
+                            } else{
                                 // Sets storage preference logged in to true
                                 DataStoreSettings.setLoggedIn(context, true)
                                 // Sets our current account from the given id
@@ -185,12 +180,18 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                                     context,
                                     email.hashCode()
                                 )
+                                }
+                                // Sets storage preference logged in to true
+                                DataStoreSettings.setLoggedIn(context, true)
+                                // Sets our access token to the token we obtained
+                                DataStoreSettings.setAccessToken(context, response.body()?.access_token!!)
+                                // Sets our refresh token to the token we obtained
+                                DataStoreSettings.setRefreshToken(context, response.body()?.refresh_token!!)
                                 // Navigates to main page
                                 navController.navigate("main") {
                                     popUpTo(0) { inclusive = true }
                                     launchSingleTop = true
                                 }
-                            }
                             // Handles error if we couldn't verify the code or it was wrong
                         } else {
                             errMsg = "Incorrect code"
@@ -211,7 +212,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                 coroutineScope.launch {
                     errMsg = try {
                         // Gets a login response to send us another email
-                        val response = RetrofitApiClient.apiModel.login(EmailRequest(email))
+                        val response = RetrofitApiClient.apiModel.login(LoginRequest(email))
                         // If this is successful we tell them we sent an email
                         if (response.isSuccessful) {
                             "A new code has been sent to your email."
