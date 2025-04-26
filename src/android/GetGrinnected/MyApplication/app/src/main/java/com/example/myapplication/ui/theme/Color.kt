@@ -2,7 +2,7 @@ package com.example.myapplication.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Colors Tried to
+// Colors Tried to match the colorscheme on Swift the best we could
 val NavyBlue = Color(0xFF102F4D)
 val GrayishBlue = Color(0xFF3F576E)
 val OffWhiteBlue = Color(0xFFD7DCEC)
