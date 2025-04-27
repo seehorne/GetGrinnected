@@ -271,10 +271,6 @@ You can see our changes at the commit with hash [695e0af](https://github.com/see
 
 ## Group Ellie and Ethan
 
-### A: Ellie B: Ethan
-> TODO: DELETEME ON COMPLETION
-> THIS SECTION STILL NEEDS TO BE FILLED OUT.
-
 ### A: Ethan B: Ellie
 MainActivity.kt, lines 41-186
 
@@ -282,12 +278,13 @@ We worked together to make sure both of us had an understanding of the current c
 
  You can see our changes at the commit with the hash [b0d3ca9](https://github.com/seehorne/GetGrinnected/commit/b0d3ca92759449de424f9ef4d40c14623d970d83)
 
+### A: Ellie B: Ethan
+
 On the other side, for Ellie showing code to Ethan, we worked with the functions dropPastEvents and findID, both in scrape.js. The changes we made to the documentation were to add overarching function documentation for findID and update the overarching function documentation for dropPastEvents to include the time_based parameter that was added in the most recent commit about this code prior to this lab: this was necessary if Ethan were to take over the next step of writing CI tests for it so he would know how to call things. There was already some overarching documentation for the dropPastEvents which outlined parameters except for the time_based one, as well as inline comments on both functions explaining what certain lines did, which Ethan found helpful in understanding the general behavior of the function. We also made a Trello task for the CI tests, which doesn’t have a before pic because it didn’t exist before, the after image is shown here.
 
 <img src="images/CI_task.jpeg" width="50%">
 
 The changes are at the coomit with hash [009e931](https://github.com/seehorne/GetGrinnected/commit/009e9315376b8346ba5f1883898fc59831bf36d7)
-
 
 # (3) Self-Selected Work toward Minimum Viable Product (MVP)
 
