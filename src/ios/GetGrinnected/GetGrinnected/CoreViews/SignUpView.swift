@@ -16,7 +16,7 @@ struct SignUpView: View{
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
-    
+    @State private var success = Bool()
     @StateObject private var userProfile = UserProfile()
     @State private var signupError = ""
     
@@ -39,11 +39,11 @@ struct SignUpView: View{
                       title: "Grinnell Email",
                       placeholder: "Enter your Grinnell Email.. (@grinnell.edu)")
             
-            //Signin Password Text Fields
-            InputView(text: $password,
-                      title: "Password",
-                      placeholder: "Enter your password...",
-                      isSecureField: true)
+//            //Signin Password Text Fields
+//            InputView(text: $password,
+//                      title: "Password",
+//                      placeholder: "Enter your password...",
+//                      isSecureField: true)
             
             //error
             if !signupError.isEmpty{
@@ -56,7 +56,27 @@ struct SignUpView: View{
             //Signup button
             
             Button {
-                attemptSignUp()
+                userProfile.signUpUser(email: email, user: username) { result in
+                    switch result {
+                    case .success(let output):
+                        print("API Response: \(output)")
+                        success=true
+                    case .failure(let error):
+                        print("API call failed: \(error.localizedDescription)")
+                        if let apiError = error as? UserProfile.APIError {
+                                        switch apiError {
+                                        case .signInError(let message):
+                                            signupError = message
+                                        default:
+                                            signupError = apiError.localizedDescription
+                                        }
+                                    } else {
+                                        signupError = error.localizedDescription
+                                    }
+                        success=false
+                    }
+                }
+                    
             } label: {
                 HStack{
                     Text("SIGN UP")
