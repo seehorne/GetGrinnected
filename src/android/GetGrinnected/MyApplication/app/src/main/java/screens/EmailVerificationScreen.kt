@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -39,7 +43,6 @@ import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
 import com.example.myapplication.AppRepository
-import com.example.myapplication.AccountEntity
 import com.example.myapplication.LoginRequest
 import com.example.myapplication.VerifyRequest
 import com.example.myapplication.toAccountEntity
@@ -113,6 +116,13 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                     errCode = false
                 },
                 label = { Text("Verification Code", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Lock,
+                        contentDescription = "Verification Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 isError = errCode,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true
@@ -133,8 +143,9 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
             // This is our verify button
             Button(onClick = {
                 coroutineScope.launch {
-                    // Checks that the code input is 6 characters long
-                    if (codeInput.length == 6) {
+                    // Checks that the code input is 6 characters long since we hard
+                    // set that it can't be more than 6 in the input field
+                    if (codeInput.length < 6) {
                         errMsg = "Please enter 6-digit code"
                         errCode = true
                         return@launch // Escapes launch due to missing username

@@ -16,6 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -128,6 +132,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     errUsername = false
                 },
                 label = { Text("Username", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Email Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 isError = errUsername,
                 keyboardOptions = KeyboardOptions(
                     // This makes it so the enter key is a next button instead of enter
@@ -151,6 +162,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     errEmail = false
                 }, //ensures it isn't case sensitive
                 label = { Text("Email", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Email,
+                        contentDescription = "Email Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 isError = errEmail,
                 keyboardOptions = KeyboardOptions(
                     // This makes it so the enter key is a done button instead of enter
@@ -278,10 +296,16 @@ fun SignupScreenPreview(){
  */
 fun validateUsername(username: String): String? {
     // Set of allowed characters Alphabetical and periods and underscores
-    val allowedChars = Regex("^[a-zA-Z._]+$")
+    val allowedChars = Regex("^[a-zA-Z0-9._]+$")
     // If the username contains characters that aren't allowed we display the following error
     if (!allowedChars.matches(username)) {
         return "Username can only include letters, '.', and '_'"
+    }
+    // Set of letters
+    val letters = Regex("[a-zA-Z]")
+    // If the username does not contain at least one letter display the following error
+    if (!letters.containsMatchIn(username)) {
+        return "Username must contain at least one letter"
     }
     // If username has consecutive periods return the following error
     if (username.contains("..")) return "Username cannot contain two or more '.' in a row"
@@ -299,8 +323,8 @@ fun validateUsername(username: String): String? {
     if (username.endsWith(".") || username.endsWith("_")) {
         return "Username cannot end with '.' or '_'"
     }
-    // If username is not at least 8 characters long return the following error
-    if (username.length < 8) return "Username must be at least 8 characters long"
+    // If username is more than 20 characters long return the following error
+    if (username.length > 20) return "Username must be no more that 20 characters long"
 
     return null // means we passed validation
 }
