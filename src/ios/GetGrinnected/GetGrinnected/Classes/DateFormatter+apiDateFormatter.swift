@@ -6,7 +6,7 @@
 //
 import Foundation
 
-// Add to a utility file
+// Add to a utility file, can be used instead of creating a new formatter every time
 extension DateFormatter {
     static let apiDateFormatter: DateFormatter = {
         let formatter = DateFormatter()

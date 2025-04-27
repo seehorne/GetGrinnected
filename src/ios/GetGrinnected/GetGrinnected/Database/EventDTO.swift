@@ -13,10 +13,7 @@ import SwiftData
  
  The codable protocol allows for encoding and decoding (and this one specifically for JSONs, especially the codingkey.
  This is used to take the JSON string from the API and deconstruct many events, in the form of [Event] to deconstruct the entire JSON
- 
  */
-
-
 struct EventDTO: Codable {
     //? type is an optional type. If scraping finds a null value, the value may remain null.
     var eventid: Int?

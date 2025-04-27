@@ -105,6 +105,8 @@ struct VerificationView: View {
             //if the API call was successful, go to the main view
             .navigationDestination(isPresented: $success) {
                 MainNavView()
+                    //if you are logged in, do not need to show the back button that you have to resend a verificatino code
+                    .navigationBarBackButtonHidden(true)
             }
         } //navigation
     } //body

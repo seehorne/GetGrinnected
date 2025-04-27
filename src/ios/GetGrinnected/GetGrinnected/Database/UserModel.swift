@@ -14,12 +14,14 @@ final class UserModel {
     var email: String
     var password: String
     var isPaswordValid: Bool
+    var isLoggedIn: Bool = false
     
     init(username: String = "", email: String = "", password: String = ""){
         self.username = username
         self.email = email
         self.password = password
         self.isPaswordValid = false
+        self.isLoggedIn = false
     }
     
     

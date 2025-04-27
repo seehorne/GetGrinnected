@@ -171,6 +171,7 @@ struct SampleView: View {
         
         //see if we have successfully taken the event information
         Text("myEvents: \(myEvents)")
+        
         //check before printing
         if(myEvents[0].event_name != nil){
             Text("Name: \(myEvents[0].event_name!)")

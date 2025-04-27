@@ -17,14 +17,15 @@ import Foundation
  
  */
 class EventListParentViewModel: ObservableObject {
-    @Published var viewedDate = Date.now
-    @Published var lastDate = Date.now.addingTimeInterval(86400 * 13)
-    @Published var selectedTags = EventTags.any
+    @Published var viewedDate = Date.now //contains info about viewed date
+    @Published var lastDate = Date.now.addingTimeInterval(86400 * 13) //and last date
+    @Published var selectedTags = EventTags.any //about selected tags
     @Published var timeSpan: (start: Date, end: Date) = (Date(), Date().startOfNextDay)//time span by day
-    @Published var lastFetched: Date?
-    @Published var forceRefreshRequested: Bool = false
+    @Published var lastFetched: Date? //about when last fetched to update
+    @Published var forceRefreshRequested: Bool = false //about whether or not a force refresh was requested
     let cacheExpiration: TimeInterval = 600 // 10 minutes
     
+    //if it was requested, force refresh by setting force refreshrequested as true. 
     func forceRefresh() {
         print("Force refresh triggered")
         self.lastFetched = nil

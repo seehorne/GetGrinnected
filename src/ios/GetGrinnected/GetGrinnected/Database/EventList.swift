@@ -5,26 +5,30 @@
 //  Created by Budhil Thijm on 4/24/25.
 //
 
-import SwiftData
+import SwiftData //swift data is how we cache information
 import SwiftUI
 
+
+/**
+ EventList takes EventDTO, converts into cached EventModel. If event already exists in cache, updates information.
+ Searching, filtering and forcerefreshing is all in this file.
+ */
 struct EventList: View {
-    //model context!
+    //model context, containing how we save to cache
     @Environment(\.modelContext) private var modelContext
-    //only initialized value that is a query
-    @Query(sort: \EventModel.startTime) private var events: [EventModel]
+    
+    //only initialized value that is a query; sort our events by start time, and make it queryable by @query
+    @Query(sort: \EventModel.startTime) private var events: [EventModel] //an array of eventmodels
     
     //parentview that observes values if change
     @ObservedObject var parentView: EventListParentViewModel
     
-    //selected event
     @State var selectedEvent: Int? //An integer to represent which event we select
-    @State private var refreshTimer: Timer?
+    @State private var refreshTimer: Timer? //a timer to count when we refresh
     @State private var isLoading = false //set loading states
     
     
     //the initializer for the eventlist is the sorting function!
-    
     init(
         selectedEvent: Int?,
         parentView: EventListParentViewModel,
@@ -33,16 +37,19 @@ struct EventList: View {
         filterToday: Bool = false,
         showFavorites: Bool = false
     ){
+        //set selected event to selected event
         self.selectedEvent = selectedEvent
-        self._parentView = ObservedObject(wrappedValue: parentView)
+        self._parentView = ObservedObject(wrappedValue: parentView) //set parent view to an observed object of parent view
         
-        let timeSpanStart = parentView.timeSpan.start
-        let timeSpanEnd = parentView.timeSpan.end
         
         //apply sort order, default if no title or organization provided
         let finalSortOrder = sortOrder.isEmpty ? [SortDescriptor(
-            \EventModel.name
+            \EventModel.name //sort by name
         )] : sortOrder
+        
+        //set timespans to explain what view is showing (debugging purposes)
+        let timeSpanStart = parentView.timeSpan.start
+        let timeSpanEnd = parentView.timeSpan.end
         
         //debugging purposes
         print("EventList initialized with timespan: \(timeSpanStart) to \(timeSpanEnd), filterToday: \(filterToday)")
@@ -59,9 +66,13 @@ struct EventList: View {
             sort: finalSortOrder,
             animation: .default
         )//sort by name default animation
+        
     } //init
     
-    
+    /**
+     Buildpredicate is used to input into the query. This is so that the query is able to run efficiently
+     otherwise the compiler freaks out.
+     */
     private func buildFilterPredicate(
         timeSpanStart: Date,
         timeSpanEnd: Date,
@@ -71,41 +82,41 @@ struct EventList: View {
     ) -> Predicate<EventModel> {
         return #Predicate<EventModel> { event in
             // Time filter condition
-            return (
-                filterToday
-                ? event.startTime
-                    .flatMap {
-                        $0 >= timeSpanStart && $0 <= timeSpanEnd
-                    } ?? false //check the dates, otherwise false (not in that date)
-                : true) //if not filtering for today, return true
+            return (filterToday //filter today by the start time and end time
+                    ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
+                    : true) //if not filtering for today, return true
             &&
-            (
-                searchString.isEmpty || event.name.localizedStandardContains(searchString)
-            )
+            // search filtering: if it's empty, simply write true (so all events are present), or whatever event name contains that search
+            (searchString.isEmpty || event.name.localizedStandardContains(searchString))
             &&
+            //if the event is favorited, show the event. ShowFavorites is only on for the favorites page
             (showFavorites ? event.favorited : true)
         }
     }
     
+    //main event body view
     var body: some View {
         VStack{
+            //if empty show that no events are in that time period
             if events.isEmpty{
-                Text("No Events in this time period")
+                //a more helpful empty message
+                Text("No Events under those parameters..")
                     .padding()
                 
             }
             
-            
+            //helpful loading page
             if isLoading {
                 //progress View
                 ProgressView("Loading Events...")
                     .padding()
             } else {
+                //for every event, based on ID
                 ForEach(events, id: \.id) { event in
-                    //checks if favorited page
-                    EventCard(event: event, isExpanded: (event.id == selectedEvent))
-                        .onTapGesture {
-                            withAnimation(.easeInOut) {
+                    //add an event card of that event that..
+                    EventCard(event: event, isExpanded: (event.id == selectedEvent))//selects based on if the selected event is the same as the event ID
+                        .onTapGesture { //on tap..
+                            withAnimation(.easeInOut) { //changes selectedEvent to this event, (and thus expands it)
                                 //select event
                                 if (event.id == selectedEvent){
                                     selectedEvent = -1
@@ -120,12 +131,12 @@ struct EventList: View {
             
         }//vstack
         .onAppear{
-            //fetch events on appear
+            //fetch events on initial appear
             Task {
                 await fetchEvents()
             }
             
-            //refrehs on timer
+            //refresh on timer, every 5 minutes for now!
             refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
                 Task {
                     await fetchEvents()
@@ -134,13 +145,17 @@ struct EventList: View {
                 
         }
         .onDisappear {
-            //if view disappears, invalidate timers
+            //if view disappears, invalidate timers, so it doesn't refresh every time!
             refreshTimer?.invalidate()
             refreshTimer = nil
         }
+        /**
+         THIS will eventually be changed to a scroll up to refresh!
+         **/
         .toolbar {
             //force refresh
             Button("Refresh"){
+                //force refresh through the button!
                 parentView.forceRefresh() //only changes last change to nil
                 removeDuplicates() //remove duplicates
                 Task{ await fetchEvents()}
@@ -159,25 +174,26 @@ struct EventList: View {
      once called, shows isloading ot be true, and resets error message
      */
     private func fetchEvents() async {
-        //determine if we should fetch
+        //determine if we should fetch based on last fetched time, time interval (date selected), and if a force refresh was requested
         let shouldFetch = parentView.lastFetched == nil || Date().timeIntervalSince(parentView.lastFetched!) >= parentView.cacheExpiration || parentView.forceRefreshRequested
         
         //use cache data
         if !shouldFetch{
             print("using cached data")
-            return
+            return //return to escape from the fetched events function
         }
         
-        //if loading, set to true
+        //if loading, set to true, to show loading view
         await MainActor.run {
             isLoading = true
         }
         
-        //remove duplicates
+        //remove duplicates in the main actor (not sure why)
         await MainActor.run {
             removeDuplicates()
         }
         
+        //logging for debugging
         print("Fetching data from API, updating cache")
         
         // Update on main thread since we're changing published properties
@@ -299,17 +315,21 @@ struct EventList: View {
         } // await MainActor
         
         
-        
+        //note that fetch is complete
         await MainActor.run {
             print("Fetch complete. Found \(events.count) events for timespan \(parentView.timeSpan.start) to \(parentView.timeSpan.end)")
         }
     } //fetchEvents
     
     
+    /**
+     Remove duplicates to remove any duplicate events clogging up the cache!
+     */
     private func removeDuplicates() {
         // Group events by ID and find duplicates
         let eventsByID = Dictionary(grouping: events, by: { $0.id })
         
+        //for every duplicate, where the event matches the id and there are more than 1 of that event..
         for (_, duplicates) in eventsByID where duplicates.count > 1 {
             // Sort by last updated
             let sortedDuplicates = duplicates.sorted {
@@ -320,6 +340,7 @@ struct EventList: View {
             for duplicate in sortedDuplicates.dropFirst() {
                 // The issue is here - before deleting, make sure we're not
                 // trying to access or modify the tags property
+                //delete that duplicate
                 modelContext.delete(duplicate)
             }
         }
