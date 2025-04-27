@@ -251,4 +251,114 @@ She didn't really provide feedback on documentation given that she didn't really
 
 #### General Notes from meeting
 
+## Stakeholder
+Lily Freeman on Tuesday April 22 and 4:30pm. Lily is a second year student who is not in formal leadership of any organization. She lives in a project house and is a member of the women's ultimate frisbee team.
+
+#### Description of Test Session
+We treated the test session similarly to the prototype sessions where we followed a sandbox approach but this time with the docs as the supplementary material to communicate steps. Generally, Lily did not use the docs, though she did take a brief look when they were provided to her, and we only provided a few nudges in certain directions for features not fully implemented (for example: verification code at the time was hard coded to 123456 so we let her know that).
+
+### Behavoir of interacting with the documentation
+After being shown them, Lily did not interact with the documentation especially heavily during the sessions itself. However, she also had very few questions about how things worked, and the interactions she tried in our sandbox protocol nearly always did what she expected (which aligned with what we intended them to do). The one exception to this rule would be when a feature wasn't implemented, which, as we did in interviews, we would let her know was the case (this was denoted in the documentation as well, but wouldn't have given much more context than us talking).
+
+### Did they succeed or get stuck
+As mentioned in the documentation part, she largely succeeded! She found pretty much every feature on both the Android and iOS side with little or no prompting: the one exception would be that after the Android app (which she saw first), she expected some implemented features iOS did not have yet (like favorites going to the favorite screen) because they were present on Android, but clarifying iOS did not have them yet seemed to ameliorate her confusion. 
+
+### What feedback did they provide about the documentation
+Seeing as her use of the documentation was minimal, she didn't provide much feedback about it, but the brief look she took at it did not elicit any strong reactions—it seemed to make enough sense but not really inspire further discussion from her side.
+
+### What questions did we ask and what were Lily's answers
+
+* Color scheme: what color would you imagine this being?
+   * Lily's answer: probably blue, or like teal. Purple could also be nice, but lands on blue
+
+* Logo: Do you prefer the new one (designed by Rei) or the old one (the two Gs designed by Michael early on)
+   * Lily's answer: likes the new one much better
+
+* How do you feel about passwords vs a code sent to email?
+   * Lily's answer: wouldn't personally mind a password, she could always remind it or save it on her phone, but a one time code could be convenient for something like this where you aren't logging in and out all the time
+
+* Do you have any feedback for us, positive or negative?
+   * Lily's answer: Generally, had mostly positive things to say. Liked the idea of event notifications a lot to remember events and when they start, feels like that would be a lot more efficient than her current strategy of taking pictures of photos on HSSC bulletin boards but then never looking at them.
+
+* What is a feature we don't yet have that you would like to see?
+   * Lily's answer: It would be really nice if events could have images
+
+### General notes
+ANDROID
+
+* Login  
+  * Could be clearer that it needs to be a Grinnell email  
+  * Went to her phone to check email, so that process seems clear  
+* Home  
+  * Day filtering intuitive  
+    * Does look like tomorrow though  
+  * Tags make sense  
+* Calendar  
+  * Sorting there too  
+  * Month view  
+    * Wants to go to next month, feature?  
+* Favorites  
+  * Will it know about recurring events?  
+    * It should  
+*  Settings  
+  * Org cards  
+    * What info  
+      * How to contact them  
+      * Their instagram if they have one  
+* Wants to know if she’s seen everything?  
+  * Not yet light and dark mode  
+  * Tries light and dark mode  
+    * “I like that a lot”  
+* Feedback  
+  * Like the navbar, that’s clear  
+  * Likes tags a lot  
+  * Expected expand to show just one, but likes that you can see more than one  
+  * Expected calendar to have multiple months  
+  * Colors?  
+    * Android purple nice but she also just likes purple  
+    * Dark mode purple pleasant to look at  
+      * Red and black would feel “too Grinnell”  
+      * Maybe don’t have purple AND red
+
+iOS
+
+* Don’t have an account link found  
+  * Name, email, password thing found  
+    * Password   
+      * Should I remember it?  
+    * OTP vs password pref?  
+      * She doesn’t mind having a password bc it could saved in her phone, but some people might prefer OTP  
+* Home  
+  * Finds notification bell, immediately has a sense for what that does  
+    * When would it notify you  
+      * Customize alert time?  
+        * Likes being able to customize  
+      * Likes idea of getting an update when event changes  
+  * Oops wrong version, tech break  
+  * Overall impression?  
+    * Round boxes more pleasant to look at than android ones  
+  * Search bar  
+    * “Oh I remember there was a lecture at the art museum but I don’t remember when it was, let me search lecture art museum”  
+      * See a poster, remember some but not all  
+      * Hopefully it would go across all fields so we can find it without relying on just one specific detail being forgot  
+  * Calendar  
+    * Can see super in advance  
+      * Likes that you can see exact day from month view  
+    * Day button that goes back to today on calendar view  
+      * Liked that  
+  * Settings  
+    * light mode dark mode  
+      * Prefers light mode, for ios, but dark mode more on android  
+      * Likes that it isn’t bright red, more subdued  
+      * If not red, what color would imagine it  
+        * Blue, but is actively looking at WGMC photo  
+        * Purple, like from android  
+        * Maybe just an accent color in addition to the pink?  
+        * Likes idea of us having our own color that isn’t red  
+        * If had to choose: teal, blue, purple  
+  * Alternative logo  
+    * Likes new logo, much more than current one  
+  * Generally feels very positive, likes the notification idea a lot, bc current strategy of taking pictures of event posters and then not going  
+  * A feature we don’t have that would be useful  
+    * Pictures of events?
 
