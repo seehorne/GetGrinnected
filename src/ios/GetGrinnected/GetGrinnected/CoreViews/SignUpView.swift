@@ -93,6 +93,9 @@ struct SignUpView: View{
             .cornerRadius(10)
             .padding(.top, 24)
             
+            .navigationDestination(isPresented: $success) {
+                VerificationView(email: email)
+            }
         }//VStack
         .padding()
         

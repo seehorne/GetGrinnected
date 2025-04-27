@@ -14,6 +14,8 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage = ""
+    @State private var success = Bool()
+    @StateObject private var userProfile = UserProfile()
     
     var body: some View {
         
@@ -25,8 +27,8 @@ struct LoginView: View {
                 //Signin Email Text Field
                 InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
                 
-                //Signin Password Text Fields
-                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
+//                //Signin Password Text Fields
+//                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
                 
                 
                 // Button
@@ -34,12 +36,31 @@ struct LoginView: View {
                     //logic that checks if user exists and password is correct
 //                    if UserProfile.checkUser(email, password, errorMessage){
 //                        print("Log in success!")
-                            isLoggedIn = true
+                            //isLoggedIn = true
 //                    } else{
 //                        print("\(errorMessage)")
 //                    }
-                    
-                    
+                    errorMessage = ""
+                    userProfile.loginUser(email: email) { result in
+                        switch result {
+                        case .success(let output):
+                            print("API Response: \(output)")
+                            success = true
+                        case .failure(let error):
+                            print("API call failed: \(error.localizedDescription)")
+                            success = false
+                            if let apiError = error as? UserProfile.APIError {
+                                            switch apiError {
+                                            case .signInError(let message):
+                                                errorMessage = message
+                                            default:
+                                                errorMessage = apiError.localizedDescription
+                                            }
+                                        } else {
+                                            errorMessage = error.localizedDescription
+                                        }
+                        }
+                    }
                     //once successfully logged in, jump to main viewport
                 } label: {
                     HStack {
@@ -64,8 +85,9 @@ struct LoginView: View {
                         .padding(.top, 4)
                 }
                 
-                //signin button
-                
+                .navigationDestination(isPresented: $success) {
+                    VerificationView(email: email)
+                }
             }
             .padding()
         } //navigation
