@@ -145,6 +145,109 @@ Note: 5 through 7 pertain to features we may scrape due to viability and lack of
 
 8. Click any of the other icons on the bottom bar to go to their pages.
 
+# Swift Frontend
+
+## Installing the app
+
+1. Clone the project from Github.
+
+2. Install Xcode, and open this path within the GitGrinnected repo as a project: `src/ios/GetGrinnected`.
+
+3. Follow these steps to run the app on your device. <https://developer.apple.com/documentation/xcode/running-your-app-in-simulator-or-on-a-device>
+
+## Login
+
+1. This is the page the app starts on.
+
+1. Enter an @grinnell.edu email that is current associated with an account
+
+2. Optionally, tap the "Don't have an account?" text in the bottom message to jump to the "Sign Up" page.
+
+3. Tap the "Login" button to go to the "Verification" page.
+
+## Sign Up
+
+1. After starting the app, tap the "Don't have an account" button to get here.
+
+2. Enter a username made of any case letters, any numbers .s or _s but no ..s, or __s and no starting with _s or .s and your username must contain at least on letter.
+
+3. Enter an @grinnell.edu email not currently associated with an account (if it is not a grinnell email it will give an error asking for a grinnell email, if it is empty it will ask for a grinnell email, if it is assigned to an account that already exists it will give an error)
+
+4. Optionally, tap the "Back" button in the top left to jump to the "Login" page.
+
+5. Tap the "Sign In" button to go to the "Verification" page.
+
+## Verification
+
+1. Go to the email you entered on the previous page and wait for a verification code to be sent.
+
+2. Enter the code given (if you enter an invalid code it will give you an error and if you enter a code less than 6 digits it will ask you for a 6 digit code. It will also not allow you to enter more than 6 digits)
+
+3. Tap the verify button to go to the "Home" page on a correct code.
+
+4. Optionally, tap the "Resend Code" button to be sent a new verification code to your email.
+
+5. Optionally, tap the "Cancel" button to navigate back to either the "signup" or "login" page depending on the process you were doing.
+
+## Event cards
+
+1. Tap on card shown to expand the description (Tap again to close card).
+
+2. Tap Heart Icon
+
+    - Icon becomes filled (You have now favorited the event)
+    - The event is now in your favorites page
+    - You can press the Icon again and it will be unfavorited
+
+3. Tap Bell Icon
+
+    - Icon currently does not become filled
+    - Currently no push notification
+
+## Home
+
+1. See events on the current day viewed.
+
+2. Change currently viewed day. (Did change currently viewed day, got broken during refactoring for caching)
+
+3. Change what tag you are filtering by. (Currenting in progress)
+
+4. See the events that are happening today and scroll through them.
+
+5. Move to this page by pressing the home button on the bottom.
+
+6. Move to other pages by pressing their buttons on the bottom.
+
+## Calendar (This page may end up being removed or combined with the home page)
+
+1. See the events on the current day viewed.
+
+2. Change currently viewed day. Can be done by tapping the dropdown showing the day or by swiping the week part and tapping a day.
+
+3. See the events that are happening today and scroll through them.
+
+4. Move to this page by pressing the calendar button on the bottom.
+
+5. Move to other pages by pressing their buttons on the bottom.
+
+## Favorites
+
+1. See events that you have favorited and scroll through them.
+
+2. Move to this page by pressing the favorites button on the bottom.
+
+3. Move to other pages by pressing their buttons on the bottom.
+
+## Settings
+
+1. Change username by tapping username. (Currently not implemented)
+
+2. Switch between light and dark mode.
+
+3. Move to this page by pressing the profile button on the bottom.
+
+4. Move to other pages by pressing their buttons on the bottom.
+
 # Invisible Progress
 
 ## Caching
