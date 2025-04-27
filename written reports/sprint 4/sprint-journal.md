@@ -284,7 +284,7 @@ On the other side, for Ellie showing code to Ethan, we worked with the functions
 
 <img src="images/CI_task.jpeg" width="50%">
 
-The changes are at the coomit with hash [009e931](https://github.com/seehorne/GetGrinnected/commit/009e9315376b8346ba5f1883898fc59831bf36d7)
+The changes are at the commit with hash [009e931](https://github.com/seehorne/GetGrinnected/commit/009e9315376b8346ba5f1883898fc59831bf36d7)
 
 # (3) Self-Selected Work toward Minimum Viable Product (MVP)
 
