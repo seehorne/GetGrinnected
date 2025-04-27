@@ -328,7 +328,7 @@ My initial goal was to create a schema to store states, event information, etc. 
 
 ### How was AI used?
 
-To do this I had done some prior research to the experiment on what resources might exist (google searches "how would I keep app preferences post closing app in Jetpack Compose Kotlin?", Tutorials "Caching data from an API in jetpack compose", etc.) and after I felt like I had a general understanding of what resources were available I started by doing what I could with the understanding I had to implement this into our app. When I hit a hiccup where I felt confused or not fully clear what I was missing I would ask ChatGPT "This is how I understand x y and z in jetpack composed, without providing code can you explain the gaps in my understanding?" I asked likely 50 plus questions like this or similar like "Do you have resources that may be able to fill these gaps?" to do my best to fill these gaps in understanding. Sometime it was helpful and other times googling helped significantly more.
+To do this I had done some prior research to the experiment on what resources might exist (google searches "how would I keep app preferences post closing app in Jetpack Compose Kotlin?", Tutorials "Caching data from an API in jetpack compose", etc.) and after I felt like I had a general understanding of what resources were available I started by doing what I could with the understanding I had to implement this into our app. When I hit a hiccup where I felt confused or not fully clear what I was missing I would ask ChatGPT "This is how I understand x y and z in jetpack composed, without providing code can you explain the gaps in my understanding?" I asked likely 50 plus questions like this or similar like "Do you have resources that may be able to fill these gaps?" to do my best to fill these gaps in understanding. Sometimes it was helpful and other times googling helped significantly more. Additionally there were times I asked prompts like "generally can you write out a code process for x?" This allowed me to get a general framework to work off of how something could be implemented (Note I did not take the code or copy it just used it as a mental structure for how I could do something). This was super helpful in putting together the mental model of how a local db was going to operate, with the actually implementation side of things.
 
 ### What impact did it have?
 
@@ -362,7 +362,7 @@ After everyone else's AI experiments, and the general idea I've seen spreading t
 
 ## Stakeholder
 
-Regan Stambaugh on Wednesday April 23rd at 6:30pm. Regan is a student athlete, SEPC leader, Singer and 3rd year Grinnell College student.
+Regan Stambaugh on Wednesday April 23rd at 6:30pm. Regan is a student athlete, upcoming team captain, SEPC leader, Singer and Rising 4th year Grinnell College student.
 
 ### Feedback
 
@@ -380,11 +380,80 @@ As mentioned previously she was very successful in navigating our app aside from
 
 #### What feedback did they provide about documentation?
 
-She didn't really provide feedback on documentation given that she didn't really utilize it.
+She didn't really provide feedback on documentation given that she didn't really utilize it. However from the general look over the documentation she didn't seem to be confused or off put by any section in particular.
 
 #### What questions did we ask and what were Regan's answers?
 
+* Which of the two color schemes did you prefer?
+  * Response: iOS
+* What information would you expect to see on an org card?
+  * Response: What is there seems comprehensive enough.
+* Where would you expect the followed org cards to be?
+  * Response: Not in settings. Maybe settings is profile or org cards are in favorite screen.
+* What would you expect a search bar to do?
+  * Response: Search all days for events that match the search.
+
 #### General Notes from meeting
+
+iOS
+* Login
+  * Guess I should make an account
+* Home
+  * Liked the calendar view for different days on home page
+  * Liked favoriting other events
+  * “This is exciting”
+  * Runs a little slow
+  * Needs to sort by tags
+  * Fun to see events they were not aware of
+* Calendar
+  * Calendar feature is cool
+  * The calendar design is sleeker
+  * Why can I sort by date on home screen (isn’t different enough)
+* Favorites
+  * No comments
+* Settings
+  * Dark Mode
+  * Thought logo would log out
+* General
+  * Would I be able to add events as an org leader?
+    * Response: Probably only allowing updates
+  * Color scheme looks good
+  * I like that is all there
+  * I like that its all in one place 
+
+ANDROID
+* Login
+  * Went to her phone to check for email so very intuitve where the verification code would go
+* Home
+  * Date was unclear as to what day it was talking about (is the 25th Sunday)
+  * Was not clear how tags were working
+  * No women’s sports on this day
+* Calendar
+  * Cool how clicking on a day pulls up events
+  * Filters carry over 
+  * Confusing that it doesn't update until new day is clicked 
+* Favorites
+  * No comments
+* Settings
+  * Org cards seem comprehensive enough
+  * Maybe calling it profile would be better 
+  * Would then make sense for orgs to be there 
+  * Orgs could also go on favorites
+  * Switch account button not clear
+* General
+  * How do I find orgs 
+  * Can I click on org names to go to org
+  * Is there a search bar? 
+  * What should have search bars
+    * Home page should at least have search bar
+  * Is the verification code going to be a permanent feature
+  * “Nice job. It looks nice”
+
+#### What we will change based on this feedback
+
+* We truly affirmed that we will be switching the color scheme for Android to match the blue theme we currently have on iOS
+* Again as our other stakeholders had mentioned, it further establishes a need for a functioning search bar as a pivotal feature of our app.
+* Along with our other stakeholder meetings it was pointed out that the calendar didn't seem distinct/different enough from the homepage so we may decide on moving forward without the calendar page in exchange for a super effective search feature.
 
 ## Stakeholder
 Lily Freeman on Tuesday April 22 and 4:30pm. Lily is a second year student who is not in formal leadership of any organization. She lives in a project house and is a member of the women's ultimate frisbee team.
@@ -503,4 +572,3 @@ iOS
    * Similarly, it helped us select a new color scheme, specifically blue
    * It affirmed the utility of a search bar feature, which we are now considering directing energy that previously would've gone to calendar towards.
    * Images remain a stretch goal, but something we are actively considering doing if the time and space to implement them emerges
-
