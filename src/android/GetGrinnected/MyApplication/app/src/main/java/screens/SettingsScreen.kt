@@ -117,12 +117,16 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 onClick = { /* TODO handle switch account */ },
                 modifier = modifier.padding(end = 8.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.ChangeCircle,
-                    contentDescription = "Switch Account",
-                    modifier = modifier.size(24.dp),
-                    tint = colorScheme.primary
-                )
+                Box(contentAlignment = Alignment.Center,
+                    modifier = Modifier.background(Color.White, shape = CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ChangeCircle,
+                        contentDescription = "Switch Account",
+                        modifier = modifier.size(24.dp),
+                        tint = colorScheme.primary
+                    )
+                }
             }
         }
 /* This is commented out for the time being as we have the profile picture as a stretch goal.
@@ -288,9 +292,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Button (
                 onClick = {  // Sets our logged in state to false
                     coroutineScope.launch{
-                        DataStoreSettings.setLoggedIn(context, false)
-                        DataStoreSettings.setLoggedInAccountId(context, 0)
-                        // 0 will be our effective null state of account since no account will have accountID 0
+                        // This resets user preferences to default states
+                        DataStoreSettings.clearUserSession(context)
                     }
                     navController.navigate("welcome"){ // takes us to the welcome screen
                         popUpTo(0){inclusive = true} // pops the back stack
@@ -345,11 +348,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 @Composable
 fun SettingsScreenPreview(){
     val sampleOrgs = listOf(
-        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
-        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test4", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test5", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
+        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test4", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test5", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
         )
-    SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {}, navController = rememberNavController())
+    SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {}, navController = rememberNavController())
 }

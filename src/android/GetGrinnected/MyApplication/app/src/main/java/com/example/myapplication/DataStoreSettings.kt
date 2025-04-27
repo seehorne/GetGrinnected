@@ -21,6 +21,13 @@ object DataStoreSettings {
     private val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
     // Preference key for Logged in account id to track the current logged in account
     private val LOGGED_IN_ACCOUNT_ID = intPreferencesKey("logged_in_account_id")
+    // Preference key for Access token
+    private val ACCESS_TOKEN = stringPreferencesKey("access_token")
+    // Preference key for Refresh token
+    private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
+    // Preference key for the last time we synced with the api
+    private val LAST_SYNC_TIME = longPreferencesKey("last_sync_time")
+
     /**
      * Setter for logged in value
      * @param context is the current context our app is running
@@ -79,6 +86,70 @@ object DataStoreSettings {
      */
     fun getLoggedInAccountId(context: Context): Flow<Int?> {
         return context.dataStore.data.map { it[LOGGED_IN_ACCOUNT_ID] }
+    }
+
+    /**
+     * Setter for Access token value
+     * @param context is the current context our app is running
+     * @param token is the string representation of the token
+     */
+    suspend fun setAccessToken(context: Context, token: String) {
+        context.dataStore.edit { it[ACCESS_TOKEN] = token }
+    }
+
+    /**
+     * Getter for Access Token value
+     * @param context is the current context our app is running
+     * @return Flow<String> this basically is a reactive value of the Access token
+     */
+    fun getAccessToken(context: Context): Flow<String?> {
+        return context.dataStore.data.map { it[ACCESS_TOKEN] }
+    }
+
+    /**
+     * Setter for Refresh token value
+     * @param context is the current context our app is running
+     * @param token is the string representation of the token
+     */
+    suspend fun setRefreshToken(context: Context, token: String) {
+        context.dataStore.edit { it[REFRESH_TOKEN] = token }
+    }
+
+    /**
+     * Getter for Refresh Token value
+     * @param context is the current context our app is running
+     * @return Flow<String> this basically is a reactive value of the Refresh token
+     */
+    fun getRefreshToken(context: Context): Flow<String?> {
+        return context.dataStore.data.map { it[REFRESH_TOKEN] }
+    }
+
+    /**
+     * Setter for Refresh token value
+     * @param context is the current context our app is running
+     * @param time is a Long that is the time we are setting our last sync to
+     */
+    suspend fun setLastSyncTime(context: Context, time: Long) {
+        context.dataStore.edit { it[LAST_SYNC_TIME] = time }
+    }
+
+    /**
+     * Getter for Refresh Token value
+     * @param context is the current context our app is running
+     * @return Flow<Long> that is a reactive version of our last time we synced with the api
+     */
+    fun getLastSyncTime(context: Context): Flow<Long?> {
+        return context.dataStore.data.map { it[LAST_SYNC_TIME] }
+    }
+
+    /**
+     * Clears all stored preferences
+     * @param context current context our  app is running
+     */
+    suspend fun clearUserSession(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
     }
 
 }

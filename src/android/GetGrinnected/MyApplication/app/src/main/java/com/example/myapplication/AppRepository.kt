@@ -90,11 +90,11 @@ object AppRepository {
             // Modify the favorited_events list
             val updatedFavorites = if (isFavorited) {
                 // If event is favorited we add the id to our accounts list of favorited events
-                currentAccount.favorited_events + eventId
+                currentAccount.favorited_events?.plus(eventId)
             } else {
                 // If the event has been unfavorited we remove the id from our accounts list of
                 // favorited events
-                currentAccount.favorited_events - eventId
+                currentAccount.favorited_events?.minus(eventId)
             }
 
             // Make new account instance with the new favorited events
@@ -192,13 +192,14 @@ fun AccountEntity.toUser(): User = User(
     accountid = this.accountid,
     account_name = this.account_name,
     email = this.email,
-    profile_picture = this.profile_picture,
-    favorited_events = this.favorited_events,
-    drafted_events = this.drafted_events,
-    favorited_tags = this.favorited_tags,
-    account_description = this.account_description,
+    profile_picture = this.profile_picture?: "",
+    favorited_events = this.favorited_events?: emptyList(),
+    drafted_events = this.drafted_events?: emptyList(),
+    favorited_tags = this.favorited_tags?: emptyList(),
+    account_description = this.account_description?: "",
     account_role = this.account_role,
     is_followed = this.is_followed,
+    notified_events = this.notified_events?: emptyList()
 )
 
 /**
@@ -208,11 +209,12 @@ fun User.toAccountEntity(): AccountEntity = AccountEntity(
     accountid = this.accountid,
     account_name = this.account_name,
     email = this.email,
-    profile_picture = this.profile_picture,
-    favorited_events = this.favorited_events,
-    drafted_events = this.drafted_events,
-    favorited_tags = this.favorited_tags,
-    account_description = this.account_description,
+    profile_picture = this.profile_picture?: "",
+    favorited_events = this.favorited_events?: emptyList(),
+    drafted_events = this.drafted_events?: emptyList(),
+    favorited_tags = this.favorited_tags?: emptyList(),
+    account_description = this.account_description?: "",
     account_role = this.account_role,
     is_followed = this.is_followed,
+    notified_events = this.notified_events?: emptyList()
 )

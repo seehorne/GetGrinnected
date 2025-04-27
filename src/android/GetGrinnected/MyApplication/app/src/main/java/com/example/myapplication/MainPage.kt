@@ -63,11 +63,11 @@ fun MainPage(
     )
     // For demo purposes only
     val sampleOrgs = listOf(
-        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
-        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test4", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test5", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2),  listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
+        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test4", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test5", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2),  listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
     )
 
     // Creates a scaffold composable to work from

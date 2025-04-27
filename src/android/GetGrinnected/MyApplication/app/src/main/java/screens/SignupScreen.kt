@@ -208,12 +208,18 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                             // Assess if the request and if the email was available
                             if (response.isSuccessful) {
                             // Sets our logged in state to true
-                            navController.navigate("verification/${email}/${signUp}/${username}") {
+                            navController.navigate("verification/${email}/${signUp}") {
                                 popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
                             }
                             } else {
-                              errMsg = response.errorBody()?.string() ?: "Signup failed"
+                                errMsg = if(response.errorBody()?.string()?.contains("Username exists") == true){
+                                    "User with that username already exists"
+                                } else if (response.errorBody()?.string()?.contains("Email exists") == true){
+                                    "User with that email already exists"
+                                } else{
+                                    "Signup Failed"
+                                }
                             }
                             } catch(e: Exception) { // Handles network errors that way arise when making the api call
                                errMsg = "Network error: ${e.localizedMessage}"

@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.EmailRequest
+import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
@@ -167,16 +167,20 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                         isLoading = true
                         try {
                             // Makes the api login request
-                              val emailResponse = RetrofitApiClient.apiModel.login(EmailRequest(email))
+                              val emailResponse = RetrofitApiClient.apiModel.login(LoginRequest(email))
                             // Assess if the request and validation of login was successful if so
                             // nav to main if not show login failure.
                             if (emailResponse.isSuccessful) {
-                            navController.navigate("verification/${email}/${signUp}/str") {
+                            navController.navigate("verification/${email}/${signUp}") {
                                 popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
                             }
                             } else {
-                              errMsg =  emailResponse.errorBody()?.string() ?: "Login failed"
+                                errMsg = if(emailResponse.errorBody()?.string()?.contains("No such user") == true){
+                                    "No user found with that email"
+                                } else{
+                                    "Login Failed"
+                                }
                             }
                             // Failure specifically with a network connection ie couldn't leave our app
                             } catch (e: Exception) {
