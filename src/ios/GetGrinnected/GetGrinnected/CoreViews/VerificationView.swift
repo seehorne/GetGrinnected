@@ -18,6 +18,7 @@ struct VerificationView: View {
     @State private var errorMessage = ""
     @State private var isProcessing = false
     @State private var verifyError = ""
+    @State private var resendError = ""
     @StateObject private var userProfile = UserProfile()
     
     init(email: String, isLoggedIn: Binding<Bool>) {
@@ -44,6 +45,7 @@ struct VerificationView: View {
                 
                 // Button
                 Button {
+                    verifyError = "" //reset verification error
                     //triggers API call
                     userProfile.verifyUser(email: email, code: code) { result in
                         switch result {
@@ -61,7 +63,7 @@ struct VerificationView: View {
                                                 verifyError = apiError.localizedDescription
                                             }
                                         } else {
-                                            errorMessage = error.localizedDescription
+                                            verifyError = error.localizedDescription
                                         }
                         }
                     }
@@ -81,7 +83,7 @@ struct VerificationView: View {
                 
                 Button{//this button is for resending the code
                     userProfile.resendOTP(email: email) { result in
-                        verifyError = ""
+                        resendError = ""
                         switch result {
                         case .success(let output):
                             print("API Response: \(output)")
@@ -91,7 +93,7 @@ struct VerificationView: View {
                             //this wouldn't be an error that's the users fault
                             //or something they could fix in a way other than just trying again
                             //but still probably good to let them know if something happened
-                            verifyError = userProfile.getErrorMessage(error: error);
+                            resendError = userProfile.getErrorMessage(error: error);
                         }
                     }
                 }label: {
@@ -108,6 +110,12 @@ struct VerificationView: View {
                 
             }
             .padding()
+            
+            if !resendError.isEmpty{ //if there is a resend error, render it here
+                Text(resendError)
+                    .foregroundColor(.red)
+                    .font(.caption)
+            }
         } //navigation
     } //body
 }//LoginView
