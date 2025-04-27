@@ -12,17 +12,19 @@ import Foundation
 import SwiftUI
 
 struct VerificationView: View {
-    @State private var isLoggedIn: Bool
+    @Binding var isLoggedIn: Bool
     @State private var code = ""
     @State private var email: String
     @State private var errorMessage = ""
-    @State private var success = Bool()
+    @State private var isProcessing = false
     @State private var verifyError = ""
     @StateObject private var userProfile = UserProfile()
     
-    init(email: String) {
+    init(email: String, isLoggedIn: Binding<Bool>) {
         self.email = email
-        self.isLoggedIn = false
+        _isLoggedIn = isLoggedIn // Properly initialize the binding
+        self.errorMessage = ""
+        self.verifyError = ""
     }
     
     var body: some View {
@@ -48,10 +50,9 @@ struct VerificationView: View {
                         case .success(let output):
                             //if succeeded, log it
                             print("API Response: \(output)")
-                            success=true //and we are good to go to the next one
+                            self.isLoggedIn=true //and we are good to go to the next one
                         case .failure(let error):
                             print("API call failed:\(error.localizedDescription)")
-                            success=false
                             if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                             switch apiError {
                                             case .signInError(let message):
@@ -83,6 +84,7 @@ struct VerificationView: View {
                         switch result {
                         case .success(let output):
                             print("API Response: \(output)")
+                            isLoggedIn = true
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
                         }
@@ -101,18 +103,11 @@ struct VerificationView: View {
                 
             }
             .padding()
-            
-            //if the API call was successful, go to the main view
-            .navigationDestination(isPresented: $success) {
-                MainNavView()
-                    //if you are logged in, do not need to show the back button that you have to resend a verificatino code
-                    .navigationBarBackButtonHidden(true)
-            }
         } //navigation
     } //body
 }//LoginView
 
 
 #Preview {
-    LoginView(isLoggedIn: .constant(false))
+    VerificationView(email: "test@grinnell.edu", isLoggedIn: .constant(false))
 }

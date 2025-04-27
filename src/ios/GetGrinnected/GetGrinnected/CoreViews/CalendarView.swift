@@ -38,7 +38,7 @@ struct CalendarView: View {
                         }
                         .padding(.top)//padding on top
                     }
-                    .searchable(text: $searchText, placement: .toolbar)
+                    .searchable(text: $searchText, placement: .automatic)
                 }//scroll view
                 .edgesIgnoringSafeArea(.top)
             }

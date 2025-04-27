@@ -45,6 +45,7 @@ struct LoginView: View {
                         switch result {
                         case .success(let output):
                             print("API Response: \(output)")
+                            //set is logged in to true, if success
                             success = true
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
@@ -70,7 +71,7 @@ struct LoginView: View {
                     }
                     .foregroundColor(.white)
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
-                }//Button
+                } //Button
                 .background (.colorBlue)
                     .cornerRadius (10)
                     .padding(.top, 24)
@@ -87,7 +88,7 @@ struct LoginView: View {
                 
                 //if the API call was successful, go to verification 
                 .navigationDestination(isPresented: $success) {
-                    VerificationView(email: email)
+                    VerificationView(email: email, isLoggedIn: $isLoggedIn)
                 }
             }
             .padding()

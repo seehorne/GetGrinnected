@@ -90,7 +90,7 @@ struct SignUpView: View{
             .padding(.top, 24)
             
             .navigationDestination(isPresented: $success) {
-                VerificationView(email: email)
+                VerificationView(email: email, isLoggedIn: $isLoggedIn)
             }
         }//VStack
         .padding()
