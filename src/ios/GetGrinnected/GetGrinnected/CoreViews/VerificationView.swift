@@ -87,6 +87,9 @@ struct VerificationView: View {
                             isLoggedIn = true
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
+                            //we don't print error messages in the same way here bc there's
+                            //no user an input could give that would change the result/there
+                            //isn't a way to do it wrong
                         }
                     }
                 }label: {

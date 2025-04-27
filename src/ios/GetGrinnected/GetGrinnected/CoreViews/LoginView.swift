@@ -51,16 +51,17 @@ struct LoginView: View {
                             print("API call failed: \(error.localizedDescription)")
                             success = false
                             //render API error message if there was an error
-                            if let apiError = error as? UserProfile.APIError {
-                                            switch apiError {
-                                            case .signInError(let message):
-                                                errorMessage = message
-                                            default:
-                                                errorMessage = apiError.localizedDescription
-                                            }
-                                        } else {
-                                            errorMessage = error.localizedDescription
-                                        }
+//                            if let apiError = error as? UserProfile.APIError {
+//                                            switch apiError {
+//                                            case .signInError(let message):
+//                                                errorMessage = message
+//                                            default:
+//                                                errorMessage = apiError.localizedDescription
+//                                            }
+//                                        } else {
+//                                            errorMessage = error.localizedDescription
+//                                        }
+                            errorMessage = userProfile.getErrorMessage(error: error);
                         }
                     }
                 } label: {
