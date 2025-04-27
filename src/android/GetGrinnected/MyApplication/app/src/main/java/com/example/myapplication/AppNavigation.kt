@@ -14,6 +14,9 @@ import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
 import android.content.Context
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Alignment
 
 /**
  * A composable function that is utilized for smooth navigation through login/signup process
@@ -63,19 +66,17 @@ fun AppNavigation(
             }
         }
         composable(
-            "verification/{email}/{flag}/{username}",
+            "verification/{email}/{flag}",
             arguments = listOf(
-                navArgument("username") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("flag"){ type = NavType.BoolType },
 
             )
         ) { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username") ?: ""
             val email = backStackEntry.arguments?.getString("email") ?: ""
             val flag = backStackEntry.arguments?.getBoolean("flag") ?: false
 
-            EmailVerificationScreen(email, flag, username, navController = navController)
+            EmailVerificationScreen(email, flag, navController = navController)
         }
     }
 }

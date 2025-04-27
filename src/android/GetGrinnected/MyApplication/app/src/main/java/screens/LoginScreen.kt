@@ -171,7 +171,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                             // Assess if the request and validation of login was successful if so
                             // nav to main if not show login failure.
                             if (emailResponse.isSuccessful) {
-                            navController.navigate("verification/${email}/${signUp}/str") {
+                            navController.navigate("verification/${email}/${signUp}") {
                                 popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
                             }

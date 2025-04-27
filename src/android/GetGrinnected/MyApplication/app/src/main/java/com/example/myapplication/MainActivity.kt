@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -10,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -66,6 +68,40 @@ class MainActivity : ComponentActivity() {
             if (accountId != null) {
                 // Sets our current active account in the repo to the stored account value
                 AppRepository.setCurrentAccountById(accountId)
+            }
+
+            // We get our refresh token or a null value
+            val refreshToken = DataStoreSettings.getRefreshToken(applicationContext).firstOrNull()
+
+            // We check that the refresh token is none null
+            if (!refreshToken.isNullOrEmpty()) {
+                try {
+                    // Make a refreshToken call to our API
+                    val refreshResponse = RetrofitApiClient.apiModel.refreshToken("Bearer $refreshToken")
+
+                    // If it is successful a 403 error would mean we don't have a refreshToken
+                    if (refreshResponse.isSuccessful) {
+                        // Get new tokens
+                        val newAccessToken = refreshResponse.body()?.access_token
+                        val newRefreshToken = refreshResponse.body()?.refresh_token
+
+                        // So long as they are non-null we set the tokens
+                        if (newAccessToken != null && newRefreshToken != null) {
+                            // Save new tokens
+                            DataStoreSettings.setAccessToken(applicationContext, newAccessToken)
+                            DataStoreSettings.setRefreshToken(applicationContext, newRefreshToken)
+                            // Tokens refreshed successfully! User stays logged in.
+                        }
+                    } else {
+                        // Refresh token invalid or expired
+                        DataStoreSettings.clearUserSession(applicationContext)
+                    }
+                } catch (e: Exception) {
+                    // Network error of some sort likely unable to leave the app (this is allowed
+                    // since we have the cached events so long as they have been updated within 3hrs so we
+                    // won't clear session
+                    Toast.makeText(applicationContext, "No internet connection. You are offline.", Toast.LENGTH_LONG).show()
+                }
             }
 
             setContent {

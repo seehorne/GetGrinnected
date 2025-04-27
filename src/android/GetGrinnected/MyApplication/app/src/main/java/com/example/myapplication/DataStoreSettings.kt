@@ -142,5 +142,14 @@ object DataStoreSettings {
         return context.dataStore.data.map { it[LAST_SYNC_TIME] }
     }
 
+    /**
+     * Clears all stored preferences
+     * @param context current context our  app is running
+     */
+    suspend fun clearUserSession(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
 
 }

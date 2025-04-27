@@ -30,3 +30,12 @@ data class VerifyRequest(
     val email: String,
     val code: String
 )
+
+/**
+ * Data object of info sent to refresh Tokens
+ */
+data class TokenRefreshResponse(
+    val message: String,
+    val refresh_token: String,
+    val access_token: String
+)

@@ -292,9 +292,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Button (
                 onClick = {  // Sets our logged in state to false
                     coroutineScope.launch{
-                        DataStoreSettings.setLoggedIn(context, false)
-                        DataStoreSettings.setLoggedInAccountId(context, 0)
-                        // 0 will be our effective null state of account since no account will have accountID 0
+                        // This resets user preferences to default states
+                        DataStoreSettings.clearUserSession(context)
                     }
                     navController.navigate("welcome"){ // takes us to the welcome screen
                         popUpTo(0){inclusive = true} // pops the back stack
