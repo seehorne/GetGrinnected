@@ -2,13 +2,13 @@
 
 ## Stakeholder: Regan
 
-Regan Stambaugh on Wednesday April 23rd at 6:30pm. Regan is a student athlete, upcoming team captain, SEPC leader, Singer and Rising 4th year Grinnell College student.
+We met with Regan Stambaugh on Wednesday April 23rd at 6:30pm. Regan is a student athlete, upcoming team captain, SEPC leader, Singer and Rising 4th year Grinnell College student.
 
 ### Feedback
 
 #### Description of Test Session
 
-We treated the test session similarly to the prototype sessions where we followed a sandbox approach but this time with the docs as the supplementary material to communicate steps. Generally, Regan did not use the docs and we only provided a few nudges in certain directions for features not fully implemented (for example: verification code at the time was hard coded to 123456 so we let her know that).
+We treated the test session similarly to the prototype sessions where we followed a sandbox approach but this time with the docs as the supplementary material to communicate steps. Generally, Regan did not use the docs and we only provided a few nudges in certain directions for features not fully implemented (for example: verification code at the time was hard coded to 123456 so we let her know that). We showed her iOS first, then Android.
 
 #### Behavoir of interacting with the documentation
 
@@ -97,21 +97,21 @@ ANDROID
 
 ## Stakeholder: Lily
 
-Lily Freeman on Tuesday April 22 and 4:30pm. Lily is a second year student who is not in formal leadership of any organization. She lives in a project house and is a member of the women's ultimate frisbee team.
-
+We met with Lily Freeman on Tuesday April 22 and 4:30pm. Lily is a second year student who is not in formal leadership of any organization. She lives in a project house and is a member of the women's ultimate frisbee team.
+### Feedback
 #### Description of Test Session
-We treated the test session similarly to the prototype sessions where we followed a sandbox approach but this time with the docs as the supplementary material to communicate steps. Generally, Lily did not use the docs, though she did take a brief look when they were provided to her, and we only provided a few nudges in certain directions for features not fully implemented (for example: verification code at the time was hard coded to 123456 so we let her know that).
+We treated the test session similarly to the prototype sessions where we followed a sandbox approach but this time with the docs as the supplementary material to communicate steps. Generally, Lily did not use the docs, though she did take a brief look when they were provided to her, and we only provided a few nudges in certain directions for features not fully implemented (for example: verification code at the time was hard coded to 123456 so we let her know that). We showed her Android first then iOS.
 
-### Behavoir of interacting with the documentation
+#### Behavoir of interacting with the documentation
 After being shown them, Lily did not interact with the documentation especially heavily during the sessions itself. However, she also had very few questions about how things worked, and the interactions she tried in our sandbox protocol nearly always did what she expected (which aligned with what we intended them to do). The one exception to this rule would be when a feature wasn't implemented, which, as we did in interviews, we would let her know was the case (this was denoted in the documentation as well, but wouldn't have given much more context than us talking).
 
-### Did they succeed or get stuck
+#### Did they succeed or get stuck
 As mentioned in the documentation part, she largely succeeded! She found pretty much every feature on both the Android and iOS side with little or no prompting: the one exception would be that after the Android app (which she saw first), she expected some implemented features iOS did not have yet (like favorites going to the favorite screen) because they were present on Android, but clarifying iOS did not have them yet seemed to ameliorate her confusion. 
 
-### What feedback did they provide about the documentation
+#### What feedback did they provide about the documentation
 Seeing as her use of the documentation was minimal, she didn't provide much feedback about it, but the brief look she took at it did not elicit any strong reactions—it seemed to make enough sense but not really inspire further discussion from her side.
 
-### What questions did we ask and what were Lily's answers
+#### What questions did we ask and what were Lily's answers
 
 * Color scheme: what color would you imagine this being?
    * Lily's answer: probably blue, or like teal. Purple could also be nice, but lands on blue
@@ -128,7 +128,7 @@ Seeing as her use of the documentation was minimal, she didn't provide much feed
 * What is a feature we don't yet have that you would like to see?
    * Lily's answer: It would be really nice if events could have images
 
-### General notes
+#### General notes
 ANDROID
 
 * Login  
@@ -208,15 +208,164 @@ iOS
   * A feature we don’t have that would be useful  
     * Pictures of events?
 
-   ### What we will change based on this feedback
+   #### What we will change based on this feedback
    * This feedback, in combination with Yuina's helped us decide to use the logo made by the person who made Grinneats logo, since this logo was preferred
    * Similarly, it helped us select a new color scheme, specifically blue
    * It affirmed the utility of a search bar feature, which we are now considering directing energy that previously would've gone to calendar towards.
    * Images remain a stretch goal, but something we are actively considering doing if the time and space to implement them emerges
 
-# Stakeholder: Yuina
+## Stakeholder: Yuina
+We met with, Yuina Iseki on Tuesday April 22rd at 1:30pm. Yuina is a current fourth year, an international student, and the current president of ISO (International Students Organization), which is an MLC (multicultural leadership council) organization.
 
-TODO: THIS SECTION HAS NOT YET BEEN WRITTEN.
+### Feedback
+
+#### Description of Test Session
+We treated the test session similarly to the prototype sessions where we followed a sandbox approach but this time with the docs as the supplementary material to communicate steps. Generally, Yuina did not use the docs and we only provided a few nudges in certain directions for features not fully implemented (for example: verification code at the time was hard coded to 123456 so we let her know that). We showed her iOS first, then Android.
+
+#### Behavoir of interacting with the documentation
+The documentation was available to her to the entire time on a laptop, but like our other participants, she did not interact very heavily with it. 
+
+#### Did they succeed or get stuck
+Yuina's interactions with the app were largely successful. She had some questions like "is this just for this day" in sorting by time, but she tended to answer them for herself without much of our assistance within seconds, generally by clicking on a relevant menu. The most confusion she had was in interacting with features that were not yet implemented, which we explained to her. This was also listed in the documentation, but she didn't gravitate towards that for these clarifications. We are getting the sense that external docs of that form are not super common for mobile apps, where navigating to docs mean you typically can't see the docs anymore: perhaps this is why all of our stakeholders had basically the same reaction to our docs.
+
+#### What feedback did they provide about the documentation
+On account of not really interacting with the documentation, we did not get explicit verbal feedback from Yuina about the documentation. However, she also did not experience difficulty getting the app to do what she wanted, and most of her interactions aligned with both her and our expectations (except for some things not-yet-implemented that did not perform an action because they weren't yet implemented, and that was managed through our letting her know that was the case). This functions as implicit feedback that the app itself is largely self documented in the sense that it is straightforward to use.
+
+#### What questions did we ask and what were Yuina's answers?
+* What color scheme would be a good fit?
+   * Yuina's answer: blue
+
+* What logo would be better than the current one (by which we meant our original)? (bc she independently expressed not liking the original logo at ALL)
+   * Yuina's answer: something like the Grinneats one
+
+* If you could search, what would you search for in the search bar?
+   * Yuina's answer: CS events, or event types that aren't in the tags
+
+* What features would you like to see that we don't currently have? (stretch-goal type)
+   * Yuina's answer: Event recommendation algorithm, sharing events to others
+
+#### General notes
+IOS
+
+* Logo  
+* **Add GetGrinnected as a name of the app**  
+* Wanted something cuter, like Grinneats  
+* Squirrel holding calendar  
+* Login navigation  
+* Recognizes that she doesn’t have account  
+* Clicks link to make one  
+* Fills in username with her name  
+* Fills in email with Grinnell email  
+* Enters password  
+  * Encounters needs to be at least 8 characters  
+  * Updates password to meet that  
+* Now on home  
+  * Recognizes what the bell button would probably do  
+  * Scrolling through events  
+    * “Nice that mentor sessions are here”  
+  * “Is this page just for today?”  
+  * Looks at date picker  
+    * Is this supposed to change the events  
+    * Yes, but not currently doing so  
+  * Likes the filters (tags)  
+    * Track and field has weird HTML rendering of &  
+  * Does the search bar work  
+    * No  
+    * But what would you want to do with it  
+      * Search for CS study breaks  
+      * Just put in CS  
+        * Would find CS related events  
+          * Study breaks  
+          * CS table  
+          * There is no tag (filter) for CS  
+* Move to calendar  
+  * “Is this supposed to be a calendar but it isn’t there yet”  
+    * Seeing the week at the top isn’t super obvious  
+    * Was expecting an actual calendar with events on each day  
+* Move to settings  
+  * Sees light and dark mode, toggles that on and off a couple times  
+  * Tries to change username, it doesn’t really stick  
+* Guided by Budhil to go back to calendar  
+  * Swipe left and right on days  
+* What’s the difference between home and calendar  
+  * Mostly just the days  
+  * What would you expect  
+    * Events in different visual format  
+    * List makes sense in home, but calendar different  
+    * Or maybe it would be a list based off her favorites  
+      * Events or orgs  
+* Things she likes  
+  * Favorites, notifications, UI  
+  * Text and headings are nice  
+  * Likes expandable event card  
+    * Sees everything she expects when it expands  
+    * Tag format makes sense, aligns with expectations
+
+Android
+
+* Login/Signup  
+  * Change the logo\!  
+* Verification code:  
+  * 123456 (hardcoded)  
+* Home page:  
+  * “Wow this is very different”  
+  * “Color palette is also different”  
+  * ***Can I filter by location, or no?***  
+  * Filter by tags and by day  
+  * Is there an “all” tag?  
+  * Deselect all checkboxes   
+  * It doesn’t select it when I click the bar? You have to select specifically the checkbox instead of the whole line when selecting the tags  
+  * There are also current double events  
+  * Date view that brings a calendar is helpful, when selects a day  
+* Calendar view  
+  * Calendar to see day view, month view, and week view  
+  * **Showing all dates from 20th of other months, other than just april**  
+  * How do you feel about this page overall?  
+    * If you see a calendar, and at a glance you see what kind of what events there are?  
+    * Week view would make most sense. For space consideration  
+    * No expectation for horizontal view, maybe would be nice  
+    * Currently no switching between months	  
+  * Month view:  
+    *  Something, even a color code, to see what may be going on  
+    * A number for number of events  
+    * If you do a tag for CS, it would show a different color for the days that have a CS on that event it would be green  
+    * Looks more similar to what I expected  
+* Favorites:  
+  * Favorites updates, its a good page, like the page.   
+* Overall color scheme:  
+  * It’s nice to have a color palette: consistent and aesthetic color theme  
+  * Blue?  
+* Settings page:  
+  * Switching accounts, very nice  
+  * Orgs:  
+    * Like the look for orgs cards  
+    * The location of settings would be expected to be in favorites not in settings  
+    * Maybe a tab for events and orgs, instead of just a “favorites tab”  
+    * Star for favorite orgs, heart works find
+
+Overall impressions
+
+* Change the logo pls  
+  * Squirrel  
+* Features are very nice,  
+  * Filtering system  
+  * Notifications  
+  * Favorites  
+* Other event apps:  
+  * What’s different here?  
+  * How can it be successful in the community  
+* How important do you think the search bar for the ?  
+  * Very important\! Please make it work 🙂  
+  * If there are orgs you know, I would know I would be looking for CS events.   
+* Stretch:  
+  * If there are algorithm to suggest events you may like based on favorites  
+  * See people you follow to go to   
+* Sharing an event to another person.   
+  * Use in instagram.  
+
+#### What did we change in response
+* Yuina's feedback about the logo prompted us to contact Rei about getting a new one, which we are now using.
+* Her feedback also emphasized that search bar was very important, and that the calendar, when it doesn't look like a calendar, feels really similar to a homepage. This influenced our choice to redirect our energies towards a more robust search,
 
 # (2) Internal Documentation Lab
 
