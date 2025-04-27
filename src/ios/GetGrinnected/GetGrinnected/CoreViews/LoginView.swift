@@ -27,41 +27,26 @@ struct LoginView: View {
                 //Signin Email Text Field
                 InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
                 
-//                //Signin Password Text Fields
-//                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
-                
+                //error
+                if !errorMessage.isEmpty{
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }//if
                 
                 // Button
                 Button {
-                    //logic that checks if user exists and password is correct
-//                    if UserProfile.checkUser(email, password, errorMessage){
-//                        print("Log in success!")
-                            //isLoggedIn = true
-//                    } else{
-//                        print("\(errorMessage)")
-//                    }
                     errorMessage = ""
                     userProfile.loginUser(email: email) { result in
                         switch result {
-                        case .success(let output):
-                            print("API Response: \(output)")
-                            //set is logged in to true, if success
-                            success = true
-                        case .failure(let error):
-                            print("API call failed: \(error.localizedDescription)")
-                            success = false
-                            //render API error message if there was an error
-//                            if let apiError = error as? UserProfile.APIError {
-//                                            switch apiError {
-//                                            case .signInError(let message):
-//                                                errorMessage = message
-//                                            default:
-//                                                errorMessage = apiError.localizedDescription
-//                                            }
-//                                        } else {
-//                                            errorMessage = error.localizedDescription
-//                                        }
-                            errorMessage = userProfile.getErrorMessage(error: error);
+                            case .success(let output):
+                                print("API Response: \(output)")
+                                //set is logged in to true, if success
+                                success = true
+                            case .failure(let error):
+                                print("API call failed: \(error.localizedDescription)")
+                                success = false
+                                errorMessage = userProfile.getErrorMessage(error: error);
                         }
                     }
                 } label: {

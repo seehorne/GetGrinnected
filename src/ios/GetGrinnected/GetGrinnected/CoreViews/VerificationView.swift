@@ -81,15 +81,17 @@ struct VerificationView: View {
                 
                 Button{//this button is for resending the code
                     userProfile.resendOTP(email: email) { result in
+                        verifyError = ""
                         switch result {
                         case .success(let output):
                             print("API Response: \(output)")
                             isLoggedIn = true
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
-                            //we don't print error messages in the same way here bc there's
-                            //no user an input could give that would change the result/there
-                            //isn't a way to do it wrong
+                            //this wouldn't be an error that's the users fault
+                            //or something they could fix in a way other than just trying again
+                            //but still probably good to let them know if something happened
+                            verifyError = userProfile.getErrorMessage(error: error);
                         }
                     }
                 }label: {

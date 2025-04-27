@@ -51,6 +51,7 @@ struct SignUpView: View{
             //Signup button
             
             Button {
+                signupError = "" //clear the error message
                 userProfile.signUpUser(email: email, user: username) { result in
                     switch result {
                     case .success(let output):
@@ -58,18 +59,9 @@ struct SignUpView: View{
                         success=true
                     case .failure(let error):
                         print("API call failed: \(error.localizedDescription)")
-                        //render API error message if there was an error
-                        if let apiError = error as? UserProfile.APIError {
-                                        switch apiError {
-                                        case .signInError(let message):
-                                            signupError = message
-                                        default:
-                                            signupError = apiError.localizedDescription
-                                        }
-                                    } else {
-                                        signupError = error.localizedDescription
-                                    }
                         success=false
+                        //render API error message if there was an error
+                        signupError = userProfile.getErrorMessage(error: error);
                     }
                 }
                     

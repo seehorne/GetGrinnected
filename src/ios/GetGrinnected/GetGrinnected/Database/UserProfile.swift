@@ -255,6 +255,25 @@ class UserProfile: ObservableObject {
         task.resume()
     }
     
+    //try to refactor API error message thing as function
+    //this takes in the error and generates the right message for it
+    //error is the error an API call returns
+    //this function returns the most specific description we can get for what that is
+    func getErrorMessage(error: Error) -> String{
+        if let apiError = error as? APIError {
+            switch apiError {
+                case .signInError(let message):
+                    return message //get the message out if possible
+                default: //if nothing, just used localized description
+                    return apiError.localizedDescription
+                }
+        } else {//not one we wrote the error for
+            //use the error message swift came up with
+            return error.localizedDescription
+        }
+        
+    }
+    
     // all the things that could be in the API response
     // all marked as optional
     struct APIResponse: Codable {
