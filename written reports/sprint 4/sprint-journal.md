@@ -1,19 +1,6 @@
 # (1) External Documentation and Stakeholder Meetings
 
-> Description (TODO: DELETEME before completion)
->
-> In your Sprint Journal, add an entry that includes the following for each stakeholder:
->
-> - Who you met with
->   - Name, occupation, and other relevant information about the stakeholder
->   - Date and time of the stakeholder meeting
-> - Description of the test session and feedback
->   - What was their behavior of interacting with the documentation?
->   - Did they succeed or get stuck?
->   - What feedback did they provide about documentation?
->   - What questions did you ask, and what were the stakeholder's answers?
-
-## Stakeholder
+## Stakeholder: Regan
 
 Regan Stambaugh on Wednesday April 23rd at 6:30pm. Regan is a student athlete, upcoming team captain, SEPC leader, Singer and Rising 4th year Grinnell College student.
 
@@ -108,7 +95,8 @@ ANDROID
 * Again as our other stakeholders had mentioned, it further establishes a need for a functioning search bar as a pivotal feature of our app.
 * Along with our other stakeholder meetings it was pointed out that the calendar didn't seem distinct/different enough from the homepage so we may decide on moving forward without the calendar page in exchange for a super effective search feature.
 
-## Stakeholder
+## Stakeholder: Lily
+
 Lily Freeman on Tuesday April 22 and 4:30pm. Lily is a second year student who is not in formal leadership of any organization. She lives in a project house and is a member of the women's ultimate frisbee team.
 
 #### Description of Test Session
@@ -225,6 +213,10 @@ iOS
    * Similarly, it helped us select a new color scheme, specifically blue
    * It affirmed the utility of a search bar feature, which we are now considering directing energy that previously would've gone to calendar towards.
    * Images remain a stretch goal, but something we are actively considering doing if the time and space to implement them emerges
+
+# Stakeholder: Yuina
+
+TODO: THIS SECTION HAS NOT YET BEEN WRITTEN.
 
 # (2) Internal Documentation Lab
 
