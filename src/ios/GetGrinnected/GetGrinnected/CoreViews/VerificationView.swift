@@ -102,6 +102,7 @@ struct VerificationView: View {
             }
             .padding()
             
+            //if the API call was successful, go to the main view
             .navigationDestination(isPresented: $success) {
                 MainNavView()
             }

@@ -86,14 +86,15 @@ class UserProfile: ObservableObject {
         ]
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
+        //run a post request to specified route
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if let error = error { //if it had an undisclosed error, return a failure
                 print("Error: \(error)")
                 completion(.failure(error))
                 return
             }
 
-            guard let data = data else {
+            guard let data = data else { // no data is also an error
                 print("No data received")
                 completion(.failure(APIError.invalidResponse))
                 return
@@ -102,6 +103,8 @@ class UserProfile: ObservableObject {
             do {
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
+                    //at this point you should have message
+                    //so if the error field has stuff in, put message as the error message
                     completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
                     return
                 }
@@ -128,14 +131,15 @@ class UserProfile: ObservableObject {
         ]
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
+        //make post request to the right route
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if let error = error { //if it had an undisclosed error, return a failure
                 print("Error: \(error)")
                 completion(.failure(error))
                 return
             }
 
-            guard let data = data else {
+            guard let data = data else { // no data also is an error
                 print("No data received")
                 completion(.failure(APIError.invalidResponse))
                 return
@@ -144,6 +148,8 @@ class UserProfile: ObservableObject {
             do {
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
+                    //at this point you should have message
+                    //so if the error field has stuff in, put message as the error message
                     completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
                     return
                 }
@@ -172,13 +178,13 @@ class UserProfile: ObservableObject {
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if let error = error { //if it had an undisclosed error, return a failure
                 print("Error: \(error)")
                 completion(.failure(error))
                 return
             }
 
-            guard let data = data else {
+            guard let data = data else { // no data, also error
                 print("No data received")
                 completion(.failure(APIError.invalidResponse))
                 return
@@ -187,6 +193,8 @@ class UserProfile: ObservableObject {
             do {
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
+                    //at this point you should have message
+                    //so if the error field has stuff in, put message as the error message
                     completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
                     return
                 }
@@ -201,7 +209,9 @@ class UserProfile: ObservableObject {
         task.resume()
     }
     
+    //API call to resend OTP
     func resendOTP(email: String, completion: @escaping (Result<String, Error>) -> Void) {
+        //make post request to correct route
         let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/resend-otp")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -211,28 +221,31 @@ class UserProfile: ObservableObject {
             "email": email,
         ]
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-
+        
+        //process the response
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if let error = error { //if it had an undisclosed error, return a failure
                 print("Error: \(error)")
                 completion(.failure(error))
                 return
             }
 
-            guard let data = data else {
+            guard let data = data else { //if it didn't give you data, also an error, failure
                 print("No data received")
                 completion(.failure(APIError.invalidResponse))
                 return
             }
 
-            do {
+            do {//try to recode the response
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
+                    //at this point you should have message
+                    //so if the error field has stuff in, put message as the error message
                     completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
                     return
                 }
 
-                // Success
+                // Success if you got this far! Yay!
                 completion(.success(decodedResponse.message ?? "Success"))
             } catch {
                 print("Decoding error: \(error)")
@@ -242,7 +255,8 @@ class UserProfile: ObservableObject {
         task.resume()
     }
     
-    
+    // all the things that could be in the API response
+    // all marked as optional
     struct APIResponse: Codable {
         let error: String?
         let message: String?

@@ -49,6 +49,7 @@ struct LoginView: View {
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
                             success = false
+                            //render API error message if there was an error
                             if let apiError = error as? UserProfile.APIError {
                                             switch apiError {
                                             case .signInError(let message):
@@ -61,7 +62,6 @@ struct LoginView: View {
                                         }
                         }
                     }
-                    //once successfully logged in, jump to main viewport
                 } label: {
                     HStack {
                         Text("SIGN IN")
@@ -85,6 +85,7 @@ struct LoginView: View {
                         .padding(.top, 4)
                 }
                 
+                //if the API call was successful, go to verification 
                 .navigationDestination(isPresented: $success) {
                     VerificationView(email: email)
                 }

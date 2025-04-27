@@ -39,11 +39,6 @@ struct SignUpView: View{
                       title: "Grinnell Email",
                       placeholder: "Enter your Grinnell Email.. (@grinnell.edu)")
             
-//            //Signin Password Text Fields
-//            InputView(text: $password,
-//                      title: "Password",
-//                      placeholder: "Enter your password...",
-//                      isSecureField: true)
             
             //error
             if !signupError.isEmpty{
@@ -63,6 +58,7 @@ struct SignUpView: View{
                         success=true
                     case .failure(let error):
                         print("API call failed: \(error.localizedDescription)")
+                        //render API error message if there was an error
                         if let apiError = error as? UserProfile.APIError {
                                         switch apiError {
                                         case .signInError(let message):
