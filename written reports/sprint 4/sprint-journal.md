@@ -288,10 +288,6 @@ The changes are at the commit with hash [009e931](https://github.com/seehorne/Ge
 
 # (3) Self-Selected Work toward Minimum Viable Product (MVP)
 
-> <span style="color:red">Description (TODO: DELETE ME ON COMPLETION)
-> - In a Sprint Journal entry, remind us what your MVP is (look back to Milestone 1 where you described what features would be included in your MVP)
-> - Describe what work, if any, remains toward delivering your MVP
-
 Our minimum viable product, as described in milestone 1, is different from our current conception of minimum viable product. At the time, it included...
 
 * Shows all events currently happening at Grinnell (scraping information off of 25 live)  
@@ -301,7 +297,8 @@ Our minimum viable product, as described in milestone 1, is different from our c
 * Allow user accounts to friend each other  
 * Events sorted by category 
 
-More recently (on April 8), we updated the aims of our minimum viable product to include the following:
+On April 8, we changed our MVP description to match with this better.
+
 - Shows all events currently happening at Grinnell (scraping information off of 25 live)
 - Create a user account (Grinnell emails only?)
   - Sign in:
@@ -375,14 +372,18 @@ More recently (on April 8), we updated the aims of our minimum viable product to
   - Social aspect: to be spoken about after the sprint
     - collaborations with organizations
 
-This has also changed a little bit to date, specifically our architecture no longer uses passwords and usernames, opting for one time verification codes instead, so the features of asking for username and password are a little obsolete (though we are well on our way to asking for usernames anyway, just in case you need it). Likewise, the parsing of 25live data has revealed that some event features, such as repetition, are hard to access from event data itself and would need to be inferred extra-data, and have thus recieved less attention. We have however, made good progress towards reflecting other event data: the pieces that remain for our proposed MVP are event popularity and RSVP status. RSVP status has been solved by scraping public events only, and event popularity is in the works for the final sprint (though this feature has slowly shifted towards a stretch goal, albeit an achievable one, in its own right). Another thing that is no longer relevant is draft events, since events are harvested from official college sources rather than posted directly. Further, though our current app reflects both home page and calendar, recent user feedback has suggested that since the home page is time sorted, the calendar is not entirely necessary, so its place in the MVP is less central: this energy will be directed towards more robust searching. Finally in the things that have changed, the social aspect has become increasingly less central, so while org-student connectivity is still very important to us, friending and individual-level collaborations are less central.
+However, there are still things that have changed to date. Some of these have been changed due to us getting a better understanding of the design and usage parameters of our app, and others are to make sure we are still able to deliver a realized product within the semester. Here, we list the differences from that description of our MVP.
+
+- We now use one-time verification codes, so no need for passwords.
+- We decided to put less focus on checking if events from 25live had certain features, because we evaluated them to be more trouble than they are worth with the way the system stores information.
+  - Repetition: Can't check for it properly, all events have different IDs even when repeated.
+  - RSVP: scrape public events only, so it won't be a problem to check
+- Draft events are no longer relevant since we do not plan to allow posting of events in the MVP
+- Based on user feedback, we have decided to lessen the importance of the calendar and focus on the homepage and search features.
+- We are taking away focus from org cards and listings, since they do not fit as well in this version of the app and we are not confident in our ability to deliver them well-made and on-time.
 
 As a whole, the vast majority of these goals apart from those outlined has been completed. The major things that remain are:
- * List of orgs
-   * A challenge to this is that they are constantly updating, which makes it hard to know which ones exist and get up to date information about them
-   * Once we have this information, we have organization cards ready to fill with them, it is a greater logistical challenge than technical one
-   * One option is using the hosts of events as reference for orgs, but this will not permit all the things we hope org cards would achieve, like ready access to descriptions
-   * This happening is pre-requisite to following orgs, but the logic for doing so would be largely the same as favoriting, so gaining information is the major blocker here
+
 * Accessibility settings
    * We have the one color scheme (or two, if you consider dark and light mode), but are taking efforts to ensure that one scheme is colorblind accessible, since there are fewer options. Having one main scheme is important to visual identity which has motivated this choice
    * Variable text size has yet to be implemented but we will in the coming sprint
@@ -391,12 +392,6 @@ As a whole, the vast majority of these goals apart from those outlined has been 
    * However, if it is to remain in the MVP, this would require an implementation of image hosting. 
 * Sorting by popularity
    * This would require live updates of who has favorited what, which could be managed on a database level through API calls.
-* Org accounts
-   * Because the events are pulled from 25live, these are less of a technical undertaking than they would otherwise be 
-   * They would be very straightforward to implement, as a consequence:
-      * We would need to allow accounts to be made that end with @studentorg.grinnell.edu, not just @grinnell.edu
-      * Give them further access to favorites info for attendance to their events, which would require matching orgs on events to their corresponding org accounts, if accounts have been made
-         * Accounts could be premade, if we got a full list of orgs, but this is the challenge of the org cards
 * Searching
    * Well underway on both frontends but not yet robust
       * TODO: what are the action steps here
