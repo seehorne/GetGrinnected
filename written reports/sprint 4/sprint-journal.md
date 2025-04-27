@@ -90,6 +90,7 @@ The changes are at the coomit with hash [009e931](https://github.com/seehorne/Ge
 > - In a Sprint Journal entry, remind us what your MVP is (look back to Milestone 1 where you described what features would be included in your MVP)
 > - Describe what work, if any, remains toward delivering your MVP
 
+
 # (4) **Generative AI** Experiment
 
 Each experiment will be an h2 (`##`) below, with individual questions under h3s (`###`). 
@@ -361,6 +362,7 @@ iOS
     * “Oh I remember there was a lecture at the art museum but I don’t remember when it was, let me search lecture art museum”  
       * See a poster, remember some but not all  
       * Hopefully it would go across all fields so we can find it without relying on just one specific detail being forgot  
+      * Search bar is a high utility feature
   * Calendar  
     * Can see super in advance  
       * Likes that you can see exact day from month view  
@@ -381,4 +383,10 @@ iOS
   * Generally feels very positive, likes the notification idea a lot, bc current strategy of taking pictures of event posters and then not going  
   * A feature we don’t have that would be useful  
     * Pictures of events?
+
+   ### What we will change based on this feedback
+   * This feedback, in combination with Yuina's helped us decide to use the logo made by the person who made Grinneats logo, since this logo was preferred
+   * Similarly, it helped us select a new color scheme, specifically blue
+   * It affirmed the utility of a search bar feature, which we are now considering directing energy that previously would've gone to calendar towards.
+   * Images remain a stretch goal, but something we are actively considering doing if the time and space to implement them emerges
 
