@@ -75,6 +75,203 @@ class UserProfile: ObservableObject {
         return true
     }
 
+    func loginUser(email: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/login")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
+        let body: [String: Any] = [
+            "email": email
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
+        }
+        task.resume()
+    }
+    
+    func verifyUser(email: String, code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/verify")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "email": email,
+            "code": code
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
+        }
+        task.resume()
+    }
+    
+    
+    func signUpUser(email: String, user: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/signup")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "email": email,
+            "username": user
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
+        }
+        task.resume()
+    }
+    
+    func resendOTP(email: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/resend-otp")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any] = [
+            "email": email,
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
+        }
+        task.resume()
+    }
+    
+    
+    struct APIResponse: Codable {
+        let error: String?
+        let message: String?
+        let refresh_token: String?
+        let access_token: String?
+    }
+    
+    /*
+     ASSOCIATED ERRORS WITH API CALLING
+     (named so as to not conflict with existing parent classes)
+     */
+    /// Custom errors (
+    enum APIError: Swift.Error, CustomLocalizedStringResourceConvertible {
+        case badEmail
+        case invalidResponse
+        case decoderError
+        case signInError(String)
+        var localizedStringResource: LocalizedStringResource {
+            switch self {
+            case .badEmail: return "Email wrong:";
+            case .invalidResponse: return "Invalid response from server";
+            case .decoderError: return "Could not decode JSON";
+            case .signInError(let message):  return "Login error \(message)"
+            }
+        }
+    }
+
+                // Success
+
+            
 }
 

@@ -6,11 +6,6 @@
 //
 
 
-//
-//  VerificationView.swift
-//  Created by Ellie Seehorn on 4/25/25.
-//
-
 import SwiftUI
 
 import Foundation
@@ -57,7 +52,7 @@ struct VerificationView: View {
                         case .failure(let error):
                             print("API call failed:\(error.localizedDescription)")
                             success=false
-                            if let apiError = error as? APIError {//treat the error as API error object
+                            if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                             switch apiError {
                                             case .signInError(let message):
                                                 verifyError = message //use the response message if there was one
