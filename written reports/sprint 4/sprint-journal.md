@@ -223,6 +223,26 @@ The impact was pretty significant as it allowed me to ask pretty specific questi
 
 I actually generally expected it to help less than it did. It was really a lot better and providing more specific feedback to really help me when I hit a specific gap in knowledge. Additionally, I feel as though I was expecting to begin to curate my messages/prompts to the degree that I did. I feel like I learned a lot about prompts for example if starting a chat you want to provide as much background info about your topic as possible and provide as much detail as you can about your understanding or specific use case for some new thing you want to implement. "I am making an events app for grinnell college, currently I have persisting states using datastores for certain app preferences like darkmode light mode, login state, etc. Currently I am working on a Room Database and currently I have an API I get my events from, but when I try to upsert these events to my Room DB it doesn't upsert. What are reasons maybe with how I am creating my events table that might cause an upsert to not occur? (Please just explain do not code)" This prompt gave me pivotal information about the need for type convertors for certain data types in Room DB tables. Curation of similar prompts and my learning of how to curate these questions really evolved and I think that really surprised me during this process.
 
+## Troubleshooting API to send and verify codes
+This experiment was completed by Ellie.
+
+### What were initial goals and expectations?
+By the time I approached this experiment, I had reason to believe I'd implemented an API route that should send a verification code to a user's email, as well as potentially one to verify the code on return, but I was having a hard time testing this using just the exisiting manual testing procedure.
+
+### How was AI used?
+This experiment was conducted using ChatGPT. I have a free account, so the model was the default free account model (I believe this is GPT-4o)
+
+My prompts involved the CLI thing I was trying to run, followed by an the result/error I got, and a question I had. Sometimes, where relevant, it also included the source code associated with the call I was trying to make. Before I took to AI I had
+   1. Written the API call code
+   2. Read and ran the existing manual testing procedure
+I did these things so I was prepared to come to AI with specific questions, and my hope (not necessarily realized, more on this later) was that I could avoid having to copy and paste in an entire codebase.
+
+### What impact did it have
+The best way I can describe its impact was "swingy". In some cases, it was pretty useful: for example, when I didn't yet have the sqlite3 module despite having marked it as required, it was useful in telling me how to resolve that error (I needed to run npm install). However, when I was having more specific errors (such as the request seemingly not being recieved despite the API running) (that maybe didn't conform as well to its training), it had much less useful advice to give and asked for increasingly large amounts of source code to be copied in. Despite my doing so (and telling it this specifically), it kept confusing a POST request for a GET request, and mostly told me places I might want to put console logs, rather than identifying what was actually wrong. This went on until the amount of code it needed didn't seem tenable to fit in a single request, and also came out of several different files, so using AI proved increasingly cumbersome. I also was beginning to worry about the ethical implications of feeding it so much of my group's code to potentially train on, so at this point I called the experiment off. I was left with code full of a bunch of console logs, and requests that still did not appear recieved. The issue ended up being fixed during a pair programming session with Almond later that night.
+
+### To what extent did this impact match goals and expectations?
+After everyone else's AI experiments, and the general idea I've seen spreading that debugging is a use case where AI can be quite strong, I had really high hopes for this, but it was ultimately pretty disappointing. It caught the low hanging fruit errors like the missing passage, but as soon as I got to the meat of the struggle, it became a lot less impactful. With each error, it would request more and more source code to try to help me resolve it, and seemed to just not acknowledge that I had explicitly told it the advice it was giving that I had already tried (it gave me the same advice repeatedly, which did not work). I learned that its efficacy is very much tied with the amount of context it has, which isn't surprising, but was a little unpleasant because there was a lot of intertwined code from different places it allegedly "needed": yet giving it didn't really improve its performance much. I concede that for errors associated with big libraries, it can do pretty well since its maybe seen things of that form before, but it is less good at diagnosing and fixing errors that are really local in nature.
+
 # (5) **Stakeholder** Meetings & Feedback
 
 ## Stakeholder
