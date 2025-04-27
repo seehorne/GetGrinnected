@@ -145,6 +145,13 @@ Note: 5 through 7 pertain to features we may scrape due to viability and lack of
 
 8. Click any of the other icons on the bottom bar to go to their pages.
 
+# Invisible Progress
+
+## Caching
+
+Both Frontends have worked this sprint to implement a caching system for information coming from the API. Ideally this allows our app to be utilized off line with the most recent sync information from the API. Additionally we can hopefully utilize querying or storing systems that make persistent states simpler. For Kotlin we implemented a local db that syncs with the repository to store event and account related information. Additionally we have Storage Preferences associated with our access and refresh tokens, whether we are currently logged in, the current account we are logged in with, and the theme we currently have set. These states allow us to have persistent authorized login so users do not need to continually log in each time they open the app. These hold for things like our Theme state that ensures we start the app in the correct theme. Finally we have a pull to refresh functionality that allows us to resync with the API when we pull down on the homepage as a manual refresh (Otherwise we resync with the API every 3 hours).
+
+## API
 
 # Git Diff Link
 
