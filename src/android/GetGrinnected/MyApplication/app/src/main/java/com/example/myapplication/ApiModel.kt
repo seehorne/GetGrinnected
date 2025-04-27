@@ -3,6 +3,7 @@ package com.example.myapplication
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 
@@ -28,5 +29,9 @@ interface ApiModel {
 
     // Async function to get user info given an access token
     @GET("user/data")
-    suspend fun getUserData(@retrofit2.http.Header("Authorization") token: String): Response<User>
+    suspend fun getUserData(@Header("Authorization") token: String): Response<User>
+
+    // Async function to refresh auth tokens
+    @POST("user/token-refresh")
+    suspend fun refreshToken(@Header("Authorization") refreshToken: String): Response<TokenRefreshResponse>
 }

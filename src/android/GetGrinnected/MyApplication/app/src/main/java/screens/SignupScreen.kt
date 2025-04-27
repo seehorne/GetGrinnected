@@ -208,7 +208,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                             // Assess if the request and if the email was available
                             if (response.isSuccessful) {
                             // Sets our logged in state to true
-                            navController.navigate("verification/${email}/${signUp}/${username}") {
+                            navController.navigate("verification/${email}/${signUp}") {
                                 popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
                             }

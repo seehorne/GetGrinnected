@@ -54,7 +54,7 @@ import com.example.myapplication.toAccountEntity
  * @param navController used to move through the app
  */
 @Composable
-fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navController: NavController, modifier: Modifier = Modifier) {
+fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavController, modifier: Modifier = Modifier) {
     // The code the user inputs
     var codeInput by remember { mutableStateOf("") }
     // General error messages
@@ -174,6 +174,15 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                                         DataStoreSettings.setLoggedInAccountId(context, accountEntity.accountid)
                                         // Sets storage preference logged in to true
                                         DataStoreSettings.setLoggedIn(context, true)
+                                        // If this is a login
+                                        if(!flag){
+                                            // Gets the current time
+                                            val now = System.currentTimeMillis()
+                                            // Syncs from API
+                                            AppRepository.syncFromApi()
+                                            // Sets the new LastSyncTime to now
+                                            DataStoreSettings.setLastSyncTime(context, now)
+                                        }
                                         // Navigates to main page
                                         navController.navigate("main") {
                                             popUpTo(0) { inclusive = true }
@@ -258,5 +267,5 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
 @Preview (showBackground = true)
 @Composable
 fun EmailVerificationScreenPreview(){
-    EmailVerificationScreen(modifier= Modifier, username = "user", email= "", flag = true, navController = rememberNavController())
+    EmailVerificationScreen(modifier= Modifier, email= "", flag = true, navController = rememberNavController())
 }

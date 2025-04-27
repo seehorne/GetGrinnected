@@ -66,19 +66,17 @@ fun AppNavigation(
             }
         }
         composable(
-            "verification/{email}/{flag}/{username}",
+            "verification/{email}/{flag}",
             arguments = listOf(
-                navArgument("username") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("flag"){ type = NavType.BoolType },
 
             )
         ) { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username") ?: ""
             val email = backStackEntry.arguments?.getString("email") ?: ""
             val flag = backStackEntry.arguments?.getBoolean("flag") ?: false
 
-            EmailVerificationScreen(email, flag, username, navController = navController)
+            EmailVerificationScreen(email, flag, navController = navController)
         }
     }
 }
