@@ -216,7 +216,7 @@ iOS
 
 # Stakeholder: Yuina
 
-TODO: THIS SECTION HAS NOT YET BEEN WRITTEN.
+<span style="color:red">TODO: THIS SECTION HAS NOT YET BEEN WRITTEN.</span>
 
 # (2) Internal Documentation Lab
 
@@ -288,7 +288,7 @@ The changes are at the commit with hash [009e931](https://github.com/seehorne/Ge
 
 # (3) Self-Selected Work toward Minimum Viable Product (MVP)
 
-> Description (TODO: DELETEME ON COMPLETION)
+> <span style="color:red">Description (TODO: DELETE ME ON COMPLETION)
 > - In a Sprint Journal entry, remind us what your MVP is (look back to Milestone 1 where you described what features would be included in your MVP)
 > - Describe what work, if any, remains toward delivering your MVP
 
