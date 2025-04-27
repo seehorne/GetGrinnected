@@ -433,10 +433,10 @@ async function userDataSetArray(array_name, req, res, _next) {
     // Get the email from the request, assuming it was set by the middleware.
     const email = req.email;
 
-    // The new array will be in the request body. We will check it is valid below.
-    const newArray = req.body;
+    // The new array will be in the request body under the proper array name.
+    const newArray = req.body[array_name];
 
-    // Make sure all the event IDs they gave us exist (and they're an array of ints lol)
+    // Make sure the array is all integers, and that all elements are real events
     const exist = await eventsExist(newArray);
     if (!exist.result) {
         res.status(400).json({
@@ -446,8 +446,9 @@ async function userDataSetArray(array_name, req, res, _next) {
         return;
     }
 
-    // Update that user's favorited events in the database..
-    await database.modifyAccountField(email, array_name, JSON.stringify(newArray));
+    // Update that user's favorited events in the database.
+    // TODO: DO WE NEED TO USE JSON TO STRINGIFY THE ARRAY, OR NO?
+    await database.modifyAccountField(email, array_name, newArray);
     res.json({
         'message': `Successfully updated ${array_name}`
     });

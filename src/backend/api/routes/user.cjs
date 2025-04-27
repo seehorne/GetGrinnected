@@ -236,7 +236,9 @@ async function routeGetFavorited(req, res, _next) {
   const account = await db.getAccountByEmail(email);
 
   // Return their favorited events array
-  res.json(account.favorited_events);
+  res.json({
+    'favorited_events': account.favorited_events
+  });
 }
 
 /**
@@ -247,6 +249,15 @@ async function routeGetFavorited(req, res, _next) {
  * @param {*} next  Express callback function
  */
 async function routePutFavorited(req, res, next) {
+  // Make sure favorited_events is within the body of the request.
+  if (!req.body.favorited_events) {
+    res.status(400).json({
+      'error': 'Bad request',
+      'message': 'Body must include favorited_events array.'
+    });
+    return;
+  }
+
   // Set the favorited_events array of that user, and let that function do the response.
   await util.userDataSetArray('favorited_events', req, res, next);
 }
@@ -264,7 +275,9 @@ async function routeGetNotified(req, res, _next) {
   const account = await db.getAccountByEmail(email);
 
   // Return their notified events array
-  res.json(account.notified_events);
+  res.json({
+    'notified_events': account.notified_events
+  });
 }
 
 /**
@@ -276,6 +289,15 @@ async function routeGetNotified(req, res, _next) {
  */
 
 async function routePutNotified(req, res, next) {
+  // Make sure notified_events is within the body of the request.
+  if (!req.body.notified_events) {
+    res.status(400).json({
+      'error': 'Bad request',
+      'message': 'Body must include notified_events array.'
+    });
+    return;
+  }
+
   // Set the notified_events array of that user, and let that function do the response.
   await util.userDataSetArray('notified_events', req, res, next);
 }
@@ -293,7 +315,9 @@ async function routeGetUsername(req, res, _next) {
   const account = await db.getAccountByEmail(email);
 
   // Return their username array
-  res.json(account.account_name);
+  res.json({
+    'username': account.account_name
+  });
 }
 
 /**
@@ -304,9 +328,17 @@ async function routeGetUsername(req, res, _next) {
  * @param {*} _next  Express callback function, unused
  */
 async function routePutUsername(req, res, _next) {
+  // Make sure username is within the body of the request.
+  const newUsername = req.body.username;
+  if (newUsername === undefined) {
+    res.status(400).json({
+      'error': 'Bad request',
+      'message': 'Body must include username.'
+    });
+    return;
+  }
 
   // Get the username from the request body, and make sure it's a string.
-  const newUsername = req.body;
   if (typeof newUsername !== 'string') {
     res.status(400).json({
       'error': 'Invalid body',
@@ -328,6 +360,7 @@ async function routePutUsername(req, res, _next) {
   }
 
   // With the new username validated, set it
+  const email = req.email;
   await db.modifyAccountField(email, 'account_name', newUsername);
   res.json({
     'message': 'Username successfully updated.'
