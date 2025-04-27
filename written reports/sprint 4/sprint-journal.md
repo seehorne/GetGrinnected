@@ -90,6 +90,120 @@ The changes are at the coomit with hash [009e931](https://github.com/seehorne/Ge
 > - In a Sprint Journal entry, remind us what your MVP is (look back to Milestone 1 where you described what features would be included in your MVP)
 > - Describe what work, if any, remains toward delivering your MVP
 
+Our minimum viable product, as described in milestone 1, is different from our current conception of minimum viable product. At the time, it included...
+
+* Shows all events currently happening at Grinnell (scraping information off of 25 live)  
+* Create a user account (Grinnell emails only?)  
+* Allows users to sign up for student organization email lists  
+* Student Org leaders being able to create events directly on the app  
+* Allow user accounts to friend each other  
+* Events sorted by category 
+
+More recently (on April 8), we updated the aims of our minimum viable product to include the following:
+- Shows all events currently happening at Grinnell (scraping information off of 25 live)
+- Create a user account (Grinnell emails only?)
+  - Sign in:
+    - Ask for username and password
+    - Forgot password option
+    - Forgot username option
+  - sign up:
+    - Power-account vs normal user account distinction (how will this work?)
+      - Verify the authority to ensure security and privacy
+    - Ask for grinnell email
+    - Ask for create-password
+      - List requirements for password
+      - If requirements are not met, shows that it's not met
+    - Verify email with verification
+      - Send email to email automatically, with a code that is available for a 60 second time limit
+- Events sorted by category
+- Users can search for events on Home page and in calendar
+  - "robust" searching, to include misspellings and find tags that were incorrectly inputted
+  - events and organizations show up when search
+  - when no search found, "no results" pop-up, prompting user to reduce filters or change search
+  - speech-to-text option
+- Event cards
+  - Found on Home Page + Calendar
+  - contains information on:
+    - if event repeats
+    - if RSVP, max headcount and current number
+    - how many people liked events
+    - tags
+    - description
+    - organizations and collaborating organizations
+  - able to see **organization** and follow organizations
+- Bottom bar for easy navigation between windows
+- Highlights window you are on in bottom bar
+- Email verification for profile creation 
+- Color system chosen to be accesable to color blindness with options for different types of color blindness
+- Screen reader compatible
+- Home page
+  - Lists events for the current day that are automatically sorted by popularity and by the tags that user filled out during survey
+  - Can click on events for more information
+  - Can change the day to look at any point in the next week
+  - Can change the tags to sort events you are viewing
+  - Includes navigation bar to calendar and profile page
+  - A sort button to sort based on popularity, alphabetically, by organization (grouping organizations)
+- Calendar
+  - Ability to see comprehensive view of all upcoming events
+  - Ability to toggle from day, to week to month view, intuitively
+  - Ability to see drafted event in calendar
+  - Ability to toggle between public calendar and personal (liked events + drafts) calendar
+  - Ability to click on a specific day, to get the day of an event, and able to click on a specific event to get the **event card** associated with that event
+  - Ability to filter events
+  - Includes navigation bar to home and profile page
+- Profile page
+  - Able to change profile picture
+  - Able to change username (to reasonable names)
+  - Able to change account to other organization accounts a user has
+  - Able to sign out of current account
+  - Contains list of followed organizations:
+    - if no organizations to be found, "FIND organizations" button
+  - Include settings page:
+    - change text-size for the application
+    - light-dark/other colored themes, for better visibility
+  - Organizations list
+    - sort organizations by popularity, alphabet, etc. 
+    - able to see **organization card** through organization list
+    - able to follow an organization through **organization card**
+    - able to see the events an organization is hosting
+    - to see an organizations' events through the organizations list
+    - to  follow an organization, will it be a request-to-follow feature? How do we deal with exclusivity(?)
+  - Followed organization list
+    - able to see organizations' page/user pages(?)
+  - Social aspect: to be spoken about after the sprint
+    - collaborations with organizations
+
+This has also changed a little bit to date, specifically our architecture no longer uses passwords and usernames, opting for one time verification codes instead, so the features of asking for username and password are a little obsolete (though we are well on our way to asking for usernames anyway, just in case you need it). Likewise, the parsing of 25live data has revealed that some event features, such as repetition, are hard to access from event data itself and would need to be inferred extra-data, and have thus recieved less attention. We have however, made good progress towards reflecting other event data: the pieces that remain for our proposed MVP are event popularity and RSVP status. RSVP status has been solved by scraping public events only, and event popularity is in the works for the final sprint (though this feature has slowly shifted towards a stretch goal, albeit an achievable one, in its own right). Another thing that is no longer relevant is draft events, since events are harvested from official college sources rather than posted directly. Further, though our current app reflects both home page and calendar, recent user feedback has suggested that since the home page is time sorted, the calendar is not entirely necessary, so its place in the MVP is less central: this energy will be directed towards more robust searching. Finally in the things that have changed, the social aspect has become increasingly less central, so while org-student connectivity is still very important to us, friending and individual-level collaborations are less central.
+
+As a whole, the vast majority of these goals apart from those outlined has been completed. The major things that remain are:
+ * List of orgs
+   * A challenge to this is that they are constantly updating, which makes it hard to know which ones exist and get up to date information about them
+   * Once we have this information, we have organization cards ready to fill with them, it is a greater logistical challenge than technical one
+   * One option is using the hosts of events as reference for orgs, but this will not permit all the things we hope org cards would achieve, like ready access to descriptions
+   * This happening is pre-requisite to following orgs, but the logic for doing so would be largely the same as favoriting, so gaining information is the major blocker here
+* Accessibility settings
+   * We have the one color scheme (or two, if you consider dark and light mode), but are taking efforts to ensure that one scheme is colorblind accessible, since there are fewer options. Having one main scheme is important to visual identity which has motivated this choice
+   * Variable text size has yet to be implemented but we will in the coming sprint
+* Profile picture
+   * With the declining importance of social features, these are less salient.
+   * However, if it is to remain in the MVP, this would require an implementation of image hosting. 
+* Sorting by popularity
+   * This would require live updates of who has favorited what, which could be managed on a database level through API calls.
+* Org accounts
+   * Because the events are pulled from 25live, these are less of a technical undertaking than they would otherwise be 
+   * They would be very straightforward to implement, as a consequence:
+      * We would need to allow accounts to be made that end with @studentorg.grinnell.edu, not just @grinnell.edu
+      * Give them further access to favorites info for attendance to their events, which would require matching orgs on events to their corresponding org accounts, if accounts have been made
+         * Accounts could be premade, if we got a full list of orgs, but this is the challenge of the org cards
+* Searching
+   * Well underway on both frontends but not yet robust
+      * TODO: what are the action steps here
+
+While these have room for growth and for re-evaluation of place in the MVP, the rest of listed items are complete, leaving us well, well on our way to a minimum usable and deployable system
+
+
+
+
 
 # (4) **Generative AI** Experiment
 
