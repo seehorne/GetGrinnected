@@ -433,28 +433,21 @@ async function userDataSetArray(array_name, req, res, _next) {
     // Get the email from the request, assuming it was set by the middleware.
     const email = req.email;
 
-    // Make sure the request body is an array of integers.
+    // The new array will be in the request body. We will check it is valid below.
     const newArray = req.body;
-    if (!isIntegerArray(newArray)) {
-        res.status(400).json({
-            'error': 'Invalid body',
-            'message': 'Request body must be an array of integers.'
-        });
-        return;
-    }
 
-    // Make sure all the event IDs they gave us exist
-    const eventsExist = await eventsExist(newArray);
-    if (!eventsExist.result) {
+    // Make sure all the event IDs they gave us exist (and they're an array of ints lol)
+    const exist = await eventsExist(newArray);
+    if (!exist.result) {
         res.status(400).json({
             'error': 'Invalid request',
-            'message': eventsExist.message
+            'message': exist.message
         });
         return;
     }
 
     // Update that user's favorited events in the database..
-    await db.modifyAccountField(email, array_name, newArray);
+    await database.modifyAccountField(email, array_name, JSON.stringify(newArray));
     res.json({
         'message': `Successfully updated ${array_name}`
     });

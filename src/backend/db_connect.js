@@ -224,6 +224,16 @@ async function dropExpiredEvents(){
     return result;
 }
 
+async function getEventByID(id) {
+    const [event] = await pool.query(`
+        SELECT * 
+        FROM events
+        WHERE eventid = ?
+         `, [id]);
+
+    return event[0];
+}
+
 async function verifyLogin(username, password){
     const existingAccount = await getAccount(username);
 
@@ -286,9 +296,10 @@ async function modifyAccountField(email, field, newValue) {
     }
 
     // ?'s will get filled by: field, newValue, email.
-    const sql = `UPDATE accounts SET ? = ? WHERE email = ?`
+    // NOTE: we need to avoid escaping the field, but this is okay because it will never be user inputted.
+    const sql = `UPDATE accounts SET ${field} = ? WHERE email = ?`
 
-    const result = await pool.query(sql, [field, newValue, email]);
+    const result = await pool.query(sql, [newValue, email]);
     return result;
 }
 
@@ -309,5 +320,6 @@ if (require.main === module) {
         getEventsWithTags,
         insertEventsFromScrape,
         modifyAccountField,
+        getEventByID,
     };
 }
