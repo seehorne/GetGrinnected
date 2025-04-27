@@ -126,9 +126,17 @@ function run() {
   // Get your own data by requesting it with a GET request.
   app.get('/user/data', middlewareVerifyAuth, user.routeGetUserData);
 
-  // TODO: Update parts of your data (favorites, followed, etc) with POST requests.
+  // Favorited events: GET (read) and PUT (write)
+  app.get('/user/events/favorited', middlewareVerifyAuth, user.routeGetFavorited);
+  app.put('/user/events/favorited', middlewareVerifyAuth, user.routePutFavorited);
 
+  // Notified events: GET (read) and PUT (write)
+  app.get('/user/events/notified', middlewareVerifyAuth, user.routeGetNotified);
+  app.put('/user/events/notified', middlewareVerifyAuth, user.routePutNotified);
 
+  // Username: GET (read) and PUT (write)
+  app.get('/user/username', middlewareVerifyAuth, user.routeGetUsername);
+  app.put('/user/username', middlewareVerifyAuth, user.routePutUsername);
 }
 
 /**

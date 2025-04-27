@@ -224,6 +224,117 @@ async function routeVerifyOTP(req, res, _next) {
 }
 
 /**
+ * Get the favorited events of the user you are logged in as.
+ * 
+ * @param {*} req  Express request.
+ * @param {*} res  Express response.
+ * @param {*} _next  Next callback function, unused.
+ */
+async function routeGetFavorited(req, res, _next) {
+  // Query the database for that user. We can assume they exist thanks to the middleware.
+  const email = req.email;
+  const account = await db.getAccountByEmail(email);
+
+  // Return their favorited events array
+  res.json(account.favorited_events);
+}
+
+/**
+ * Write updated favorite events for the user you are logged in as.
+ * 
+ * @param {*} req  Express request
+ * @param {*} res  Express response
+ * @param {*} next  Express callback function
+ */
+async function routePutFavorited(req, res, next) {
+  // Set the favorited_events array of that user, and let that function do the response.
+  await util.userDataSetArray('favorited_events', req, res, next);
+}
+
+/**
+ * Get the notified events of the user you are logged in as.
+ * 
+ * @param {*} req  Express request.
+ * @param {*} res  Express response.
+ * @param {*} _next  Next callback function, unused.
+ */
+async function routeGetNotified(req, res, _next) {
+  // Query the database for that user. We can assume they exist thanks to the middleware.
+  const email = req.email;
+  const account = await db.getAccountByEmail(email);
+
+  // Return their notified events array
+  res.json(account.notified_events);
+}
+
+/**
+ * Write updated notified events for the user you are logged in as.
+ * 
+ * @param {*} req  Express request
+ * @param {*} res  Express response
+ * @param {*} next  Express callback function
+ */
+
+async function routePutNotified(req, res, next) {
+  // Set the notified_events array of that user, and let that function do the response.
+  await util.userDataSetArray('notified_events', req, res, next);
+}
+
+/**
+ * Get the username events of the user you are logged in as.
+ * 
+ * @param {*} req  Express request.
+ * @param {*} res  Express response.
+ * @param {*} _next  Next callback function, unused.
+ */
+async function routeGetUsername(req, res, _next) {
+  // Query the database for that user. We can assume they exist thanks to the middleware.
+  const email = req.email;
+  const account = await db.getAccountByEmail(email);
+
+  // Return their username array
+  res.json(account.account_name);
+}
+
+/**
+ * Write an updated username for the user you are logged in as.
+ * 
+ * @param {*} req  Express request
+ * @param {*} res  Express response
+ * @param {*} _next  Express callback function, unused
+ */
+async function routePutUsername(req, res, _next) {
+
+  // Get the username from the request body, and make sure it's a string.
+  const newUsername = req.body;
+  if (typeof newUsername !== 'string') {
+    res.status(400).json({
+      'error': 'Invalid body',
+      'message': 'Request body must be a string.'
+    });
+    return;
+  }
+
+  // Make sure the new username is valid, if not also return an error.
+  const valid = util.validateUsername(newUsername);
+  if (!valid.result) {
+    // reuse the reason returned by validateUsername if the check fails,
+    // so we can have a more descriptive error
+    res.status(400).json({
+      'error': 'Invalid username',
+      'message': valid.reason
+    })
+    return;
+  }
+
+  // With the new username validated, set it
+  await db.modifyAccountField(email, 'account_name', newUsername);
+  res.json({
+    'message': 'Username successfully updated.'
+  });
+}
+
+/**
  * Refresh the authorization and refresh token of a user. This route is
  * protected, so it can only be accessed by users who hold a valid refresh token.
  * 
@@ -247,7 +358,13 @@ async function routeRefreshTokens(req, res, _next) {
 
 if (require.main !== module) {
   module.exports = {
+    routeGetFavorited,
+    routeGetNotified,
     routeGetUserData,
+    routeGetUsername,
+    routePutFavorited,
+    routePutNotified,
+    routePutUsername,
     routeRefreshTokens,
     routeSendOTP,
     routeSignUpNewUser,
