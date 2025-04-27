@@ -448,7 +448,7 @@ async function userDataSetArray(array_name, req, res, _next) {
 
     // Update that user's favorited events in the database.
     // TODO: DO WE NEED TO USE JSON TO STRINGIFY THE ARRAY, OR NO?
-    await database.modifyAccountField(email, array_name, newArray);
+    await database.modifyAccountField(email, array_name, JSON.stringify(newArray));
     res.json({
         'message': `Successfully updated ${array_name}`
     });
