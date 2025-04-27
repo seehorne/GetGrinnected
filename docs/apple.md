@@ -63,12 +63,11 @@ _Looking for Android guide? Click [here](android.md) for Android docs_
 - Click the "Don't have an account" button, redirected to [sign up page](#sign-up)
 - Fill in the text boxes requesting a username, Grinnell email, and password (UNDER CONSTRUCTION :building_construction:)
     - Username rules are as follows:
-        - allowed chars `a-z` `_` and `.`
+        - max length 20 characters
+        - allowed chars `a-z`, `A-Z`, `0-9`, `_`, and `.`
+        - must contain at least 1 letter
         - no `__` `..` `_.` or `._`
         - no ending or starting with `.` or `_`
-        - at least 8 characters
-    - Password rules as follows:
-        - Must be at least 8 characters
     - Under construction because, like in [login](#login), we will be moving towards emailed passcodes over passwords
 - Submit
     - Checks for valid Grinnell email and password (UNDER CONSTRUCTION :building_construction:)

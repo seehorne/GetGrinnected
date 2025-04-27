@@ -16,7 +16,7 @@ const DBPATH = './src/backend/Database/localOTP.db'
  */
 function validateUsername(username) {
     // Make sure the username is within the right length (8-20 chars)
-    const minLength = 8;
+    const minLength = 1;
     const maxLength = 20;
     if (username.length < minLength || username.length > maxLength) {
         return {
@@ -31,11 +31,10 @@ function validateUsername(username) {
     const letters = username.match(/[A-Za-z]/g) || [];
 
     // If there are too few letters, the username is invalid.
-    const minLetters = 5;
-    if (letters.length < minLetters) {
+    if (letters.length < 1) {
         return {
             result: false,
-            reason: `Username must contain at least ${minLetters} letters.`
+            reason: `Username must contain at least one letter.`
         };
     }
 
@@ -76,7 +75,7 @@ function validateUsername(username) {
     // After all these checks, we can be confident the username is valid
     return {
         result: true,
-        reason: ''
+        reason: 'Valid username.'
     };
 }
 
