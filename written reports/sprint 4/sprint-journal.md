@@ -214,7 +214,7 @@ iOS
    * It affirmed the utility of a search bar feature, which we are now considering directing energy that previously would've gone to calendar towards.
    * Images remain a stretch goal, but something we are actively considering doing if the time and space to implement them emerges
 
-# Stakeholder: Yuina
+## Stakeholder: Yuina
 
 TODO: THIS SECTION HAS NOT YET BEEN WRITTEN.
 
