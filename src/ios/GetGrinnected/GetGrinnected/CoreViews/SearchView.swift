@@ -22,7 +22,7 @@ struct SearchView: View {
                 Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Search", searchBarOn: true)
                 ScrollView(.vertical, showsIndicators: false){
                 //content of eventlist, show favorites true!, no search string
-                EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: true)
+                EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: false)
                 }
             }
             .edgesIgnoringSafeArea(.top)
