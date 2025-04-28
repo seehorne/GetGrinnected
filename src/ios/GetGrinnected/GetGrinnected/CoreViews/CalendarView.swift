@@ -39,6 +39,10 @@ struct CalendarView: View {
                         .padding(.top)//padding on top
                     }
                     .searchable(text: $searchText, placement: .automatic)
+                   .refreshable {
+                       //force refresh through the button!
+                       viewModel.forceRefresh() //only changes last change to nil
+                   }
                 }//scroll view
                 .edgesIgnoringSafeArea(.top)
             }

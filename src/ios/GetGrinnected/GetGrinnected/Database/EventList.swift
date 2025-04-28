@@ -153,16 +153,7 @@ struct EventList: View {
         /**
          THIS will eventually be changed to a scroll up to refresh!
          **/
-        .toolbar {
-            //force refresh
-            Button("Refresh"){
-                //force refresh through the button!
-                parentView.forceRefresh() //only changes last change to nil
-                removeDuplicates() //remove duplicates
-                Task{ await fetchEvents()}
-            }
-            .disabled(isLoading) //cannot use while events are loading
-        }
+        .disabled(isLoading) //cannot use while events are loading
     }//body
     
     
