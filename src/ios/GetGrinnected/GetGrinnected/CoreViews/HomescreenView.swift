@@ -11,13 +11,14 @@ import SwiftUI
 struct HomescreenView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
+    @State private var searchText = ""
     
     var body: some View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(safeAreaTop, title: "Home", searchBarOn: true)
+                Header(safeAreaTop, title: "Home")
                 
                 ScrollView(.vertical, showsIndicators: false){
                     
@@ -45,7 +46,8 @@ struct HomescreenView: View {
                         } //HStack
                         
                         //Main Event List View
-                        EventListView(parentView: viewModel)
+                        EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: false)
+                            .searchable(text: $searchText)
                         
                         Spacer() // KEEPS DATE, TAGS, AND EVENTS AT TOP
                         
