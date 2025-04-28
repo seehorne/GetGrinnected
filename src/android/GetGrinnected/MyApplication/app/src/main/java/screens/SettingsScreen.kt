@@ -294,6 +294,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                     coroutineScope.launch{
                         // This resets user preferences to default states
                         DataStoreSettings.clearUserSession(context)
+                        onToggleTheme(false)
                     }
                     navController.navigate("welcome"){ // takes us to the welcome screen
                         popUpTo(0){inclusive = true} // pops the back stack

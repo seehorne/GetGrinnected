@@ -10,28 +10,6 @@ tags:
   - name: user
     description: Logging in and changing user settings.
 paths:
-  /user/{username}:
-    get:
-      tags:
-        - user
-      summary: Check if user exists.
-      description: Check if a user exists with the specified username.
-      parameters:
-        - name: username
-          in: path
-          required: true
-          schema: 
-            type: string
-      responses:
-        '200':
-          description: Whether the user exists.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  result:
-                    type: boolean
   /user/login:
     post:
       tags:
@@ -100,7 +78,7 @@ paths:
         - Username or email are not provided in request body
         - Username or email are already associated with an account
         - Email does not end with @grinnell.edu
-        - Username does not follow rules (TODO: DO THOSE GO HERE?)
+        - Username does not follow rules (see <https://getgrinnected.sites.grinnell.edu/docs/apple/#sign-up>)
       requestBody:
         required: true
         content:
@@ -291,6 +269,215 @@ paths:
           $ref: '#/components/responses/InvalidToken'
         '404':
           $ref: '#/components/responses/NoSuchUser'
+  /user/events/favorited:
+    get:
+      tags:
+        - user
+      summary: Get favorited event list.
+      description: Get list of favorited event IDs.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favorited_events:
+                    type: array
+                    example: [14, 20, 77]
+                    items:
+                      type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+    put:
+      tags:
+        - user
+      summary: Change favorited events list.
+      description: Overwrite the array of favorited events with a new array.
+      security:
+        - auth_token: []
+      requestBody:
+        description: Array of new favorited event IDs.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                favorited_events:
+                  type: array
+                  example: [20, 77]
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: Successful update.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully updated favorited_events.
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: "Bad request"
+                  message:
+                    example: "Request body must contain favorited_events."
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /user/events/notified:
+    get:
+      tags:
+        - user
+      summary: Get notified event list.
+      description: Get list of notified event IDs.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notified_events:
+                    type: array
+                    example: [14, 20, 77]
+                    items:
+                      type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+    put:
+      tags:
+        - user
+      summary: Change notified events list.
+      description: Overwrite the array of notified events with a new array.
+      security:
+        - auth_token: []
+      requestBody:
+        description: Array of new notified event IDs.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notified_events:
+                  type: array
+                  example: [1, 2, 5]
+                  items:
+                    type: integer
+      responses:
+        '202':
+          description: Successful update.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully updated notified events.
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: "Bad request"
+                  message:
+                    example: "Request body must contain notified_events."
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /user/username:
+    get:
+      tags:
+        - user
+      summary: Get username.
+      description: Get username.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: example_user
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+    put:
+      tags:
+        - user
+      summary: Change username.
+      description: Change username.
+      security:
+        - auth_token: []
+      requestBody:
+        description: New username,
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: new_username
+      responses:
+        '200':
+          description: Successful update.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully updated username.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
   /events:
     get:
       tags:
@@ -383,7 +570,7 @@ components:
             items:
               $ref: '#/components/schemas/Event'
     Unauthorized:
-      description: No such user.
+      description: Token required.
       content:
         application/json:
           schema:
@@ -524,6 +711,14 @@ components:
             - 14
             - 20
             - 77
+        notified_events:
+          type: array
+          items:
+            type: integer
+          example:
+            - 33
+            - 2
+            - 531
         favorited_orgs:
           type: array
           items:

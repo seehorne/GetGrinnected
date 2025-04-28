@@ -144,7 +144,7 @@ object DataStoreSettings {
 
     /**
      * Clears all stored preferences
-     * @param context current context our  app is running
+     * @param context current context our app is running
      */
     suspend fun clearUserSession(context: Context) {
         context.dataStore.edit { preferences ->

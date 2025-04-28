@@ -11,9 +11,11 @@ interface AppDao {
 
     // Event Operations
 
-    // Gets you all events in a flow type so data is reactive
-    @Query("SELECT * FROM events")
+    // Gets you all events in a flow type so data is reactive and sorted by date and time
+    @Query("SELECT * FROM events ORDER BY event_date ASC, event_start_time ASC")
     fun getAllEvents(): Flow<List<EventEntity>>
+
+
 
     // Gets events by a given id should probably switch this to a flow
     @Query("SELECT * FROM events WHERE eventid = :id")
