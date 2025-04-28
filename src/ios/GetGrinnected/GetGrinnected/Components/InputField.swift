@@ -23,6 +23,7 @@ struct InputView: View {
             } else {
                 TextField(placeholder, text: $text)
                     .font(.system (size: 14))
+                    .textCase(.lowercase)
             }
             Divider ()
         }
