@@ -717,3 +717,74 @@ When helping with SwiftData, it was very helpful. Explaining the configurations 
 
 ### To what extent did this impact match goals and expectations?
 I think I gave Claude too much credit, and I realize there must be more specificity to my prompts. Overall, the AIs were SUPER helpful for exposing me to new techniques and functions. HOWEVER, if I did not specify the structure of certain things, there was a lot of things that were left unexplained. However, when I took my time to create a more explanatory prompt (and to not give me answers), the AI model successfully helped me learn as well as get work done more efficiently. 
+
+## Timed Notifications for Kotlin
+
+This was done by Ethan on their own.
+
+### What were initial goals and expectations?
+
+Written after the experiment
+
+The goal is to get working code for a timed notification on the android version of our app. I want a useful idea of where I should start and some help answering questions on the implementation
+
+### How was AI used?
+
+I'm going to do a play by play of the prompts I used, and what I got from the responses.
+
+1. I asked "how to create timed notifications in kotlin?"
+
+   It gave me two options one that uses a simple delay function that is probably not what I want as I beleive it wont resolve if the app is closed and a alrm system. I tried to impliment the alarm system but it didnt work right away
+
+2. "java.lang.SecurityException: Caller com.example.myapplication needs to hold android.permission.SCHEDULE_EXACT_ALARM or android.permission.USE_EXACT_ALARM to set exact alarms."
+
+  I put the error directly into the AI. It gave a possible solution to the error but trying to implement it turned out to be just wrong. I lloked at the error close rand found a solution by better understanding the error. 
+
+3. "fun scheduleNotification(event: Event) {
+        val intent = Intent(context, NotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val delayInMillis = 60
+        val triggerAtMillis = System.currentTimeMillis() + delayInMillis
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            triggerAtMillis,
+            pendingIntent
+        )
+    } why wont I get a notification ".
+
+   Next I tried just throwing in the section of code and seeing if it could tell me why it wasnt working. It gave a couple of reasons for potential failure and a new piece of code. I tried fixing the things they mentioned then just copied and pasted the code. It still didnt work. 
+
+5. I asked, "how do i fill the intent"
+
+ This was a specific question to fix a something it had mentioned before. Suposedly this could help display the correct notification. It still didnt work
+
+6. I asked for a "function to find the difference in dates in milliseconds in kotlin"
+
+   The aswer turned out to be much simpler than I had aanticipated 
+fun getDifferenceInMillis(date1: Date, date2: Date): Long {
+    return date2.time - date1.time
+} But it was still useful and found what I wanted quickly
+   
+
+8. I said "min in miliseconds"
+
+   It gave me a short snippet with the correct code. This was actualy useful
+
+### What impact did it have?
+
+It was a kinda frustrating tool to use but seems to work best as a search bar equivelent but obsfuscates who is actualy credited for the code. I guess I found it mildly useful but I think it had a low overall impact.
+
+### To what extent did this impact match goals and expectations?
+
+Since I specifically wrote the goals and expectations before hand, I followed them pretty closely and it matched well.
+
+It fell below my expectations for how usable its responses were. It was frustrating and unethical to use in my opinion. 
+
