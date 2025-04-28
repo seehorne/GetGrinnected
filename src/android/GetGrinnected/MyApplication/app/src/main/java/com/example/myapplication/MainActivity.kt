@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
                 // Gets events from Repo
                 val eventEntities = AppRepository.events.value
                 // Turns events into event data class and then sorts them by event time
-                val events = fixTime(eventEntities.map { it.toEvent() }).sortedBy { it.event_start_time }
+                val events = eventEntities.map { it.toEvent() }.sortedBy { it.event_start_time }
 
                 // We get a string set of all the distinct tags
                 val tagsString = events.flatMap { it.tags }.distinct()

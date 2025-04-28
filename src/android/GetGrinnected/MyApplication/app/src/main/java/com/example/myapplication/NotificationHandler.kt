@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -16,13 +15,13 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.random.Random
+import androidx.annotation.RequiresApi as RequiresApi1
 
-//import com.ayush.assignment.databinding.ActivityMainBinding
 
 class NotificationHandler(private val context: Context) {
     private val notificationManager = context.getSystemService(NotificationManager::class.java)
     private val notificationChannelID = "notification_channel_id"
-    //private lateinit var binding: ActivityMainBinding
+
     // SIMPLE NOTIFICATION
     fun showSimpleNotification(event: Event){
         val notification = NotificationCompat.Builder(context, notificationChannelID)
@@ -36,7 +35,7 @@ class NotificationHandler(private val context: Context) {
         notificationManager.notify(Random.nextInt(), notification)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi1(Build.VERSION_CODES.O)
     fun showSimpleNotificationDelay(event: Event){
         val notification = NotificationCompat.Builder(context, notificationChannelID)
             .setContentTitle(event.event_name)
@@ -45,12 +44,23 @@ class NotificationHandler(private val context: Context) {
             .setPriority(NotificationManager.IMPORTANCE_HIGH)
             .setAutoCancel(false)
             .build()  // finalizes the creation
-        Handler(Looper.getMainLooper()).postDelayed({
-            notificationManager.notify(Random.nextInt(), notification)
-        }, getDifferenceInMillis(
-            LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS"),
-            event.event_end_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")))
-
+        val differenceInMillis = event.event_start_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let {
+            LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let { it1 ->
+                getDifferenceInMillis(
+                    it1,
+                    it
+                )
+            }
+        }
+        if (differenceInMillis != null) {
+            if (differenceInMillis > 0) {
+                Handler(Looper.getMainLooper()).postDelayed(
+                            {
+                                notificationManager.notify(Random.nextInt(), notification)
+                            }, differenceInMillis
+                        )
+            }
+        }
     }
     /**
      * a function that turns a string into a date
@@ -58,23 +68,23 @@ class NotificationHandler(private val context: Context) {
      * @param dateFormat string in date format
      * @param timeZone grabs the current timezone from your phone
      */
-    fun String.toDate(
+    private fun String.toDate(
         dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
         timeZone: TimeZone = TimeZone.getTimeZone("UTC"),
-    ): Date {
+    ): Date? {
         val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
         parser.timeZone = timeZone
         return parser.parse(this)
     }
 
     /**
-     * a function that gets the time between an event and current time in miliseconds
+     * a function that gets the time between an event and current time in milliseconds
      *
      * @param date1 the current time
      * @param date2 the time the event starts
      */
-    fun getDifferenceInMillis(date1: Date, date2: Date): Long {
-        val fifteenMinutesInMillis = 26 * 60 * 1000L // 900000L
+    private fun getDifferenceInMillis(date1: Date, date2: Date): Long {
+        val fifteenMinutesInMillis = 15 * 60 * 1000L // 900000L
         return (date2.time - date1.time) - fifteenMinutesInMillis
     }
 
