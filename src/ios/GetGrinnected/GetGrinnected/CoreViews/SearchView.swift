@@ -1,16 +1,17 @@
 //
-//  FavoritesView.swift
+//  SearchView.swift
 //  GetGrinnected
 //
-//  Created by Ellie Seehorn on 3/4/25.
+//  Created by Budhil Thijm on 4/28/25.
 //
 
-import Foundation
 import SwiftUI
 
-struct FavoritesView: View {
+struct SearchView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
+    @State private var searchText = "-1235"
+    @State private var isLoading = true
     
     
     var body: some View {
@@ -18,13 +19,10 @@ struct FavoritesView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(safeAreaTop: safeAreaTop, title: "Favorites", searchBarOn: false)
+                Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Search", searchBarOn: true)
                 ScrollView(.vertical, showsIndicators: false){
                 //content of eventlist, show favorites true!, no search string
-                    EventList(selectedEvent: -1, parentView: viewModel, searchString: "", showFavorites: true)
-                /**
-                 TODO: add .searchable to this eventlist, so that you can search through long list of favorites. 
-                 */
+                EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: true)
                 }
             }
             .edgesIgnoringSafeArea(.top)
@@ -34,5 +32,5 @@ struct FavoritesView: View {
 }
 
 #Preview {
-    FavoritesView()
+    SearchView()
 }

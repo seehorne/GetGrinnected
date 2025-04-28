@@ -18,7 +18,7 @@ struct HomescreenView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(safeAreaTop, title: "Home")
+                Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Favorites", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
                     
@@ -49,10 +49,12 @@ struct HomescreenView: View {
                         EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: false)
                             .searchable(text: $searchText)
                         
-                        Spacer() // KEEPS DATE, TAGS, AND EVENTS AT TOP
                         
                     } //Scroll view
                     .frame(minHeight: proxy.size.height)//height
+                    
+                    
+                    Spacer() // KEEPS DATE, TAGS, AND EVENTS AT TOP
                     
                 }
             } //VStack
