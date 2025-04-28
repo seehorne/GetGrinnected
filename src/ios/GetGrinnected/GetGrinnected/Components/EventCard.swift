@@ -112,6 +112,12 @@ struct EventCard: View {
                                 Text("\(event.startTimeString!)")
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
+                            } else if (event.date != nil) { //if the MOST beautiful string is not available, utilize the simple date (April 18th, for example), instead.
+                                //there may be a possibility that this event.date still stores information of the hour (where startimestring stores all that information), and minutes, but it's simply not showing because it's set to nil for some reason. lookinto this further after.
+                                Text("\(event.date!)")
+                                    .font(.caption)
+                                    .foregroundStyle(.textPrimary)
+                                
                             }
                             
                             
