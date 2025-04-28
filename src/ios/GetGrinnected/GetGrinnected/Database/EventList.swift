@@ -100,8 +100,9 @@ struct EventList: View {
             //if empty show that no events are in that time period
             if events.isEmpty{
                 //a more helpful empty message
-                Text("No Events under those parameters..")
+                Text("No Events under those parameters...")
                     .padding()
+                    .foregroundStyle(.textSecondary)
                 
             }
             

@@ -103,10 +103,6 @@ struct EventCard: View {
                                     .font(.caption)
                             }
                             
-                            
-                            /**
-                             MUST CHANGE STARTTIME IN EVENTMODEL TO INCLUDE DATE
-                             */
                             //We want date and time on the same line, so we..
                             if((event.date != nil) && (event.startTime != nil)){ //check if both are not nil, then..
                                 Text("\(event.date!) • \(event.startTime!)") //print out both strings and create a text bullet point inbetween the date and time
@@ -230,9 +226,12 @@ struct EventCard: View {
 
 
 /**
-Remove preview for testing purposes
+Commented preview out because eventcard now uses an EventDTO, which is not the current format of the parsed events.
+An active use of the eventcards is in eventlist!
+ 
+ Keeping this here so that it can be fixed. 
  */
-////the preview is to test specific components
+//the preview is to test specific components
 //struct EventCards_Previews: PreviewProvider {
 //    static var previews: some View {
 //        let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
@@ -244,4 +243,4 @@ Remove preview for testing purposes
 //        }
 //    }
 //}
-//
+

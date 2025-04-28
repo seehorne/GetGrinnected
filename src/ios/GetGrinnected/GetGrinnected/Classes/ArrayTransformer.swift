@@ -10,6 +10,8 @@ import SwiftData
 
 /**
  Required by swiftData in order to transform EventDTO array [] attributes into EventModel array attributes
+ Transformed value: (API to DTO to EventModel),
+ reverssedtransformer:  the (EventModel to DTO to API)
  */
 @objc(ArrayTransformer) //signifier
 class ArrayTransformer: ValueTransformer {
@@ -25,6 +27,7 @@ class ArrayTransformer: ValueTransformer {
     override class func allowsReverseTransformation() -> Bool {
         return true
     }
+    
     
     //transformed value according to our arays
     override func transformedValue(_ value: Any?) -> Any? {

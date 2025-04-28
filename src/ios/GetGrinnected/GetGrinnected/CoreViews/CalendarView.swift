@@ -47,6 +47,7 @@ struct CalendarView: View {
             
         }//geometry reader
         .onAppear{
+            //set initial date of the calendar.
             viewModel.timeSpan.start = viewModel.viewedDate
             viewModel.timeSpan.end = viewModel.viewedDate.startOfNextDay
             

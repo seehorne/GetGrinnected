@@ -18,7 +18,6 @@ import Foundation
  */
 class EventListParentViewModel: ObservableObject {
     @Published var viewedDate = Date.now //contains info about viewed date
-    @Published var lastDate = Date.now.addingTimeInterval(86400 * 13) //and last date
     @Published var selectedTags = EventTags.any //about selected tags
     @Published var timeSpan: (start: Date, end: Date) = (Date(), Date().startOfNextDay)//time span by day
     @Published var lastFetched: Date? //about when last fetched to update
