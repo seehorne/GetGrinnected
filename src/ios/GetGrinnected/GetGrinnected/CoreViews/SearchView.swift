@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
-    @State private var searchText = "-1235"
+    @State private var searchText = ""
     @State private var isLoading = true
     
     

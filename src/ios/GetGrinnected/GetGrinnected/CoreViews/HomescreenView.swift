@@ -18,7 +18,7 @@ struct HomescreenView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Favorites", searchBarOn: false)
+                Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Home", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
                     
