@@ -708,7 +708,7 @@ The goal of this was to figure out how to use persistent states and create a loc
 My expectation was that it was going to completely help me find the right libraries to use, and use the right functions to have persistent states and caching. 
 
 ### How was AI used?
-Initially, the AI (Claude, ChatGPT and Deepseek), were asked to provide a guide to how to store data into a local databse _using SQLite_. Specifying SQLite was a mistake, I will mention that in the next section. I then asked how to download GRBD (for SQLite), and it gave correct instructions.
+Initially, the AI (Claude, ChatGPT and Deepseek), were asked to provide a guide to how to store data into a local database _using SQLite_. Specifying SQLite was a mistake, I will mention that in the next section. I then asked how to download GRBD (for SQLite), and it gave correct instructions.
 After some issues, I again asked it to guide me through usage on SwiftData (the right caching method), and then some later issues that showed up in the usage of SwiftData, which was the ArrayTransformer. 
 
 ### What impact did it have?
@@ -716,4 +716,4 @@ It successfully guided me through using the libraries I specified, but it did NO
 When helping with SwiftData, it was very helpful. Explaining the configurations of the modelcontext (explained in the invisible section of our review) was not so helpful. However, there was a big bug with arraytransformer where EventDTOs were not able to be converted into a EventModel (@Model), and the AI could not figure out why. In fact it took about 10 prompts with Claude and it STILL didn't figure out the issue. Until, I asked ChatGPT (even though I personally don't like ChatGPT...), and it figured out that it was an ArrayTransformer issue. I then went back to claude and mentioned that it was an arraytransformer issue, and it created it successfully and very quickly. 
 
 ### To what extent did this impact match goals and expectations?
-I think I gave AI too much credit, and I realize there must be more specificity to my prompts. Overall, the AIs were SUPER helpful for exposing me to new techniques and functions. HOWEVER, if I did not specify the structure of certain things, there was a lot of things that were left unexplained. However, when I took my time to create a more explanatory prompt (and to not give me answers), the AI model successfully helped me learn as well as get work done more efficiently. 
+I think I gave Claude too much credit, and I realize there must be more specificity to my prompts. Overall, the AIs were SUPER helpful for exposing me to new techniques and functions. HOWEVER, if I did not specify the structure of certain things, there was a lot of things that were left unexplained. However, when I took my time to create a more explanatory prompt (and to not give me answers), the AI model successfully helped me learn as well as get work done more efficiently. 
