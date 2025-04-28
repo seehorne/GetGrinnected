@@ -224,11 +224,20 @@ async function dropExpiredEvents(){
     return result;
 }
 
+async function getEventByID(id) {
+    const [event] = await pool.query(`
+        SELECT * 
+        FROM events
+        WHERE eventid = ?
+         `, [id]);
+
+    return event[0];
+}
+
 async function verifyLogin(username, password){
+    const existingAccount = await getAccount(username);
 
-    const existing_account = await getAccount(username);
-
-    if(!existing_account){
+    if(!existingAccount){
         return false; // No user found case
     }
 
@@ -273,6 +282,27 @@ async function testLogins() {
     console.log(log3);
 }
 
+/**
+ * Modify one field of a user account.
+ * 
+ * @param {string} email  Email of user to modify.
+ * @param {string} field  Field to modify
+ * @param {*} newValue  New value to write to that field
+ */
+async function modifyAccountField(email, field, newValue) {
+    const account = await getAccountByEmail(email);
+    if (!account) {
+        throw new Error('No such account to modify');
+    }
+
+    // ?'s will get filled by: field, newValue, email.
+    // NOTE: we need to avoid escaping the field, but this is okay because it will never be user inputted.
+    const sql = `UPDATE accounts SET ${field} = ? WHERE email = ?`
+
+    const result = await pool.query(sql, [newValue, email]);
+    return result;
+}
+
 if (require.main === module) {
     // File is being used as a script. Run it.
     insertEventsFromScrape();
@@ -289,5 +319,7 @@ if (require.main === module) {
         getEventsBetweenWithTags,
         getEventsWithTags,
         insertEventsFromScrape,
+        modifyAccountField,
+        getEventByID,
     };
 }

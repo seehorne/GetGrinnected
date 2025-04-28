@@ -16,6 +16,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -124,6 +127,13 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                     errEmail = false
                 },
                 label = { Text("Email", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Email,
+                        contentDescription = "Email Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 isError = errEmail,
                 keyboardOptions = KeyboardOptions(
                     // This makes it so the enter key is a done button instead of enter

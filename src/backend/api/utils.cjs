@@ -1,7 +1,8 @@
-const { sendCode } = require('../one_time_code.cjs')
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
+
+const { sendCode } = require('../one_time_code.cjs')
+const database = require('../db_connect.js');
 const SALT_ROUNDS = 10;
 const DBPATH = './src/backend/Database/localOTP.db'
 
@@ -16,7 +17,7 @@ const DBPATH = './src/backend/Database/localOTP.db'
  */
 function validateUsername(username) {
     // Make sure the username is within the right length (8-20 chars)
-    const minLength = 8;
+    const minLength = 1;
     const maxLength = 20;
     if (username.length < minLength || username.length > maxLength) {
         return {
@@ -31,11 +32,10 @@ function validateUsername(username) {
     const letters = username.match(/[A-Za-z]/g) || [];
 
     // If there are too few letters, the username is invalid.
-    const minLetters = 5;
-    if (letters.length < minLetters) {
+    if (letters.length < 1) {
         return {
             result: false,
-            reason: `Username must contain at least ${minLetters} letters.`
+            reason: `Username must contain at least one letter.`
         };
     }
 
@@ -76,7 +76,7 @@ function validateUsername(username) {
     // After all these checks, we can be confident the username is valid
     return {
         result: true,
-        reason: ''
+        reason: 'Valid username.'
     };
 }
 
@@ -91,15 +91,14 @@ async function sendOTP(email) {
         expiration_mins * 60000  // add ms to get `expiration_mins` minutes forward
     );
 
-    // Return the data from the OTP so it can be stored and verified later
+    // Combine the data from the OTP so it can be stored and verified later
     const otpData = {
         'email': email,
         'code': code,
         'expire': expiration_time.toISOString()
     };
 
-    // TODO: HASH AND SAVE THE OTP DATA TO A FILE. THIS FUNCTION MAY AS WELL DO THAT, IT IS ALWAYS A THING.
-    // attempting to do this here
+    // Save the data to the local OTP database before returning
     await otpFileSave(DBPATH, otpData.email, otpData.code, otpData.expire);
     return otpData;
 }
@@ -367,7 +366,94 @@ function parseQueryTags(queryTags) {
     return tags;
 }
 
-if (require.mail !== module) {
+/**
+ * Filter an array by an async predicate.
+ * @param {*} array  Array of items to filter
+ * @param {*} predicate  Predicate to check, should be an async function.
+ */
+async function asyncFilter(array, predicate) {
+    // await evaluation of the predicate on all array items
+    const results = await Promise.all(array.map(predicate));
+
+    // Now that we've evaluated all the predicates, filter the array by that.
+    return array.filter((_v, index) => results[index]);
+}
+
+/**
+ * Given an object, determine whether it is an array containing valid event IDs.
+ * 
+ * @param {*} object  Object to check.
+ * @returns `true` if these conditions are true.
+ * - `object` is an array
+ * - all elements of `object` correspond to a valid event ID
+ */
+async function eventsExist(object) {
+    // Make sure the object is actually an array.
+    const isArray = Array.isArray(object);
+    if (!isArray) {
+        return {
+            'result': false,
+            'message': 'Object is not an array.'
+        };
+    }
+    const array = object;
+
+    // Filter the array by which items do NOT exist.
+    const badIDs = await asyncFilter(array, async (item) => {
+        const event = await database.getEventByID(item);
+        return event === undefined;
+    });
+
+    // If there are any items that do not match with an event, return that.
+    if (badIDs.length !== 0) {
+        return {
+            'result': false,
+            'message': `Items ${JSON.stringify(badIDs)} did not correspond to actual event IDs.`
+        };
+    }
+
+    // Otherwise we're good, and we can return true with no message.
+    return {
+        'result': true,
+        'message': 'Success'
+    };
+}
+
+/**
+ * Handle a request to set an array in user data for a single user, with a parameter
+ * that lets you set which array gets modified.
+ * 
+ * @param {*} array_name  Which array name to set. Should match up with the account table.
+ * @param {*} req  Express request.
+ * @param {*} res  Express response.
+ * @param {*} _next  Next function to call from express, unused.
+ */
+async function userDataSetArray(array_name, req, res, _next) {
+    // Get the email from the request, assuming it was set by the middleware.
+    const email = req.email;
+
+    // The new array will be in the request body under the proper array name.
+    const newArray = req.body[array_name];
+
+    // Make sure the array is all integers, and that all elements are real events
+    const exist = await eventsExist(newArray);
+    if (!exist.result) {
+        res.status(400).json({
+            'error': 'Invalid request',
+            'message': exist.message
+        });
+        return;
+    }
+
+    // Update that user's favorited events in the database. Turn the array into a
+    // string so it will be handled properly by the DB query.
+    await database.modifyAccountField(email, array_name, JSON.stringify(newArray));
+    res.json({
+        'message': `Successfully updated ${array_name}`
+    });
+}
+
+if (require.main !== module) {
     module.exports = {
         validateUsername,
         otpFileCheck,
@@ -375,6 +461,8 @@ if (require.mail !== module) {
         otpFileSave,
         sendOTP,
         parseParamDate,
-        parseQueryTags
+        parseQueryTags,
+        eventsExist,
+        userDataSetArray,
     };
 }

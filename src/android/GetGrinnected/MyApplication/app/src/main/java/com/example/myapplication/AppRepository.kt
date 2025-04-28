@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
-//import com.example.myapplication.AppRepository.toUser
 
 /**
  * This is our App Repository it is a singleton object so that we can access tables seamlessly through
@@ -62,9 +61,20 @@ object AppRepository {
                 // We store the set of favorite events (could be empty)
                 val currentFavorites = _currentAccount.value?.favorited_events?.toSet() ?: emptySet()
                 // We update our list of events with the set of favorite events ticked to favorite
+                // and now we adjust the time zones of dates as we were not in the write time zone with our
+                // ISO info used the help functions Ethan made in the Main Activity
                 val events = response.body()?.map {
-                    it.copy(is_favorited = currentFavorites.contains(it.eventid))
+                    // Sets the Start time to our local timezone
+                    val localStartTime = it.event_start_time.toDate().formatTo("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                    // Sets the end time to our local timezone
+                    val localEndTime = it.event_end_time.toDate().formatTo("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                    it.copy(
+                        event_start_time = localStartTime,
+                        event_end_time = localEndTime,
+                        is_favorited = currentFavorites.contains(it.eventid)
+                    )
                 }?.map { it.toEventEntity() }
+
 
                 // If our events list isn't empty we upsert them to our local repo
                 if (events != null) dao.UpsertAll(events)

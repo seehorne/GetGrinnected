@@ -55,6 +55,10 @@ import com.example.myapplication.DataStoreSettings
 import kotlinx.coroutines.launch
 import androidx.compose.material3.ButtonDefaults
 import com.example.myapplication.fixTime
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.outlined.FilterAlt
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -119,9 +123,7 @@ fun HomeScreen(tags: List<Check>) {
     // Gets events from our repo
     val eventEntities by AppRepository.events
     // Converts them to event data type
-    val event = eventEntities.map { it.toEvent() }
-    // Sorts them by time
-    val events = fixTime(eventEntities.map { it.toEvent() }).sortedBy { it.event_start_time }
+    val events = eventEntities.map { it.toEvent() }
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
 
@@ -191,8 +193,16 @@ fun HomeScreen(tags: List<Check>) {
                         containerColor = colorScheme.secondary,
                         contentColor = colorScheme.onPrimary),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 20.dp)) {
-                    // displays selected day on the button
-                    when (selectedView) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.DateRange,
+                            contentDescription = "Calendar Icon",
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(Modifier.size(8.dp))
+
+                        // displays selected day on the button
+                        when (selectedView) {
 
                         0 -> { Text(today.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + today.format(formatter3), style = typography.labelLarge) }
                         1 -> { Text(tomorrow.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + tomorrow.format(formatter3), style = typography.labelLarge) }
@@ -202,6 +212,7 @@ fun HomeScreen(tags: List<Check>) {
                         5 -> { Text(fivedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month+ " " + fivedays.format(formatter3), style = typography.labelLarge) }
                         else -> { Text(sixdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month+ " " + sixdays.format(formatter3), style = typography.labelLarge) }
 
+                        }
                     }
                 }
                 // creates dropdown menu when button is clicked
@@ -240,7 +251,7 @@ fun HomeScreen(tags: List<Check>) {
                 // I don't know why this is necessary but was needed to properly space tag menu
                 Row(
                     modifier = Modifier
-                        .padding(25.dp),
+                        .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End,
                 ) {
@@ -249,8 +260,17 @@ fun HomeScreen(tags: List<Check>) {
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorScheme.secondary,
                             contentColor = colorScheme.onPrimary),
-                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)){
-                        Text("Tags", style = typography.labelLarge, maxLines = 1)
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Outlined.FilterAlt,
+                                contentDescription = "Filter Icon",
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(Modifier.size(8.dp))
+
+                            Text("Tags", style = typography.labelLarge, maxLines = 1)
+                        }
                     }
                     DropdownMenu(
                         expanded = expanded2.value,
@@ -370,74 +390,74 @@ fun HomeScreen(tags: List<Check>) {
                     else {
                         for (t in chosenTags.indices) {
                             if (selectedView == 0) {
-                                if (event[cardnum].event_start_time.substring(0, 10) == today.format(
+                                if (events[cardnum].event_start_time.substring(0, 10) == today.format(
                                         formatter
-                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
                                 ) {
-                                    EventCard(event = event[cardnum])
+                                    EventCard(event = events[cardnum])
                                     // creates space between cards
                                     Spacer(modifier = Modifier.height(16.dp))
                                     break
                                 }
                             } else if (selectedView == 1) {
-                                if (event[cardnum].event_start_time.substring(0, 10) == tomorrow.format(
+                                if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(
                                         formatter
-                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
                                 ) {
-                                    EventCard(event = event[cardnum])
+                                    EventCard(event = events[cardnum])
                                     // creates space between cards
                                     Spacer(modifier = Modifier.height(16.dp))
                                     break
                                 }
                             } else if (selectedView == 2) {
-                                if (event[cardnum].event_start_time.substring(0, 10) == twodays.format(
+                                if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(
                                         formatter
-                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
                                 ) {
-                                    EventCard(event = event[cardnum])
+                                    EventCard(event = events[cardnum])
                                     // creates space between cards
                                     Spacer(modifier = Modifier.height(16.dp))
                                     break
                                 }
                             } else if (selectedView == 3) {
-                                if (event[cardnum].event_start_time.substring(
+                                if (events[cardnum].event_start_time.substring(
                                         0,
                                         10
                                     ) == threedays.format(formatter)
-                                        .toString() && event[cardnum].tags.contains(chosenTags[t])
+                                        .toString() && events[cardnum].tags.contains(chosenTags[t])
                                 ) {
-                                    EventCard(event = event[cardnum])
+                                    EventCard(event = events[cardnum])
                                     // creates space between cards
                                     Spacer(modifier = Modifier.height(16.dp))
                                     break
                                 }
                             } else if (selectedView == 4) {
-                                if (event[cardnum].event_start_time.substring(0, 10) == fourdays.format(
+                                if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(
                                         formatter
-                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
                                 ) {
-                                    EventCard(event = event[cardnum])
+                                    EventCard(event = events[cardnum])
                                     // creates space between cards
                                     Spacer(modifier = Modifier.height(16.dp))
                                     break
 
                                 }
                             } else if (selectedView == 5) {
-                                if (event[cardnum].event_start_time.substring(0, 10) == fivedays.format(
+                                if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(
                                         formatter
-                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
                                 ) {
-                                    EventCard(event = event[cardnum])
+                                    EventCard(event = events[cardnum])
                                     // creates space between cards
                                     Spacer(modifier = Modifier.height(16.dp))
                                     break
                                 }
                             } else if (selectedView == 6) {
-                                if (event[cardnum].event_start_time.substring(0, 10) == sixdays.format(
+                                if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(
                                         formatter
-                                    ).toString() && event[cardnum].tags.contains(chosenTags[t])
+                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
                                 ) {
-                                    EventCard(event = event[cardnum])
+                                    EventCard(event = events[cardnum])
                                     // creates space between cards
                                     Spacer(modifier = Modifier.height(16.dp))
                                     break
