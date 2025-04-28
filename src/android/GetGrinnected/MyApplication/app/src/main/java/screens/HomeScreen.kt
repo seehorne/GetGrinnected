@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.DataStoreSettings
 import kotlinx.coroutines.launch
 import androidx.compose.material3.ButtonDefaults
+import com.example.myapplication.fixTime
 
 /**
  * Anthony Schwindt, Ethan Hughes
@@ -120,7 +121,7 @@ fun HomeScreen(tags: List<Check>) {
     // Converts them to event data type
     val event = eventEntities.map { it.toEvent() }
     // Sorts them by time
-    val events = event.sortedBy { it.event_time }
+    val events = fixTime(eventEntities.map { it.toEvent() }).sortedBy { it.event_start_time }
     // makes the page scrollable
     LaunchedEffect(Unit) { state.animateScrollTo(100) }
 

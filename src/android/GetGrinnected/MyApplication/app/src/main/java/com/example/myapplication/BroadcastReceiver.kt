@@ -12,23 +12,18 @@ const val channelID = "channel1"
 const val titleExtra = "titleExtra"
 const val messageExtra = "messageExtra"
 
-// BroadcastReceiver for handling notifications
-class Notification : BroadcastReceiver() {
 
-    // Method called when the broadcast is received
+
+class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Build the notification using NotificationCompat.Builder
-        val notification = NotificationCompat.Builder(context, channelID)
-            .setSmallIcon(R.mipmap.ic_launcher_foreground)
-            .setContentTitle(intent.getStringExtra(titleExtra)) // Set title from intent
-            .setContentText(intent.getStringExtra(messageExtra)) // Set content text from intent
+        val notification = NotificationCompat.Builder(context, "your_channel_id")
+            .setContentTitle("test")
+            .setContentText("This notification was scheduled!")
+            .setSmallIcon(R.drawable.getgrinnected_logo)
             .build()
 
-        // Get the NotificationManager service
-        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        // Show the notification using the manager
-        manager.notify(notificationID, notification)
+        notificationManager.notify(1, notification)
     }
 }

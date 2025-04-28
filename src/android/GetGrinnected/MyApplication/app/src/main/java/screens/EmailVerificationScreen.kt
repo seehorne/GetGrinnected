@@ -134,7 +134,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
             Button(onClick = {
                 coroutineScope.launch {
                     // Checks that the code input is 6 characters long
-                    if (codeInput.length == 6) {
+                    if (codeInput.length < 6) {
                         errMsg = "Please enter 6-digit code"
                         errCode = true
                         return@launch // Escapes launch due to missing username
