@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import android.content.Context
+import screens.SearchScreen
 
 
 /**
@@ -107,7 +108,7 @@ fun MainPage(
             // Set of routes to for our navbar to follow
             composable("Home") { HomeScreen(tags = tags) }
 
-            composable("Calendar") { CalendarScreen(tags = tags) }
+            composable("Search") { SearchScreen() }
 
 
             composable("Favorites") { FavoritesScreen() }
