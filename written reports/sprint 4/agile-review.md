@@ -2,6 +2,10 @@
 
 **Period:** 4/14 - 4/27
 
+It's not listed as something that is required, but we're predicting you might want a link that shows the diff between this and last sprint. Like with previous sprints, if you click the link before the `sprint4` tag is pushed it will show an empty diff.
+
+<https://github.com/seehorne/GetGrinnected/compare/sprint3..sprint4>
+
 # Kotlin Frontend Functionality
 
 ## Installing the app
