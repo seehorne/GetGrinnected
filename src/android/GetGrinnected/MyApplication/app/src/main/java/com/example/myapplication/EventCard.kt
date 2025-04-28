@@ -1,8 +1,9 @@
 package com.example.myapplication
 
+import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,20 +30,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import android.Manifest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat.getSystemService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Date
 
@@ -69,14 +65,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     val typography = MaterialTheme.typography
     val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
     val notificationHandler = NotificationHandler(context)
-    val differenceInMillis = event.event_start_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let {
-        LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let { it1 ->
-            getDifferenceInMillis(
-                it1,
-                it
-            )
-        }
-    }
+
     LaunchedEffect(key1 = true) {
         if (!postNotificationPermission.status.isGranted) {
             postNotificationPermission.launchPermissionRequest()
@@ -110,7 +99,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             ) {
                 // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f)) {
-                    event.event_name?.let {
+                    event.event_name.let {
                         Text(
                             text = it,
                             style = typography.titleLarge,

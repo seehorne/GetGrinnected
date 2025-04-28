@@ -23,6 +23,7 @@ import kotlinx.serialization.Serializable
  * @property is_draft: Integer used as a 0 or 1 for whether an event is a draft or not
  * @property is_favorited: Boolean used to discern whether the current user has favorited this event
  */
+@Suppress("PLUGIN_IS_NOT_ENABLED")
 @Serializable
 data class Event(
     val event_all_day: Int,

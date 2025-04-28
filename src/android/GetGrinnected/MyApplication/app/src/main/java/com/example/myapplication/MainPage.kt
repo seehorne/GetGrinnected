@@ -3,16 +3,12 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import screens.CalendarScreen
-import screens.FavoritesScreen
-import screens.HomeScreen
-import screens.SettingsScreen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -26,9 +22,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import android.content.Context
-import androidx.compose.material.icons.filled.Search
+import screens.FavoritesScreen
+import screens.HomeScreen
 import screens.SearchScreen
+import screens.SettingsScreen
 
 
 /**

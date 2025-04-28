@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -50,6 +52,7 @@ fun SearchScreen(){
     val events = eventEntities.map { it.toEvent() }
     val searchedEvent = mutableListOf<Event>()
     // Filter items based on query
+
     val filteredItems by remember {
         derivedStateOf {
             if (query.isEmpty()) {
@@ -63,6 +66,8 @@ fun SearchScreen(){
             }
         }
     }
+
+
     Column(modifier = Modifier.fillMaxSize()) {
         CustomizableSearchBar(
             query = query,
