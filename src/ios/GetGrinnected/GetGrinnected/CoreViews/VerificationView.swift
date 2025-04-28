@@ -70,7 +70,7 @@ struct VerificationView: View {
                     //once successfully logged in, jump to main viewport
                 } label: {
                     HStack {
-                        Text("start getting grinnected")
+                        Text("Start Getting Grinnected!")
                             .fontWeight(.semibold)
                         Image (systemName: "arrow.right")
                     }
