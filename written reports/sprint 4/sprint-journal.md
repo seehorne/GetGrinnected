@@ -531,7 +531,7 @@ However, there are still things that have changed to date. Some of these have be
 - Based on user feedback, we have decided to lessen the importance of the calendar and focus on the homepage and search features.
 - We are taking away focus from org cards and listings, since they do not fit as well in this version of the app and we are not confident in our ability to deliver them well-made and on-time.
 
-As a whole, the vast majority of these goals apart from those outlined has been completed. The major things that remain are:
+As a whole, the vast majority of these goals apart from those outlined has been completed. The things that remain are:
 
 * Accessibility settings
    * We have the one color scheme (or two, if you consider dark and light mode), but are taking efforts to ensure that one scheme is colorblind accessible, since there are fewer options. Having one main scheme is important to visual identity which has motivated this choice
@@ -544,6 +544,7 @@ As a whole, the vast majority of these goals apart from those outlined has been 
 * Searching
    * Well underway on both frontends but not yet robust
       * TODO: what are the action steps here
+* Frontends syncing their user data with the database
 
 While these have room for growth and for re-evaluation of place in the MVP, the rest of listed items are complete, leaving us well, well on our way to a minimum usable and deployable system
 
