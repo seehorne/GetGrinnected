@@ -158,6 +158,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                                 }
                                 if (isNotification.value){
                                     notificationHandler.showSimpleNotificationDelay(event)
+                                    notificationHandler.scheduleNotification(event)
                                 }
                             },
                     )

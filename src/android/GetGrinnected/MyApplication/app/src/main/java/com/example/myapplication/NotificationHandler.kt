@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -89,6 +90,7 @@ class NotificationHandler(private val context: Context) {
     }
 
     //@SuppressLint("ScheduleExactAlarm")
+    @RequiresApi(Build.VERSION_CODES.O)
     fun scheduleNotification(event: Event) {
         val intent = Intent(context, NotificationReceiver::class.java).apply {
             putExtra("title", event.event_name)
@@ -102,8 +104,15 @@ class NotificationHandler(private val context: Context) {
         )
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val delayInMillis = 60 * 1000L // <- fix this (1 minute)
-        val triggerAtMillis = System.currentTimeMillis() + delayInMillis
+        val differenceInMillis = event.event_start_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let {
+            LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let { it1 ->
+                getDifferenceInMillis(
+                    it1,
+                    it
+                )
+            }
+        }
+        val triggerAtMillis = System.currentTimeMillis() + differenceInMillis!!
 /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
