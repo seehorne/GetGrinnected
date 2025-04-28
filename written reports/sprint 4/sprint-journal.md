@@ -543,7 +543,15 @@ As a whole, the vast majority of these goals apart from those outlined has been 
    * This would require live updates of who has favorited what, which could be managed on a database level through API calls.
 * Searching
    * Well underway on both frontends but not yet robust
-      * TODO: what are the action steps here
+      * The ability to quickly and robustly sort the events based on user input
+      * Can search by any text in an event item
+       * Search By event title
+       * Search By event description
+       * Search By orgs associated with events
+       * Search By tags associated with event
+       * Search By location associated with event
+       * Search by favorite event
+       * Can Mix and match any of those search conditionals to find intended events by user in our database
 * Frontends syncing their user data with the database
 
 While these have room for growth and for re-evaluation of place in the MVP, the rest of listed items are complete, leaving us well, well on our way to a minimum usable and deployable system
