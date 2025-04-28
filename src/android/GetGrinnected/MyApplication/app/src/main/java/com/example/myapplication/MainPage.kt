@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import screens.CalendarScreen
@@ -26,6 +27,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import android.content.Context
+import androidx.compose.material.icons.filled.Search
 import screens.SearchScreen
 
 
@@ -42,6 +44,7 @@ import screens.SearchScreen
  *  @param navController this is the nav Controller to our login flow process to be used in sign out functionality
  */
 
+@SuppressLint("NewApi")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainPage(
@@ -58,7 +61,7 @@ fun MainPage(
     // Creates a list of navItems including a name and an icon associated to display on the navbar
     val navItemList = listOf(
         NavItem("Home", Icons.Default.Home),
-        NavItem("Search", Icons.Default.DateRange),
+        NavItem("Search", Icons.Default.Search),
         NavItem("Favorites", Icons.Default.Favorite),
         NavItem("Settings", Icons.Default.Settings),
     )
