@@ -230,8 +230,7 @@ struct EventList: View {
                 if processedEventIds.contains(dtoID){
                     continue
                 }//If contains, continue, if not..
-                processedEventIds
-                    .insert(dtoID)//add it to the list of processed IDs
+                processedEventIds.insert(dtoID)//add it to the list of processed IDs
                     
                 // Check if this event already exists in the database
                 let existingEvent = events.first(where: { $0.id == dtoID })
@@ -241,6 +240,10 @@ struct EventList: View {
                     existing.name = dto.event_name ?? existing.name
                     existing.imageURL = dto.event_image ?? existing.imageURL
                     existing.location = dto.event_location ?? existing.location
+                    
+                    //handle saving data, so no overwriting
+                    print("favorited \(existing.name)\(existing.favorited)")
+                    existing.favorited = existing.favorited
                         
                     //handle arrays carefully
                     if let newOrgs = dto.organizations{
