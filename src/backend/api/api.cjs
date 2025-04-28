@@ -64,6 +64,21 @@ function run() {
       });
   }
 
+  /*****************************************************************************
+   * SETTING UP ROUTES.                                                        *
+   *****************************************************************************
+   *
+   * Each route has 4 parts. They look like this.
+   *
+   * `app.put('a', [b, c], d);`
+   * - put means that this is a PUT request, rather than a GET or something else
+   * - 'a' is the URI, it's the end of the URL to access that route--what frontends connect to.
+   * - b and c are middlewares. they are functions that run on the request to
+   *   validate it before going to the main request. they can reject the request
+   *   early if it is invalid.
+   * - d is the request function, it runs last and handles the main request.
+   */
+
   // Default route just shows the API is online.
   app.get('/', routeShowOnline);
 
