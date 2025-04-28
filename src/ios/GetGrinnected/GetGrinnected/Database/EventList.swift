@@ -44,7 +44,7 @@ struct EventList: View {
         
         //apply sort order, default if no title or organization provided
         let finalSortOrder = sortOrder.isEmpty ? [SortDescriptor(
-            \EventModel.name //sort by name
+            \EventModel.startTime //sort by name
         )] : sortOrder
         
         //set timespans to explain what view is showing (debugging purposes)
