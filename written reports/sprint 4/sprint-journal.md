@@ -553,6 +553,8 @@ As a whole, the vast majority of these goals apart from those outlined has been 
        * Search by favorite event
        * Can Mix and match any of those search conditionals to find intended events by user in our database
 * Frontends syncing their user data with the database
+* Notifications have to send
+* Logins on Swift have to be persistent across launches
 
 While these have room for growth and for re-evaluation of place in the MVP, the rest of listed items are complete, leaving us well, well on our way to a minimum usable and deployable system
 
