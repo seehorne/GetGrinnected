@@ -31,7 +31,7 @@ data class Event(
     val event_end_time: String,
     val event_image: String?,
     val event_location: String?,
-    val event_name: String?,
+    val event_name: String,
     val event_private: Int,
     val event_start_time: String,
     val event_time: String?,
