@@ -256,6 +256,8 @@ Both Frontends have worked this sprint to implement a caching system for informa
 
 ## API
 
+APIs are naturally not very visible from a user's perspective, and the API for our app has come a long way during this sprint. At the last demo most of the mechanics happening on the frontend were just faked (logging in, choosing favorites, etc) but now we are completely connected to the API for logging in on both frontends and the correct routes exist to allow for setting user data like favorite events and usernames. Because the API functionality has taken a lot longer to develop than we anticipated, the frontends do not use those routes. We talk about this as part of our MVP that must be completed in sprint 5, over in the sprint journal document.
+
 # Git Diff Link
 
 This diff shows the changes we made to our codebase over the course of this sprint: <4>
