@@ -43,6 +43,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.getSystemService
+import java.time.LocalDateTime
+import java.util.Date
 
 /**
  * A composable function that creates the general look of an event card.
@@ -67,7 +69,14 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     val typography = MaterialTheme.typography
     val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
     val notificationHandler = NotificationHandler(context)
-
+    val differenceInMillis = event.event_start_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let {
+        LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let { it1 ->
+            getDifferenceInMillis(
+                it1,
+                it
+            )
+        }
+    }
     LaunchedEffect(key1 = true) {
         if (!postNotificationPermission.status.isGranted) {
             postNotificationPermission.launchPermissionRequest()
@@ -157,8 +166,19 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                                     AppRepository.toggleNotification(event.eventid, isNotification.value)
                                 }
                                 if (isNotification.value){
+                                    if (getDifferenceInMillis(LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                                            event.event_end_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                            ) < 0){
+                                        notificationHandler.showSimpleNotificationDone(event)
+                                    }
+                                    else if (getDifferenceInMillis(LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                                            event.event_start_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        ) < 0){
+                                        notificationHandler.showSimpleNotificationInProgress(event)
+                                    }
+                                    else {
                                     notificationHandler.showSimpleNotificationDelay(event)
-                                    notificationHandler.scheduleNotification(event)
+                                    notificationHandler.scheduleNotification(event)}
                                 }
                             },
                     )
@@ -181,6 +201,10 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+private fun getDifferenceInMillis(date1: Date, date2: Date): Long {
+    return (date2.time - date1.time)
 }
 
 

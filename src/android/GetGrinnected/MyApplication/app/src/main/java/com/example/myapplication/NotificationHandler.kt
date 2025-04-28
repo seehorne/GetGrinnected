@@ -24,10 +24,23 @@ class NotificationHandler(private val context: Context) {
     private val notificationChannelID = "notification_channel_id"
 
     // SIMPLE NOTIFICATION
-    fun showSimpleNotification(event: Event){
+    fun showSimpleNotificationInProgress(event: Event){
         val notification = NotificationCompat.Builder(context, notificationChannelID)
             .setContentTitle(event.event_name)
-            .setContentText(event.event_time)
+            .setContentText("This event is in progress right now")
+            .setSmallIcon(R.drawable.getgrinnected_logo)
+            .setPriority(NotificationManager.IMPORTANCE_HIGH)
+            .setAutoCancel(false)
+            .build()  // finalizes the creation
+
+        notificationManager.notify(Random.nextInt(), notification)
+    }
+
+    // SIMPLE NOTIFICATION
+    fun showSimpleNotificationDone(event: Event){
+        val notification = NotificationCompat.Builder(context, notificationChannelID)
+            .setContentTitle(event.event_name)
+            .setContentText("Sorry this event is over already")
             .setSmallIcon(R.drawable.getgrinnected_logo)
             .setPriority(NotificationManager.IMPORTANCE_HIGH)
             .setAutoCancel(false)
