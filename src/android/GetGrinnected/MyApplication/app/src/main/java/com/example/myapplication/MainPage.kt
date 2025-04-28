@@ -58,7 +58,7 @@ fun MainPage(
     // Creates a list of navItems including a name and an icon associated to display on the navbar
     val navItemList = listOf(
         NavItem("Home", Icons.Default.Home),
-        NavItem("Calendar", Icons.Default.DateRange),
+        NavItem("Search", Icons.Default.DateRange),
         NavItem("Favorites", Icons.Default.Favorite),
         NavItem("Settings", Icons.Default.Settings),
     )

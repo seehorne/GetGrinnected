@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchScreen(){
-
+    CustomizableSearchBar("DAG")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
