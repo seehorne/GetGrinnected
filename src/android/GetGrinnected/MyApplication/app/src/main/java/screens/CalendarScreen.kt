@@ -1,6 +1,7 @@
 package screens
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -60,6 +61,7 @@ import java.time.format.DateTimeFormatter
  *
  * @param modifier Modifier to be applied to the screen layout.
  */
+@SuppressLint("NewApi")
 @OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

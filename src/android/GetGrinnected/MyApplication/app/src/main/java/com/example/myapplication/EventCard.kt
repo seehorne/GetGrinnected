@@ -42,6 +42,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.getSystemService
 
 /**
  * A composable function that creates the general look of an event card.
@@ -151,10 +152,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                             .size(40.dp)
                             .clickable {
                                 isNotification.value = !isNotification.value
-                                // This tells our database to update the events favorited status
-                                notificationHandler.showSimpleNotification(event)
+                                // This tells our database to update the events notification status
                                 CoroutineScope(Dispatchers.IO).launch {
                                     AppRepository.toggleNotification(event.eventid, isNotification.value)
+                                }
+                                if (isNotification.value){
+                                    notificationHandler.showSimpleNotificationDelay(event)
+                                    notificationHandler.scheduleNotification(event)
                                 }
                             },
                     )
