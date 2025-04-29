@@ -149,15 +149,15 @@ describe('Test API', () => {
         });
 
         describe('Error handling', () => {
-            // Define sets of routes to test, by which request they use
+            // For GET we only need to know which routes to try.
             const getRoutes = [
+                '/user/data',
                 '/user/events/favorited',
                 '/user/events/notified',
                 '/user/username',
             ];
-            const postRoutes = [
-                '/user/token-verify'
-            ];
+            // For PUT we must provide appropriate body parameters so we don't
+            // get caught by check for body parameters unless we want to. 
             const putRoutes = [
                 { 'route': '/user/events/favorited', 'body': 'favorited_events' },
                 { 'route': '/user/events/notified', 'body': 'notified_events' },
@@ -174,6 +174,23 @@ describe('Test API', () => {
                             // Headers
                             .set('Authorization', `Bearer ${access_token}`)
                             .set('Content-Type', 'application/json')
+
+                        assert.strictEqual(res.statusCode, 400);
+                    });
+
+                    it(`PUT ${item.route} should 400 when body is included without correct key`, async () => {
+                        // Create the request body, but omit the correct key.
+                        var jsonBody = {};
+
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .put(item.route)
+                            // Headers
+                            .set('Authorization', `Bearer ${access_token}`)
+                            .set('Content-Type', 'application/json')
+                            // Body
+                            .send(jsonBody);
 
                         assert.strictEqual(res.statusCode, 400);
                     });
@@ -210,7 +227,7 @@ describe('Test API', () => {
                             // Body
                             .send(jsonBody);
 
-                            assert.strictEqual(res.statusCode, 403);
+                        assert.strictEqual(res.statusCode, 403);
                     });
 
                     it(`PUT ${item.route} should 404 when the user does not exist`, async () => {
@@ -258,7 +275,7 @@ describe('Test API', () => {
                             .set('Authorization', `Bearer invalid_token`)
                             .set('Content-Type', 'application/json');
 
-                            assert.strictEqual(res.statusCode, 403);
+                        assert.strictEqual(res.statusCode, 403);
                     });
 
                     it(`GET ${route} should 404 when the user does not exist`, async () => {
@@ -297,7 +314,9 @@ describe('Test API', () => {
                 access = object.access_token;
             });
 
-            // This route's errors are checked separately because they use the refresh token, not the auth token.
+            // NOTE: This route's errors are checked separately from the
+            // paramaterized tests because they use the refresh token,
+            // not the auth token.
             it('should 401 when the token is not included', async () => {
                 const res = await req
                     .post('/user/token-refresh')
@@ -326,6 +345,9 @@ describe('Test API', () => {
 
         describe('GET /user/data', () => {
             // TODO: WRITE THE TESTS
+            it('should return data for the current user', () => {
+                const res = null;
+            });
         });
 
         describe('GET /user/events/favorited', () => {
