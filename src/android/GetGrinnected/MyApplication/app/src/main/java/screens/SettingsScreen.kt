@@ -2,6 +2,7 @@ package screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -103,15 +103,15 @@ fun SettingsScreen(modifier: Modifier = Modifier,
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(top = 80.dp)
+                .padding(top = 80.dp, start = 16.dp)
                 .verticalScroll(scrollState),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(modifier = modifier.height(8.dp))
 
             Text(
-                text = "Username",
+                text = "Profile",
                 style = typography.titleLarge,
                 color = colorScheme.onBackground
             )
@@ -120,8 +120,17 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             // Setup row to have the username and editing button inline with each other
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier.fillMaxWidth()
             ) {
+                Text(
+                    text = "Username:",
+                    style = typography.bodyLarge,
+                    color = colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
                 Text(
                     text = account.account_name,
                     style = typography.bodyLarge,
@@ -226,26 +235,74 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Spacer(modifier = modifier.height(8.dp))
 
             // Setup a row to have the wording for the dark mode switch inline with the switch
+            Text(
+                text = "Appearance",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
+
+            Spacer(modifier = modifier.height(4.dp))
+
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier.fillMaxWidth()
             ) {
                 Text(
                     text = if (darkTheme) "Switch to light mode" else "Switch to dark mode",
                     style = typography.bodyLarge,
-                    color = colorScheme.onBackground
+                    color = colorScheme.onBackground,
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.weight(1f))
 
                 // Switch to toggle dark or light mode
                 Switch(
                     checked = darkTheme,
+                    modifier = Modifier.padding(end = 8.dp),
                     onCheckedChange = {
                         onToggleTheme(it)
                     })
             }
 
             Spacer(modifier = modifier.height(8.dp))
+
+            Text(
+                text = "Accessibility",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
+
+            Spacer(modifier = modifier.height(4.dp))
+
+            Row(modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically){
+                Text(
+                    text = "Font Size",
+                    style = typography.bodyLarge,
+                    color = colorScheme.onBackground
+                )
+            }
+
+            Spacer(modifier = modifier.height(4.dp))
+
+            Row(modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically){
+                Text(
+                    text = "Screen Reader",
+                    style = typography.bodyLarge,
+                    color = colorScheme.onBackground
+                )
+            }
+
+            Spacer(modifier = modifier.height(8.dp))
+
+            Text(
+                text = "About",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
+
+            Spacer(modifier = modifier.height(4.dp))
 
             // This button handles our sign out process
             Button(
