@@ -27,6 +27,10 @@ jobs:
     - name: Start MySQL
       run: sudo service mysql start
 
+    - name: Import CI database into runner MySQL
+      # the password is in plaintext and that's fine, see below
+      run: mysql -u root -proot < ${GITHUB_WORKSPACE}/src/backend/Database/GetGrinnected_CI_Data.sql
+
     - name: Test with npm
       uses: actions/setup-node@v4
       with:
@@ -40,12 +44,12 @@ jobs:
       run: npm test
 
       # set the env so it runs correctly, this replaces a .env file.
-      # all of these secrets are in plaintext, but they're just for this purpose
-      # so it should be fine.
+      # all of these secrets are in plaintext, but they're just for CI and 
+      # never reused elsewhere so it's not a concern.
       env:
         # jwt generation and verification
-        REFRESH_TOKEN_SECRET: "test_test_test_test_test_test_te"
-        ACCESS_TOKEN_SECRET: "ci_ci_ci_ci_ci_ci_ci_ci_ci_ci_ci"
+        REFRESH_TOKEN_SECRET: "fe5e20424416460f194fa331b32c11d8"
+        ACCESS_TOKEN_SECRET: "8a771256633a8458a464733ea2113a39"
         # connection to the database
         MYSQL_HOST: localhost
         MYSQL_USER: root
