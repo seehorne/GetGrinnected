@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
 const DBPATH = './src/backend/Database/localOTP.db'
@@ -123,31 +122,6 @@ async function routeSignUpNewUser(req, res, _next) {
 }
 
 /**
- * Generate new user tokens for a specific email address.
- * 
- * @param {string} email  Email to generate the tokens for.
- * @returns  An object with two keys:
- * - refresh for the user's refresh token
- * - access for the user's access token
- */
-function generateUserTokens(email) {
-  // Use JSON Web Tokens to create two tokens for the user,
-  // a long-lived refresh token and a short-lived access token.
-  const refreshToken = jwt.sign(
-    { email },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '30d' }
-  );
-  const accessToken = jwt.sign(
-    { email },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' }
-  );
-
-  return { 'refresh': refreshToken, 'access': accessToken };
-}
-
-/**
  * Verify an OTP code.
  * 
  * @param {*} req  Express request. Body should contain email logging into,
@@ -173,7 +147,7 @@ async function routeVerifyOTP(req, res, _next) {
     return;
   } else {
     // Generate tokens for that user
-    const tokens = generateUserTokens(email);
+    const tokens = util.generateUserTokens(email);
 
     // Send those tokens back to the user in a successful response.
     res.json({
@@ -320,7 +294,7 @@ async function routeRefreshTokens(req, res, _next) {
   const email = req.email;
 
   // Generate and send the new tokens
-  const tokens = generateUserTokens(email);
+  const tokens = util.generateUserTokens(email);
   res.json({
     'message': 'Successfully refreshed',
     'refresh_token': tokens.refresh,
