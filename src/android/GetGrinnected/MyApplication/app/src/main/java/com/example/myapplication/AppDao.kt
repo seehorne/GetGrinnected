@@ -9,13 +9,15 @@ import androidx.room.Dao
 @Dao
 interface AppDao {
 
-    // Event Operations
+    /* EVENTS OPERATIONS */
 
     // Gets you all events in a flow type so data is reactive and sorted by date and time
     @Query("SELECT * FROM events ORDER BY event_date ASC, event_start_time ASC")
     fun getAllEvents(): Flow<List<EventEntity>>
 
-
+    // Deletes events that have expired by a day and returns the number of deleted events
+    @Query("DELETE FROM events WHERE event_date < :currentDate")
+    suspend fun deleteExpiredEvents(currentDate: String): Int
 
     // Gets events by a given id should probably switch this to a flow
     @Query("SELECT * FROM events WHERE eventid = :id")
@@ -45,11 +47,16 @@ interface AppDao {
     @Query("UPDATE events SET is_favorited = :isFavorited WHERE eventid = :eventId")
     suspend fun updateFavoriteStatus(eventId: Int, isFavorited: Boolean)
 
-    // Updates whether an event is favorited or not basically flips the symbol
+    // Updates whether an event is notified or not basically flips the symbol
     @Query("UPDATE events SET is_notification = :isNotification WHERE eventid = :eventId")
     suspend fun updateNotificationStatus(eventId: Int, isNotification: Boolean)
 
-    // Account Operations
+    // Gets the list of eventids in the database
+    @Query("SELECT eventid FROM events")
+    suspend fun getAllEventIds(): List<Int>
+
+    /* ACCOUNT OPERATIONS */
+
     // Upserts an account into the account table
     @Upsert
     suspend fun upsertAccount(account: AccountEntity)

@@ -9,13 +9,14 @@ import Foundation
 import SwiftUI
 
 struct LoginView: View {
+    //for maintaining login states
     @Binding var isLoggedIn: Bool
     
+    @StateObject private var userProfile = UserProfile()
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage = ""
     @State private var success = Bool()
-    @StateObject private var userProfile = UserProfile()
     
     var body: some View {
         

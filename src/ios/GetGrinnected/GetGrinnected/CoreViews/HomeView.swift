@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 //Calendar view
-struct CalendarView: View {
+struct HomeView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
     @State private var searchText = ""
@@ -24,7 +24,6 @@ struct CalendarView: View {
             NavigationStack{
                 VStack(){
                     Spacer()
-                    
                     //vertical scroll view to see more events
                     ScrollView(.vertical, showsIndicators: false){
                         //vstack to have some spacing between header and main compoments
@@ -38,7 +37,11 @@ struct CalendarView: View {
                         }
                         .padding(.top)//padding on top
                     }
-                    .searchable(text: $searchText, placement: .automatic)
+                    .searchable(text: $searchText, prompt: "Search...")
+                   .refreshable {
+                       //force refresh through the button!
+                       viewModel.forceRefresh() //only changes last change to nil
+                   }
                 }//scroll view
                 .edgesIgnoringSafeArea(.top)
             }
@@ -70,5 +73,5 @@ struct CalendarView: View {
 
 
 #Preview() {
-    CalendarView()
+    HomeView()
 }
