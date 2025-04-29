@@ -205,7 +205,6 @@ class MainActivityKtTest {
         var darkTheme = false
         composeTestRule.setContent {
             SettingsScreen(
-                orgs = emptyList(),
                 account = User(1, "user", "email@grinnell.edu", "", listOf(), listOf(), listOf(), listOf(), "", 0),
                 darkTheme = darkTheme,
                 onToggleTheme = { darkTheme = it },

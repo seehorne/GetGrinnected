@@ -185,15 +185,12 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                                         DataStoreSettings.setLoggedInAccountId(context, accountEntity.accountid)
                                         // Sets storage preference logged in to true
                                         DataStoreSettings.setLoggedIn(context, true)
-                                        // If this is a login
-                                        if(!flag){
-                                            // Gets the current time
-                                            val now = System.currentTimeMillis()
-                                            // Syncs from API
-                                            AppRepository.syncFromApi()
-                                            // Sets the new LastSyncTime to now
-                                            DataStoreSettings.setLastSyncTime(context, now)
-                                        }
+                                        // Gets the current time
+                                        val now = System.currentTimeMillis()
+                                        // Syncs from API
+                                        AppRepository.syncFromApi()
+                                        // Sets the new LastSyncTime to now
+                                        DataStoreSettings.setLastSyncTime(context, now)
                                         // Navigates to main page
                                         navController.navigate("main") {
                                             popUpTo(0) { inclusive = true }

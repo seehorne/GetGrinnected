@@ -10,15 +10,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -33,18 +30,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.AppRepository
 import com.example.myapplication.DataStoreSettings
-import com.example.myapplication.OrgCard
-import com.example.myapplication.R
 import com.example.myapplication.User
 import kotlinx.coroutines.launch
 import androidx.compose.material3.AlertDialog
@@ -56,7 +48,6 @@ import com.example.myapplication.toAccountEntity
  * A composable function that represents the Settings screen of our app.
  *
  * @param modifier Modifier to be applied to the screen layout.
- * @param orgs the list of orgs that they follow.
  * @param account the user account that is currently logged in
  * @param darkTheme the current state of the Theme of light or dark mode
  * @param onToggleTheme a lambda function passed down from previous screen that calls back to the
@@ -66,7 +57,6 @@ import com.example.myapplication.toAccountEntity
  */
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier,
-                   orgs: List<User>,
                    account: User,
                    darkTheme: Boolean,
                    onToggleTheme: (Boolean) -> Unit,
@@ -79,9 +69,6 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     val colorScheme = MaterialTheme.colorScheme
     // Accessing font info from our theme
     val typography = MaterialTheme.typography
-
-    // Sets the orgs to be only the set of orgs that are followed by the user.
-    val isFollowed = orgs.filter { it.is_followed }
     // The current context of our app
     val context = LocalContext.current
     // Used to launch background tasks and processes
@@ -111,54 +98,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             )
 
             Spacer(modifier = modifier.weight(1f))
-
-           /* // This is the icon button for switch an account
-            IconButton(
-                onClick = { /* TODO handle switch account */ },
-                modifier = modifier.padding(end = 8.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center,
-                    modifier = Modifier.background(Color.White, shape = CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ChangeCircle,
-                        contentDescription = "Switch Account",
-                        modifier = modifier.size(24.dp),
-                        tint = colorScheme.primary
-                    )
-                }
-            }*/
         }
-/* This is commented out for the time being as we have the profile picture as a stretch goal.
-        Box(
-            contentAlignment = Alignment.BottomEnd,
-            modifier = modifier.padding(16.dp)
-        ) {
-            // This is our profile image
-            Image(
-                painter = painterResource(id = R.drawable.blank_profile_picture),
-                contentDescription = "Profile Image",
-                modifier = modifier
-                    .size(120.dp)
-                    .clip(CircleShape)
-            )
-            // Button to change the profile picture
-            IconButton(
-                onClick = { /* TODO handle image change */ },
-                modifier = modifier
-                    .offset(x = (-8).dp, y = (-8).dp)
-                    .background(Color.White, CircleShape)
-                    .size(32.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit Profile Image",
-                    tint = Color.Black,
-                    modifier = modifier.size(18.dp)
-                )
-            }
-        }
-*/
         // Sets up a column for the rest of the information
         Column(
             modifier = modifier
@@ -191,7 +131,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 // Button to edit the username
                 IconButton(onClick = {
                     newUsername = account.account_name
-                    showEditDialog = true }) {
+                    showEditDialog = true
+                }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit Username",
@@ -206,9 +147,15 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 AlertDialog(
                     // When we dismiss with our dismiss button we set our show boolean to false
                     onDismissRequest = { showEditDialog = false },
-                    title = { Text("Edit Username", color = colorScheme.onBackground, style = typography.titleLarge) },
+                    title = {
+                        Text(
+                            "Edit Username",
+                            color = colorScheme.onBackground,
+                            style = typography.titleLarge
+                        )
+                    },
                     text = {
-                        Column{
+                        Column {
                             // Makes the text field to enter the input
                             OutlinedTextField(
                                 value = newUsername,
@@ -220,38 +167,44 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                 singleLine = true,
                                 isError = usernameError != null,
                                 label = {
-                                    Text("Username",
+                                    Text(
+                                        "Username",
                                         color = colorScheme.onBackground,
-                                        style = typography.labelLarge)
+                                        style = typography.labelLarge
+                                    )
                                 }
                             )
                             // If we have a validation issue with username we display the issue with
                             // the associated error
                             if (usernameError != null) {
-                                Text(text = usernameError ?: "",
+                                Text(
+                                    text = usernameError ?: "",
                                     color = colorScheme.error,
-                                    style = typography.bodySmall)
+                                    style = typography.bodySmall
+                                )
                             }
                         }
                     },
                     confirmButton = {
                         // Button to save the edited username
-                        TextButton(onClick = {
-                            coroutineScope.launch {
-                                // Makes a new account entity with the new name
-                                val updatedAccount = account.copy(account_name = newUsername)
-                                // Upserts ie updates the account name
-                                AppRepository.upsertAccount(updatedAccount.toAccountEntity())
-                                // Sets our current active account to the given account
-                                AppRepository.setCurrentAccountById(updatedAccount.accountid)
-                                // Sends our updated username to the remote database
-                                AppRepository.syncUsername(newUsername)
-                                // Closes the editing dialog
-                                showEditDialog = false
-                            }
-                        },
+                        TextButton(
+                            onClick = {
+                                coroutineScope.launch {
+                                    // Makes a new account entity with the new name
+                                    val updatedAccount = account.copy(account_name = newUsername)
+                                    // Upserts ie updates the account name
+                                    AppRepository.upsertAccount(updatedAccount.toAccountEntity())
+                                    // Sets our current active account to the given account
+                                    AppRepository.setCurrentAccountById(updatedAccount.accountid)
+                                    // Sends our updated username to the remote database
+                                    AppRepository.syncUsername(newUsername)
+                                    // Closes the editing dialog
+                                    showEditDialog = false
+                                }
+                            },
                             // If username is valid the button will be enabled otherwise it will be disabled
-                            enabled = usernameError == null) {
+                            enabled = usernameError == null
+                        ) {
                             Text("Save", color = colorScheme.primary, style = typography.labelLarge)
                         }
                     },
@@ -260,7 +213,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         TextButton(onClick = {
                             showEditDialog = false
                         }) {
-                            Text("Cancel", color = colorScheme.primary, style = typography.labelLarge)
+                            Text(
+                                "Cancel",
+                                color = colorScheme.primary,
+                                style = typography.labelLarge
+                            )
                         }
                     }
                 )
@@ -269,7 +226,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Spacer(modifier = modifier.height(8.dp))
 
             // Setup a row to have the wording for the dark mode switch inline with the switch
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -291,15 +248,15 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Spacer(modifier = modifier.height(8.dp))
 
             // This button handles our sign out process
-            Button (
+            Button(
                 onClick = {  // Sets our logged in state to false
-                    coroutineScope.launch{
+                    coroutineScope.launch {
                         // This resets user preferences to default states
                         DataStoreSettings.clearUserSession(context)
                         onToggleTheme(false)
                     }
-                    navController.navigate("welcome"){ // takes us to the welcome screen
-                        popUpTo(0){inclusive = true} // pops the back stack
+                    navController.navigate("welcome") { // takes us to the welcome screen
+                        popUpTo(0) { inclusive = true } // pops the back stack
                         launchSingleTop = true
                     }
                 },
@@ -312,37 +269,10 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                     style = typography.labelLarge
                 )
             }
-
-            Text(
-                "Organizations you follow:",
-                style = typography.titleLarge,
-                color = colorScheme.onBackground
-            )
-
-            Spacer(modifier = modifier.height(4.dp))
-
-            // Checks if the user has any followed orgs, if not it displays the following
-            if (isFollowed.isEmpty()) {
-                Text(
-                    "You haven't followed any organizations yet.",
-                    modifier = Modifier.padding(16.dp),
-                    style = typography.bodyMedium,
-                    color = colorScheme.onBackground
-                )
-            } else {
-                // If the user does, it makes a scrollable list of org cards that they follow
-                isFollowed.forEach { account ->
-                    OrgCard(
-                        account = account,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 8.dp)
-                    )
-                }
-            }
         }
     }
 }
+
 
 /**
  * Preview used specifically for UI design purposes
@@ -350,12 +280,5 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 @Preview (showBackground = true)
 @Composable
 fun SettingsScreenPreview(){
-    val sampleOrgs = listOf(
-        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
-        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test4", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test5", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        )
-    SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {}, navController = rememberNavController())
+    SettingsScreen(account = User(1, "User123", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {}, navController = rememberNavController())
 }
