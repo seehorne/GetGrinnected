@@ -56,8 +56,6 @@ import java.util.Date
 fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
-    // Boolean to track if card should cause notification
-    val isNotification = remember(event.is_notification) { mutableStateOf(event.is_notification) }
     val context = LocalContext.current
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
@@ -99,14 +97,12 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             ) {
                 // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f)) {
-                    event.event_name.let {
-                        Text(
-                            text = it,
-                            style = typography.titleLarge,
-                            color = colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                    Text(
+                        text = event.event_name,
+                        style = typography.titleLarge,
+                        color = colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "${event.event_date} at ${event.event_time}",
                         style = typography.bodyMedium,
@@ -143,18 +139,17 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     )
                     // This is our notification icon
                     Icon(
-                        imageVector = if (isNotification.value) Icons.Filled.Notifications else Icons.Outlined.Notifications,
+                        imageVector = if (event.is_notification) Icons.Filled.Notifications else Icons.Outlined.Notifications,
                         contentDescription = "Notification Icon",
                         tint = colorScheme.tertiary,
                         modifier = Modifier
                             .size(40.dp)
                             .clickable {
-                                isNotification.value = !isNotification.value
                                 // This tells our database to update the events notification status
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    AppRepository.toggleNotification(event.eventid, isNotification.value)
+                                    AppRepository.toggleNotification(event.eventid, !event.is_notification)
                                 }
-                                if (isNotification.value){
+                                if (!event.is_notification){
                                     if (getDifferenceInMillis(LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS"),
                                             event.event_end_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")
                                             ) < 0){

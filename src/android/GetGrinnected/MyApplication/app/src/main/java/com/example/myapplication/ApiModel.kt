@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 
 /**
@@ -34,4 +35,16 @@ interface ApiModel {
     // Async function to refresh auth tokens
     @POST("user/token-refresh")
     suspend fun refreshToken(@Header("Authorization") refreshToken: String): Response<TokenRefreshResponse>
+
+    // Async function to update the remote databases list of favorited events for a user
+    @PUT("user/events/favorited")
+    suspend fun updateFavorites(@Header("Authorization") token: String, @Body favorites: UpdateFavoritesRequest): Response<SimpleMessageResponse>
+
+    // Async function to update the remote databases list of notified events for a user
+    @PUT("user/events/notified")
+    suspend fun updateNotifications(@Header("Authorization") token: String, @Body notifications: UpdateNotificationsRequest): Response<SimpleMessageResponse>
+
+    // Async function to update the remote databases current username for a user
+    @PUT("user/username")
+    suspend fun updateUsername(@Header("Authorization") token: String, @Body usernameRequest: UpdateUsernameRequest): Response<SimpleMessageResponse>
 }
