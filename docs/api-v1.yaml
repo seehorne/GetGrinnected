@@ -1,0 +1,789 @@
+openapi: 3.0.4
+info:
+  title: GetGrinnected API
+  version: '1.0'
+servers:
+  - url: https://node16049-csc324--spring2025.us.reclaim.cloud/
+tags:
+  - name: events
+    description: Getting calendar events. 
+  - name: user
+    description: Logging in and changing user settings.
+paths:
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Log in.
+      description: |
+        Log in an existing user, which will send a one-time code to their email. 
+        
+        Will fail with status `400` if no email address is provided in request body.
+        
+        Will fail with status `404` if the user you are attempting to log in does not exist.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@grinnell.edu
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: boolean
+                    example: 'OTP successfully sent.'
+        '404':
+          description: No such user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: No such user
+                  message:
+                    example: No user account exists with that email.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: No email
+                  message:
+                    example: An email must be provided in the body of the request.
+  /user/signup:
+    post:
+      tags:
+        - user
+      summary: Sign up.
+      description: |
+        Sign up a new user account. 
+        
+        Will fail with status `400` if any of these errors are present.
+        - Username or email are not provided in request body
+        - Username or email are already associated with an account
+        - Email does not end with @grinnell.edu
+        - Username does not follow rules (see <https://getgrinnected.sites.grinnell.edu/docs/apple/#sign-up>)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@grinnell.edu
+                username:
+                  type: string
+                  example: example_user
+      responses:
+        '201':
+          description: 'Account created.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: boolean
+                    example: 'Account created, and OTP successfully sent.'
+        '400':
+          description: 'Bad request.'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: Invalid username
+                  message:
+                    example: Username must not contain the sequences '_.', '._', '..', or '__'.
+  /user/resend-otp:
+    post:
+      tags:
+        - user
+      summary: Resend OTP code for login/signup.
+      description: |
+        Resend an OTP code to a user, such as if they do not recieve their code when logging in.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@grinnell.edu
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: boolean
+                    example: 'OTP successfully sent.'
+        '404':
+          description: No such user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: No such user
+                  message:
+                    example: No user account exists with that email.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: No email
+                  message:
+                    example: An email must be provided in the body of the request.
+  /user/verify:
+    post:
+      tags:
+        - user
+      summary: Verify recieved OTP code.
+      description: |
+        Verify the OTP code that has been sent to a user's email. If the code is correct and has not expired, an authorization and a refresh token will be sent back.
+        
+        The authorization token should be sent with all authenticated requests, and expires after 15 minutes.
+        
+        The refresh token can be used to refresh itself and the authorization token, and expires after 30 days unless refreshed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@grinnell.edu
+                code:
+                  type: string
+                  example: 123456
+      responses:
+        '200':
+          description: Successful verification.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully authenticated
+                  refresh_token:
+                    $ref: '#/components/schemas/AuthToken'
+                  access_token:
+                    $ref: '#/components/schemas/AuthToken'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: Bad code
+                  message:
+                    example: Could not verify OTP.
+  /user/data:
+    get:
+      tags:
+        - user
+      summary: Get user data when logged in.
+      description: |
+        Get user data from the database.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /user/token-refresh:
+    post:
+      tags:
+        - user
+      summary: Refresh user tokens when logged in.
+      description: Refresh user tokens using a refresh token, which you can only get by logging in previously.
+      security:
+        - refresh_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully refreshed
+                  refresh_token:
+                    $ref: '#/components/schemas/AuthToken'
+                  auth_token:
+                    $ref: '#/components/schemas/AuthToken'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /user/events/favorited:
+    get:
+      tags:
+        - user
+      summary: Get favorited event list.
+      description: Get list of favorited event IDs.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favorited_events:
+                    type: array
+                    example: [14, 20, 77]
+                    items:
+                      type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+    put:
+      tags:
+        - user
+      summary: Change favorited events list.
+      description: Overwrite the array of favorited events with a new array.
+      security:
+        - auth_token: []
+      requestBody:
+        description: Array of new favorited event IDs.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                favorited_events:
+                  type: array
+                  example: [20, 77]
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: Successful update.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully updated favorited_events.
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: "Bad request"
+                  message:
+                    example: "Request body must contain favorited_events."
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /user/events/notified:
+    get:
+      tags:
+        - user
+      summary: Get notified event list.
+      description: Get list of notified event IDs.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notified_events:
+                    type: array
+                    example: [14, 20, 77]
+                    items:
+                      type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+    put:
+      tags:
+        - user
+      summary: Change notified events list.
+      description: Overwrite the array of notified events with a new array.
+      security:
+        - auth_token: []
+      requestBody:
+        description: Array of new notified event IDs.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notified_events:
+                  type: array
+                  example: [1, 2, 5]
+                  items:
+                    type: integer
+      responses:
+        '202':
+          description: Successful update.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully updated notified events.
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: "Bad request"
+                  message:
+                    example: "Request body must contain notified_events."
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /user/username:
+    get:
+      tags:
+        - user
+      summary: Get username.
+      description: Get username.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Successful request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: example_user
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+    put:
+      tags:
+        - user
+      summary: Change username.
+      description: Change username.
+      security:
+        - auth_token: []
+      requestBody:
+        description: New username,
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: new_username
+      responses:
+        '200':
+          description: Successful update.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully updated username.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /events:
+    get:
+      tags:
+        - events
+      summary: Find all events.
+      description: Find all events stored in the database.
+      operationId: findAllEvents
+      parameters:
+        - $ref: '#/components/parameters/tags'
+      responses:
+        '200':
+          $ref: '#/components/responses/EventSuccess'
+  /events/between/{start}/{end}:
+    get:
+      tags:
+        - events
+      summary: Find events between dates.
+      description: |
+        Find all events between a start and end time.
+
+
+        `start` and `end` parameters must match one of these valid formats:
+
+
+        - `YYYY-MM-DD` for a date at midnight, in Grinnell time (UTC-5).
+
+        - `YYYY-MM-DDTHH:MM` for a date and time, in Grinnell time (UTC-5).
+
+        - `YYYY-MM-DDTHH:MMZ` for a date and time, in a specific timezone
+        Timezones should be formatted like `-0600` or `+1200`.
+      operationId: findEventsBetween
+      parameters:
+        - name: start
+          in: path
+          description: Start of the period to search. Format must match description above.
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: '2025-04-07'
+        - name: end
+          in: path
+          description: End of the period to search. Format must match description above.
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: '2025-04-08'
+        - $ref: '#/components/parameters/tags'
+      responses:
+        '200':
+          $ref: '#/components/responses/EventSuccess'
+        '400':
+          description: >
+            Invalid request. Dates must follow correct format and start date
+            must be before end date.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ErrorDateInvalid'
+                  - $ref: '#/components/schemas/ErrorDateOrder'
+components:
+  securitySchemes:
+    auth_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+      description: Authorization token, expiration 15 minutes.
+    refresh_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Refresh token, expiration 30 days.
+  parameters:
+    tags:
+      name: tags
+      in: query
+      description: Events must have all of these tags if specified.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tags'
+  responses:
+    EventSuccess:
+      description: Successful operation.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Event'
+    Unauthorized:
+      description: Token required.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              error:
+                example: Token required
+              message:
+                example: An authorization token is required, but it was not provided.
+    InvalidToken:
+      description: Invalid or expired token.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              error:
+                example: Invalid or expired token
+              message:
+                example: The authorization token provided was not valid, or has expired. Please request a new token.
+    NoSuchUser:
+      description: No such user.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+            properties:
+              error:
+                example: No such user
+              message:
+                example: You are verified with email example@grinnell.edu, but no user exists with that address.
+    
+  schemas:
+    Event:
+      type: object
+      properties:
+        eventid:
+          type: integer
+          example: 30881
+          description: ID of the event in Grinnell Events.
+        event_name:
+          type: string
+          example: Grinnell Advocates Karaoke
+          description: Name of the event.
+        event_description:
+          type: string
+          example: \n  Grinnell Advocates Karaoke\n
+          description: Description of the event.
+        event_location:
+          type: string
+          example: Bob’s Underground - Main Hall
+          description: Location the event takes place.
+        organizations:
+          type: array
+          example:
+            - Advocates
+            - ' Crssj'
+          description: Array of organizations in charge.
+          items:
+            description: Organization names.
+            type: string
+        rsvp:
+          type: integer
+          example: 0
+          enum:
+            - 0
+            - 1
+          description: Whether the event requires rsvp.
+        event_date:
+          type: string
+          example: April 8
+          description: Human-readable date the event takes place.
+        event_all_day:
+          type: integer
+          example: 0
+          enum:
+            - 0
+            - 1
+          description: Whether the event is all-day.
+        event_start_time:
+          type: string
+          example: '2025-04-09T00:00:00.000Z'
+          description: Event start time in UTC.
+        event_end_time:
+          type: string
+          example: '2025-04-09T02:00:00.000Z'
+          description: Event end time in UTC
+        tags:
+          $ref: '#/components/schemas/Tags'
+        event_private:
+          type: integer
+          example: 0
+          description: Whether the event is private.
+          enum:
+            - 0
+            - 1
+        repeats:
+          type: integer
+          example: 0
+          description: Whether the event repeats.
+          enum:
+            - 0
+            - 1
+        event_image:
+          type: string
+          example: null
+          description: Path to image for event.
+        is_draft:
+          type: integer
+          example: 0
+          description: Whether the event is a draft.
+          enum:
+            - 0
+            - 1
+    User:
+      type: object
+      properties:
+        accountid:
+          type: integer
+          example: 10
+        account_name:
+          type: string
+          example: example_user
+        email:
+          type: string
+          example: example@grinnell.edu
+        profile_picture:
+          type: string
+          example: null
+        favorited_events:
+          type: array
+          items:
+            type: integer
+          example:
+            - 14
+            - 20
+            - 77
+        notified_events:
+          type: array
+          items:
+            type: integer
+          example:
+            - 33
+            - 2
+            - 531
+        favorited_orgs:
+          type: array
+          items:
+            type: integer
+          example:
+            - 12
+            - 13
+            - 14
+        drafted_events:
+          type: array
+          items:
+            type: integer
+          example:
+            - 21
+        favorited_tags:
+          type: array
+          items:
+            type: string
+          example:
+            - foo
+            - bar
+        account_description:
+          type: string
+        account_role:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+          example: 0
+    Tags:
+      type: array
+      example:
+        - Music
+        - Students
+      description: Array of event tags.
+      items:
+        description: Tag names.
+        type: string
+    AuthToken:
+      type: string
+      description: Authorization or refresh token.
+      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unknown error
+        message:
+          type: string
+          example: An unknown error has occured.
+    ErrorDateOrder:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+      properties:
+        error:
+          example: Invalid date
+        message:
+          example: Start date could not be read properly.
+    ErrorDateInvalid:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+      properties:
+        error:
+          example: Bad date order
+        message:
+          example: Start date must occur before end date.

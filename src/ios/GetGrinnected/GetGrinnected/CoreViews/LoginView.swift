@@ -14,6 +14,8 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage = ""
+    @State private var success = Bool()
+    @StateObject private var userProfile = UserProfile()
     
     var body: some View {
         
@@ -25,22 +27,28 @@ struct LoginView: View {
                 //Signin Email Text Field
                 InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
                 
-                //Signin Password Text Fields
-                InputView(text: $password, title: "Password", placeholder: "Enter your password",isSecureField: true)
-                
+                //error
+                if !errorMessage.isEmpty{
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }//if
                 
                 // Button
                 Button {
-                    //logic that checks if user exists and password is correct
-//                    if UserProfile.checkUser(email, password, errorMessage){
-//                        print("Log in success!")
-                            isLoggedIn = true
-//                    } else{
-//                        print("\(errorMessage)")
-//                    }
-                    
-                    
-                    //once successfully logged in, jump to main viewport
+                    errorMessage = ""
+                    userProfile.loginUser(email: email) { result in
+                        switch result {
+                            case .success(let output):
+                                print("API Response: \(output)")
+                                //set is logged in to true, if success
+                                success = true
+                            case .failure(let error):
+                                print("API call failed: \(error.localizedDescription)")
+                                success = false
+                                errorMessage = userProfile.getErrorMessage(error: error);
+                        }
+                    }
                 } label: {
                     HStack {
                         Text("SIGN IN")
@@ -49,7 +57,7 @@ struct LoginView: View {
                     }
                     .foregroundColor(.white)
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
-                }//Button
+                } //Button
                 .background (.colorBlue)
                     .cornerRadius (10)
                     .padding(.top, 24)
@@ -64,8 +72,10 @@ struct LoginView: View {
                         .padding(.top, 4)
                 }
                 
-                //signin button
-                
+                //if the API call was successful, go to verification 
+                .navigationDestination(isPresented: $success) {
+                    VerificationView(email: email, isLoggedIn: $isLoggedIn)
+                }
             }
             .padding()
         } //navigation

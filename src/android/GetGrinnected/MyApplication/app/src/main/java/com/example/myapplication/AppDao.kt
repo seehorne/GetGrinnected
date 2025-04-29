@@ -11,9 +11,11 @@ interface AppDao {
 
     // Event Operations
 
-    // Gets you all events in a flow type so data is reactive
-    @Query("SELECT * FROM events")
+    // Gets you all events in a flow type so data is reactive and sorted by date and time
+    @Query("SELECT * FROM events ORDER BY event_date ASC, event_start_time ASC")
     fun getAllEvents(): Flow<List<EventEntity>>
+
+
 
     // Gets events by a given id should probably switch this to a flow
     @Query("SELECT * FROM events WHERE eventid = :id")
@@ -43,7 +45,9 @@ interface AppDao {
     @Query("UPDATE events SET is_favorited = :isFavorited WHERE eventid = :eventId")
     suspend fun updateFavoriteStatus(eventId: Int, isFavorited: Boolean)
 
-
+    // Updates whether an event is favorited or not basically flips the symbol
+    @Query("UPDATE events SET is_notification = :isNotification WHERE eventid = :eventId")
+    suspend fun updateNotificationStatus(eventId: Int, isNotification: Boolean)
 
     // Account Operations
     // Upserts an account into the account table

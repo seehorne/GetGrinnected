@@ -16,6 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -30,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -38,10 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.EmailRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
-import com.example.myapplication.DataStoreSettings
+import com.example.myapplication.SignupRequest
 import kotlinx.coroutines.launch
 
 /**
@@ -97,7 +99,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         ) {
             // This is the app logo image
             Image(
-                painter = painterResource(id = R.drawable.gg_logo_2),
+                painter = painterResource(id = R.drawable.getgrinnected_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -130,6 +132,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     errUsername = false
                 },
                 label = { Text("Username", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Email Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 isError = errUsername,
                 keyboardOptions = KeyboardOptions(
                     // This makes it so the enter key is a next button instead of enter
@@ -153,6 +162,13 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     errEmail = false
                 }, //ensures it isn't case sensitive
                 label = { Text("Email", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Email,
+                        contentDescription = "Email Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 isError = errEmail,
                 keyboardOptions = KeyboardOptions(
                     // This makes it so the enter key is a done button instead of enter
@@ -187,12 +203,12 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
 
                         // Checks the validation conditions
                         val emailError = validateEmail(email)
-                        val missingUsername = username.isBlank()
+                        val usernameError = validateUsername(username)
 
-                        if (missingUsername) {
-                            errMsg = "Please enter username"
+                        if (usernameError != null) {
+                            errMsg = usernameError
                             errUsername = true
-                            return@launch // Escapes launch due to missing username
+                            return@launch // Escapes launch due to invalid username
                         }
 
                         if (emailError != null) {
@@ -204,22 +220,27 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                         isLoading = true // Set loading state to true to disable the button
                         try {
                             // Makes the api email request check
-                            //   val emailReponse = RetrofitApiClient.apiModel.checkemail(
-                            //     EmailRequest(email)
-                            // )
+                            val response = RetrofitApiClient.apiModel.signup(
+                                SignupRequest(username = username, email = email)
+                            )
                             // Assess if the request and if the email was available
-                            // if (emailReponse.isSuccessful && emailReponse.body()?.success == true) {
-                            // TODO SEND EMAIL HERE
+                            if (response.isSuccessful) {
                             // Sets our logged in state to true
-                            navController.navigate("verification/${email}/${signUp}/${username}") {
+                            navController.navigate("verification/${email}/${signUp}") {
                                 popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
                             }
-                            // } else {
-                            //   errMsg = emailReponse.body()?.message ?: "Email already in use"
-                            // }
-                            // } catch(e: Exception) { // Handles network errors that way arise when making the api call
-                            //   errMsg = "Network error: ${e.localizedMessage}"
+                            } else {
+                                errMsg = if(response.errorBody()?.string()?.contains("Username exists") == true){
+                                    "User with that username already exists"
+                                } else if (response.errorBody()?.string()?.contains("Email exists") == true){
+                                    "User with that email already exists"
+                                } else{
+                                    "Signup Failed"
+                                }
+                            }
+                            } catch(e: Exception) { // Handles network errors that way arise when making the api call
+                               errMsg = "Network error: ${e.localizedMessage}"
                         } finally { // Set loading state to false to reenable the button
                             isLoading = false
                         }
@@ -251,7 +272,6 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
         }
     }
 }
-
 /**
  * Validates an email ends in @grinnell.edu
  * @param email takes in a String representation of an email
@@ -263,9 +283,48 @@ fun validateEmail(email: String): String? {
     return null
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPreview(){
     SignupScreen(modifier = Modifier, navController = rememberNavController())
+}
+
+/**
+ * Validates username meets our general requirements (see docs)
+ * @param username is the username to be validated
+ * @return either null if we pass validation or a string reporting the associated error
+ */
+fun validateUsername(username: String): String? {
+    // Set of allowed characters Alphabetical and periods and underscores
+    val allowedChars = Regex("^[a-zA-Z0-9._]+$")
+    // If the username contains characters that aren't allowed we display the following error
+    if (!allowedChars.matches(username)) {
+        return "Username can only include letters, '.', and '_'"
+    }
+    // Set of letters
+    val letters = Regex("[a-zA-Z]")
+    // If the username does not contain at least one letter display the following error
+    if (!letters.containsMatchIn(username)) {
+        return "Username must contain at least one letter"
+    }
+    // If username has consecutive periods return the following error
+    if (username.contains("..")) return "Username cannot contain two or more '.' in a row"
+    // If username has consecutive underscores return the following error
+    if (username.contains("__")) return "Username cannot contain two or more '_' in a row"
+    // If username has a period followed by an underscore return the following error
+    if (username.contains("._")) return "Username cannot contain a '.' followed by a '_'"
+    // If username has an underscore followed by a period return the following error
+    if (username.contains("_.") && !username.contains("._")) return "Username cannot contain a '_' followed by a '.'"
+    // If username starts with a period or underscore return the following error
+    if (username.startsWith(".") || username.startsWith("_")) {
+        return "Username cannot start with '.' or '_'"
+    }
+    // If username ends with a period or underscore return the following error
+    if (username.endsWith(".") || username.endsWith("_")) {
+        return "Username cannot end with '.' or '_'"
+    }
+    // If username is more than 20 characters long return the following error
+    if (username.length > 20) return "Username must be no more that 20 characters long"
+
+    return null // means we passed validation
 }

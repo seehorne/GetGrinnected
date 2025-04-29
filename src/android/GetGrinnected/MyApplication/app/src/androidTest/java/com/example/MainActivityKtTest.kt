@@ -1,5 +1,6 @@
 package com.example
 
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.compose.rememberNavController
@@ -7,9 +8,15 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.myapplication.AccountEntity
 import com.example.myapplication.AppNavigation
 import com.example.myapplication.Check
 import com.example.myapplication.MainPage
+import com.example.myapplication.User
+import screens.FavoritesScreen
+import screens.LoginScreen
+import screens.SettingsScreen
+import screens.SignupScreen
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityKtTest {
@@ -114,7 +121,7 @@ class MainActivityKtTest {
  @Test
  fun mainPage_Navbar_NavigatesToAllScreens() {
   val destinations = listOf(
-   NavTestData("Calendar", "April"),
+   //NavTestData("Calendar", "April"),
    NavTestData("Home", "Tags"),
    NavTestData("Favorites", "Favorite Events"),
    NavTestData("Settings", "Preferences"),
@@ -122,9 +129,21 @@ class MainActivityKtTest {
 
   composeTestRule.setContent {
    MainPage(
-       darkTheme = false, onToggleTheme = {},
+       darkTheme = false,
+       onToggleTheme = {},
        tags = mutableListOf<Check>(),
-       navController = rememberNavController()
+       navController = rememberNavController(),
+       account = AccountEntity(accountid = 1,
+      account_name = "Test",
+      email = "",
+      profile_picture = "",
+      favorited_events = emptyList(),
+      drafted_events = emptyList(),
+      favorited_tags = emptyList(),
+      account_description = "",
+      account_role = 0,
+      is_followed = false,
+           notified_events = emptyList())
    )
   }
 
@@ -177,4 +196,77 @@ class MainActivityKtTest {
         }
     }
     **/
+
+    /**
+     * Tests the dark mode switch works as intended
+     */
+    @Test
+    fun settingsScreen_TogglesDarkModeSwitch() {
+        var darkTheme = false
+        composeTestRule.setContent {
+            SettingsScreen(
+                orgs = emptyList(),
+                account = User(1, "user", "email@grinnell.edu", "", listOf(), listOf(), listOf(), listOf(), "", 0),
+                darkTheme = darkTheme,
+                onToggleTheme = { darkTheme = it },
+                navController = rememberNavController()
+            )
+        }
+        composeTestRule.onNodeWithText("Switch to dark mode").assertExists()
+        composeTestRule.onNode(isToggleable()).performClick()
+        assert(darkTheme)
+    }
+
+    /**
+     * Tests the signup gives errors on none Grinnell email
+     */
+    @Test
+    fun signupScreen_EmailValidation_Only_Grinnell_Emails_Allowed() {
+        composeTestRule.setContent {
+            SignupScreen(modifier = Modifier, navController = rememberNavController())
+        }
+        composeTestRule.onNodeWithText("Username").performTextInput("TestUser")
+        composeTestRule.onNodeWithText("Email").performTextInput("user@gmail.com")
+        composeTestRule.onNodeWithText("Sign up").performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText("Email must end with @grinnell.edu").assertIsDisplayed()
+    }
+
+    /**
+     * With no favorited events the favorites screen displays the correct text
+     */
+    @Test
+    fun favoritesScreen_NoFavorites_ShowsEmptyText() {
+        composeTestRule.setContent {
+            FavoritesScreen()
+        }
+        composeTestRule.onNodeWithText("You haven't favorited any events yet.").assertIsDisplayed()
+    }
+
+    /**
+     * Tests the signup screen gives an error if the username is not entered
+     */
+    @Test
+    fun signupScreen_UsernameRequired_ShowsError() {
+        composeTestRule.setContent {
+            SignupScreen(modifier = Modifier, navController = rememberNavController())
+        }
+
+        composeTestRule.onNodeWithText("Email").performTextInput("user@grinnell.edu")
+        composeTestRule.onNodeWithText("Sign up").performClick()
+        composeTestRule.onNodeWithText("Username can only include letters, '.', and '_'").assertIsDisplayed()
+    }
+
+    /**
+     * Tests the login screen gives an error if the email is not entered
+     */
+    @Test
+    fun loginScreen_RequiresEmail_ShowsError() {
+        composeTestRule.setContent {
+            LoginScreen(modifier = Modifier, navController = rememberNavController())
+        }
+
+        composeTestRule.onNodeWithText("Login").performClick()
+        composeTestRule.onNodeWithText("Please enter email").assertIsDisplayed()
+    }
 }

@@ -76,11 +76,11 @@ _Looking for iOS guide? Click [here](apple.md) for iOS docs_
 - Enter email in email-prompting text box
     - Must be Grinnell email
 - Enter username in username-prompting text box (UNDER CONSTRUCTION :building_construction:)
-    - allowed chars `a-z` `_` and `.`
+    - max length 20 characters
+    - allowed chars `a-z`, `A-Z`, `0-9`, `_`, and `.`
+    - must contain at least 1 letter
     - no `__` `..` `_.` or `._`
     - no ending or starting with `.` or `_`
-    - at least 8 characters
-    - check to verify these criteria is under construction
 - Press Sign In button to navigate to [login](#log-in) page, continue from there
 - Back to [table of contents](#table-of-contents)
 

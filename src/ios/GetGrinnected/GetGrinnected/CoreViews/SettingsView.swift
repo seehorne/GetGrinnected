@@ -26,7 +26,7 @@ struct SettingsView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(safeAreaTop, title: "Settings", searchBarOn: true)
+                Header(safeAreaTop, title: "Settings")
                 
                 ScrollView(.vertical, showsIndicators: false){
                 

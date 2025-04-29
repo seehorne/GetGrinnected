@@ -52,7 +52,12 @@ function sendCode(email) {
         from: account,
         to: email,
         subject: "Your GetGrinnected One Time Code",
-        text: `Your one-time code is ${code}.`
+        text: `Your one-time code for GetGrinnected is ${code}.
+    
+The code will expire in 15 minutes.
+
+If you are not trying to log in, it is safe to ignore this email.
+`
     };
     
     // Use nodemailer to send that through our gmail account

@@ -2,7 +2,6 @@ package screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +16,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -30,7 +32,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -38,10 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.EmailRequest
+import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
-import com.example.myapplication.DataStoreSettings
 import kotlinx.coroutines.launch
 
 /**
@@ -95,7 +95,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
         ) {
             // This is our app logo image
             Image(
-                painter = painterResource(id = R.drawable.gg_logo_2),
+                painter = painterResource(id = R.drawable.getgrinnected_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -127,6 +127,13 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                     errEmail = false
                 },
                 label = { Text("Email", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Email,
+                        contentDescription = "Email Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 isError = errEmail,
                 keyboardOptions = KeyboardOptions(
                     // This makes it so the enter key is a done button instead of enter
@@ -170,23 +177,24 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                         isLoading = true
                         try {
                             // Makes the api login request
-                            //  val emailResponse = RetrofitApiClient.apiModel.checkemail(
-                            //    EmailRequest(email)
-                            //)
+                              val emailResponse = RetrofitApiClient.apiModel.login(LoginRequest(email))
                             // Assess if the request and validation of login was successful if so
                             // nav to main if not show login failure.
-                            //if (emailResponse.isSuccessful && emailResponse.body()?.success == true) {
-                            // TODO SEND EMAIL HERE
-                            navController.navigate("verification/${email}/${signUp}/str") {
+                            if (emailResponse.isSuccessful) {
+                            navController.navigate("verification/${email}/${signUp}") {
                                 popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
                             }
-                            //} else {
-                            //  errMsg = emailResponse.body()?.message ?: "Email Not Found"
-                            //}
+                            } else {
+                                errMsg = if(emailResponse.errorBody()?.string()?.contains("No such user") == true){
+                                    "No user found with that email"
+                                } else{
+                                    "Login Failed"
+                                }
+                            }
                             // Failure specifically with a network connection ie couldn't leave our app
-                            // } catch (e: Exception) {
-                            //   errMsg = "Network error: ${e.localizedMessage}"
+                            } catch (e: Exception) {
+                               errMsg = "Network error: ${e.localizedMessage}"
                         } finally {
                             isLoading = false
                         }
@@ -196,14 +204,6 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
             ) {
                 Text(if (isLoading) "Logging in..." else "Login", style = typography.labelLarge)
             }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Text(
-                text = "Forgot Password?",
-                style = typography.bodyMedium,
-                color = colorScheme.onBackground,
-                modifier = Modifier.clickable { /* TODO Logic to handle forgot password */ })
 
             Spacer(modifier = Modifier.height(32.dp))
 

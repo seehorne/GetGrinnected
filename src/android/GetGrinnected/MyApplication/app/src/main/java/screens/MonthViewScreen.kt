@@ -7,6 +7,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -69,13 +70,18 @@ fun MonthViewScreen(
     }
     val scope = rememberCoroutineScope()
 
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    val typography = MaterialTheme.typography
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
             text = month,
-            color = Color.White,
+            color = colorScheme.primary,
             fontWeight = FontWeight.SemiBold,
             fontSize = 40.sp
         )
@@ -120,7 +126,7 @@ fun MonthViewScreen(
             clipPath(path){
                 drawCircle(
                     brush = Brush.radialGradient(
-                        listOf(Color.White.copy(0.8f), Color.White.copy(0.2f)),
+                        listOf(colorScheme.primary.copy(0.8f), colorScheme.primary.copy(0.2f)),
                         center = clickAnimationOffset,
                         radius = animationRadius + 0.1f
                     ),
@@ -131,7 +137,7 @@ fun MonthViewScreen(
             }
 
             drawRoundRect(
-                Color.White,
+                colorScheme.primary,
                 cornerRadius = CornerRadius(25f, 25f),
                 style = Stroke(
                     width = strokeWidth
@@ -140,7 +146,7 @@ fun MonthViewScreen(
 
             for(i in 1 until CALENDAR_ROWS){
                 drawLine(
-                    color = Color.White,
+                    color = colorScheme.primary,
                     start = Offset(0f, ySteps * i),
                     end =  Offset(canvasWidth, ySteps * i),
                     strokeWidth = strokeWidth
@@ -148,7 +154,7 @@ fun MonthViewScreen(
             }
             for(i in 1 until CALENDAR_COLUMNS){
                 drawLine(
-                    color = Color.White,
+                    color = colorScheme.primary,
                     start = Offset(xSteps * i, 0f),
                     end =  Offset(xSteps * i, canvasHeight),
                     strokeWidth = strokeWidth
@@ -166,7 +172,7 @@ fun MonthViewScreen(
                         textPositionY,
                         android.graphics.Paint().apply{
                             textSize = textHeight
-                            color = Color.White.toArgb()
+                            color = colorScheme.primary.toArgb()
                             isFakeBoldText = true
                         }
                     )

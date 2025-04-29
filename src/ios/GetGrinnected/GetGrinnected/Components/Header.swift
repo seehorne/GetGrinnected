@@ -8,13 +8,10 @@
 import SwiftUI
 
 @ViewBuilder
-func Header(_ safeAreaTop: CGFloat, title: String, searchBarOn: Bool) -> some View {
+func Header(_ safeAreaTop: CGFloat, title: String) -> some View {
     
     VStack (){
         //only have this on for the homescreen view
-        if(searchBarOn){
-            SearchBar()//search bar
-        }
         
         //title and other icons
         HStack( spacing: 10){
@@ -36,39 +33,13 @@ func Header(_ safeAreaTop: CGFloat, title: String, searchBarOn: Bool) -> some Vi
     }
 }
 
-@ViewBuilder
-func SearchBar() -> some View{
-    HStack( spacing: 15){
-        HStack(spacing: 8){
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.white)
-            
-            TextField("Search", text: .constant(""))
-                .tint(.white)
-        }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 15)
-        .background{
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(.white)
-                .opacity(0.35)
-        }//background
-        
-        Button{
-            
-        } label: {
-            //image
-            Logo(size: 35)
-        }
-    }//HStack for searching
-}
 
 #Preview {
     GeometryReader{proxy in
         let safeAreaTop = proxy.safeAreaInsets.top
         ScrollView(.vertical, showsIndicators: false){
             VStack(){
-                Header(safeAreaTop, title: "Header", searchBarOn: true)
+                Header(safeAreaTop, title: "Header")
                 
                 VStack{
                     ForEach(1...10, id: \.self){_ in

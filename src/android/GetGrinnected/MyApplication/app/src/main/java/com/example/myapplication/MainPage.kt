@@ -1,17 +1,14 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import screens.CalendarScreen
-import screens.FavoritesScreen
-import screens.HomeScreen
-import screens.SettingsScreen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -25,6 +22,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import screens.FavoritesScreen
+import screens.HomeScreen
+import screens.SearchScreen
+import screens.SettingsScreen
+
 
 /**
  * A composable function that displays the main page of the app with a bottom navbar.
@@ -39,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
  *  @param navController this is the nav Controller to our login flow process to be used in sign out functionality
  */
 
+@SuppressLint("NewApi")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainPage(
@@ -46,7 +49,8 @@ fun MainPage(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     tags: List<Check>,
-    navController: NavController
+    navController: NavController,
+    account: AccountEntity
 ) {
     // Creates our navbar
     val bottomNavController = rememberNavController()
@@ -54,17 +58,17 @@ fun MainPage(
     // Creates a list of navItems including a name and an icon associated to display on the navbar
     val navItemList = listOf(
         NavItem("Home", Icons.Default.Home),
-        NavItem("Calendar", Icons.Default.DateRange),
+        NavItem("Search", Icons.Default.Search),
         NavItem("Favorites", Icons.Default.Favorite),
         NavItem("Settings", Icons.Default.Settings),
     )
     // For demo purposes only
     val sampleOrgs = listOf(
-        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
-        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test4", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test5", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2),  listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
+        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test4", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
+        User(1, "test5", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2),  listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
     )
 
     // Creates a scaffold composable to work from
@@ -104,10 +108,12 @@ fun MainPage(
             // Set of routes to for our navbar to follow
             composable("Home") { HomeScreen(tags = tags) }
 
-            composable("Calendar") { CalendarScreen(tags = tags) }
+            composable("Search") { SearchScreen() }
+
 
             composable("Favorites") { FavoritesScreen() }
-            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = User(1, "User123", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
+            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
+
         }
     }
 }

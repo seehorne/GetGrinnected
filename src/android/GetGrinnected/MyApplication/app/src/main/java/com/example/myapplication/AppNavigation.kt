@@ -13,7 +13,6 @@ import screens.EmailVerificationScreen
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
-
 /**
  * A composable function that is utilized for smooth navigation through login/signup process
  * @param modifier the modifier to be applied to page layouts navigated to.
@@ -30,9 +29,13 @@ fun AppNavigation(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     startDestination: String,
-    tags: List<Check>,
+    tags: List<Check>
   // This handles our navigation system with a nav controller
 ){
+
+    // Gets current active account from App Repository
+    val account = AppRepository.currentAccount.value
+
     val navController = rememberNavController()
     // This instantiates our nave controller with a start destination dependent on whether
     // the user is logged in or not.
@@ -52,22 +55,23 @@ fun AppNavigation(
         // This is our home area with our navbar it acts as our view model in a sense
         // for navigating through the various logged in app screens.
         composable("main"){
-            MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController)
+            // Makes sure account is not null just since it could be to start as someone who hasn't logged in
+            if (account != null) {
+                MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, account = account)
+            }
         }
         composable(
-            "verification/{email}/{flag}/{username}",
+            "verification/{email}/{flag}",
             arguments = listOf(
-                navArgument("username") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("flag"){ type = NavType.BoolType },
 
             )
         ) { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username") ?: ""
             val email = backStackEntry.arguments?.getString("email") ?: ""
             val flag = backStackEntry.arguments?.getBoolean("flag") ?: false
 
-            EmailVerificationScreen(email, flag, username, navController = navController)
+            EmailVerificationScreen(email, flag, navController = navController)
         }
     }
 }

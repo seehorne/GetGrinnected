@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.AppRepository
 import com.example.myapplication.EventCard
 import com.example.myapplication.toEvent
+import android.content.Context
 
 /**
  * A composable function that represents the Favorites screen of our app.
@@ -98,11 +99,3 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
     }
 }
 
-/**
- * Preview used specifically for UI design purposes
- */
-@Preview (showBackground = true)
-@Composable
-fun FavoritesPreview() {
-    FavoritesScreen()
-}

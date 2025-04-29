@@ -1,5 +1,6 @@
 package screens
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -21,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,9 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,15 +44,17 @@ import com.example.myapplication.Event
 import com.example.myapplication.EventCard
 import com.example.myapplication.R
 import com.example.myapplication.toEvent
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
 
 /**
  * A composable function that represents the Calendar screen of our app. (More to come)
  *
  * @param modifier Modifier to be applied to the screen layout.
  */
+@SuppressLint("NewApi")
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
@@ -62,29 +64,10 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
     val event = eventEntities.map { it.toEvent() }
     // Sorts them by time
     event.sortedBy { it.event_time }
+    // grabs devices current date
     val date = LocalDate.now()
     val formatter = DateTimeFormatter.ofPattern("MM")
     val currentMonth = date.format(formatter).toString()
-    val chosenTags = mutableListOf<String>()
-    var selectedView by remember { mutableIntStateOf(2) }
-    // tracks dropdowns based on buttons
-    val expanded = remember { mutableStateOf(false) }
-    val expanded2 = remember { mutableStateOf(false) }
-    var calendarInputList by remember {
-        mutableStateOf(createCalendarList(event, chosenTags, currentMonth))
-    }
-    var clickedCalendarElem by remember {
-        mutableStateOf<CalendarInput?>(null)
-    }
-    val scrollState = rememberScrollState()
-    // background color for the page
-    val gradient =
-        Brush.verticalGradient(
-            listOf(Color.Red, Color.Blue, Color.Green),
-            0.0f,
-            10000.0f,
-            TileMode.Repeated
-        )
     // sets the month based on devices local date
     val month = (when (currentMonth) {
         "01" -> { "January" }
@@ -102,19 +85,49 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
             "December"
         }
     }).toString()
-    Column(modifier = modifier.fillMaxSize().background(gradient)) {
-        Box(modifier = modifier.background(Color.Black).size(width = 450.dp, height = 100.dp)) {
+    // grabs selected tags
+    val chosenTags = mutableListOf<String>()
+    // tracks what day we are on
+    var selectedView by remember { mutableIntStateOf(2) }
+    // tracks dropdowns based on buttons
+    val expanded = remember { mutableStateOf(false) }
+    val expanded2 = remember { mutableStateOf(false) }
+    var calendarInputList by remember {
+        mutableStateOf(createCalendarList(event, chosenTags, currentMonth))
+    }
+    var clickedCalendarElem by remember {
+        mutableStateOf<CalendarInput?>(null)
+    }
+    val scrollState = rememberScrollState()
+    // background color for the page
+    /*
+    val gradient =
+        Brush.verticalGradient(
+            listOf(Color.Blue, Color.Magenta, Color.Cyan),
+            0.0f,
+            5000.0f,
+            TileMode.Repeated
+        )
+    */
+    // To access our theme colors
+    val colorScheme = MaterialTheme.colorScheme
+    // To access our font info from our theme
+    // val typography = MaterialTheme.typography
+    
+    // sets the background for the page for us to build our other elements on
+    Column(modifier = modifier.fillMaxSize().background(color = colorScheme.background)) {
+        Box(modifier = modifier.background(color = colorScheme.primaryContainer).fillMaxWidth().size(100.dp)) {
             Row{
                 // adds the logo to the top
                 Image(
-                    painter = painterResource(id = R.drawable.gg_logo_2),
+                    painter = painterResource(id = R.drawable.getgrinnected_logo),
                     contentDescription = "App Logo",
                     modifier = Modifier
                         .padding(25.dp)
                         .background(Color.White)
                         .size(50.dp)
                 )
-                // centers the bottons
+                // centers the buttons
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
@@ -139,6 +152,12 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                                     }
                                 }
                                 calendarInputList = createCalendarList(event, chosenTags, currentMonth) }) {
+                            DropdownMenuItem(
+                                text = {Text("Unselect All")},
+                                onClick = {for (t in tags.indices){
+                                    tags[t].checked.value = false}
+                                },
+                            )
                             for (i in tags.indices) {
                                 DropdownMenuItem(
                                     text = {
@@ -146,7 +165,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
                                             check = tags[i]
                                         )
                                     },
-                                    onClick = {}
+                                    onClick = {tags[i].checked.value = !tags[i].checked.value}
                                 )
                             }
                             Spacer(modifier = Modifier.height(60.dp))
@@ -237,8 +256,11 @@ fun createCalendarList(event: List<Event>, tags: List<String>, month: String): L
     val currentDay = mutableListOf<Event>()
     // sorts events
     for(i in 1 .. 31){
+        // checks each event
         for(j in event.indices){
+            // checks if tags are selected
             if (tags.isEmpty()) {
+                // checks event is the correct day and the correct month
                 if (event[j].event_start_time.substring(8, 10) == i.toString()
                     && event[j].event_start_time.substring(5, 7) == month
                 ) {
@@ -247,13 +269,15 @@ fun createCalendarList(event: List<Event>, tags: List<String>, month: String): L
             }
             else {
                 for(t in tags.indices){
-                if(event[j].event_start_time.substring(8, 10) == i.toString() && event[j].tags.contains(tags[t])){
-                        currentDay.add(event[j])
-                        break
-                    }
+                    // checks event is the correct day and the correct month
+                    if(event[j].event_start_time.substring(8, 10) == i.toString()
+                        && event[j].event_start_time.substring(5, 7) == month
+                        && event[j].tags.contains(tags[t])) {
+                            currentDay.add(event[j])
+                            break
+                        }
                 }
             }
-
         }
         calendarInputs.add(
             CalendarInput(

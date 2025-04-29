@@ -15,7 +15,7 @@ struct EventCreationView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             ScrollView(.vertical, showsIndicators: false){
                 VStack(){
-                    Header(safeAreaTop, title: "Event Creation", searchBarOn: false)
+                    Header(safeAreaTop, title: "Event Creation")
                     
                     
                     //content
