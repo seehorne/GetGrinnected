@@ -231,6 +231,9 @@ function close() {
       }
     });
   }
+
+  // close connection to the database
+  db.end();
 }
 
 /**
