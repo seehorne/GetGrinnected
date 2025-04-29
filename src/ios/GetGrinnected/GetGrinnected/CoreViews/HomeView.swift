@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 //Calendar view
-struct CalendarView: View {
+struct HomeView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
     @State private var searchText = ""
@@ -73,5 +73,5 @@ struct CalendarView: View {
 
 
 #Preview() {
-    CalendarView()
+    HomeView()
 }

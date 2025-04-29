@@ -44,7 +44,7 @@ struct EventList: View {
         
         //apply sort order, default if no title or organization provided
         let finalSortOrder = sortOrder.isEmpty ? [SortDescriptor(
-            \EventModel.startTime //sort by name
+            \EventModel.startTime //sort by time
         )] : sortOrder
         
         //set timespans to explain what view is showing (debugging purposes)
@@ -68,6 +68,12 @@ struct EventList: View {
         )//sort by name default animation
         
     } //init
+    //space so it's easier to distinguish different components of this view
+    
+    
+    
+    
+    
     
     /**
      Buildpredicate is used to input into the query. This is so that the query is able to run efficiently
@@ -150,10 +156,6 @@ struct EventList: View {
             refreshTimer?.invalidate()
             refreshTimer = nil
         }
-        /**
-         THIS will eventually be changed to a scroll up to refresh!
-         **/
-        .disabled(isLoading) //cannot use while events are loading
     }//body
     
     

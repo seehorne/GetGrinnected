@@ -12,9 +12,9 @@ struct MainNavView: View {
     var body: some View {
         //creates the bottom bar for navigatio
         TabView {
-            CalendarView()
+            HomeView()
                 .tabItem {
-                    Label("Calendar", systemImage: "calendar")
+                    Label("Home", systemImage: "house.fill")
                 }
             SearchView()
                 .tabItem {
