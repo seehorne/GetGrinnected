@@ -158,8 +158,18 @@ class UserProfile: ObservableObject {
                     return
                 }
 
-                // Success
-                completion(.success(decodedResponse.message ?? "Success"))
+                // Success??
+                // well first check if we got the relevant tokens and if we did, save them for later use
+                if let aToken = decodedResponse.access_token, let rToken = decodedResponse.refresh_token,
+                             !aToken.isEmpty && !rToken.isEmpty {
+                    UserDefaults.standard.set(decodedResponse.access_token, forKey: "accessToken")
+                    UserDefaults.standard.set(decodedResponse.refresh_token, forKey: "refreshToken")
+                    //in order to be in this condition we must have an access token so we're fine to assume its here
+                    completion(.success(decodedResponse.message ?? "Success"))
+                }
+                else { //otherwise we are verified but not authorized
+                    completion(.failure(APIError.unauthorized))
+                }
             } catch {
                 print("Decoding error: \(error)")
                 completion(.failure(APIError.decoderError))
@@ -276,7 +286,99 @@ class UserProfile: ObservableObject {
             //use the error message swift came up with
             return error.localizedDescription
         }
-        
+    }
+    
+    //this function refreshes the access token and keeps it local for the user
+    func refreshAccessToken(completion: @escaping (Result<String, Error>) -> Void) {
+        guard let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") else {
+            completion(.failure(APIError.unauthorized))
+            return
+        }
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/token-refresh")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else {
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                // Store new tokens
+                if let aToken = decodedResponse.access_token, let rToken = decodedResponse.refresh_token,
+                             !aToken.isEmpty && !rToken.isEmpty {
+                    UserDefaults.standard.set(decodedResponse.access_token, forKey: "accessToken")
+                    UserDefaults.standard.set(decodedResponse.refresh_token, forKey: "refreshToken")
+                    //in order to be in this condition we must have an access token so we're fine to assume its here
+                    completion(.success("Bearer \(String(describing: decodedResponse.access_token))"))
+                }
+                else {
+                    completion(.failure(APIError.unauthorized))
+                }
+            } catch {
+                completion(.failure(APIError.decoderError))
+            }
+        }.resume()
+    }
+    
+    
+    //request builder, the actual call we care about
+    func safeApiCall( requestBuilder: @escaping (String) -> URLRequest,
+                      completion: @escaping (Result<Data, Error>) -> Void) {
+        //Get current access token
+        guard let accessToken = UserDefaults.standard.string(forKey: "accessToken") else {
+            completion(.failure(APIError.unauthorized))
+            return
+        }
+        //Make the API call
+        //this is an internal function, not my favorite, but does the job
+        func makeRequest(token: String) {
+            var request = requestBuilder(token)
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(APIError.invalidResponse))
+                    return
+                }
+                if httpResponse.statusCode == 403 {
+                    // Try refreshing token and retrying
+                    self.refreshAccessToken { result in
+                        switch result {
+                        case .success(let newToken):
+                            let retryRequest = requestBuilder(newToken)
+                            URLSession.shared.dataTask(with: retryRequest) { data, response, error in
+                                if let error = error {
+                                    completion(.failure(error))
+                                    return
+                                }
+                                guard let data = data else {
+                                    completion(.failure(APIError.invalidResponse))
+                                    return
+                                }
+
+                                completion(.success(data))
+                            }.resume()
+                        case .failure(let refreshError):
+                            completion(.failure(refreshError))
+                        }
+                    }
+                } else if let data = data {
+                    completion(.success(data))
+                } else {
+                    completion(.failure(APIError.invalidResponse))
+                }
+            }
+            task.resume()
+        }
+        makeRequest(token: "Bearer \(accessToken)")
     }
     
     // all the things that could be in the API response
@@ -298,12 +400,14 @@ class UserProfile: ObservableObject {
         case invalidResponse
         case decoderError
         case signInError(String)
+        case unauthorized
         var localizedStringResource: LocalizedStringResource {
             switch self {
             case .badEmail: return "Email wrong:";
             case .invalidResponse: return "Invalid response from server";
             case .decoderError: return "Could not decode JSON";
-            case .signInError(let message):  return "Login error \(message)"
+            case .signInError(let message):  return "Login error \(message)";
+            case .unauthorized: return "Could not authenticate user session"
             }
         }
     }
