@@ -68,13 +68,6 @@ struct EventList: View {
         )//sort by name default animation
         
     } //init
-    //space so it's easier to distinguish different components of this view
-    
-    
-    
-    
-    
-    
     /**
      Buildpredicate is used to input into the query. This is so that the query is able to run efficiently
      otherwise the compiler freaks out.
@@ -140,13 +133,15 @@ struct EventList: View {
         .onAppear{
             //fetch events on initial appear
             Task {
-                await fetchEvents()
+                let myEvents = await fetchEvents()
+                await DTOtoCache(eventDTOs: myEvents)
             }
             
             //refresh on timer, every 5 minutes for now!
             refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
                 Task {
-                    await fetchEvents()
+                    let myEvents = await fetchEvents()
+                    await DTOtoCache(eventDTOs: myEvents)
                 }
             }
                 
@@ -158,33 +153,24 @@ struct EventList: View {
         }
     }//body
     
-    
-    
-    /// Fetching events
-    
-    //Function Fetch Events
     /**
      Returns nothing:
      once called, shows isloading ot be true, and resets error message
+    Takes JSON from API and converts into DTO
      */
-    private func fetchEvents() async {
+    private func fetchEvents() async -> [EventDTO] {
         //determine if we should fetch based on last fetched time, time interval (date selected), and if a force refresh was requested
         let shouldFetch = parentView.lastFetched == nil || Date().timeIntervalSince(parentView.lastFetched!) >= parentView.cacheExpiration || parentView.forceRefreshRequested
         
         //use cache data
         if !shouldFetch{
-            print("using cached data")
-            return //return to escape from the fetched events function
+            print("No need to Fetch")
+            return []//return to escape from the fetched events function
         }
         
         //if loading, set to true, to show loading view
         await MainActor.run {
             isLoading = true
-        }
-        
-        //remove duplicates in the main actor (not sure why)
-        await MainActor.run {
-            removeDuplicates()
         }
         
         //logging for debugging
@@ -200,14 +186,26 @@ struct EventList: View {
                 .run {
                     isLoading = false
                 } //set to false if you failed to fetch data
-            return
+            return []
         }//guard let
-            
             
         //parse events
         let eventDTOs = EventData.parseEvents(json: jsonString)
-            
-            
+        
+        //note that fetch is complete
+        await MainActor.run {
+            print("Fetch complete. Found \(events.count) events for timespan \(parentView.timeSpan.start) to \(parentView.timeSpan.end)")
+        }
+        
+        //return all DTOs for another function to save to cache
+        return eventDTOs
+    } //fetchEvents
+    
+    /**
+        FetchEvents now only returns DTOs, while DTOtoCache takes thoes values
+     and  stores them in the cache
+     */
+    private func DTOtoCache(eventDTOs: [EventDTO]) async {
         // Update on main thread since we're changing published properties
         await MainActor.run {
             //add all existing ids to events
@@ -282,22 +280,23 @@ struct EventList: View {
             } //if there is an event with that ID
                 
                 
-            //cleanup old Events (older than a week) from events
+            //cleanup old Events (older than two weeks) from events
             let weekAgo = Calendar.current.date(
                 byAdding: .day,
-                value: -7,
+                value: -14,
                 to: Date()
             )!
                 
-            //delete all values older than a week
+            //delete all values older than two weeks
             let oldPredicate = #Predicate<EventModel> {
                 $0.lastUpdated < weekAgo
             } //defining predicate
+            
             try? modelContext
                 .delete(model: EventModel.self, where: oldPredicate)
                 
             // a little inefficient, however..
-            removeDuplicates()
+            removeDuplicatesFromCache()
                 
             //save context after adding all events
             try? modelContext.save()
@@ -308,21 +307,16 @@ struct EventList: View {
                 
             //turn off loading state
             isLoading = false
-            print("API fetch completed at \(Date())")
+            print("DTO Caching completed at \(Date())")
         } // await MainActor
         
         
-        //note that fetch is complete
-        await MainActor.run {
-            print("Fetch complete. Found \(events.count) events for timespan \(parentView.timeSpan.start) to \(parentView.timeSpan.end)")
-        }
-    } //fetchEvents
-    
+    }
     
     /**
      Remove duplicates to remove any duplicate events clogging up the cache!
      */
-    private func removeDuplicates() {
+    private func removeDuplicatesFromCache() {
         // Group events by ID and find duplicates
         let eventsByID = Dictionary(grouping: events, by: { $0.id })
         
