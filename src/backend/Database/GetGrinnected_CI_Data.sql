@@ -7,7 +7,7 @@
 -- Server version: 9.2.0
 -- PHP Version: 8.0.30
 --
--- goofed upon to make it workable for CI by almond
+-- modified for CI purposes by almond
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -25,6 +25,10 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+-- almond addition: create the DB itself.
+CREATE DATABASE IF NOT EXISTS GetGrinnectedCI;
+USE GetGrinnectedCI;
+
 --
 -- Table structure for table `accounts`
 --
@@ -40,15 +44,16 @@ CREATE TABLE `accounts` (
   `drafted_events` json DEFAULT NULL,
   `favorited_tags` json DEFAULT NULL,
   `account_description` text,
-  `account_role` int DEFAULT NULL
+  `account_role` int DEFAULT NULL,
+  `notified_events` json DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`accountid`, `account_name`, `email`, `password`, `profile_picture`, `favorited_events`, `favorited_orgs`, `drafted_events`, `favorited_tags`, `account_description`, `account_role`) VALUES
-(1, 'test_account', 'email@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `accounts` (`accountid`, `account_name`, `email`, `password`, `profile_picture`, `favorited_events`, `favorited_orgs`, `drafted_events`, `favorited_tags`, `account_description`, `account_role`, `notified_events`) VALUES
+(1, 'test_account', 'email@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -80,8 +85,9 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`eventid`, `event_name`, `event_description`, `event_location`, `organizations`, `rsvp`, `event_date`, `event_time`, `event_all_day`, `event_start_time`, `event_end_time`, `tags`, `event_private`, `repeats`, `event_image`, `is_draft`) VALUES
-(1, 'one', 'uno yksi jedna um vienas une', 'nowhere', '[\"One Person\"]', 0, 'May 30', '1 p.m. - 5 p.m.', 0, '2025-05-30 18:00:00', '2025-05-30 22:00:00', '[\"one\", \"event\"]', 0, 0, NULL, 0),
-(2, 'two', 'dos du dy tveir dois dau', 'everywhere', '[\"Two\", \"People\"]', 0, 'May 31', '3 p.m. - 4 p.m.', 0, '2025-05-31 20:00:00', '2025-05-31 21:00:00', '[\"two\", \"event\"]', 0, 0, NULL, 0);
+(1, 'one', 'fake description for event 1', 'nowhere', '[\"One Person\"]', 0, 'May 30', '1 p.m. - 5 p.m.', 0, '2025-05-30 18:00:00', '2025-05-30 22:00:00', '[\"one\", \"odd\"]', 0, 0, NULL, 0),
+(2, 'two', 'fake description for event 2', 'everywhere', '[\"Two\", \"People\"]', 0, 'May 31', '3 p.m. - 4 p.m.', 0, '2025-05-31 20:00:00', '2025-05-31 21:00:00', '[\"two\", \"even\"]', 0, 0, NULL, 0),
+(3, 'three', 'fake description for event 3', 'in between', '[\"Nobody\"]', 0, 'May 31', '2 p.m. - 3 p.m.', 0, '2025-05-31 19:00:00', '2025-05-31 20:00:00', '[\"three\", \"odd\"]', 0, 0, NULL, 0);
 
 --
 -- Indexes for dumped tables
