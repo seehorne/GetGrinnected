@@ -1,5 +1,5 @@
 // testing funcs
-const { it, describe, before, after } = require('node:test');
+const { it, describe, before, beforeEach, after } = require('node:test');
 const assert = require('node:assert/strict');
 const request = require('supertest');
 const sinon = require('sinon');
@@ -9,7 +9,6 @@ const isEmpty = require('lodash/isEmpty');
 const arrayXOR = require('lodash/xor');
 
 // local files
-const db = require('../db_connect'); // so we can mock it with sinon
 const api = require('../api/api.cjs');
 const events = require('../api/routes/events.cjs');
 const user = require('../api/routes/user.cjs');
@@ -21,145 +20,337 @@ function arraysEqual(array1, array2) {
 }
 
 describe('Test API', () => {
+    var req;
     // Run API to start tests, and stop it on finish.
     before(() => {
+        req = request('http://localhost:8080')
         api.run();
     });
     after(() => {
         api.close();
     });
 
-    describe('GET /', () => {
-        it('should return online text', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/');
-            assert.strictEqual(res.statusCode, 200);
-            assert.strictEqual(res.text, 'API online!');
-        });
-    });
-
-    describe('GET /events', () => {
-        // Create fake DB methods
-        before(() => {
-            sinon.stub(db, 'getEvents').callsFake(async () => {
-                return 'getEvents';
-            });
-
-            sinon.stub(db, 'getEventsWithTags').callsFake(async (_tags) => {
-                return 'getEventsWithTags';
-            });
-        });
-
-        it('should call getEvents when no tags provided', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/events');
-            assert.strictEqual(res.statusCode, 200);
-            assert.strictEqual(
-                res.text,
-                '"getEvents"'
-            );
-        });
-
-        it('should call getEventsWithTags when tags are provided', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/events?tag=exists');
-            assert.strictEqual(res.statusCode, 200);
-            assert.strictEqual(
-                res.text,
-                '"getEventsWithTags"'
-            );
-        });
-    });
-
-    describe('GET /events/between', () => {
-        // Create fake DB methods
-        before(() => {
-            sinon.stub(db, 'getEventsBetween').callsFake(
-                async (_start, _end) => {
-                    return 'getEventsBetween';
-                }
-            );
-
-            sinon.stub(db, 'getEventsBetweenWithTags').callsFake(
-                async (_start, _end, _tags) => {
-                    return 'getEventsBetweenWithTags';
-                }
-            );
-        });
-
-        it('should call getEventsBetween when no tags are provided', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/events/between/2021-03-04/2021-03-06');
-            assert.strictEqual(res.statusCode, 200);
-            assert.strictEqual(
-                res.text,
-                '"getEventsBetween"'
-            );
-        });
-
-        it('should call getEventsBetweenWithTags when tags are provided',
-            async () => {
-                const req = request('http://localhost:8080');
-                const res = await req.get('/events/between/2021-03-04/2021-03-06?tag=example');
+    describe('Unauthenticated', () => {
+        describe('GET /', () => {
+            it('should return online text', async () => {
+                const res = await req.get('/');
                 assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(res.text, 'API online!');
+            });
+        });
+
+        describe('GET /events', () => {
+            it('should return all events with no tags', async () => {
+                const res = await req.get('/events');
+
+                // Check return status and length (but not content) of response array
+                assert.strictEqual(res.statusCode, 200);
+                const eventsArray = JSON.parse(res.text);
+                assert.strictEqual(eventsArray.length, 3);
+            });
+
+            it('should return fewer events with tags', async () => {
+                const res = await req.get('/events?tag=odd');
+
+                // Check return status and length (but not content) of response array
+                assert.strictEqual(res.statusCode, 200);
+                const eventsArray = JSON.parse(res.text);
+                assert.strictEqual(eventsArray.length, 2);
+            });
+        });
+
+        describe('GET /events/between', () => {
+            it('should return only events on a certain date', async () => {
+                const res = await req.get('/events/between/2025-05-31/2025-06-01');
+
+                // Check return status and length (but not content) of response array
+                assert.strictEqual(res.statusCode, 200);
+                const eventsArray = JSON.parse(res.text);
+                assert.strictEqual(eventsArray.length, 2);
+            });
+
+            it('should filter those events with a tag provided', async () => {
+                const res = await req.get('/events/between/2025-05-31/2025-06-01?tag=odd');
+
+                // Check return status and length (but not content) of response array
+                assert.strictEqual(res.statusCode, 200);
+                const eventsArray = JSON.parse(res.text);
+                assert.strictEqual(eventsArray.length, 1);
+            });
+
+            it('should fail with entirely invalid dates', async () => {
+                const res = await req.get('/events/between/20210304/20210306');
+                assert.strictEqual(res.statusCode, 400);
                 assert.strictEqual(
                     res.text,
-                    '"getEventsBetweenWithTags"'
+                    JSON.stringify({
+                        'error': 'Invalid date',
+                        'message': 'Start and end date could not be read properly.'
+                    })
                 );
             });
 
-        it('should fail with entirely invalid dates', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/events/between/20210304/20210306');
-            assert.strictEqual(res.statusCode, 400);
-            assert.strictEqual(
-                res.text,
-                JSON.stringify({
-                    'error': 'Invalid date',
-                    'message': 'Start and end date could not be read properly.'
-                })
-            );
+            it('should fail with invalid start date', async () => {
+                const res = await req.get('/events/between/20210304/2021-03-06');
+                assert.strictEqual(res.statusCode, 400);
+                assert.strictEqual(
+                    res.text,
+                    JSON.stringify({
+                        'error': 'Invalid date',
+                        'message': 'Start date could not be read properly.'
+                    })
+                );
+            });
+
+            it('should fail with invalid end date', async () => {
+                const res = await req.get('/events/between/2021-03-02/20210304');
+                assert.strictEqual(res.statusCode, 400);
+                assert.strictEqual(
+                    res.text,
+                    JSON.stringify({
+                        'error': 'Invalid date',
+                        'message': 'End date could not be read properly.'
+                    })
+                );
+            });
+
+            it('should fail with start date after end date', async () => {
+                const res = await req.get('/events/between/2021-03-06/2021-03-02');
+                assert.strictEqual(res.statusCode, 400);
+                assert.strictEqual(
+                    res.text,
+                    JSON.stringify({
+                        'error': 'Bad date order',
+                        'message': 'Start date must occur before end date.'
+                    })
+                );
+            });
+        });
+    });
+
+    // NOTE: It is not possible to test these routes automatically to my knowledge,
+    // because they are too closely tied to the login process and emails.
+    // - POST /user/login
+    // - POST /user/signup
+    // - POST /user/resend-otp
+    // - POST /user/verify
+    // Instead, they must be incorporated into manual testing.
+    // TODO: ADD MANUAL TESTING SECTION ON THIS.
+
+    // the authenticated tests need these tokens, let their scope cover all tests
+    var refresh_token;
+    var access_token;
+    describe('Authenticated', () => {
+        before(() => {
+            // Fake the user tokens, as if they had logged in.
+            const tokens = util.generateUserTokens('email@example.com');
+            refresh_token = tokens.refresh;
+            access_token = tokens.access;
         });
 
-        it('should fail with invalid start date', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/events/between/20210304/2021-03-06');
-            assert.strictEqual(res.statusCode, 400);
-            assert.strictEqual(
-                res.text,
-                JSON.stringify({
-                    'error': 'Invalid date',
-                    'message': 'Start date could not be read properly.'
-                })
-            );
+        describe('Error handling', () => {
+            // Define sets of routes to test, by which request they use
+            const getRoutes = [
+                '/user/events/favorited',
+                '/user/events/notified',
+                '/user/username',
+            ];
+            const postRoutes = [
+                '/user/token-verify'
+            ];
+            const putRoutes = [
+                { 'route': '/user/events/favorited', 'body': 'favorited_events' },
+                { 'route': '/user/events/notified', 'body': 'notified_events' },
+                { 'route': '/user/username', 'body': 'username' }
+            ];
+
+            describe('PUT routes', () => {
+                for (const item of putRoutes) {
+                    it(`PUT ${item.route} should 400 when no body is included`, async () => {
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .put(item.route)
+                            // Headers
+                            .set('Authorization', `Bearer ${access_token}`)
+                            .set('Content-Type', 'application/json')
+
+                        assert.strictEqual(res.statusCode, 400);
+                    });
+
+                    it(`PUT ${item.route} should 401 when token is not provided`, async () => {
+                        // Create the request body to have the required key
+                        var jsonBody = {};
+                        jsonBody[item.body] = 'fake_but_present';
+
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .put(item.route)
+                            // Headers
+                            .set('Content-Type', 'application/json')
+                            // Body
+                            .send(jsonBody);
+
+                        assert.strictEqual(res.statusCode, 401);
+                    });
+
+                    it(`PUT ${item.route} should 403 when the token is not good`, async () => {
+                        // Create the request body to have the required key
+                        var jsonBody = {};
+                        jsonBody[item.body] = 'fake_but_present';
+
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .put(item.route)
+                            // Headers
+                            .set('Authorization', `Bearer invalid_token`)
+                            .set('Content-Type', 'application/json')
+                            // Body
+                            .send(jsonBody);
+
+                            assert.strictEqual(res.statusCode, 403);
+                    });
+
+                    it(`PUT ${item.route} should 404 when the user does not exist`, async () => {
+                        // Generate tokens for a user that's not really in the db.
+                        const fakeTokens = util.generateUserTokens('fake@example.com');
+
+                        // Create the request body to have the required key
+                        var jsonBody = {};
+                        jsonBody[item.body] = 'fake_but_present';
+
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .put(item.route)
+                            // Headers
+                            .set('Authorization', `Bearer ${fakeTokens.access}`)
+                            .set('Content-Type', 'application/json')
+                            // Body
+                            .send(jsonBody);
+
+                        assert.strictEqual(res.statusCode, 404);
+                    });
+                }
+            });
+
+            describe('GET routes', () => {
+                for (const route of getRoutes) {
+                    it(`GET ${route} should 401 when token is not provided`, async () => {
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .get(route)
+                            // Headers
+                            .set('Content-Type', 'application/json');
+
+                        assert.strictEqual(res.statusCode, 401);
+                    });
+
+                    it(`GET ${route} should 403 when the token is not good`, async () => {
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .get(route)
+                            // Headers
+                            .set('Authorization', `Bearer invalid_token`)
+                            .set('Content-Type', 'application/json');
+
+                            assert.strictEqual(res.statusCode, 403);
+                    });
+
+                    it(`GET ${route} should 404 when the user does not exist`, async () => {
+                        // Generate tokens for a user that's not really in the db.
+                        const fakeTokens = util.generateUserTokens('fake@example.com');
+
+                        // Make the request
+                        const res = await req
+                            // URL ending
+                            .get(route)
+                            // Headers
+                            .set('Authorization', `Bearer ${fakeTokens.access}`)
+                            .set('Content-Type', 'application/json');
+
+                        assert.strictEqual(res.statusCode, 404);
+                    });
+                }
+            });
         });
 
-        it('should fail with invalid end date', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/events/between/2021-03-02/20210304');
-            assert.strictEqual(res.statusCode, 400);
-            assert.strictEqual(
-                res.text,
-                JSON.stringify({
-                    'error': 'Invalid date',
-                    'message': 'End date could not be read properly.'
-                })
-            );
+        describe('POST /user/token-refresh', () => {
+            it('should return new tokens', async () => {
+                const res = await req
+                    .post('/user/token-refresh')
+                    .set('Authorization', `Bearer ${refresh_token}`)
+                    .set('Content-Type', 'application/json');
+
+                // Convert response into a JSON object, make sure it has the right keys
+                const object = JSON.parse(res.text);
+                assert.strictEqual(object.message, "Successfully refreshed");
+                assert.notStrictEqual(object.refresh_token, undefined);
+                assert.notStrictEqual(object.access_token, undefined);
+
+                // Since we just changed the tokens, update the higher-scoped vars.
+                refresh = object.refresh_token;
+                access = object.access_token;
+            });
+
+            // This route's errors are checked separately because they use the refresh token, not the auth token.
+            it('should 401 when the token is not included', async () => {
+                const res = await req
+                    .post('/user/token-refresh')
+                    .set('Authorization', `Bearer not_a_real_token_lol`)
+                    .set('Content-Type', 'application/json');
+                assert.strictEqual(res.statusCode, 403);
+            });
+
+            it('should 403 when the token is not good', async () => {
+                const res = await req
+                    .post('/user/token-refresh')
+                    .set('Authorization', `Bearer not_a_real_token_lol`)
+                    .set('Content-Type', 'application/json');
+                assert.strictEqual(res.statusCode, 403);
+            });
+
+            it('should 404 when the user does not exist', async () => {
+                const fakeTokens = util.generateUserTokens('fake@example.com');
+                const res = await req
+                    .post('/user/token-refresh')
+                    .set('Authorization', `Bearer ${fakeTokens.refresh}`)
+                    .set('Content-Type', 'application/json');
+                assert.strictEqual(res.statusCode, 404);
+            });
         });
 
-        it('should fail with start date after end date', async () => {
-            const req = request('http://localhost:8080');
-            const res = await req.get('/events/between/2021-03-06/2021-03-02');
-            assert.strictEqual(res.statusCode, 400);
-            assert.strictEqual(
-                res.text,
-                JSON.stringify({
-                    'error': 'Bad date order',
-                    'message': 'Start date must occur before end date.'
-                })
-            );
+        describe('GET /user/data', () => {
+            // TODO: WRITE THE TESTS
         });
 
+        describe('GET /user/events/favorited', () => {
+            // TODO: WRITE THE TESTS
+        });
+
+        describe('GET /user/events/notified', () => {
+            // TODO: WRITE THE TESTS
+        });
+
+        describe('GET /user/username', () => {
+            // TODO: WRITE THE TESTS
+        });
+
+        describe('PUT /user/events/favorited', () => {
+            // TODO: WRITE THE TESTS
+        });
+
+        describe('PUT /user/events/notified', () => {
+            // TODO: WRITE THE TESTS
+        });
+
+        describe('PUT /user/username', () => {
+            // TODO: WRITE THE TESTS
+        });
     });
 });
 
