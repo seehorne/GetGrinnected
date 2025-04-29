@@ -18,8 +18,9 @@ struct SearchView: View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
-                // Header is outside of scrollable so it does not move
-                Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Search", searchBarOn: true)
+                // Searchbar is outside of scrollable so it does not move
+                SearchBar(inputText: $searchText, safeAreaTop: safeAreaTop)
+                
                 ScrollView(.vertical, showsIndicators: false){
                 //content of eventlist, show favorites true!, no search string
                 EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: false)
