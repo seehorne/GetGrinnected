@@ -19,6 +19,7 @@ struct SettingsView: View {
     @State private var viewColorScheme: ColorScheme = .light
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
+    @State private var basicInput: String = ""
     
     var body: some View {
         
@@ -26,7 +27,7 @@ struct SettingsView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(safeAreaTop, title: "Settings")
+                Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
                 

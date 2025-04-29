@@ -44,7 +44,7 @@ struct EventList: View {
         
         //apply sort order, default if no title or organization provided
         let finalSortOrder = sortOrder.isEmpty ? [SortDescriptor(
-            \EventModel.name //sort by name
+            \EventModel.startTime //sort by time
         )] : sortOrder
         
         //set timespans to explain what view is showing (debugging purposes)
@@ -68,6 +68,12 @@ struct EventList: View {
         )//sort by name default animation
         
     } //init
+    //space so it's easier to distinguish different components of this view
+    
+    
+    
+    
+    
     
     /**
      Buildpredicate is used to input into the query. This is so that the query is able to run efficiently
@@ -150,19 +156,6 @@ struct EventList: View {
             refreshTimer?.invalidate()
             refreshTimer = nil
         }
-        /**
-         THIS will eventually be changed to a scroll up to refresh!
-         **/
-        .toolbar {
-            //force refresh
-            Button("Refresh"){
-                //force refresh through the button!
-                parentView.forceRefresh() //only changes last change to nil
-                removeDuplicates() //remove duplicates
-                Task{ await fetchEvents()}
-            }
-            .disabled(isLoading) //cannot use while events are loading
-        }
     }//body
     
     
@@ -230,8 +223,7 @@ struct EventList: View {
                 if processedEventIds.contains(dtoID){
                     continue
                 }//If contains, continue, if not..
-                processedEventIds
-                    .insert(dtoID)//add it to the list of processed IDs
+                processedEventIds.insert(dtoID)//add it to the list of processed IDs
                     
                 // Check if this event already exists in the database
                 let existingEvent = events.first(where: { $0.id == dtoID })
@@ -241,6 +233,10 @@ struct EventList: View {
                     existing.name = dto.event_name ?? existing.name
                     existing.imageURL = dto.event_image ?? existing.imageURL
                     existing.location = dto.event_location ?? existing.location
+                    
+                    //handle saving data, so no overwriting
+                    print("favorited \(existing.name)\(existing.favorited)")
+                    existing.favorited = existing.favorited
                         
                     //handle arrays carefully
                     if let newOrgs = dto.organizations{

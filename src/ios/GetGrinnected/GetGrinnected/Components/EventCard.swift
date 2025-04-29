@@ -50,6 +50,10 @@ struct EventCard: View {
     let isExpanded: Bool//The single card does not need a @binding or @state tag
     //simply based on this value, the expansion will show and not.
     
+    
+    /** Some helper functions for the date*/
+
+    
     //body is how this is rendered
     
     var body: some View{
@@ -103,19 +107,17 @@ struct EventCard: View {
                                     .font(.caption)
                             }
                             
-                            //We want date and time on the same line, so we..
-                            if((event.date != nil) && (event.startTime != nil)){ //check if both are not nil, then..
-                                Text("\(event.date!) • \(event.startTime!)") //print out both strings and create a text bullet point inbetween the date and time
+                            // Formatted time string
+                            if(event.startTimeString != nil){ //lastly, check if ONLY the time is not nil.
+                                Text("\(event.startTimeString!)")
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
-                            } else if(event.date != nil){//otherwise, we check if ONLY the date is not nil.
-                                Text("\(event.date!)") //print out date
+                            } else if (event.date != nil) { //if the MOST beautiful string is not available, utilize the simple date (April 18th, for example), instead.
+                                //there may be a possibility that this event.date still stores information of the hour (where startimestring stores all that information), and minutes, but it's simply not showing because it's set to nil for some reason. lookinto this further after.
+                                Text("\(event.date!)")
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
-                            } else if(event.startTime != nil){ //lastly, check if ONLY the time is not nil.
-                                Text("\(event.startTime!)")
-                                    .font(.caption)
-                                    .foregroundStyle(.textPrimary)
+                                
                             }
                             
                             
