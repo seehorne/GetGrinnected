@@ -27,6 +27,8 @@ final class EventModel: Hashable { // hashable for uniqueness
     var location: String?
     var startTime: Date?
     var endTime: Date?
+    var startTimeString: String?
+    var endTimeString: String?
     var rsvp: Int?
     var all_day: Int?
     var event_private: Int?
@@ -63,14 +65,34 @@ final class EventModel: Hashable { // hashable for uniqueness
         self.tags = dto.tags ?? []
         self.organizations = dto.organizations ?? []
 
-        //creating a formatter (coudld use the extension that we wrote..
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        func formattedEventTime() -> String? {
+            guard let date = dto.useful_event_start_time else { return nil }
+            
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.dateFormat = "EEEE MMMM d'\(daySuffix(for: date))' 'at' h:mm a"
+            
+            return formatter.string(from: date)
+        }
 
-        self.startTime = dto.event_start_time.flatMap { formatter.date(from: $0) }
-        self.endTime = dto.event_end_time.flatMap { formatter.date(from: $0) }
-
+        func daySuffix(for date: Date) -> String {
+            let calendar = Calendar.current
+            let day = calendar.component(.day, from: date)
+            
+            switch day {
+            case 1, 21, 31: return "st"
+            case 2, 22: return "nd"
+            case 3, 23: return "rd"
+            default: return "th"
+            }
+        }
+        
+        self.startTime =  dto.useful_event_start_time//type date
+        self.endTime = dto.useful_event_end_time //type date
+        
+        self.startTimeString = formattedEventTime() //type string
+        self.endTimeString = dto.event_end_time //type string
+        
         self.imageURL = dto.event_image
         self.rsvp = dto.rsvp
         self.all_day = dto.event_all_day
@@ -100,4 +122,5 @@ final class EventModel: Hashable { // hashable for uniqueness
     static func ==(lhs: EventModel, rhs: EventModel) -> Bool {
         return lhs.id == rhs.id
     }
+    
 }

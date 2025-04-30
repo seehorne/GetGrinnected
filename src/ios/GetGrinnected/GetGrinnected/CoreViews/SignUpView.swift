@@ -9,9 +9,7 @@ import SwiftUI
 
 struct SignUpView: View{
     @Binding var isLoggedIn: Bool
-    
     //connect to LoginView and ContentView's isLogged In
-    @EnvironmentObject var authManager: AuthManager
     
     @State private var username = ""
     @State private var email = ""

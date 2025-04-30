@@ -9,13 +9,14 @@ import Foundation
 import SwiftUI
 
 struct EventCreationView: View {
+    
     var body: some View {
         
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             ScrollView(.vertical, showsIndicators: false){
                 VStack(){
-                    Header(safeAreaTop, title: "Event Creation")
+                    Header(safeAreaTop: safeAreaTop, title: "Favorites", searchBarOn: false)
                     
                     
                     //content

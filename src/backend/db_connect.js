@@ -20,6 +20,13 @@ const pool = mysql.createPool({
 }).promise()
 
 /**
+ * End the connection to the database pool.
+ */
+function end() {
+    pool.end();
+}
+
+/**
  * insertEventsFromScrape
  * 
  * uses scraped json file to fill events into database
@@ -310,6 +317,7 @@ if (require.main === module) {
 } else {
     // File is being used as a module. Export it.
     module.exports = {
+        end,
         createAccount,
         dropExpiredEvents,
         getAccount,
