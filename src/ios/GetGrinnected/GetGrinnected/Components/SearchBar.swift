@@ -19,6 +19,7 @@ struct SearchBar: View {
                 TextField("Search", text: Binding(
                     get: { inputText },
                     set: { inputText = $0 }))
+                .foregroundColor(.white)
                 .tint(.white)
             }
             .padding(.vertical, 10)
