@@ -12,6 +12,8 @@ struct SettingsView: View {
     // access the core data to see the color scheme the device is set to
     @Environment(\.colorScheme) private var userColorScheme
     
+    // boolean to keep track if we are logged in
+    @Binding var isLoggedIn: Bool
     // our users username
     @State private var username: String = "user123"
     
@@ -30,22 +32,43 @@ struct SettingsView: View {
                 Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
-                
-                //content
-                VStack {
-                    InputView(text: $username, title: "Change Username", placeholder: "Username")
-                        .padding()
                     
-                    // switch for light/dark mode
-                    Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
-                        .padding()
-                        .tint(.colorBlue)
-                        .frame(maxWidth: 200)
-                } //VStack
-                .padding()
+                    //content
+                    VStack {
+                        HStack {
+                            // spacer to right align button
+                            Spacer()
                             
-                }//vstack
-            }//Scroll view
+                            // Logout button
+                            Button(action: {
+                                // we are logging out
+                                isLoggedIn = false
+                            }) {
+                                Text("Logout")
+                                    .foregroundColor(.border)
+                                Image(systemName: "rectangle.portrait.and.arrow.right")
+                                    .foregroundColor(.border)
+                                    .imageScale(.large)
+                            } //Button
+                            .navigationDestination(isPresented: $isLoggedIn) {
+                                ContentView()
+                            }
+                        }
+                        
+                        InputView(text: $username, title: "Change Username", placeholder: "Username")
+                            .padding()
+                        
+                        // switch for light/dark mode
+                        Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
+                            .padding()
+                            .tint(.border)
+                            .frame(maxWidth: 200)
+                            .foregroundColor(.border)
+                    } //VStack
+                    .padding()
+                    
+                }   //vstack
+            }   //Scroll view
             .edgesIgnoringSafeArea(.top)
             
         }//GeometryReader
@@ -81,5 +104,5 @@ struct SettingsView: View {
 } //ProfileView
 
 #Preview {
-    SettingsView()
+    SettingsView(isLoggedIn: .constant(true))
 }

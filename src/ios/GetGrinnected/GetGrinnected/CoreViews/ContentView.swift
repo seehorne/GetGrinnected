@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if isLoggedIn {
-                MainNavView()
+                MainNavView(isLoggedIn: $isLoggedIn)
                     .navigationBarBackButtonHidden(true)
             } else{
                 LoginView(isLoggedIn: $isLoggedIn)
