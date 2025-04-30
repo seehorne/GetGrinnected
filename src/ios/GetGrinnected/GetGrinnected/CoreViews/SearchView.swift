@@ -6,32 +6,68 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SearchView: View {
     // the parent model used for updating our event list
-    @StateObject private var viewModel = EventListParentViewModel()
-    @State private var searchText = ""
-    @State private var isLoading = true
+    //model context, containing how we save to cache
+    @Environment(\.modelContext) private var modelContext
+    
+    //only initialized value that is a query; sort our events by start time, and make it queryable by @query
+    @Query(sort: \EventModel.startTime) var events: [EventModel] //an array of eventmodels
+    
+    //parentview that observes values if change
+    @StateObject var parentView = EventListParentViewModel()
+    @State private var selectedEvent: Int?
+    @State private var isLoading = false //set loading states
+    @State private var refreshTimer: Timer? //a timer to count when we refresh
     
     
-    var body: some View {
+    //Sorting and Filtering parameters
+    @State private var sortOrder = SortOrder.eventTime
+    @State private var filterType = FilterType.name
+    @State private var filter = ""
+    
+    
+    var body: some View{
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
-            VStack(){
-                // Searchbar is outside of scrollable so it does not move
-                SearchBar(inputText: $searchText, safeAreaTop: safeAreaTop)
+            VStack{ //contains pickers
+                //searchbar
+                SearchBar(inputText: $filter, safeAreaTop: safeAreaTop)
+                
+                //header elements
+                HStack{
+                    //creating a selector of sort order
+                    Picker("Sort Order", selection: $sortOrder){
+                        //for all cases of our possible sort orders
+                        ForEach(SortOrder.allCases) { sortOrder in
+                            Text("Sort by \(sortOrder)")
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    //filtering list
+                    Picker("Filter by", selection: $filterType) {
+                        ForEach(FilterType.allCases) { filterType in
+                            Text("Filter by \(filterType)")
+                        }
+                    }
+                    .buttonStyle(.bordered) //for an enclosed box
+                    .padding(.horizontal) //horizontal padding
+                    
+                }//header elements
                 
                 ScrollView(.vertical, showsIndicators: false){
-                //content of eventlist, show favorites true!, no search string
-                EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, showFavorites: false)
-                }
-            }
+                    EventList(parentView: parentView, selectedEvent: -1, sortOrder: $sortOrder, filterType: $filterType, filter: $filter, filterToday: false)
+                    
+                }//scroll view
+                
+            }//navigation stack
             .edgesIgnoringSafeArea(.top)
-            
-        }//GeometryReader
-    }
+        }//geometry reader
+        
+    }//body
 }
 
-#Preview {
-    SearchView()
-}

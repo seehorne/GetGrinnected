@@ -5,7 +5,6 @@
 //  Created by Ellie Seehorn on 3/4/25.
 //
 
-import Foundation
 import SwiftUI
 
 struct ContentView: View {
