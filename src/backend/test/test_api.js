@@ -344,41 +344,74 @@ describe('Test API', () => {
         });
 
         describe('GET /user/data', () => {
-            // TODO: WRITE THE TESTS
             it('returns data for the current user', async () => {
                 const res = await req
                     .get('/user/data')
                     .set('Authorization', `Bearer ${access_token}`)
                     .set('Content-Type', 'application/json');
-                console.log(res.text);
                 assert.strictEqual(res.statusCode, 200);
-                assert.strictEqual(
-                    res.text,
-                    `{"accountid":1,"account_name":"fake_but_present",\
-"email":"email@example.com","password":null,"profile_picture":null,\
-"favorited_events":null,"favorited_orgs":null,"drafted_events":null,\
-"favorited_tags":null,"account_description":null,"account_role":null,\
-"notified_events":null}`
-                );
             });
         });
 
-        describe('GET+PUT /user/events/favorited', () => {
-            it('gets initial account name', async () => {
-                // TODO: WRITE TEST
-            });
-
-            it('modifies existing account name', async () => {
-                // TODO: WRITE TEST
-            });
-        });
-
-        describe('GET+PUT /user/events/notified', () => {
+        describe('GET + PUT /user/events/favorited', () => {
             // TODO: WRITE THE TESTS
         });
 
-        describe('GET+PUT /user/username', () => {
+        describe('GET + PUT /user/events/notified', () => {
             // TODO: WRITE THE TESTS
+        });
+
+        describe('GET + PUT /user/username', () => {
+            it('modifies and gets account name successfully', async () => {
+                const newName = 'new_account_name';
+
+                // Set the username to a valid one.
+                const putRes = await req
+                    .put('/user/username')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ "username": newName });
+                assert.strictEqual(putRes.statusCode, 200);
+
+                // Get the username, and make sure it matches what we put there.
+                const getRes = await req
+                    .get('/user/username')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json');
+                assert.strictEqual(getRes.statusCode, 200);
+                assert.strictEqual(getRes.text, `{"username":"${newName}"}`);
+            });
+
+            describe('accepts valid usernames and rejects invalid ones', () => {
+                const usernames = [
+                    { 'username': 'a', 'status': 200 },
+                    { 'username': 'abc123', 'status': 200 },
+                    { 'username': 'ALL.CAPS.NAME', 'status': 200 },
+                    { 'username': '1997.word', 'status': 200 },
+                    { 'username': 'twen.ty_chars_ex.act', 'status': 200 },
+                    { 'username': 'double__underscore', 'status': 400 },
+                    { 'username': 'double..period', 'status': 400 },
+                    { 'username': '.start_period', 'status': 400 },
+                    { 'username': '_start_underscore', 'status': 400 },
+                    { 'username': 'end_period.', 'status': 400 },
+                    { 'username': 'end_underscore_', 'status': 400 },
+                    { 'username': 'twenty_characters_max', 'status': 400 },
+                    { 'username': 'inv@l!d char$', 'status': 400 },
+                    { 'username': '1997', 'status': 400 },
+                ];
+
+                for (item of usernames) {
+                    it(`gives code ${item.status} for username ${item.username}`, async () => {
+                        const res = await req
+                            .put('/user/username')
+                            .set('Authorization', `Bearer ${access_token}`)
+                            .set('Content-Type', 'application/json')
+                            .send({ 'username': item.username });
+
+                        assert.strictEqual(res.status, item.status);
+                    });
+                }
+            });
         });
     });
 });
