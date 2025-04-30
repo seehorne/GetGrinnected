@@ -29,6 +29,7 @@
 		4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */; };
 		CA0EB8C52DB00AAC005898BA /* DayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C42DB00A9F005898BA /* DayCard.swift */; };
 		CA0EB8C92DB2AA63005898BA /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C82DB2AA61005898BA /* WeekView.swift */; };
+		CA3109F82DC28D7900875D8C /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3109F72DC28D7900875D8C /* SearchBar.swift */; };
 		CA3B0A462DBB583500A270FA /* DateFormatter+apiDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0A452DBB582A00A270FA /* DateFormatter+apiDateFormatter.swift */; };
 		CA6DF8412DA6116500EFE10A /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6DF8402DA6116300EFE10A /* Logo.swift */; };
 		CAA8FE8A2DB92AF3005C6BBE /* ParentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA8FE882DB92AF3005C6BBE /* ParentView.swift */; };
@@ -126,6 +127,7 @@
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA0EB8C42DB00A9F005898BA /* DayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCard.swift; sourceTree = "<group>"; };
 		CA0EB8C82DB2AA61005898BA /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
+		CA3109F72DC28D7900875D8C /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		CA3B0A452DBB582A00A270FA /* DateFormatter+apiDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+apiDateFormatter.swift"; sourceTree = "<group>"; };
 		CA6DF8402DA6116300EFE10A /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		CAA8FE882DB92AF3005C6BBE /* ParentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentView.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 		CACCD44A2DA31696001D31C0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				CA3109F72DC28D7900875D8C /* SearchBar.swift */,
 				CA0EB8C82DB2AA61005898BA /* WeekView.swift */,
 				CA0EB8C42DB00A9F005898BA /* DayCard.swift */,
 				CA6DF8402DA6116300EFE10A /* Logo.swift */,
@@ -493,6 +496,7 @@
 				0CC0E1FA2DBDC33400B179C5 /* VerificationView.swift in Sources */,
 				CACCD45C2DA31696001D31C0 /* SettingsView.swift in Sources */,
 				CACCD45D2DA31696001D31C0 /* EventCreationView.swift in Sources */,
+				CA3109F82DC28D7900875D8C /* SearchBar.swift in Sources */,
 				CACCD45E2DA31696001D31C0 /* InputField.swift in Sources */,
 				CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */,
 				4CA0C5772DA5D16200059803 /* Header.swift in Sources */,
