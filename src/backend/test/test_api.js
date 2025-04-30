@@ -32,7 +32,7 @@ describe('Test API', () => {
 
     describe('Unauthenticated', () => {
         describe('GET /', () => {
-            it('should return online text', async () => {
+            it('returns online text', async () => {
                 const res = await req.get('/');
                 assert.strictEqual(res.statusCode, 200);
                 assert.strictEqual(res.text, 'API online!');
@@ -40,7 +40,7 @@ describe('Test API', () => {
         });
 
         describe('GET /events', () => {
-            it('should return all events with no tags', async () => {
+            it('returns all events with no tags', async () => {
                 const res = await req.get('/events');
 
                 // Check return status and length (but not content) of response array
@@ -49,7 +49,7 @@ describe('Test API', () => {
                 assert.strictEqual(eventsArray.length, 3);
             });
 
-            it('should return fewer events with tags', async () => {
+            it('returns fewer events with tags', async () => {
                 const res = await req.get('/events?tag=odd');
 
                 // Check return status and length (but not content) of response array
@@ -60,7 +60,7 @@ describe('Test API', () => {
         });
 
         describe('GET /events/between', () => {
-            it('should return only events on a certain date', async () => {
+            it('returns only events on a certain date', async () => {
                 const res = await req.get('/events/between/2025-05-31/2025-06-01');
 
                 // Check return status and length (but not content) of response array
@@ -69,7 +69,7 @@ describe('Test API', () => {
                 assert.strictEqual(eventsArray.length, 2);
             });
 
-            it('should filter those events with a tag provided', async () => {
+            it('filters those events with a tag provided', async () => {
                 const res = await req.get('/events/between/2025-05-31/2025-06-01?tag=odd');
 
                 // Check return status and length (but not content) of response array
@@ -78,7 +78,7 @@ describe('Test API', () => {
                 assert.strictEqual(eventsArray.length, 1);
             });
 
-            it('should fail with entirely invalid dates', async () => {
+            it('fails with entirely invalid dates', async () => {
                 const res = await req.get('/events/between/20210304/20210306');
                 assert.strictEqual(res.statusCode, 400);
                 assert.strictEqual(
@@ -90,7 +90,7 @@ describe('Test API', () => {
                 );
             });
 
-            it('should fail with invalid start date', async () => {
+            it('fails with invalid start date', async () => {
                 const res = await req.get('/events/between/20210304/2021-03-06');
                 assert.strictEqual(res.statusCode, 400);
                 assert.strictEqual(
@@ -102,7 +102,7 @@ describe('Test API', () => {
                 );
             });
 
-            it('should fail with invalid end date', async () => {
+            it('fails with invalid end date', async () => {
                 const res = await req.get('/events/between/2021-03-02/20210304');
                 assert.strictEqual(res.statusCode, 400);
                 assert.strictEqual(
@@ -114,7 +114,7 @@ describe('Test API', () => {
                 );
             });
 
-            it('should fail with start date after end date', async () => {
+            it('fails with start date after end date', async () => {
                 const res = await req.get('/events/between/2021-03-06/2021-03-02');
                 assert.strictEqual(res.statusCode, 400);
                 assert.strictEqual(
@@ -166,7 +166,7 @@ describe('Test API', () => {
 
             describe('PUT routes', () => {
                 for (const item of putRoutes) {
-                    it(`PUT ${item.route} should 400 when no body is included`, async () => {
+                    it(`PUT ${item.route} gives 400 when no body is included`, async () => {
                         // Make the request
                         const res = await req
                             // URL ending
@@ -178,7 +178,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 400);
                     });
 
-                    it(`PUT ${item.route} should 400 when body is included without correct key`, async () => {
+                    it(`PUT ${item.route} gives 400 when body is included without correct key`, async () => {
                         // Create the request body, but omit the correct key.
                         var jsonBody = {};
 
@@ -195,7 +195,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 400);
                     });
 
-                    it(`PUT ${item.route} should 401 when token is not provided`, async () => {
+                    it(`PUT ${item.route} gives 401 when token is not provided`, async () => {
                         // Create the request body to have the required key
                         var jsonBody = {};
                         jsonBody[item.body] = 'fake_but_present';
@@ -212,7 +212,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 401);
                     });
 
-                    it(`PUT ${item.route} should 403 when the token is not good`, async () => {
+                    it(`PUT ${item.route} gives 403 when the token is not good`, async () => {
                         // Create the request body to have the required key
                         var jsonBody = {};
                         jsonBody[item.body] = 'fake_but_present';
@@ -230,7 +230,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 403);
                     });
 
-                    it(`PUT ${item.route} should 404 when the user does not exist`, async () => {
+                    it(`PUT ${item.route} gives 404 when the user does not exist`, async () => {
                         // Generate tokens for a user that's not really in the db.
                         const fakeTokens = util.generateUserTokens('fake@example.com');
 
@@ -255,7 +255,7 @@ describe('Test API', () => {
 
             describe('GET routes', () => {
                 for (const route of getRoutes) {
-                    it(`GET ${route} should 401 when token is not provided`, async () => {
+                    it(`GET ${route} gives 401 when token is not provided`, async () => {
                         // Make the request
                         const res = await req
                             // URL ending
@@ -266,7 +266,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 401);
                     });
 
-                    it(`GET ${route} should 403 when the token is not good`, async () => {
+                    it(`GET ${route} gives 403 when the token is not good`, async () => {
                         // Make the request
                         const res = await req
                             // URL ending
@@ -278,7 +278,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 403);
                     });
 
-                    it(`GET ${route} should 404 when the user does not exist`, async () => {
+                    it(`GET ${route} gives 404 when the user does not exist`, async () => {
                         // Generate tokens for a user that's not really in the db.
                         const fakeTokens = util.generateUserTokens('fake@example.com');
 
@@ -297,7 +297,7 @@ describe('Test API', () => {
         });
 
         describe('POST /user/token-refresh', () => {
-            it('should return new tokens', async () => {
+            it('returns new tokens', async () => {
                 const res = await req
                     .post('/user/token-refresh')
                     .set('Authorization', `Bearer ${refresh_token}`)
@@ -317,7 +317,7 @@ describe('Test API', () => {
             // NOTE: This route's errors are checked separately from the
             // paramaterized tests because they use the refresh token,
             // not the auth token.
-            it('should 401 when the token is not included', async () => {
+            it('gives 401 when the token is not included', async () => {
                 const res = await req
                     .post('/user/token-refresh')
                     .set('Authorization', `Bearer not_a_real_token_lol`)
@@ -325,7 +325,7 @@ describe('Test API', () => {
                 assert.strictEqual(res.statusCode, 403);
             });
 
-            it('should 403 when the token is not good', async () => {
+            it('gives 403 when the token is not good', async () => {
                 const res = await req
                     .post('/user/token-refresh')
                     .set('Authorization', `Bearer not_a_real_token_lol`)
@@ -333,7 +333,7 @@ describe('Test API', () => {
                 assert.strictEqual(res.statusCode, 403);
             });
 
-            it('should 404 when the user does not exist', async () => {
+            it('gives 404 when the user does not exist', async () => {
                 const fakeTokens = util.generateUserTokens('fake@example.com');
                 const res = await req
                     .post('/user/token-refresh')
@@ -345,32 +345,39 @@ describe('Test API', () => {
 
         describe('GET /user/data', () => {
             // TODO: WRITE THE TESTS
-            it('should return data for the current user', () => {
-                const res = null;
+            it('returns data for the current user', async () => {
+                const res = await req
+                    .get('/user/data')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json');
+                console.log(res.text);
+                assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(
+                    res.text,
+                    `{"accountid":1,"account_name":"fake_but_present",\
+"email":"email@example.com","password":null,"profile_picture":null,\
+"favorited_events":null,"favorited_orgs":null,"drafted_events":null,\
+"favorited_tags":null,"account_description":null,"account_role":null,\
+"notified_events":null}`
+                );
             });
         });
 
-        describe('GET /user/events/favorited', () => {
+        describe('GET+PUT /user/events/favorited', () => {
+            it('gets initial account name', async () => {
+                // TODO: WRITE TEST
+            });
+
+            it('modifies existing account name', async () => {
+                // TODO: WRITE TEST
+            });
+        });
+
+        describe('GET+PUT /user/events/notified', () => {
             // TODO: WRITE THE TESTS
         });
 
-        describe('GET /user/events/notified', () => {
-            // TODO: WRITE THE TESTS
-        });
-
-        describe('GET /user/username', () => {
-            // TODO: WRITE THE TESTS
-        });
-
-        describe('PUT /user/events/favorited', () => {
-            // TODO: WRITE THE TESTS
-        });
-
-        describe('PUT /user/events/notified', () => {
-            // TODO: WRITE THE TESTS
-        });
-
-        describe('PUT /user/username', () => {
+        describe('GET+PUT /user/username', () => {
             // TODO: WRITE THE TESTS
         });
     });
@@ -385,63 +392,63 @@ describe('parseParamDate', () => {
         process.env.TZ = 'UTC';
     });
 
-    it('should accept ISO-8601 time unchanged', () => {
+    it('accepts ISO-8601 time unchanged', () => {
         const input = '2025-04-05T22:19-0500';
         const expected = new Date(input);
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
-    it('should respect non-Grinnell ISO-8601 timezones', () => {
+    it('respects non-Grinnell ISO-8601 timezones', () => {
         const input = '2022-03-12T10:32+1230';
         const expected = new Date(input);
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
-    it('should assume Grinnell time if timezone unspecified', () => {
+    it('assumes Grinnell time if timezone unspecified', () => {
         const input = '1999-01-01T08:19';
         const expected = new Date(input + '-0500');
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
-    it('should assume Grinnell midnight if no time specified', () => {
+    it('assumes Grinnell midnight if no time specified', () => {
         const input = '2025-08-04';
         const expected = new Date(input + 'T00:00-0500');
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected.toISOString(), actual.toISOString());
     });
 
-    it('should reject clearly malformed time', () => {
+    it('rejects clearly malformed time', () => {
         const input = 'this is not a date'
         const expected = NaN;
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
-    it('should reject date with seconds', () => {
+    it('rejects date with seconds', () => {
         const input = '2021-05-10T10:30:53-0500'
         const expected = NaN;
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
-    it('should reject dates with no separator', () => {
+    it('rejects dates with no separator', () => {
         const input = '20250405'
         const expected = NaN;
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
-    it('should reject Unix time', () => {
+    it('rejects Unix time', () => {
         const input = '1743909495';
         const expected = NaN;
         const actual = util.parseParamDate(input);
         assert.strictEqual(expected, actual.valueOf());
     });
 
-    it('should reject natural language formatted dates', () => {
+    it('rejects natural language formatted dates', () => {
         const input = 'March 3, 2002';
         const expected = NaN;
         const actual = util.parseParamDate(input);
@@ -450,7 +457,7 @@ describe('parseParamDate', () => {
 });
 
 describe('parseQueryTags', () => {
-    it('should ignore empty tags', () => {
+    it('ignores empty tags', () => {
         const input = null;
         const expected = [];
         const actual = util.parseQueryTags(input);
@@ -460,7 +467,7 @@ describe('parseQueryTags', () => {
         );
     });
 
-    it('should accept one tag', () => {
+    it('accepts one tag', () => {
         const input = 'a';
         const expected = ['"a"'];
         const actual = util.parseQueryTags(input);
@@ -470,7 +477,7 @@ describe('parseQueryTags', () => {
         );
     });
 
-    it('should split one tag, comma separated', () => {
+    it('splits one tag, comma separated', () => {
         const input = 'a,b,c';
         const expected = ['"a"', '"b"', '"c"'];
         const actual = util.parseQueryTags(input);
@@ -480,7 +487,7 @@ describe('parseQueryTags', () => {
         );
     });
 
-    it('should accept multiple tags, in a list', () => {
+    it('accepts multiple tags, in a list', () => {
         const input = ['a', 'b', 'c'];
         const expected = ['"a"', '"b"', '"c"'];
         const actual = util.parseQueryTags(input);
@@ -490,7 +497,7 @@ describe('parseQueryTags', () => {
         );
     });
 
-    it('should split a mix of list and comma-separated tags', () => {
+    it('splits a mix of list and comma-separated tags', () => {
         const input = ['a', 'b,c', 'd'];
         const expected = ['"a"', '"b"', '"c"', '"d"'];
         const actual = util.parseQueryTags(input);
