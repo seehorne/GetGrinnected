@@ -21,6 +21,8 @@ import screens.WelcomeScreen
  * function instated in the call the AppNavigation in the MainActivity.
  * @param startDestination is a string that tells us which screen to start at (this depends on
  * if a user is already logged in or not)
+ * @param fontSizeSetting String associated with the current font size setting we have selected
+ * @param onFontSizeChange String call back function that allows us to change the state of the font size
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -29,7 +31,9 @@ fun AppNavigation(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     startDestination: String,
-    tags: List<Check>
+    tags: List<Check>,
+    fontSizeSetting: String,
+    onFontSizeChange: (String) -> Unit
   // This handles our navigation system with a nav controller
 ){
 
@@ -57,7 +61,7 @@ fun AppNavigation(
         composable("main"){
             // Makes sure account is not null just since it could be to start as someone who hasn't logged in
             if (account != null) {
-                MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, account = account)
+                MainPage(modifier, darkTheme, onToggleTheme, tags = tags, navController = navController, account = account, fontSizeSetting = fontSizeSetting, onFontSizeChange =  onFontSizeChange)
             }
         }
         composable(

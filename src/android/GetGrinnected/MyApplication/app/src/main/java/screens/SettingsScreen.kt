@@ -13,10 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,8 +43,12 @@ import com.example.myapplication.DataStoreSettings
 import com.example.myapplication.User
 import kotlinx.coroutines.launch
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.FontSizePrefs
 import com.example.myapplication.toAccountEntity
 
 /**
@@ -60,7 +67,9 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                    account: User,
                    darkTheme: Boolean,
                    onToggleTheme: (Boolean) -> Unit,
-                   navController: NavController) {
+                   navController: NavController,
+                   fontSizeSetting: String,
+                   onFontSizeChange: (String) -> Unit) {
     // Allows the app to be a scrollable view
     val scrollState = rememberScrollState()
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
@@ -78,8 +87,12 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     var showEditDialog by remember { mutableStateOf(false) }
     // String associated with storing and changing the username of an account when we edit
     var newUsername by remember { mutableStateOf(account.account_name) }
-
+    // State associated with whether there is an error in the username
     var usernameError by remember { mutableStateOf<String?>(null) }
+
+    var fontSizeDropdownExpanded by remember { mutableStateOf(false) }
+    val fontSizeOptions = FontSizePrefs.entries
+    val selectedFontPref = FontSizePrefs.getFontPrefFromKey(fontSizeSetting)
 
     // Sets up our ui to follow a box layout
     Box(modifier = modifier.fillMaxSize()) {
@@ -258,7 +271,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 // Switch to toggle dark or light mode
                 Switch(
                     checked = darkTheme,
-                    modifier = Modifier.padding(end = 8.dp),
+                    modifier = Modifier.padding(end = 16.dp),
                     onCheckedChange = {
                         onToggleTheme(it)
                     })
@@ -276,19 +289,49 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Row(modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically){
-                Text(
-                    text = "Font Size",
-                    style = typography.bodyLarge,
-                    color = colorScheme.onBackground
-                )
+                Text("Font Size:", style = typography.bodyLarge, color = colorScheme.onBackground)
+                Spacer(modifier = Modifier.weight(1f))
+                Box {
+                    Text(
+                        text = selectedFontPref.label,
+                        modifier = Modifier
+                            .clickable { fontSizeDropdownExpanded = true }
+                            .padding(end = 8.dp),
+                        color = colorScheme.primary
+                    )
+
+                    DropdownMenu(
+                        expanded = fontSizeDropdownExpanded,
+                        onDismissRequest = { fontSizeDropdownExpanded = false },
+                        modifier = Modifier.background(colorScheme.surface)
+                    ) {
+                        fontSizeOptions.forEach { size ->
+                            DropdownMenuItem(
+                                text = { Text(size.label) },
+                                onClick = {
+                                    onFontSizeChange(size.key)
+                                    fontSizeDropdownExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
             }
+
+            Spacer(modifier = modifier.height(8.dp))
+
+            Text(
+                text = "Notifications",
+                style = typography.titleLarge,
+                color = colorScheme.onBackground
+            )
 
             Spacer(modifier = modifier.height(4.dp))
 
             Row(modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically){
                 Text(
-                    text = "Screen Reader",
+                    text = "Time to alert before event",
                     style = typography.bodyLarge,
                     color = colorScheme.onBackground
                 )
@@ -321,16 +364,25 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Text(
-                    "Sign Out",
-                    style = typography.labelLarge
-                )
+                Row {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = "Edit Username",
+                        modifier = modifier.size(20.dp),
+                        tint = colorScheme.onPrimary
+                    )
+                    Spacer(modifier.width(4.dp))
+                    Text(
+                        "Sign Out",
+                        style = typography.labelLarge
+                    )
+                }
             }
         }
     }
 }
 
-
+/*
 /**
  * Preview used specifically for UI design purposes
  */
@@ -339,3 +391,4 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 fun SettingsScreenPreview(){
     SettingsScreen(account = User(1, "User123", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),  darkTheme = false, onToggleTheme =  {}, navController = rememberNavController())
 }
+*/

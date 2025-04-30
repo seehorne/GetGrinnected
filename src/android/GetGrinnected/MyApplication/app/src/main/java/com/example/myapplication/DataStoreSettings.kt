@@ -27,6 +27,8 @@ object DataStoreSettings {
     private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
     // Preference key for the last time we synced with the api
     private val LAST_SYNC_TIME = longPreferencesKey("last_sync_time")
+    // Preference key for the font size
+    private val FONT_SIZE = stringPreferencesKey("font_size")
 
     /**
      * Setter for logged in value
@@ -149,6 +151,28 @@ object DataStoreSettings {
     suspend fun clearUserSession(context: Context) {
         context.dataStore.edit { preferences ->
             preferences.clear()
+        }
+    }
+
+    /**
+     * Getter for the font size value
+     * @param context is the current context our app is running
+     * @return Flow<String> this basically is a reactive value of the font size
+     */
+    fun getFontSize(context: Context): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[FONT_SIZE]
+        }
+    }
+
+    /**
+     * Setter for the font size value
+     * @param context is the current context our app is running
+     * @param fontSize is the string representation of the fontSize
+     */
+    suspend fun setFontSize(context: Context, fontSize: String) {
+        context.dataStore.edit { preferences ->
+            preferences[FONT_SIZE] = fontSize
         }
     }
 
