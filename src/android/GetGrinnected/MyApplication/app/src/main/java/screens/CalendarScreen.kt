@@ -1,8 +1,6 @@
 package screens
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -27,7 +25,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,9 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,12 +42,9 @@ import com.example.myapplication.Check
 import com.example.myapplication.CheckBox
 import com.example.myapplication.Event
 import com.example.myapplication.EventCard
-import com.example.myapplication.NotificationHandler
 import com.example.myapplication.R
 import com.example.myapplication.toEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -108,6 +100,7 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
     }
     val scrollState = rememberScrollState()
     // background color for the page
+    /*
     val gradient =
         Brush.verticalGradient(
             listOf(Color.Blue, Color.Magenta, Color.Cyan),
@@ -115,11 +108,11 @@ fun CalendarScreen(tags: List<Check>, modifier: Modifier = Modifier) {
             5000.0f,
             TileMode.Repeated
         )
-
+    */
     // To access our theme colors
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
-    val typography = MaterialTheme.typography
+    // val typography = MaterialTheme.typography
     
     // sets the background for the page for us to build our other elements on
     Column(modifier = modifier.fillMaxSize().background(color = colorScheme.background)) {
@@ -285,7 +278,6 @@ fun createCalendarList(event: List<Event>, tags: List<String>, month: String): L
                         }
                 }
             }
-
         }
         calendarInputs.add(
             CalendarInput(

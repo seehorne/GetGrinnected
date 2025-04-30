@@ -1,8 +1,9 @@
 package com.example.myapplication
 
+import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,20 +30,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import android.Manifest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat.getSystemService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.Date
 
 /**
  * A composable function that creates the general look of an event card.
@@ -58,8 +56,6 @@ import androidx.core.content.ContextCompat.getSystemService
 fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Boolean to track whether a card is expanded
     val expanded = remember { mutableStateOf(false) }
-    // Boolean to track if card should cause notification
-    val isNotification = remember(event.is_notification) { mutableStateOf(event.is_notification) }
     val context = LocalContext.current
     // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
@@ -101,14 +97,12 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             ) {
                 // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f)) {
-                    event.event_name?.let {
-                        Text(
-                            text = it,
-                            style = typography.titleLarge,
-                            color = colorScheme.onSurface,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                    Text(
+                        text = event.event_name,
+                        style = typography.titleLarge,
+                        color = colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "${event.event_date} at ${event.event_time}",
                         style = typography.bodyMedium,
@@ -145,20 +139,30 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     )
                     // This is our notification icon
                     Icon(
-                        imageVector = if (isNotification.value) Icons.Filled.Notifications else Icons.Outlined.Notifications,
+                        imageVector = if (event.is_notification) Icons.Filled.Notifications else Icons.Outlined.Notifications,
                         contentDescription = "Notification Icon",
                         tint = colorScheme.tertiary,
                         modifier = Modifier
                             .size(40.dp)
                             .clickable {
-                                isNotification.value = !isNotification.value
                                 // This tells our database to update the events notification status
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    AppRepository.toggleNotification(event.eventid, isNotification.value)
+                                    AppRepository.toggleNotification(event.eventid, !event.is_notification)
                                 }
-                                if (isNotification.value){
+                                if (!event.is_notification){
+                                    if (getDifferenceInMillis(LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                                            event.event_end_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                            ) < 0){
+                                        notificationHandler.showSimpleNotificationDone(event)
+                                    }
+                                    else if (getDifferenceInMillis(LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                                            event.event_start_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        ) < 0){
+                                        notificationHandler.showSimpleNotificationInProgress(event)
+                                    }
+                                    else {
                                     notificationHandler.showSimpleNotificationDelay(event)
-                                    notificationHandler.scheduleNotification(event)
+                                    notificationHandler.scheduleNotification(event)}
                                 }
                             },
                     )
@@ -181,6 +185,10 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+private fun getDifferenceInMillis(date1: Date, date2: Date): Long {
+    return (date2.time - date1.time)
 }
 
 

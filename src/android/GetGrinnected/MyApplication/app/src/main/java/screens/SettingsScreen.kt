@@ -112,7 +112,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Spacer(modifier = modifier.weight(1f))
 
-            // This is the icon button for switch an account
+           /* // This is the icon button for switch an account
             IconButton(
                 onClick = { /* TODO handle switch account */ },
                 modifier = modifier.padding(end = 8.dp)
@@ -127,7 +127,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         tint = colorScheme.primary
                     )
                 }
-            }
+            }*/
         }
 /* This is commented out for the time being as we have the profile picture as a stretch goal.
         Box(
@@ -244,6 +244,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                 AppRepository.upsertAccount(updatedAccount.toAccountEntity())
                                 // Sets our current active account to the given account
                                 AppRepository.setCurrentAccountById(updatedAccount.accountid)
+                                // Sends our updated username to the remote database
+                                AppRepository.syncUsername(newUsername)
                                 // Closes the editing dialog
                                 showEditDialog = false
                             }

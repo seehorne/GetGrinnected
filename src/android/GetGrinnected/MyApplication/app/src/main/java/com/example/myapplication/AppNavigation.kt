@@ -13,11 +13,6 @@ import screens.EmailVerificationScreen
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
-import android.content.Context
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Alignment
-
 /**
  * A composable function that is utilized for smooth navigation through login/signup process
  * @param modifier the modifier to be applied to page layouts navigated to.
