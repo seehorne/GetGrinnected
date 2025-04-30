@@ -12,8 +12,13 @@ import SwiftUI
 struct HomeView: View {
     // the parent model used for updating our event list
     @StateObject private var viewModel = EventListParentViewModel()
-    @State private var searchText = ""
     @State private var isLoading = true
+    
+    
+    //Sorting and Filtering parameters
+    @State private var sortOrder = SortOrder.eventTime
+    @State private var filterType = FilterType.name
+    @State private var filter = ""
     
     //Main view body
     var body: some View {
@@ -33,11 +38,11 @@ struct HomeView: View {
                                 .padding(.top, 120)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, filterToday: searchText.isEmpty, showFavorites: false)
+                            EventList(parentView: viewModel,selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterToday: filter.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
-                    .searchable(text: $searchText, prompt: "Search...")
+                    .searchable(text: $filter, prompt: "Search...")
                    .refreshable {
                        //force refresh through the button!
                        viewModel.forceRefresh() //only changes last change to nil

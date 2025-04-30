@@ -23,37 +23,150 @@ enum FilterType: String, Identifiable, CaseIterable {
     var id: Self { self } //identifiable protocol
 }
 
+/**
+ EventList takes EventDTO, converts into cached EventModel. If event already exists in cache, updates information.
+ Searching, filtering and forcerefreshing is all in this file.
+ */
 struct EventList: View {
     //model context, containing how we save to cache
     @Environment(\.modelContext) private var modelContext
     
     //only initialized value that is a query; sort our events by start time, and make it queryable by @query
-    @Query var events: [EventModel] //an array of eventmodels
-    @State var isLoading: Bool = false
-    
+    @Query(sort: \EventModel.startTime) private var events: [EventModel] //an array of eventmodels
     
     //parentview that observes values if change
     @ObservedObject var parentView: EventListParentViewModel
     
-    
-    //Sorting and Filtering parameters
-    @Binding private var sortOrder: SortOrder
-    @Binding private var filterType: FilterType
-    @Binding private var filter: String
+    @State var selectedEvent: Int? //An integer to represent which event we select
+    @State private var refreshTimer: Timer? //a timer to count when we refresh
+    @State private var isLoading = false //set loading states
     
     
-    // https://www.youtube.com/watch?v=ASnbOSMv1iw&ab_channel=StewartLynch
-    init(parentView: EventListParentViewModel, sortOrder: Binding<SortOrder>, filterType: Binding<FilterType>, filter: Binding<String>){
-        self.parentView = parentView
-        self._filterType = filterType
-        self._sortOrder = sortOrder
-        self._filter = filter
-    }
+    //the initializer for the eventlist is the sorting function!
+    init(
+        parentView: EventListParentViewModel,
+        selectedEvent: Int?,
+        sortOrder: SortOrder,
+        filterType: FilterType,
+        filter: String,
+        filterToday: Bool = false
+    ){
+        
+        //set selected event to selected event
+        self.selectedEvent = selectedEvent
+        self._parentView = ObservedObject(wrappedValue: parentView) //set parent view to an observed object of parent view
+        
+        
+        //apply sort order, default if no title or organization provided
+        let sortDescriptors: [SortDescriptor<EventModel>] =
+        switch sortOrder {
+            case .eventName:
+                [SortDescriptor(\EventModel.name)]
+            case .eventTime:
+                [SortDescriptor(\EventModel.startTime)]
+        }
+        
+        //apply filtering
+        var predicate: Predicate<EventModel>
+        if filter.isEmpty {
+            predicate = #Predicate { EventModel in true}
+        } else {
+            switch filterType {
+                case .name:
+                    predicate = #Predicate{ event in
+                        (filterToday
+                                ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
+                                : true) //if not filtering for today, return true
+                        &&
+                        // search filtering: if it's empty, simply write true (so all events are present), or whatever event name contains that search
+                        (filter.isEmpty || event.name.localizedStandardContains(filter))
+                    }
+                case .favorites:
+                    predicate = #Predicate{ event in
+                        event.favorited
+                        &&
+                        // search filtering: if it's empty, simply write true (so all events are present), or whatever event name contains that search
+                        (filter.isEmpty || event.name.localizedStandardContains(filter))
+                    }
+            }
+        }
+        
+        
+        //set timespans to explain what view is showing (debugging purposes)
+        let timeSpanStart = parentView.timeSpan.start
+        let timeSpanEnd = parentView.timeSpan.end
+        
+        //debugging purposes
+        print("EventList initialized with timespan: \(timeSpanStart) to \(timeSpanEnd), filterToday: \(filterToday)")
+        
+        //initialize events according to those sorting specificatinos
+        _events = Query(
+            filter: predicate,
+            sort: sortDescriptors,
+            animation: .default
+        )//sort by name default animation
+        
+    } //init
     
-    
+    //main event body view
     var body: some View {
-        EventListView(selectedEvent: -1, sortOrder: $sortOrder, filterType: $filterType, filter: $filter)
-    }
+        VStack{
+            //if empty show that no events are in that time period
+            if events.isEmpty{
+                //a more helpful empty message
+                Text("No Events under those parameters...")
+                    .padding()
+                    .foregroundStyle(.textSecondary)
+                
+            }
+            
+            //helpful loading page
+            if isLoading {
+                //progress View
+                ProgressView("Loading Events...")
+                    .padding()
+            } else {
+                //for every event, based on ID
+                ForEach(events, id: \.id) { event in
+                    //add an event card of that event that..
+                    EventCard(event: event, isExpanded: (event.id == selectedEvent))//selects based on if the selected event is the same as the event ID
+                        .onTapGesture { //on tap..
+                            withAnimation(.easeInOut) { //changes selectedEvent to this event, (and thus expands it)
+                                //select event
+                                if (event.id == selectedEvent){
+                                    selectedEvent = -1
+                                } else {
+                                    selectedEvent = event.id
+                                }
+                            }
+                        }//tap each event, and it sets id = to that event
+                    
+                }//foreach
+            }//if loading, else, fetch.
+            
+        }//vstack
+        .onAppear{
+            //fetch events on initial appear
+            Task {
+                await updateEvents()
+            }
+            
+            //refresh on timer, every 5 minutes for now!
+            refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
+                Task {
+                    await updateEvents()
+                }
+            }
+                
+        }
+        .onDisappear {
+            //if view disappears, invalidate timers, so it doesn't refresh every time!
+            refreshTimer?.invalidate()
+            refreshTimer = nil
+        }
+    }//body
+    
+    
     
     
     //update events, save to cache

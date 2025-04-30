@@ -60,7 +60,7 @@ struct SearchView: View {
                 }//header elements
                 
                 ScrollView(.vertical, showsIndicators: false){
-                    EventList(parentView: parentView, selectedEvent: -1, sortOrder: $sortOrder, filterType: $filterType, filter: $filter, filterToday: false)
+                    EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterToday: false)
                     
                 }//scroll view
                 
