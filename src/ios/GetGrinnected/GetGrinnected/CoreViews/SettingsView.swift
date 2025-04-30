@@ -17,10 +17,14 @@ struct SettingsView: View {
     // our users username
     @State private var username: String = "user123"
     
+    @StateObject private var userProfile = UserProfile()
+    
     // current view color scheme
     @State private var viewColorScheme: ColorScheme = .light
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
+    // what font size we current have set
+    @State private var fontSize = 17.0
     @State private var basicInput: String = ""
     
     var body: some View {
@@ -47,7 +51,6 @@ struct SettingsView: View {
                                 Text("Logout")
                                     .foregroundColor(.border)
                                 Image(systemName: "rectangle.portrait.and.arrow.right")
-                                    .foregroundColor(.border)
                                     .imageScale(.large)
                             } //Button
                             .navigationDestination(isPresented: $isLoggedIn) {
@@ -61,15 +64,30 @@ struct SettingsView: View {
                         // switch for light/dark mode
                         Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
                             .padding()
-                            .tint(.border)
                             .frame(maxWidth: 200)
-                            .foregroundColor(.border)
+                        
+                        Text("Font Size")
+                        
+                        // slider for text size
+                        Slider(
+                            value: $fontSize,
+                            in: 17...47,
+                            step: 5
+                        ) {} minimumValueLabel: {
+                            Text("A")
+                                .font(.system(size: 17))
+                        } maximumValueLabel: {
+                            Text("A")
+                                .font(.system(size: 47))
+                        }
                     } //VStack
                     .padding()
                     
                 }   //vstack
             }   //Scroll view
             .edgesIgnoringSafeArea(.top)
+            .foregroundColor(.border)
+            .tint(.border)
             
         }//GeometryReader
         .preferredColorScheme(viewColorScheme)
