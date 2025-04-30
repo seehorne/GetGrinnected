@@ -30,6 +30,10 @@ describe('Test API', () => {
         api.close();
     });
 
+    /*
+     * CHECK ALL NON-AUTHENTICATED API CALLS
+     */
+
     describe('Unauthenticated', () => {
         describe('GET /', () => {
             it('returns online text', async () => {
@@ -136,20 +140,32 @@ describe('Test API', () => {
     // - POST /user/verify
     // Instead, they must be incorporated into manual testing.
 
-    // the authenticated tests need these tokens, let their scope cover all tests
+    /*
+     * CHECK ALL AUTHENTICATED API CALLS
+     */
+    
     var refresh_token;
     var access_token;
     describe('Authenticated', () => {
+        // Fake the user tokens, as if they had logged in.
         before(() => {
-            // Fake the user tokens, as if they had logged in.
             const tokens = util.generateUserTokens('email@example.com');
             refresh_token = tokens.refresh;
             access_token = tokens.access;
         });
 
+        // Small test: make sure refresh token is not the same as access token.
         it('has different refresh and access tokens', () => {
             assert.notStrictEqual(refresh_token, access_token, 'refresh and access token are the same');
         });
+
+        /*
+         * PARAMETERIZED TESTS FOR 400 ERRORS THAT 
+         * ALL AUTHENTICATED ROUTES SHARE.
+         * 
+         * By doing this, we're checking that these routes actually
+         * do require authentication properly.
+         */
 
         describe('Error handling', () => {
             // For GET we only need to know which routes to try.
@@ -167,6 +183,7 @@ describe('Test API', () => {
                 { 'route': '/user/username', 'body': 'username' }
             ];
 
+            // Test all routes that PUT data
             describe('PUT routes', () => {
                 for (const item of putRoutes) {
                     it(`PUT ${item.route} gives 400 when no body is included`, async () => {
@@ -256,6 +273,9 @@ describe('Test API', () => {
                 }
             });
 
+            // Test all routes that GET data.
+            // GET shares many of the same error codes, but a GET route won't
+            // raise a 400 error when there is nothing in the body.
             describe('GET routes', () => {
                 for (const route of getRoutes) {
                     it(`GET ${route} gives 401 when token is not provided`, async () => {
@@ -298,6 +318,10 @@ describe('Test API', () => {
                 }
             });
         });
+
+        /*
+         * TEST /user/token-refresh ROUTE 
+         */ 
 
         describe('POST /user/token-refresh', () => {
             it('returns new tokens', async () => {
@@ -356,6 +380,15 @@ describe('Test API', () => {
             });
         });
 
+        /*
+         * TEST /user/events/notified AND /user/events/favorited,
+         * SINCE BOTH NEED TO HANDLE THE SAME ERRORS AS EACH OTHER.
+         * 
+         * This is a nested parameterized test.
+         * - first by type of event (favorited vs notified)
+         * - then by valid and invalid inputs for PUT-ing data
+         */
+
         const arrayEventTypes = [
             'favorited',
             'notified'
@@ -413,6 +446,13 @@ describe('Test API', () => {
             });
         }
 
+        /*
+         * TEST /user/username ROUTE
+         *
+         * This is totally separate because it doesn't have the same form as the
+         * other user data requests. They take arrays, this takes strings.
+         */
+
         describe('GET + PUT /user/username', () => {
             it('modifies and gets account name successfully', async () => {
                 const newName = 'new_account_name';
@@ -468,6 +508,14 @@ describe('Test API', () => {
     });
 });
 
+/*
+ * TEST HELPER FUNCTIONS FROM UTILS
+ *
+ * For these, the name of the description will match the name of the function.
+ * 
+ * These tests are really long because they are not parameterized, but at this
+ * point it doesn't feel worth changing.
+ */
 
 describe('parseParamDate', () => {
     // Before any tests run, set our timezone to UTC so 
