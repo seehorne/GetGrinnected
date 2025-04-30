@@ -20,6 +20,8 @@ struct SettingsView: View {
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
     @State private var basicInput: String = ""
+    @State private var userProfile = UserProfile()
+    @State private var loggedOut: Bool = false
     
     var body: some View {
         
@@ -33,6 +35,27 @@ struct SettingsView: View {
                 
                 //content
                 VStack {
+                    HStack {
+                        // spacer to right align button
+                        Spacer()
+                        
+                        // Logout button
+                        Button(action: {
+                            // we are logging out
+                            //isLoggedIn = false
+                            userProfile.updateLoginState(isLoggedIn: false)
+                            loggedOut = true
+                        }) {
+                            Text("Logout")
+                                .foregroundColor(.border)
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .imageScale(.large)
+                        } //Button
+                        .navigationDestination(isPresented: $loggedOut) {
+                            ContentView()
+                        }
+                    }
+                    
                     InputView(text: $username, title: "Change Username", placeholder: "Username")
                         .padding()
                     
