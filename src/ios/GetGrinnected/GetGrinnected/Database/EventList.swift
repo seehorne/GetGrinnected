@@ -164,13 +164,13 @@ struct EventList: View {
         .onAppear{
             //fetch events on initial appear
             Task {
-                await fetchEvents()
+                await updateEvents()
             }
             
             //refresh on timer, every 5 minutes for now!
             refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
                 Task {
-                    await fetchEvents()
+                    await updateEvents()
                 }
             }
                 
@@ -183,22 +183,29 @@ struct EventList: View {
     }//body
     
     
-    
-    /// Fetching events
+    private func updateEvents() async {
+        print("1: updateEvents called")
+        if let eventstoUpdate = await fetchEvents(){
+            await DTOtoCache(eventDTOs: eventstoUpdate)
+            print("2: updateEvents success")
+        } else {
+            print("3: no events to update")
+        }
+    }
     
     //Function Fetch Events
     /**
      Returns nothing:
      once called, shows isloading ot be true, and resets error message
      */
-    private func fetchEvents() async {
+    private func fetchEvents() async -> [EventDTO]? {
         //determine if we should fetch based on last fetched time, time interval (date selected), and if a force refresh was requested
         let shouldFetch = parentView.lastFetched == nil || Date().timeIntervalSince(parentView.lastFetched!) >= parentView.cacheExpiration || parentView.forceRefreshRequested
         
         //use cache data
         if !shouldFetch{
             print("using cached data")
-            return //return to escape from the fetched events function
+            return []//return to escape from the fetched events function
         }
         
         //if loading, set to true, to show loading view
@@ -224,7 +231,7 @@ struct EventList: View {
                 .run {
                     isLoading = false
                 } //set to false if you failed to fetch data
-            return
+            return []
         }//guard let
             
             
@@ -232,6 +239,16 @@ struct EventList: View {
         let eventDTOs = EventData.parseEvents(json: jsonString)
             
             
+        
+        //note that fetch is complete
+        await MainActor.run {
+            print("Fetch complete.")
+        }
+        
+        return eventDTOs
+    } //fetchEvents
+    
+    private func DTOtoCache(eventDTOs: [EventDTO]) async {
         // Update on main thread since we're changing published properties
         await MainActor.run {
             //add all existing ids to events
@@ -259,7 +276,9 @@ struct EventList: View {
                     existing.location = dto.event_location ?? existing.location
                     
                     //handle saving data, so no overwriting
-                    print("favorited \(existing.name)\(existing.favorited)")
+                    if(existing.favorited){
+                        print("favorited \(existing.name)\(existing.favorited)")
+                    }
                     existing.favorited = existing.favorited
                         
                     //handle arrays carefully
@@ -335,12 +354,7 @@ struct EventList: View {
             print("API fetch completed at \(Date())")
         } // await MainActor
         
-        
-        //note that fetch is complete
-        await MainActor.run {
-            print("Fetch complete. Found \(events.count) events for timespan \(parentView.timeSpan.start) to \(parentView.timeSpan.end)")
-        }
-    } //fetchEvents
+    }
     
     
     /**
