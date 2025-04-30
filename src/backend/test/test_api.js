@@ -147,6 +147,10 @@ describe('Test API', () => {
             access_token = tokens.access;
         });
 
+        it('has different refresh and access tokens', () => {
+            assert.notStrictEqual(refresh_token, access_token, 'refresh and access token are the same');
+        });
+
         describe('Error handling', () => {
             // For GET we only need to know which routes to try.
             const getRoutes = [
