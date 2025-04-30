@@ -82,7 +82,7 @@ function validateUsername(username) {
 
 async function sendOTP(email) {
     sendTo = email
-    if (email == 'getgrinnected.demo@grinnell.edu'){
+    if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu'){
         sendTo = 'getgrinnected.demo@gmail.com'
     }
     // Send the user a one-time code by email.
