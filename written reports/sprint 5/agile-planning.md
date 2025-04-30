@@ -1,4 +1,4 @@
-# Sprint 4 planning
+# Sprint 5 planning
 
 ## Capacity
 
