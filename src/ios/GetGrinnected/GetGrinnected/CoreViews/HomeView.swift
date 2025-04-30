@@ -15,6 +15,12 @@ struct HomeView: View {
     @State private var searchText = ""
     @State private var isLoading = true
     
+    
+    //Sorting and Filtering parameters
+    @State private var sortOrder = SortOrder.eventTime
+    @State private var filterType = FilterType.name
+    @State private var filter = ""
+    
     //Main view body
     var body: some View {
         //geomtry view to have header
@@ -33,7 +39,7 @@ struct HomeView: View {
                                 .padding(.top, 120)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, filterToday: searchText.isEmpty, showFavorites: false)
+                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
