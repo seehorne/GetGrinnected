@@ -45,7 +45,7 @@ struct SearchView: View {
                             Text("Sort by \(sortOrder)")
                         }
                     }
-                    .padding(.horizontal) //horizontal padding
+                    .padding(.horizontal) //horizontal padding, so the sortorder dropdown isn't right on the leftside of the screen
                     
                     Spacer()
                     

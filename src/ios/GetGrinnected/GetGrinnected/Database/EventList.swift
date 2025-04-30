@@ -161,19 +161,18 @@ struct EventList: View {
             }//if loading, else, fetch.
             
         }//vstack
-        .onAppear{
-            //fetch events on initial appear
+        .onChange(of: parentView.forceRefreshRequested){
             Task {
                 await updateEvents()
             }
-            
-            //refresh on timer, every 5 minutes for now!
-            refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
+        }
+        .onAppear{
+            //refresh on timer, every 30 minutes for now!
+            refreshTimer = Timer.scheduledTimer(withTimeInterval: 1800, repeats: true){ _ in
                 Task {
                     await updateEvents()
                 }
             }
-                
         }
         .onDisappear {
             //if view disappears, invalidate timers, so it doesn't refresh every time!

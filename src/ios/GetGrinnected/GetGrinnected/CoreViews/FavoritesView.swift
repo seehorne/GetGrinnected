@@ -71,7 +71,7 @@ struct FavoritesView: View {
                         
                     }//vstack
                 }
-                //todo: set tags for filtering
+                //TODO: set tags for filtering
             }
             .edgesIgnoringSafeArea(.top)
             
