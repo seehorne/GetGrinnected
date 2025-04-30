@@ -397,7 +397,46 @@ describe('Test API', () => {
         });
 
         describe('GET + PUT /user/events/notified', () => {
-            // TODO: WRITE THE TESTS
+            it('modifies and gets valid events', async () => {
+                const newItems = [2, 3];
+
+                // Make sure it adds the items
+                const putRes = await req
+                    .put('/user/events/notified')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ "notified_events": newItems });
+                assert.strictEqual(putRes.statusCode, 200, putRes.text);
+
+                const getRes = await req
+                    .get('/user/events/notified')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json');
+                assert.strictEqual(getRes.statusCode, 200, getRes.text);
+                assert.strictEqual(getRes.text, '{"notified_events":[2,3]}');
+            });
+
+            describe('accepts valid inputs and rejects invalid ones', () => {
+                const inputs = [
+                    { 'input': [], 'status': 200 },
+                    { 'input': [1], 'status': 200 },
+                    { 'input': [5], 'status': 400 },
+                    { 'input': 'a literal string', 'status': 400 },
+                    { 'input': 1, 'status': 400 },
+                ];
+
+                for (item of inputs) {
+                    it(`gives ${item.status} on input ${JSON.stringify(item.input)}`, async () => {
+                        const res = await req
+                            .put('/user/events/notified')
+                            .set('Authorization', `Bearer ${access_token}`)
+                            .set('Content-Type', 'application/json')
+                            .send({ "notified_events": item.input });
+                        
+                        assert.strictEqual(res.statusCode, item.status, res.text);
+                    });
+                }
+            });
         });
 
         describe('GET + PUT /user/username', () => {
