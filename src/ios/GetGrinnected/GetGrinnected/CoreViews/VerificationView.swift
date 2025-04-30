@@ -87,7 +87,6 @@ struct VerificationView: View {
                         switch result {
                         case .success(let output):
                             print("API Response: \(output)")
-                            isLoggedIn = true
                         case .failure(let error):
                             print("API call failed: \(error.localizedDescription)")
                             //this wouldn't be an error that's the users fault
