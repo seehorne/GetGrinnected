@@ -101,7 +101,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                 Column(modifier = Modifier.weight(1f)) {
                     event.event_name.let {
                         Text(
-                            text = it,
+                            text =  it,
                             style = typography.titleLarge,
                             color = colorScheme.onSurface,
                             fontWeight = FontWeight.Bold
@@ -112,7 +112,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                         style = typography.bodyMedium,
                         color = colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(2.dp))
-                    event.event_location?.let { Text(text = it, 
+                    event.event_location?.let { Text(text = it,
                                                      style = typography.bodyMedium,
                                                       color = colorScheme.onSurface)
                     }
