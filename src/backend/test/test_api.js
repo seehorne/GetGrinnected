@@ -135,7 +135,6 @@ describe('Test API', () => {
     // - POST /user/resend-otp
     // - POST /user/verify
     // Instead, they must be incorporated into manual testing.
-    // TODO: ADD MANUAL TESTING SECTION ON THIS.
 
     // the authenticated tests need these tokens, let their scope cover all tests
     var refresh_token;
