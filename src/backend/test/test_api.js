@@ -34,7 +34,7 @@ describe('Test API', () => {
         describe('GET /', () => {
             it('returns online text', async () => {
                 const res = await req.get('/');
-                assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(res.statusCode, 200, res.text);
                 assert.strictEqual(res.text, 'API online!');
             });
         });
@@ -44,18 +44,18 @@ describe('Test API', () => {
                 const res = await req.get('/events');
 
                 // Check return status and length (but not content) of response array
-                assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(res.statusCode, 200, res.text);
                 const eventsArray = JSON.parse(res.text);
-                assert.strictEqual(eventsArray.length, 3);
+                assert.strictEqual(eventsArray.length, 3, res.text);
             });
 
             it('returns fewer events with tags', async () => {
                 const res = await req.get('/events?tag=odd');
 
                 // Check return status and length (but not content) of response array
-                assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(res.statusCode, 200, res.text);
                 const eventsArray = JSON.parse(res.text);
-                assert.strictEqual(eventsArray.length, 2);
+                assert.strictEqual(eventsArray.length, 2, res.text);
             });
         });
 
@@ -64,35 +64,35 @@ describe('Test API', () => {
                 const res = await req.get('/events/between/2025-05-31/2025-06-01');
 
                 // Check return status and length (but not content) of response array
-                assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(res.statusCode, 200, res.text);
                 const eventsArray = JSON.parse(res.text);
-                assert.strictEqual(eventsArray.length, 2);
+                assert.strictEqual(eventsArray.length, 2, res.text);
             });
 
             it('filters those events with a tag provided', async () => {
                 const res = await req.get('/events/between/2025-05-31/2025-06-01?tag=odd');
 
                 // Check return status and length (but not content) of response array
-                assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(res.statusCode, 200, res.text);
                 const eventsArray = JSON.parse(res.text);
-                assert.strictEqual(eventsArray.length, 1);
+                assert.strictEqual(eventsArray.length, 1, res.text);
             });
 
             it('fails with entirely invalid dates', async () => {
                 const res = await req.get('/events/between/20210304/20210306');
-                assert.strictEqual(res.statusCode, 400);
+                assert.strictEqual(res.statusCode, 400, res.text);
                 assert.strictEqual(
                     res.text,
                     JSON.stringify({
                         'error': 'Invalid date',
                         'message': 'Start and end date could not be read properly.'
-                    })
+                    }),
                 );
             });
 
             it('fails with invalid start date', async () => {
                 const res = await req.get('/events/between/20210304/2021-03-06');
-                assert.strictEqual(res.statusCode, 400);
+                assert.strictEqual(res.statusCode, 400, res.text);
                 assert.strictEqual(
                     res.text,
                     JSON.stringify({
@@ -104,7 +104,7 @@ describe('Test API', () => {
 
             it('fails with invalid end date', async () => {
                 const res = await req.get('/events/between/2021-03-02/20210304');
-                assert.strictEqual(res.statusCode, 400);
+                assert.strictEqual(res.statusCode, 400, res.text);
                 assert.strictEqual(
                     res.text,
                     JSON.stringify({
@@ -116,7 +116,7 @@ describe('Test API', () => {
 
             it('fails with start date after end date', async () => {
                 const res = await req.get('/events/between/2021-03-06/2021-03-02');
-                assert.strictEqual(res.statusCode, 400);
+                assert.strictEqual(res.statusCode, 400, res.text);
                 assert.strictEqual(
                     res.text,
                     JSON.stringify({
@@ -175,7 +175,7 @@ describe('Test API', () => {
                             .set('Authorization', `Bearer ${access_token}`)
                             .set('Content-Type', 'application/json')
 
-                        assert.strictEqual(res.statusCode, 400);
+                        assert.strictEqual(res.statusCode, 400, res.text);
                     });
 
                     it(`PUT ${item.route} gives 400 when body is included without correct key`, async () => {
@@ -192,7 +192,7 @@ describe('Test API', () => {
                             // Body
                             .send(jsonBody);
 
-                        assert.strictEqual(res.statusCode, 400);
+                        assert.strictEqual(res.statusCode, 400, res.text);
                     });
 
                     it(`PUT ${item.route} gives 401 when token is not provided`, async () => {
@@ -209,7 +209,7 @@ describe('Test API', () => {
                             // Body
                             .send(jsonBody);
 
-                        assert.strictEqual(res.statusCode, 401);
+                        assert.strictEqual(res.statusCode, 401, res.text);
                     });
 
                     it(`PUT ${item.route} gives 403 when the token is not good`, async () => {
@@ -227,7 +227,7 @@ describe('Test API', () => {
                             // Body
                             .send(jsonBody);
 
-                        assert.strictEqual(res.statusCode, 403);
+                        assert.strictEqual(res.statusCode, 403, res.text);
                     });
 
                     it(`PUT ${item.route} gives 404 when the user does not exist`, async () => {
@@ -248,7 +248,7 @@ describe('Test API', () => {
                             // Body
                             .send(jsonBody);
 
-                        assert.strictEqual(res.statusCode, 404);
+                        assert.strictEqual(res.statusCode, 404, res.text);
                     });
                 }
             });
@@ -263,7 +263,7 @@ describe('Test API', () => {
                             // Headers
                             .set('Content-Type', 'application/json');
 
-                        assert.strictEqual(res.statusCode, 401);
+                        assert.strictEqual(res.statusCode, 401, res.text);
                     });
 
                     it(`GET ${route} gives 403 when the token is not good`, async () => {
@@ -275,7 +275,7 @@ describe('Test API', () => {
                             .set('Authorization', `Bearer invalid_token`)
                             .set('Content-Type', 'application/json');
 
-                        assert.strictEqual(res.statusCode, 403);
+                        assert.strictEqual(res.statusCode, 403, res.text);
                     });
 
                     it(`GET ${route} gives 404 when the user does not exist`, async () => {
@@ -290,7 +290,7 @@ describe('Test API', () => {
                             .set('Authorization', `Bearer ${fakeTokens.access}`)
                             .set('Content-Type', 'application/json');
 
-                        assert.strictEqual(res.statusCode, 404);
+                        assert.strictEqual(res.statusCode, 404, res.text);
                     });
                 }
             });
@@ -322,7 +322,7 @@ describe('Test API', () => {
                     .post('/user/token-refresh')
                     .set('Authorization', `Bearer not_a_real_token_lol`)
                     .set('Content-Type', 'application/json');
-                assert.strictEqual(res.statusCode, 403);
+                assert.strictEqual(res.statusCode, 403, res.text);
             });
 
             it('gives 403 when the token is not good', async () => {
@@ -330,7 +330,7 @@ describe('Test API', () => {
                     .post('/user/token-refresh')
                     .set('Authorization', `Bearer not_a_real_token_lol`)
                     .set('Content-Type', 'application/json');
-                assert.strictEqual(res.statusCode, 403);
+                assert.strictEqual(res.statusCode, 403, res.text);
             });
 
             it('gives 404 when the user does not exist', async () => {
@@ -339,7 +339,7 @@ describe('Test API', () => {
                     .post('/user/token-refresh')
                     .set('Authorization', `Bearer ${fakeTokens.refresh}`)
                     .set('Content-Type', 'application/json');
-                assert.strictEqual(res.statusCode, 404);
+                assert.strictEqual(res.statusCode, 404, res.text);
             });
         });
 
@@ -349,12 +349,51 @@ describe('Test API', () => {
                     .get('/user/data')
                     .set('Authorization', `Bearer ${access_token}`)
                     .set('Content-Type', 'application/json');
-                assert.strictEqual(res.statusCode, 200);
+                assert.strictEqual(res.statusCode, 200, res.text);
             });
         });
 
         describe('GET + PUT /user/events/favorited', () => {
-            // TODO: WRITE THE TESTS
+            it('modifies and gets valid events', async () => {
+                const newItems = [1, 2];
+
+                // Make sure it adds the items
+                const putRes = await req
+                    .put('/user/events/favorited')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ "favorited_events": newItems });
+                assert.strictEqual(putRes.statusCode, 200, putRes.text);
+
+                const getRes = await req
+                    .get('/user/events/favorited')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json');
+                assert.strictEqual(getRes.statusCode, 200, getRes.text);
+                assert.strictEqual(getRes.text, '{"favorited_events":"[1,2]"}');
+            });
+
+            describe('accepts valid inputs and rejects invalid ones', () => {
+                const inputs = [
+                    { 'input': [], 'status': 200 },
+                    { 'input': [1], 'status': 200 },
+                    { 'input': [5], 'status': 400 },
+                    { 'input': 'a literal string', 'status': 400 },
+                    { 'input': 1, 'status': 400 },
+                ];
+
+                for (item of inputs) {
+                    it(`gives ${item.status} on input ${JSON.stringify(item.input)}`, async () => {
+                        const res = await req
+                            .put('/user/events/favorited')
+                            .set('Authorization', `Bearer ${access_token}`)
+                            .set('Content-Type', 'application/json')
+                            .send({ "favorited_events": item.input });
+                        
+                        assert.strictEqual(res.statusCode, item.status, res.text);
+                    });
+                }
+            });
         });
 
         describe('GET + PUT /user/events/notified', () => {
@@ -371,14 +410,14 @@ describe('Test API', () => {
                     .set('Authorization', `Bearer ${access_token}`)
                     .set('Content-Type', 'application/json')
                     .send({ "username": newName });
-                assert.strictEqual(putRes.statusCode, 200);
+                assert.strictEqual(putRes.statusCode, 200, putRes.text);
 
                 // Get the username, and make sure it matches what we put there.
                 const getRes = await req
                     .get('/user/username')
                     .set('Authorization', `Bearer ${access_token}`)
                     .set('Content-Type', 'application/json');
-                assert.strictEqual(getRes.statusCode, 200);
+                assert.strictEqual(getRes.statusCode, 200, getRes.text);
                 assert.strictEqual(getRes.text, `{"username":"${newName}"}`);
             });
 
@@ -408,7 +447,7 @@ describe('Test API', () => {
                             .set('Content-Type', 'application/json')
                             .send({ 'username': item.username });
 
-                        assert.strictEqual(res.status, item.status);
+                        assert.strictEqual(res.status, item.status, res.text);
                     });
                 }
             });
