@@ -151,6 +151,11 @@ struct EventList: View {
                                 }
                             }
                         }//tap each event, and it sets id = to that event
+                        .onChange(of: event.favorited) { _, _ in
+                            try? modelContext.save()
+                            print("Success Save for Event\(event.id)")
+                            
+                        }
                     
                 }//foreach
             }//if loading, else, fetch.

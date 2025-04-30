@@ -71,6 +71,9 @@ struct HomeView: View {
             viewModel.timeSpan.start = newValue
             viewModel.timeSpan.end = newValue.startOfNextDay
         }
+        .refreshable {
+            viewModel.forceRefresh()
+        }
     }//main body view
 }
 
