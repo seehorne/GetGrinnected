@@ -24,6 +24,13 @@
 		0CF63C3F2DA5FE8F009744F8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (Weak, ); }; };
 		0CF63C402DA5FE8F009744F8 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C02ED382DB68CF40023BCF5 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C02ED372DB68CF40023BCF5 /* DateExtension.swift */; };
+		4C8B24CD2DC3063700901BA3 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8B24C82DC3063700901BA3 /* EventModel.swift */; };
+		4C8B24CE2DC3063700901BA3 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8B24CB2DC3063700901BA3 /* UserProfile.swift */; };
+		4C8B24CF2DC3063700901BA3 /* EventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8B24C72DC3063700901BA3 /* EventList.swift */; };
+		4C8B24D02DC3063700901BA3 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8B24CA2DC3063700901BA3 /* UserModel.swift */; };
+		4C8B24D12DC3063700901BA3 /* EventTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8B24C92DC3063700901BA3 /* EventTags.swift */; };
+		4C8B24D22DC3063700901BA3 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8B24C52DC3063700901BA3 /* EventData.swift */; };
+		4C8B24D32DC3063700901BA3 /* EventDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8B24C62DC3063700901BA3 /* EventDTO.swift */; };
 		4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5742DA4BF6500059803 /* CheckBox.swift */; };
 		4CA0C5772DA5D16200059803 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5762DA5D15300059803 /* Header.swift */; };
 		CA0EB8C52DB00AAC005898BA /* DayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C42DB00A9F005898BA /* DayCard.swift */; };
@@ -118,6 +125,13 @@
 		0CC0E1F92DBDC33400B179C5 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		0CF63C382DA5FE79009744F8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4C02ED372DB68CF40023BCF5 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateExtension.swift; path = GetGrinnected/Classes/DateExtension.swift; sourceTree = SOURCE_ROOT; };
+		4C8B24C52DC3063700901BA3 /* EventData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
+		4C8B24C62DC3063700901BA3 /* EventDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDTO.swift; sourceTree = "<group>"; };
+		4C8B24C72DC3063700901BA3 /* EventList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventList.swift; sourceTree = "<group>"; };
+		4C8B24C82DC3063700901BA3 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
+		4C8B24C92DC3063700901BA3 /* EventTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTags.swift; sourceTree = "<group>"; };
+		4C8B24CA2DC3063700901BA3 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		4C8B24CB2DC3063700901BA3 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		4CA0C5742DA4BF6500059803 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		4CA0C5762DA5D15300059803 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,6 +229,7 @@
 				CACCD44A2DA31696001D31C0 /* Components */,
 				CACCD4542DA31696001D31C0 /* CoreViews */,
 				0CBBC3CC2D77AB9A002E482E /* Assets.xcassets */,
+				4C8B24CC2DC3063700901BA3 /* Database */,
 				0CBBC3CE2D77AB9A002E482E /* Preview Content */,
 			);
 			path = GetGrinnected;
@@ -251,6 +266,20 @@
 				0CF63C382DA5FE79009744F8 /* XCTest.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C8B24CC2DC3063700901BA3 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4C8B24C52DC3063700901BA3 /* EventData.swift */,
+				4C8B24C62DC3063700901BA3 /* EventDTO.swift */,
+				4C8B24C72DC3063700901BA3 /* EventList.swift */,
+				4C8B24C82DC3063700901BA3 /* EventModel.swift */,
+				4C8B24C92DC3063700901BA3 /* EventTags.swift */,
+				4C8B24CA2DC3063700901BA3 /* UserModel.swift */,
+				4C8B24CB2DC3063700901BA3 /* UserProfile.swift */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		CACCD4472DA31696001D31C0 /* Classes */ = {
@@ -486,6 +515,13 @@
 				CACCD45B2DA31696001D31C0 /* MainNavView.swift in Sources */,
 				0CC0E1FA2DBDC33400B179C5 /* VerificationView.swift in Sources */,
 				CACCD45C2DA31696001D31C0 /* SettingsView.swift in Sources */,
+				4C8B24CD2DC3063700901BA3 /* EventModel.swift in Sources */,
+				4C8B24CE2DC3063700901BA3 /* UserProfile.swift in Sources */,
+				4C8B24CF2DC3063700901BA3 /* EventList.swift in Sources */,
+				4C8B24D02DC3063700901BA3 /* UserModel.swift in Sources */,
+				4C8B24D12DC3063700901BA3 /* EventTags.swift in Sources */,
+				4C8B24D22DC3063700901BA3 /* EventData.swift in Sources */,
+				4C8B24D32DC3063700901BA3 /* EventDTO.swift in Sources */,
 				CACCD45E2DA31696001D31C0 /* InputField.swift in Sources */,
 				CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */,
 				4CA0C5772DA5D16200059803 /* Header.swift in Sources */,

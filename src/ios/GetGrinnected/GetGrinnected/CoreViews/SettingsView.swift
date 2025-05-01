@@ -59,6 +59,7 @@ struct SettingsView: View {
                             }
                         }
                         
+                        // change username field
                         InputView(text: $username, title: "Change Username", placeholder: "Username")
                             .padding()
                         
@@ -72,6 +73,7 @@ struct SettingsView: View {
                         Slider(
                             value: $fontSize,
                             in: 20...45,
+                            // has 5 discrete steps instead of a continous slider
                             step: 5
                         ) {} minimumValueLabel: {
                             Text("A")

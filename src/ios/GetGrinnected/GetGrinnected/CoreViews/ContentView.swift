@@ -14,8 +14,6 @@ struct ContentView: View {
     // store standard font size of 20 in app storage
     @AppStorage("FontSize") private var fontSize: Double = 20.0
     
-    @Environment(\.font) private var font
-    
     var body: some View {
         Group {
             if isLoggedIn {
