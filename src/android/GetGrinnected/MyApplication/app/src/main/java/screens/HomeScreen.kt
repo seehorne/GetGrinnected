@@ -174,17 +174,7 @@ fun HomeScreen(tags: List<Check>) {
                             )
                             Spacer(Modifier.size(8.dp))
                             // displays selected day on button
-                            Text(
-                                daysList[selectedView].dayOfWeek.getDisplayName(
-                                    java.time.format.TextStyle.FULL,
-                                    Locale.getDefault()
-                                ).substring(
-                                    0,
-                                    3
-                                ) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(
-                                    formatter3
-                                ), style = typography.labelLarge
-                            )
+                            Text(daysList[selectedView].dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0, 3) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(formatter3), style = typography.labelLarge)
                         }
                     }
                     // creates dropdown menu when button is clicked
