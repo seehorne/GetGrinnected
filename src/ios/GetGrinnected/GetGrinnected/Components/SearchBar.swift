@@ -16,9 +16,10 @@ struct SearchBar: View {
             HStack(spacing: 8){
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.white)
-                TextField("Search", text: Binding(
+                TextField ("Search", text: Binding(
                     get: { inputText },
-                    set: { inputText = $0 }))
+                    set: { inputText = $0 })
+                )
                 .foregroundColor(.white)
                 .tint(.white)
             }
@@ -35,6 +36,7 @@ struct SearchBar: View {
             Logo(size: 35)
         }//HStack for searching
         .padding(.top, safeAreaTop + 10)
+        .padding(.leading)
         .background{
             Rectangle()
                 .fill(.colorBlue)

@@ -16,7 +16,7 @@ import SwiftUI
  Searching, filtering and forcerefreshing is all in this file.
  */
 enum SortOrder: String, Identifiable, CaseIterable {
-    case eventName, eventTime
+    case name, time
     var id: Self { self}
 }
 
@@ -69,9 +69,9 @@ struct EventList: View {
         //apply sort order, default if no title or organization provided
         let sortDescriptors: [SortDescriptor<EventModel>] =
         switch sortOrder {
-        case .eventName:
+        case .name:
             [SortDescriptor(\EventModel.name)]
-        case .eventTime:
+        case .time:
             [SortDescriptor(\EventModel.startTime)]
         }
         

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SettingsView: View {
     // store standard font size of 20 in app storage
-    @AppStorage("FontSize") private var fontSize: Double = 20.0
+    @AppStorage("FontSize") private var fontSize: Double = 15.0
     
     // access the core data to see the color scheme the device is set to
     @Environment(\.colorScheme) private var userColorScheme
@@ -62,26 +62,58 @@ struct SettingsView: View {
                         // change username field
                         InputView(text: $username, title: "Change Username", placeholder: "Username")
                             .padding()
+                            .background( //background color as app container
+                                ZStack {
+                                    Color.appContainer
+                                        .opacity(0.75)
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.appBorder, lineWidth: 1)
+                                }
+                            )//background
+                            .cornerRadius(8)
                         
                         // switch for light/dark mode
                         Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
                             .padding()
+                            .background( //background color as app container
+                                ZStack {
+                                    Color.appContainer
+                                        .opacity(0.75)
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.appBorder, lineWidth: 1)
+                                }
+                            )//background
+                            .cornerRadius(8)
                         
-                        Text("Font Size")
-                        
-                        // slider for text size
-                        Slider(
-                            value: $fontSize,
-                            in: 20...45,
-                            // has 5 discrete steps instead of a continous slider
-                            step: 5
-                        ) {} minimumValueLabel: {
-                            Text("A")
-                                .font(.system(size: 20))
-                        } maximumValueLabel: {
-                            Text("A")
-                                .font(.system(size: 45))
+                        VStack{
+                            Text("Font Size")
+                                .padding(.top)
+                            
+                            // slider for text size
+                            Slider(
+                                value: $fontSize,
+                                in: 10...45,
+                                // has 5 discrete steps instead of a continous slider
+                                step: 5
+                            ) {} minimumValueLabel: {
+                                Text("Aa")
+                                    .font(.system(size: 10))
+                            } maximumValueLabel: {
+                                Text("Aa")
+                                    .font(.system(size: 45))
+                            }
+                            .padding()
+                            
                         }
+                        .background( //background color as app container
+                            ZStack {
+                                Color.appContainer
+                                    .opacity(0.75)
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.appBorder, lineWidth: 1)
+                            }
+                        )//background
+                        .cornerRadius(8)
                     } //VStack
                     .padding()
                     

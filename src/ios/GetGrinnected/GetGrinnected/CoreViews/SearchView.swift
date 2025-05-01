@@ -24,7 +24,7 @@ struct SearchView: View {
     
     
     //Sorting and Filtering parameters
-    @State private var sortOrder = SortOrder.eventTime
+    @State private var sortOrder = SortOrder.time
     @State private var filterType = FilterType.name
     @State private var filter = ""
     

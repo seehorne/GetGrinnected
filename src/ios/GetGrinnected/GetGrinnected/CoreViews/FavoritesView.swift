@@ -22,7 +22,7 @@ struct FavoritesView: View {
     @State private var refreshTimer: Timer? //a timer to count when we refresh
     
     //Sorting and Filtering parameters
-    @State private var sortOrder = SortOrder.eventTime
+    @State private var sortOrder = SortOrder.time
     @State private var filterType = FilterType.name
     @State private var filter = ""
     @State private var selectedEvent: Int = -1
