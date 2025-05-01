@@ -75,35 +75,15 @@ fun HomeScreen(tags: List<Check>) {
     val expanded2 = remember { mutableStateOf(false) }
     // holds dates for the current view dropdown
     val today = LocalDate.now()
-    val tomorrow = today.plusDays(1)
-    val twodays = today.plusDays(2)
-    val threedays = today.plusDays(3)
-    val fourdays = today.plusDays(4)
-    val fivedays = today.plusDays(5)
-    val sixdays = today.plusDays(6)
+    // number of days you can see ahead in homepage
+    val days = 6
+    val daysList  = mutableListOf<LocalDate>()
+    for (day in 0..days) {
+        daysList.add(today.plusDays(day.toLong()))
+    }
     // formats the date view
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    // background color for the page
-    val formatter2 = DateTimeFormatter.ofPattern("MM")
     val formatter3 = DateTimeFormatter.ofPattern("dd")
-    val currentMonth = today.format(formatter2).toString()
-    // sets the month based on devices local date
-    val month = (when (currentMonth) {
-        "01" -> { "Jan" }
-        "02" -> { "Feb" }
-        "03" -> { "Mar" }
-        "04" -> { "Apr" }
-        "05" -> { "May" }
-        "06" -> { "Jun" }
-        "07" -> { "Jul" }
-        "08" -> { "Aug" }
-        "09" -> { "Sep" }
-        "10" -> { "Oct" }
-        "11" -> { "Nov" }
-        else -> {
-            "Dec"
-        }
-    }).toString()
     // remembers where we are scrolled to
     val state = rememberScrollState()
     // Accessing colors from our theme
@@ -156,88 +136,71 @@ fun HomeScreen(tags: List<Check>) {
                 .height(100.dp)
                 .padding(horizontal = 8.dp),
         )
-    {
-        //creates a row to align the logo and buttons on the home page
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        )
         {
-            // adds the logo to the top
-            Image(
-                painter = painterResource(id = R.drawable.getgrinnected_logo),
-                contentDescription = "App Logo",
-                modifier = Modifier
-                    .padding(25.dp)
-                    .background(Color.White)
-                    .size(50.dp)
-            )
-            // centers the buttons
+            //creates a row to align the logo and buttons on the home page
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                // creates day menu
-                Button(onClick = { expanded.value = true },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorScheme.secondary,
-                        contentColor = colorScheme.onPrimary),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 20.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Filled.DateRange,
-                            contentDescription = "Calendar Icon",
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.size(8.dp))
-
-                        // displays selected day on the button
-                        when (selectedView) {
-
-                        0 -> { Text(today.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + today.format(formatter3), style = typography.labelLarge) }
-                        1 -> { Text(tomorrow.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + tomorrow.format(formatter3), style = typography.labelLarge) }
-                        2 -> { Text(twodays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + twodays.format(formatter3), style = typography.labelLarge) }
-                        3 -> { Text(threedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + threedays.format(formatter3), style = typography.labelLarge) }
-                        4 -> { Text(fourdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + fourdays.format(formatter3), style = typography.labelLarge) }
-                        5 -> { Text(fivedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month+ " " + fivedays.format(formatter3), style = typography.labelLarge) }
-                        else -> { Text(sixdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month+ " " + sixdays.format(formatter3), style = typography.labelLarge) }
-
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            )
+            {
+                // adds the logo to the top
+                Image(
+                    painter = painterResource(id = R.drawable.getgrinnected_logo),
+                    contentDescription = "App Logo",
+                    modifier = Modifier
+                        .padding(25.dp)
+                        .background(Color.White)
+                        .size(50.dp)
+                )
+                // centers the buttons
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    // creates day menu
+                    Button(
+                        onClick = { expanded.value = true },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorScheme.secondary,
+                            contentColor = colorScheme.onPrimary
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 20.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.DateRange,
+                                contentDescription = "Calendar Icon",
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(Modifier.size(8.dp))
+                            // displays selected day on button
+                            Text(daysList[selectedView].dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0, 3) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(formatter3), style = typography.labelLarge)
+                        }
+                    }
+                    // creates dropdown menu when button is clicked
+                    DropdownMenu(
+                        expanded = expanded.value,
+                        onDismissRequest = { expanded.value = false }) {
+                        for (day in daysList.indices) {
+                            DropdownMenuItem(text = {
+                                Text(
+                                    daysList[day].dayOfWeek.getDisplayName(
+                                        java.time.format.TextStyle.FULL,
+                                        Locale.getDefault()
+                                    ).substring(
+                                        0,
+                                        3
+                                    ) + ", " + toMonth(daysList[day]) + " " + daysList[day].format(
+                                        formatter3
+                                    ), style = typography.labelLarge
+                                )
+                            }, onClick = {
+                                selectedView = day
+                                expanded.value = false
+                            })
                         }
                     }
                 }
-                // creates dropdown menu when button is clicked
-                DropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false }) {
-                    DropdownMenuItem(text = { Text(today.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + today.format(formatter3), style = typography.labelLarge) }, onClick = {
-                        selectedView = 0
-                        expanded.value = false
-                    })
-                    DropdownMenuItem(text = { Text(tomorrow.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + tomorrow.format(formatter3), style = typography.labelLarge) }, onClick = {
-                        selectedView = 1
-                        expanded.value = false
-                    })
-                    DropdownMenuItem(text = { Text(twodays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + twodays.format(formatter3), style = typography.labelLarge) }, onClick = {
-                        selectedView = 2
-                        expanded.value = false
-                    })
-                    DropdownMenuItem(text = { Text(threedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + threedays.format(formatter3), style = typography.labelLarge) }, onClick = {
-                        selectedView = 3
-                        expanded.value = false
-                    })
-                    DropdownMenuItem(text = { Text(fourdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + fourdays.format(formatter3), style = typography.labelLarge) }, onClick = {
-                        selectedView = 4
-                        expanded.value = false
-                    })
-                    DropdownMenuItem(text = { Text(fivedays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + fivedays.format(formatter3), style = typography.labelLarge) }, onClick = {
-                        selectedView = 5
-                        expanded.value = false
-                    })
-                    DropdownMenuItem(text = { Text(sixdays.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0,3) + ", " + month + " " + sixdays.format(formatter3), style = typography.labelLarge)}, onClick = {
-                        selectedView = 6
-                        expanded.value = false
-                    })
-                }}
                 // I don't know why this is necessary but was needed to properly space tag menu
                 Row(
                     modifier = Modifier
@@ -246,11 +209,14 @@ fun HomeScreen(tags: List<Check>) {
                     horizontalArrangement = Arrangement.End,
                 ) {
                     // creates tags menu
-                    Button(onClick = { expanded2.value = true },
+                    Button(
+                        onClick = { expanded2.value = true },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorScheme.secondary,
-                            contentColor = colorScheme.onPrimary),
-                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)) {
+                            contentColor = colorScheme.onPrimary
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Outlined.FilterAlt,
@@ -266,13 +232,17 @@ fun HomeScreen(tags: List<Check>) {
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
                         DropdownMenuItem(
-                            text = {Text("Unselect All")},
-                            onClick = {for (t in tags.indices){
-                                tags[t].checked.value = false}
+                            text = { Text("Unselect All") },
+                            onClick = {
+                                for (t in tags.indices) {
+                                    tags[t].checked.value = false
+                                }
                             },
                         )
-                        for (tag in tags.indices){
-                            DropdownMenuItem(text = {CheckBox(check = tags[tag])}, onClick = {tags[tag].checked.value = !tags[tag].checked.value})
+                        for (tag in tags.indices) {
+                            DropdownMenuItem(
+                                text = { CheckBox(check = tags[tag]) },
+                                onClick = { tags[tag].checked.value = !tags[tag].checked.value })
                         }
                         Spacer(modifier = Modifier.height(60.dp))
                     }
@@ -310,147 +280,36 @@ fun HomeScreen(tags: List<Check>) {
                 // populates the page with events
                 for (cardnum in events.indices) {
                     if (chosenTags.isEmpty()) {
-                        if (selectedView == 0) {
-                            if (events[cardnum].event_start_time.substring(0, 10) == today.format(
-                                    formatter
-                                ).toString()
-                            ) {
-                                EventCard(event = events[cardnum])
-                                // creates space between cards
-                                Spacer(modifier = Modifier.height(16.dp))
+                        for (day in daysList.indices) {
+                            if (selectedView == day) {
+                                if (events[cardnum].event_start_time.substring(
+                                        0,
+                                        10
+                                    ) == daysList[day].format(formatter).toString()
+                                ) {
+                                    EventCard(event = events[cardnum])
+                                    // creates space between cards
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                }
                             }
-                        } else if (selectedView == 1) {
-                            if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(
-                                    formatter
-                                ).toString()
-                            ) {
-                                EventCard(event = events[cardnum])
-                                // creates space between cards
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                        } else if (selectedView == 2) {
-                            if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(
-                                    formatter
-                                ).toString()
-                            ) {
-                                EventCard(event = events[cardnum])
-                                // creates space between cards
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                        } else if (selectedView == 3) {
-                            if (events[cardnum].event_start_time.substring(0, 10) == threedays.format(
-                                    formatter
-                                ).toString()
-                            ) {
-                                EventCard(event = events[cardnum])
-                                // creates space between cards
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                        } else if (selectedView == 4) {
-                            if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(
-                                    formatter
-                                ).toString()
-                            ) {
-                                EventCard(event = events[cardnum])
-                                // creates space between cards
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                        } else if (selectedView == 5) {
-                            if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(
-                                    formatter
-                                ).toString()
-                            ) {
-                                EventCard(event = events[cardnum])
-                                // creates space between cards
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                        } else if (selectedView == 6) {
-                            if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(
-                                    formatter
-                                ).toString()
-                            ) {
-                                EventCard(event = events[cardnum])
-                                // creates space between cards
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-
                         }
                     }
                     // sorts by tag
                     else {
-                        for (t in chosenTags.indices) {
-                            if (selectedView == 0) {
-                                if (events[cardnum].event_start_time.substring(0, 10) == today.format(
-                                        formatter
-                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
-                                ) {
-                                    EventCard(event = events[cardnum])
-                                    // creates space between cards
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    break
-                                }
-                            } else if (selectedView == 1) {
-                                if (events[cardnum].event_start_time.substring(0, 10) == tomorrow.format(
-                                        formatter
-                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
-                                ) {
-                                    EventCard(event = events[cardnum])
-                                    // creates space between cards
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    break
-                                }
-                            } else if (selectedView == 2) {
-                                if (events[cardnum].event_start_time.substring(0, 10) == twodays.format(
-                                        formatter
-                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
-                                ) {
-                                    EventCard(event = events[cardnum])
-                                    // creates space between cards
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    break
-                                }
-                            } else if (selectedView == 3) {
-                                if (events[cardnum].event_start_time.substring(
-                                        0,
-                                        10
-                                    ) == threedays.format(formatter)
-                                        .toString() && events[cardnum].tags.contains(chosenTags[t])
-                                ) {
-                                    EventCard(event = events[cardnum])
-                                    // creates space between cards
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    break
-                                }
-                            } else if (selectedView == 4) {
-                                if (events[cardnum].event_start_time.substring(0, 10) == fourdays.format(
-                                        formatter
-                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
-                                ) {
-                                    EventCard(event = events[cardnum])
-                                    // creates space between cards
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    break
-
-                                }
-                            } else if (selectedView == 5) {
-                                if (events[cardnum].event_start_time.substring(0, 10) == fivedays.format(
-                                        formatter
-                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
-                                ) {
-                                    EventCard(event = events[cardnum])
-                                    // creates space between cards
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    break
-                                }
-                            } else if (selectedView == 6) {
-                                if (events[cardnum].event_start_time.substring(0, 10) == sixdays.format(
-                                        formatter
-                                    ).toString() && events[cardnum].tags.contains(chosenTags[t])
-                                ) {
-                                    EventCard(event = events[cardnum])
-                                    // creates space between cards
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    break
+                        for (day in daysList.indices) {
+                            for (t in chosenTags.indices) {
+                                if (selectedView == day) {
+                                    if (events[cardnum].event_start_time.substring(
+                                            0,
+                                            10
+                                        ) == daysList[day].format(formatter).toString()
+                                        && events[cardnum].tags.contains(chosenTags[t])
+                                    ) {
+                                        EventCard(event = events[cardnum])
+                                        // creates space between cards
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                        break
+                                    }
                                 }
                             }
                         }
@@ -476,4 +335,26 @@ fun HomeScreen(tags: List<Check>) {
             )
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun toMonth(localDate: LocalDate): String{
+    val formatter2 = DateTimeFormatter.ofPattern("MM")
+    val month = (when (localDate.format(formatter2)) {
+        "01" -> { "Jan" }
+        "02" -> { "Feb" }
+        "03" -> { "Mar" }
+        "04" -> { "Apr" }
+        "05" -> { "May" }
+        "06" -> { "Jun" }
+        "07" -> { "Jul" }
+        "08" -> { "Aug" }
+        "09" -> { "Sep" }
+        "10" -> { "Oct" }
+        "11" -> { "Nov" }
+        else -> {
+            "Dec"
+        }
+    }).toString()
+    return month
 }

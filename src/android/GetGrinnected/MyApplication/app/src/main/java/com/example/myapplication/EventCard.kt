@@ -97,18 +97,21 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             ) {
                 // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = event.event_name,
-                        style = typography.titleLarge,
-                        color = colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
-                    )
+
+                    event.event_name.let {
+                        Text(
+                            text =  it,
+                            style = typography.titleLarge,
+                            color = colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "${event.event_date} at ${event.event_time}",
                         style = typography.bodyMedium,
                         color = colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(2.dp))
-                    event.event_location?.let { Text(text = it, 
+                    event.event_location?.let { Text(text = it,
                                                      style = typography.bodyMedium,
                                                       color = colorScheme.onSurface)
                     }
