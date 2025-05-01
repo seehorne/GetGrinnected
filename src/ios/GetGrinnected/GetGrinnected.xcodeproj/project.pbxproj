@@ -26,7 +26,6 @@
 		4C02ED382DB68CF40023BCF5 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C02ED372DB68CF40023BCF5 /* DateExtension.swift */; };
 		4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5742DA4BF6500059803 /* CheckBox.swift */; };
 		4CA0C5772DA5D16200059803 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5762DA5D15300059803 /* Header.swift */; };
-		4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */; };
 		CA0EB8C52DB00AAC005898BA /* DayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C42DB00A9F005898BA /* DayCard.swift */; };
 		CA0EB8C92DB2AA63005898BA /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0EB8C82DB2AA61005898BA /* WeekView.swift */; };
 		CA3B0A462DBB583500A270FA /* DateFormatter+apiDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3B0A452DBB582A00A270FA /* DateFormatter+apiDateFormatter.swift */; };
@@ -38,7 +37,6 @@
 		CACCD45A2DA31696001D31C0 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44B2DA31696001D31C0 /* HomeView.swift */; };
 		CACCD45B2DA31696001D31C0 /* MainNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4512DA31696001D31C0 /* MainNavView.swift */; };
 		CACCD45C2DA31696001D31C0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4522DA31696001D31C0 /* SettingsView.swift */; };
-		CACCD45D2DA31696001D31C0 /* EventCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44D2DA31696001D31C0 /* EventCreationView.swift */; };
 		CACCD45E2DA31696001D31C0 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4492DA31696001D31C0 /* InputField.swift */; };
 		CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44C2DA31696001D31C0 /* ContentView.swift */; };
 		CACCD4612DA31696001D31C0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4502DA31696001D31C0 /* LoginView.swift */; };
@@ -122,7 +120,6 @@
 		4C02ED372DB68CF40023BCF5 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateExtension.swift; path = GetGrinnected/Classes/DateExtension.swift; sourceTree = SOURCE_ROOT; };
 		4CA0C5742DA4BF6500059803 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		4CA0C5762DA5D15300059803 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
-		4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organizations.swift; sourceTree = "<group>"; };
 		4CD5D1B62D9A119D001E91BD /* GetGrinnectedTestsCI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetGrinnectedTestsCI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA0EB8C42DB00A9F005898BA /* DayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCard.swift; sourceTree = "<group>"; };
 		CA0EB8C82DB2AA61005898BA /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
@@ -133,7 +130,6 @@
 		CACCD4492DA31696001D31C0 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		CACCD44B2DA31696001D31C0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		CACCD44C2DA31696001D31C0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		CACCD44D2DA31696001D31C0 /* EventCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCreationView.swift; sourceTree = "<group>"; };
 		CACCD44E2DA31696001D31C0 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		CACCD4502DA31696001D31C0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CACCD4512DA31696001D31C0 /* MainNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavView.swift; sourceTree = "<group>"; };
@@ -279,7 +275,6 @@
 				CACCD4642DA318EE001D31C0 /* EventCard.swift */,
 				CACCD4482DA31696001D31C0 /* ColorTheme.swift */,
 				CACCD4492DA31696001D31C0 /* InputField.swift */,
-				4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -291,7 +286,6 @@
 				0CC0E1F92DBDC33400B179C5 /* VerificationView.swift */,
 				CACCD44B2DA31696001D31C0 /* HomeView.swift */,
 				CACCD44C2DA31696001D31C0 /* ContentView.swift */,
-				CACCD44D2DA31696001D31C0 /* EventCreationView.swift */,
 				CACCD44E2DA31696001D31C0 /* FavoritesView.swift */,
 				CACCD4502DA31696001D31C0 /* LoginView.swift */,
 				CACCD4512DA31696001D31C0 /* MainNavView.swift */,
@@ -492,13 +486,11 @@
 				CACCD45B2DA31696001D31C0 /* MainNavView.swift in Sources */,
 				0CC0E1FA2DBDC33400B179C5 /* VerificationView.swift in Sources */,
 				CACCD45C2DA31696001D31C0 /* SettingsView.swift in Sources */,
-				CACCD45D2DA31696001D31C0 /* EventCreationView.swift in Sources */,
 				CACCD45E2DA31696001D31C0 /* InputField.swift in Sources */,
 				CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */,
 				4CA0C5772DA5D16200059803 /* Header.swift in Sources */,
 				4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */,
 				CACCD4652DA318F3001D31C0 /* EventCard.swift in Sources */,
-				4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */,
 				CA6DF8412DA6116500EFE10A /* Logo.swift in Sources */,
 				CAEB6B772DC0147300ACA39D /* SearchView.swift in Sources */,
 				CACCD4612DA31696001D31C0 /* LoginView.swift in Sources */,
