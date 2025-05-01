@@ -24,28 +24,29 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    # The node tests try to connect to the MySQL database, so we need to start
+    # a database on the CI runner first.
     - name: Start MySQL
       run: sudo service mysql start
-
     - name: Import CI database into runner MySQL
-      # the password is in plaintext and that's fine, see below
+      # the password is in plaintext and that's fine only user on runner
       run: mysql -u root -proot < ${GITHUB_WORKSPACE}/src/backend/Database/GetGrinnected_CI_Data.sql
 
-    - name: Test with npm
+    # Set up node.js and install packages
+    - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 22.x
         cache: 'npm'
-
     - name: Fresh-install packages
       run: npm ci
 
+    # Run the actual tests
     - name: Run tests
       run: npm test
 
-      # set the env so it runs correctly, this replaces a .env file.
-      # all of these secrets are in plaintext, but they're just for CI and 
-      # never reused elsewhere so it's not a concern.
+      # when running the tests, supply env variables -- this mimics a .env file
+      # like we use in other places.
       env:
         # jwt generation and verification
         REFRESH_TOKEN_SECRET: "fe5e20424416460f194fa331b32c11d8"

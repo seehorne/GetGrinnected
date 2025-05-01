@@ -52,6 +52,7 @@ CREATE TABLE `accounts` (
 -- Dumping data for table `accounts`
 --
 
+-- create one fake account, which is `email@example.com`. not a grinnell email.
 INSERT INTO `accounts` (`accountid`, `account_name`, `email`, `password`, `profile_picture`, `favorited_events`, `favorited_orgs`, `drafted_events`, `favorited_tags`, `account_description`, `account_role`, `notified_events`) VALUES
 (1, 'test_account', 'email@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -80,48 +81,28 @@ CREATE TABLE `events` (
   `is_draft` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `events`
---
-
+-- Fake event data. we make events "one", "two" and "three"
 INSERT INTO `events` (`eventid`, `event_name`, `event_description`, `event_location`, `organizations`, `rsvp`, `event_date`, `event_time`, `event_all_day`, `event_start_time`, `event_end_time`, `tags`, `event_private`, `repeats`, `event_image`, `is_draft`) VALUES
 (1, 'one', 'fake description for event 1', 'nowhere', '[\"One Person\"]', 0, 'May 30', '1 p.m. - 5 p.m.', 0, '2025-05-30 18:00:00', '2025-05-30 22:00:00', '[\"one\", \"odd\"]', 0, 0, NULL, 0),
 (2, 'two', 'fake description for event 2', 'everywhere', '[\"Two\", \"People\"]', 0, 'May 31', '3 p.m. - 4 p.m.', 0, '2025-05-31 20:00:00', '2025-05-31 21:00:00', '[\"two\", \"even\"]', 0, 0, NULL, 0),
 (3, 'three', 'fake description for event 3', 'in between', '[\"Nobody\"]', 0, 'May 31', '2 p.m. - 3 p.m.', 0, '2025-05-31 19:00:00', '2025-05-31 20:00:00', '[\"three\", \"odd\"]', 0, 0, NULL, 0);
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `accounts`
---
+-- these were here in the original dump, idk why it's not part of the
+-- main table declaration but it seems to work okay.
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`accountid`);
-
---
--- Indexes for table `events`
---
 ALTER TABLE `events`
   ADD PRIMARY KEY (`eventid`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `accounts`
---
 ALTER TABLE `accounts`
   MODIFY `accountid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `events`
---
 ALTER TABLE `events`
   MODIFY `eventid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30951;
+
+-- this makes sure we save all the changes that were made.
 COMMIT;
 
+-- not sure if these are comments or not, I figure it's best not to touch them.
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
