@@ -472,6 +472,18 @@ paths:
                   message:
                     type: string
                     example: Successfully updated username.
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: Invalid username
+                  message:
+                    example: Username must contain at least one letter.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':

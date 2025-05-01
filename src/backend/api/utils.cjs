@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
 
 const { sendCode } = require('../one_time_code.cjs')
@@ -6,6 +7,30 @@ const database = require('../db_connect.js');
 const SALT_ROUNDS = 10;
 const DBPATH = './src/backend/Database/localOTP.db'
 
+/**
+ * Generate new user tokens for a specific email address.
+ * 
+ * @param {string} email  Email to generate the tokens for.
+ * @returns  An object with two keys:
+ * - refresh for the user's refresh token
+ * - access for the user's access token
+ */
+function generateUserTokens(email) {
+  // Use JSON Web Tokens to create two tokens for the user,
+  // a long-lived refresh token and a short-lived access token.
+  const refreshToken = jwt.sign(
+    { email },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '30d' }
+  );
+  const accessToken = jwt.sign(
+    { email },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
+
+  return { 'refresh': refreshToken, 'access': accessToken };
+}
 
 /**
  * Determine whether a username is valid.
@@ -459,6 +484,7 @@ async function userDataSetArray(array_name, req, res, _next) {
 
 if (require.main !== module) {
     module.exports = {
+        generateUserTokens,
         validateUsername,
         otpFileCheck,
         otpFileClean,
