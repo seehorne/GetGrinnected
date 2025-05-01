@@ -320,13 +320,13 @@ describe('Test API', () => {
         });
 
         /*
-         * TEST /user/token-refresh ROUTE 
+         * TEST /session/refresh ROUTE 
          */ 
 
-        describe('POST /user/token-refresh', () => {
+        describe('POST /session/refresh', () => {
             it('returns new tokens', async () => {
                 const res = await req
-                    .post('/user/token-refresh')
+                    .post('/session/refresh')
                     .set('Authorization', `Bearer ${refresh_token}`)
                     .set('Content-Type', 'application/json');
 
@@ -346,7 +346,7 @@ describe('Test API', () => {
             // not the auth token.
             it('gives 401 when the token is not included', async () => {
                 const res = await req
-                    .post('/user/token-refresh')
+                    .post('/session/refresh')
                     .set('Authorization', `Bearer not_a_real_token_lol`)
                     .set('Content-Type', 'application/json');
                 assert.strictEqual(res.statusCode, 403, res.text);
@@ -354,7 +354,7 @@ describe('Test API', () => {
 
             it('gives 403 when the token is not good', async () => {
                 const res = await req
-                    .post('/user/token-refresh')
+                    .post('/session/refresh')
                     .set('Authorization', `Bearer not_a_real_token_lol`)
                     .set('Content-Type', 'application/json');
                 assert.strictEqual(res.statusCode, 403, res.text);
@@ -363,7 +363,7 @@ describe('Test API', () => {
             it('gives 404 when the user does not exist', async () => {
                 const fakeTokens = util.generateUserTokens('fake@example.com');
                 const res = await req
-                    .post('/user/token-refresh')
+                    .post('/session/refresh')
                     .set('Authorization', `Bearer ${fakeTokens.refresh}`)
                     .set('Content-Type', 'application/json');
                 assert.strictEqual(res.statusCode, 404, res.text);
