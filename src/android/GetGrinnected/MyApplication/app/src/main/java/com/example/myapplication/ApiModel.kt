@@ -13,11 +13,11 @@ import retrofit2.http.PUT
  */
 interface ApiModel {
     // Async function for login request
-    @POST("user/login")
+    @POST("session/login")
     suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
 
     // Async function for signup request
-    @POST("user/signup")
+    @POST("session/signup")
     suspend fun signup(@Body request: SignupRequest): Response<AuthResponse>
 
     // Async function to get events
@@ -25,7 +25,7 @@ interface ApiModel {
     suspend fun getEvents(): Response<List<Event>>
 
     // Async function to verify code for OTP
-    @POST("user/verify")
+    @POST("session/verify")
     suspend fun verifyOTP(@Body request: VerifyRequest): Response<AuthResponse>
 
     // Async function to get user info given an access token
@@ -33,7 +33,7 @@ interface ApiModel {
     suspend fun getUserData(@Header("Authorization") token: String): Response<User>
 
     // Async function to refresh auth tokens
-    @POST("user/token-refresh")
+    @POST("session/refresh")
     suspend fun refreshToken(@Header("Authorization") refreshToken: String): Response<TokenRefreshResponse>
 
     // Async function to update the remote databases list of favorited events for a user
