@@ -302,8 +302,37 @@ async function routeRefreshTokens(req, res, _next) {
   });
 }
 
+/**
+ * Delete the account of the currently logged-in user.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} _next 
+ */
+async function routeDeleteAccount(req, res, _next) {
+  // Get the email to delete, we know it is included thanks to the middleware.
+  const email = req.email;
+
+  // Ask the database to delete that account
+  try {
+    await db.deleteAccount(email);
+
+    // Return a successful delete
+    res.json({
+      'message': 'Account successfully deleted.'
+    });
+  } catch (error) {
+    // If an error happens, respond saying there was an error instead
+    res.status(404).json({
+      'error': 'Unknown error',
+      'message': error.toString()
+    });
+  }
+}
+
 if (require.main !== module) {
   module.exports = {
+    routeDeleteAccount,
     routeGetFavorited,
     routeGetNotified,
     routeGetUserData,

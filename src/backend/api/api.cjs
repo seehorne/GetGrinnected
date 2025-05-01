@@ -202,6 +202,13 @@ function run() {
     ],
     user.routePutUsername
   );
+
+  // Delete account by sending a request while logged in
+  app.delete(
+    '/user',
+    [middlewareVerifyJWT(ACCESS_JWT)],
+    user.routeDeleteAccount
+  );
 }
 
 /**
