@@ -168,29 +168,37 @@ describe('Test API', () => {
          */
 
         describe('Error handling', () => {
-            // For GET we only need to know which routes to try.
-            const getRoutes = [
+            // These arrays are used to parameterize which routes we test.
+            //
+            // A route is (in general) a way the API lets us interact with it.
+            // The most important thing is the name, becuase it lets us construct
+            // the URL we use to access it.
+
+            // For routes that we GET (read) information from, we only need the
+            // names in order to access them
+            const getRouteNames = [
                 '/user/data',
                 '/user/events/favorited',
                 '/user/events/notified',
                 '/user/username',
             ];
-            // For PUT we must provide appropriate body parameters so we don't
-            // get caught by check for body parameters unless we want to. 
-            const putRoutes = [
-                { 'route': '/user/events/favorited', 'body': 'favorited_events' },
-                { 'route': '/user/events/notified', 'body': 'notified_events' },
-                { 'route': '/user/username', 'body': 'username' }
+            // For routes that PUT (write) information, we also need to know what
+            // information we are writing to test them fully. That's why we add
+            // this "body" key within the object.
+            const putRouteData = [
+                { 'name': '/user/events/favorited', 'body': 'favorited_events' },
+                { 'name': '/user/events/notified', 'body': 'notified_events' },
+                { 'name': '/user/username', 'body': 'username' }
             ];
 
             // Test all routes that PUT data
             describe('PUT routes', () => {
-                for (const item of putRoutes) {
-                    it(`PUT ${item.route} gives 400 when no body is included`, async () => {
+                for (const item of putRouteData) {
+                    it(`PUT ${item.name} gives 400 when no body is included`, async () => {
                         // Make the request
                         const res = await req
                             // URL ending
-                            .put(item.route)
+                            .put(item.name)
                             // Headers
                             .set('Authorization', `Bearer ${access_token}`)
                             .set('Content-Type', 'application/json')
@@ -198,14 +206,14 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 400, res.text);
                     });
 
-                    it(`PUT ${item.route} gives 400 when body is included without correct key`, async () => {
+                    it(`PUT ${item.name} gives 400 when body is included without correct key`, async () => {
                         // Create the request body, but omit the correct key.
                         var jsonBody = {};
 
                         // Make the request
                         const res = await req
                             // URL ending
-                            .put(item.route)
+                            .put(item.name)
                             // Headers
                             .set('Authorization', `Bearer ${access_token}`)
                             .set('Content-Type', 'application/json')
@@ -215,7 +223,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 400, res.text);
                     });
 
-                    it(`PUT ${item.route} gives 401 when token is not provided`, async () => {
+                    it(`PUT ${item.name} gives 401 when token is not provided`, async () => {
                         // Create the request body to have the required key
                         var jsonBody = {};
                         jsonBody[item.body] = 'fake_but_present';
@@ -223,7 +231,7 @@ describe('Test API', () => {
                         // Make the request
                         const res = await req
                             // URL ending
-                            .put(item.route)
+                            .put(item.name)
                             // Headers
                             .set('Content-Type', 'application/json')
                             // Body
@@ -232,7 +240,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 401, res.text);
                     });
 
-                    it(`PUT ${item.route} gives 403 when the token is not good`, async () => {
+                    it(`PUT ${item.name} gives 403 when the token is not good`, async () => {
                         // Create the request body to have the required key
                         var jsonBody = {};
                         jsonBody[item.body] = 'fake_but_present';
@@ -240,7 +248,7 @@ describe('Test API', () => {
                         // Make the request
                         const res = await req
                             // URL ending
-                            .put(item.route)
+                            .put(item.name)
                             // Headers
                             .set('Authorization', `Bearer invalid_token`)
                             .set('Content-Type', 'application/json')
@@ -250,7 +258,7 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 403, res.text);
                     });
 
-                    it(`PUT ${item.route} gives 404 when the user does not exist`, async () => {
+                    it(`PUT ${item.name} gives 404 when the user does not exist`, async () => {
                         // Generate tokens for a user that's not really in the db.
                         const fakeTokens = util.generateUserTokens('fake@example.com');
 
@@ -261,7 +269,7 @@ describe('Test API', () => {
                         // Make the request
                         const res = await req
                             // URL ending
-                            .put(item.route)
+                            .put(item.name)
                             // Headers
                             .set('Authorization', `Bearer ${fakeTokens.access}`)
                             .set('Content-Type', 'application/json')
@@ -274,26 +282,28 @@ describe('Test API', () => {
             });
 
             // Test all routes that GET data.
-            // GET shares many of the same error codes, but a GET route won't
-            // raise a 400 error when there is nothing in the body.
+            // These have to be tested separately because GET behaves differently.
+            // Specifically, GET requests don't care about the body of the request so we don't
+            // check for that error.
+            // (also I don't think I can parameterize doing a get vs a put request)
             describe('GET routes', () => {
-                for (const route of getRoutes) {
-                    it(`GET ${route} gives 401 when token is not provided`, async () => {
+                for (const name of getRouteNames) {
+                    it(`GET ${name} gives 401 when token is not provided`, async () => {
                         // Make the request
                         const res = await req
                             // URL ending
-                            .get(route)
+                            .get(name)
                             // Headers
                             .set('Content-Type', 'application/json');
 
                         assert.strictEqual(res.statusCode, 401, res.text);
                     });
 
-                    it(`GET ${route} gives 403 when the token is not good`, async () => {
+                    it(`GET ${name} gives 403 when the token is not good`, async () => {
                         // Make the request
                         const res = await req
                             // URL ending
-                            .get(route)
+                            .get(name)
                             // Headers
                             .set('Authorization', `Bearer invalid_token`)
                             .set('Content-Type', 'application/json');
@@ -301,14 +311,14 @@ describe('Test API', () => {
                         assert.strictEqual(res.statusCode, 403, res.text);
                     });
 
-                    it(`GET ${route} gives 404 when the user does not exist`, async () => {
+                    it(`GET ${name} gives 404 when the user does not exist`, async () => {
                         // Generate tokens for a user that's not really in the db.
                         const fakeTokens = util.generateUserTokens('fake@example.com');
 
                         // Make the request
                         const res = await req
                             // URL ending
-                            .get(route)
+                            .get(name)
                             // Headers
                             .set('Authorization', `Bearer ${fakeTokens.access}`)
                             .set('Content-Type', 'application/json');
