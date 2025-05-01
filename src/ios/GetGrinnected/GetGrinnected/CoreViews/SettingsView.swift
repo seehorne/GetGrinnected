@@ -17,11 +17,12 @@ struct SettingsView: View {
     
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
-    // our users username
-    @State private var username: String = "user123"
     
-    @StateObject private var userProfile = UserProfile()
+    // the user profile being used for the app
+    @ObservedObject var userProfile: UserProfile
     
+    // our users username to display
+    @State private var username: String = ""
     // current view color scheme
     @State private var viewColorScheme: ColorScheme = .light
     // boolean that says if we are on light mode or not
@@ -96,6 +97,7 @@ struct SettingsView: View {
         // run switchAppearance when the view is shown
         .onAppear {
             switchAppearance()
+            //username = userProfile.getUsername()
         }
         // changes the viewColorScheme when lightModeOn is changed
         .onChange(of: lightModeOn){ oldValue, newValue in
@@ -105,6 +107,10 @@ struct SettingsView: View {
                 viewColorScheme = .dark
             }
         } //onChange
+        // change user profile username when displayed username is changed
+        .onChange(of: username){ oldValue, newValue in
+            userProfile.setUsername(newValue)
+        }
     } //body
     
     /*
@@ -124,5 +130,5 @@ struct SettingsView: View {
 } //ProfileView
 
 #Preview {
-    SettingsView(isLoggedIn: .constant(true))
+    SettingsView(isLoggedIn: .constant(true), userProfile: UserProfile())
 }

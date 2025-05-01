@@ -41,6 +41,49 @@ class UserProfile: ObservableObject {
         }//if
     }//function set email
     
+    /*
+     Gets the username from the database.
+     */
+    func getUsername(completion: @escaping (Result<String, Error>) -> Void) -> String {
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        //run a get request to specified route
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error { //if it had an undisclosed error, return a failure
+                print("Error: \(error)")
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else { // no data is also an error
+                print("No data received")
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+
+            do {
+                let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                if let error = decodedResponse.error, !error.isEmpty {
+                    //at this point you should have message
+                    //so if the error field has stuff in, put message as the error message
+                    completion(.failure(APIError.signInError(decodedResponse.message ?? "Error")))
+                    return
+                }
+
+                // Success
+                completion(.success(decodedResponse.message ?? "Success"))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(APIError.decoderError))
+            }
+        }
+        task.resume()
+        
+        return usernameText
+    }
     
     func setUsername(_ newUsername: String){
        usernameText = newUsername

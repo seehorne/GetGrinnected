@@ -12,7 +12,9 @@ struct LoginView: View {
     //for maintaining login states
     @Binding var isLoggedIn: Bool
     
-    @StateObject private var userProfile = UserProfile()
+    // the user profile being used for the app
+    @ObservedObject var userProfile: UserProfile
+    
     @State private var email = ""
     @State private var password = ""
     @State private var errorMessage = ""
@@ -66,7 +68,7 @@ struct LoginView: View {
                 
                 //Navigation to Signup
                 NavigationLink{
-                    SignUpView(isLoggedIn: $isLoggedIn)
+                    SignUpView(isLoggedIn: $isLoggedIn, userProfile: userProfile)
                 } label : {
                     Text("Don't have an account?")
                         .foregroundColor(Color.appTextSecondary)
@@ -84,7 +86,7 @@ struct LoginView: View {
 }//LoginView
 
 #Preview {
-    LoginView(isLoggedIn: .constant(false))
+    LoginView(isLoggedIn: .constant(false), userProfile: UserProfile())
 }
 
 

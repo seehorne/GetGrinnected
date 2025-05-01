@@ -11,6 +11,8 @@ import SwiftUI
 struct MainNavView: View {
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
+    // the user profile being used for the app
+    @ObservedObject var userProfile: UserProfile
     
     var body: some View {
         //creates the bottom bar for navigatio
@@ -27,7 +29,7 @@ struct MainNavView: View {
                 .tabItem {
                     Label("Favorites", systemImage: "heart.fill")
                 }
-            SettingsView(isLoggedIn: $isLoggedIn)
+            SettingsView(isLoggedIn: $isLoggedIn, userProfile: userProfile)
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
@@ -36,5 +38,5 @@ struct MainNavView: View {
 }
 
 #Preview {
-    MainNavView(isLoggedIn: .constant(true))
+    MainNavView(isLoggedIn: .constant(true), userProfile: UserProfile())
 }

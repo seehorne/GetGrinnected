@@ -10,12 +10,13 @@ import SwiftUI
 struct SignUpView: View{
     @Binding var isLoggedIn: Bool
     //connect to LoginView and ContentView's isLogged In
+    // the user profile being used for the app
+    @ObservedObject var userProfile: UserProfile
     
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
     @State private var success = Bool()
-    @StateObject private var userProfile = UserProfile()
     @State private var signupError = ""
     
     var body: some View{
@@ -128,7 +129,7 @@ struct SignUpView: View{
 
 #Preview{
     NavigationStack{
-        SignUpView(isLoggedIn: .constant(false))
+        SignUpView(isLoggedIn: .constant(false), userProfile: UserProfile())
     }
 }
 
