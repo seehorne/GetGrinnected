@@ -19,11 +19,11 @@ struct InputView: View {
                 .font(.footnote)
             if isSecureField {
                 SecureField(placeholder, text: $text)
-                    .font(.system (size: 14))
+                    .font(.callout)
                     .autocapitalization(.none)
             } else {
                 TextField(placeholder, text: $text)
-                    .font(.system (size: 14))
+                    .font(.callout)
                     .autocapitalization(.none)
             }
             Divider ()
