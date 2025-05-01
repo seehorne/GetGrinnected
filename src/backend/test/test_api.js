@@ -282,8 +282,10 @@ describe('Test API', () => {
             });
 
             // Test all routes that GET data.
-            // GET shares many of the same error codes, but a GET route won't
-            // raise a 400 error when there is nothing in the body.
+            // These have to be tested separately because GET behaves differently.
+            // Specifically, GET requests don't care about the body of the request so we don't
+            // check for that error.
+            // (also I don't think I can parameterize doing a get vs a put request)
             describe('GET routes', () => {
                 for (const name of getRouteNames) {
                     it(`GET ${name} gives 401 when token is not provided`, async () => {
