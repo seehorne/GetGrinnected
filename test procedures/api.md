@@ -51,7 +51,7 @@ so make sure you're okay with doing this or take a backup first!
 
 ## Sign up for a new account
 
-1. Make a request to the `/user/signup` API endpoint, specifying the new account you want to create.
+1. Make a request to the `/session/signup` API endpoint, specifying the new account you want to create.
 
    For instance, this is almond's request since they do testing a lot and wanna copy+paste.
 
@@ -60,7 +60,7 @@ so make sure you're okay with doing this or take a backup first!
       -H 'Content-Type: application/json' \
       --request POST \
       --data '{"email":"heilalmond@grinnell.edu", "username":"almond"}' \
-      http://localhost:8080/user/signup | jq
+      http://localhost:8080/session/signup | jq
    ```
 
 2. Confirm the response is positive. It should look like this.
@@ -76,7 +76,7 @@ so make sure you're okay with doing this or take a backup first!
 1. Check your Grinnell outlook for an email from getgrinnected@gmail.com,
    and copy the code inside.
 
-2. Use the code to send another POST request, this time to the `/user/verify`
+2. Use the code to send another POST request, this time to the `/session/verify`
    endpoint.
 
    ```bash
@@ -84,7 +84,7 @@ so make sure you're okay with doing this or take a backup first!
       -H 'Content-Type: application/json' \
       --request POST \
       --data '{"email":"heilalmond@grinnell.edu", "code":"123456"}' \
-      http://localhost:8080/user/verify | jq
+      http://localhost:8080/session/verify | jq
    ```
 
 3. Make sure your response looks good. Here's mine, only I changed the tokens to be the example one from <https://jwt.io> so I'm not leaking anything.
@@ -109,7 +109,7 @@ so make sure you're okay with doing this or take a backup first!
       -H 'Content-Type: application/json' \
       --request POST \
       --data '{"email":"heilalmond@grinnell.edu"}' \
-      http://localhost:8080/user/login | jq
+      http://localhost:8080/session/login | jq
    ```
 
 2. It should respond with this.
