@@ -33,7 +33,9 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
       startDestination = "welcome",
-      tags = mutableListOf<Check>()
+      tags = mutableListOf<Check>(),
+      fontSizeSetting = "M",
+      onFontSizeChange = {}
   ) }
 
   composeTestRule.onNodeWithText("Login").performClick()
@@ -53,7 +55,9 @@ class MainActivityKtTest {
   composeTestRule.setContent { AppNavigation(
       darkTheme = false, onToggleTheme = {},
       startDestination = "welcome",
-      tags = mutableListOf<Check>()
+      tags = mutableListOf<Check>(),
+      fontSizeSetting = "M",
+      onFontSizeChange = {}
 
   ) }
 
@@ -102,6 +106,8 @@ class MainActivityKtTest {
       darkTheme = false, onToggleTheme = {},
       startDestination = "login",
       tags = mutableListOf<Check>(),
+      fontSizeSetting = "M",
+      onFontSizeChange = {}
   ) }
 
   composeTestRule.waitUntil(timeoutMillis = 5_000) {
@@ -143,7 +149,9 @@ class MainActivityKtTest {
       account_description = "",
       account_role = 0,
       is_followed = false,
-           notified_events = emptyList())
+           notified_events = emptyList()),
+       fontSizeSetting = "M",
+       onFontSizeChange = {}
    )
   }
 
@@ -205,11 +213,12 @@ class MainActivityKtTest {
         var darkTheme = false
         composeTestRule.setContent {
             SettingsScreen(
-                orgs = emptyList(),
                 account = User(1, "user", "email@grinnell.edu", "", listOf(), listOf(), listOf(), listOf(), "", 0),
                 darkTheme = darkTheme,
                 onToggleTheme = { darkTheme = it },
-                navController = rememberNavController()
+                navController = rememberNavController(),
+                fontSizeSetting = "M",
+                onFontSizeChange = {}
             )
         }
         composeTestRule.onNodeWithText("Switch to dark mode").assertExists()
