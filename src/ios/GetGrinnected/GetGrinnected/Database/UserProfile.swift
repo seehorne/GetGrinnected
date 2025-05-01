@@ -56,6 +56,10 @@ class UserProfile: ObservableObject {
         }
     }//setpassword
     
+    //method to update the login state which is an appstorage value
+    func updateLoginState(isLoggedIn: Bool) {
+        UserDefaults.standard.set(isLoggedIn, forKey: "isLoggedIn")
+    }
     
     /*Validation functino for the email, username, and password*/
     
@@ -201,6 +205,7 @@ class UserProfile: ObservableObject {
 
                 // Success
                 completion(.success(decodedResponse.message ?? "Success"))
+            
             } catch {
                 print("Decoding error: \(error)")
                 completion(.failure(APIError.decoderError))

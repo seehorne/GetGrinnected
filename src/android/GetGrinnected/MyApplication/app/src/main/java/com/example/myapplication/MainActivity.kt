@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -129,6 +130,18 @@ class MainActivity : ComponentActivity() {
                         tags = tags.sortedBy { it.label },
                         startDestination = if (isLoggedIn) "main" else "welcome",
                     ) // What screen to launch the app on
+                }
+            }
+            // Background task launched after we set our content
+            launch {
+                // Number of minutes we want to delay to update the remote database
+                val minutes = 1L // Currently it is every minute this can change
+                // Runs indefinitely as a background task
+                while (true) {
+                    // Sets the delay to send in minutes
+                    delay(minutes * 60 * 1000)
+                    // Syncs our current local data with the remote
+                    AppRepository.syncAccountData(context = applicationContext)
                 }
             }
         }

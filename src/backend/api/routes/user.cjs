@@ -29,15 +29,8 @@ async function routeGetUserData(req, res, _next) {
  * @param {*} _next  Express error handler for async, unused.
  */
 async function routeSendOTP(req, res, _next) {
-  // Make sure email is included in the body
+  // Get email from the body, we know it is there thanks to the middleware
   const email = req.body.email;
-  if (email === undefined) {
-    res.status(400).json({
-      'error': 'No email',
-      'message': 'An email must be provided in the body of the request.'
-    })
-    return;
-  }
 
   // Make sure the user already exists. If it does not, return a HTTP 404 error.
   // That signifies "resource not found", which is appropriate here.
@@ -69,29 +62,12 @@ async function routeSendOTP(req, res, _next) {
  * @param {*} _next  Error handler function for async (unused)
  */
 async function routeSignUpNewUser(req, res, _next) {
-  // Make sure the request provided a username. If it does not,
-  // return an HTTP 400 which indicates a badly-formed request.
+  // Get username and email from the request, which we can assume exists thanks to the middleware
   const username = req.body.username;
-  if (username === undefined) {
-    res.status(400).json({
-      'error': 'No username',
-      'message': 'A username must be provided in the body of the request.'
-    })
-    return;
-  }
-
-  // Do the same check to make sure an email is included in the request body.
   const email = req.body.email;
-  if (email === undefined) {
-    res.status(400).json({
-      'error': 'No email',
-      'message': 'An email must be provided in the body of the request.'
-    });
-    return;
-  }
 
   // Make sure the email is a grinnell email. If it does not, respond with
-  // an appropriate error. 400 again.
+  // an appropriate error. 400 for "bad request"
   if (!email.endsWith('@grinnell.edu')) {
     res.status(400).json({
       'error': 'Invalid email',
@@ -181,23 +157,9 @@ function generateUserTokens(email) {
  */
 async function routeVerifyOTP(req, res, _next) {
   // Get the email and OTP sent from the body,
-  // and make sure they were actually sent.
+  // we can assume they exist thanks to the middleware.
   const email = req.body.email;
   const code = req.body.code;
-  if (email === undefined) {
-    res.status(400).json({
-      'error': 'No email',
-      'message': 'Request body must contain email.'
-    });
-    return;
-  }
-  if (code === undefined) {
-    res.status(400).json({
-      'error': 'No code',
-      'message': 'Request body must contain code.'
-    });
-    return;
-  }
 
   // Check the OTP code the user entered against the codes we have stored.
   // If it does not match (wrong code or expired), return the same error with
@@ -249,16 +211,8 @@ async function routeGetFavorited(req, res, _next) {
  * @param {*} next  Express callback function
  */
 async function routePutFavorited(req, res, next) {
-  // Make sure favorited_events is within the body of the request.
-  if (!req.body.favorited_events) {
-    res.status(400).json({
-      'error': 'Bad request',
-      'message': 'Body must include favorited_events array.'
-    });
-    return;
-  }
-
   // Set the favorited_events array of that user, and let that function do the response.
+  // This assumes the body has `favorited_events`, and the middleware makes sure that is true
   await util.userDataSetArray('favorited_events', req, res, next);
 }
 
@@ -289,16 +243,8 @@ async function routeGetNotified(req, res, _next) {
  */
 
 async function routePutNotified(req, res, next) {
-  // Make sure notified_events is within the body of the request.
-  if (!req.body.notified_events) {
-    res.status(400).json({
-      'error': 'Bad request',
-      'message': 'Body must include notified_events array.'
-    });
-    return;
-  }
-
   // Set the notified_events array of that user, and let that function do the response.
+  // This requires the body contain `notified_events`, which we get thanks to the middleware
   await util.userDataSetArray('notified_events', req, res, next);
 }
 
@@ -328,15 +274,8 @@ async function routeGetUsername(req, res, _next) {
  * @param {*} _next  Express callback function, unused
  */
 async function routePutUsername(req, res, _next) {
-  // Make sure username is within the body of the request.
+  // Get new username from the request body, we can assume it exists thanks to the middleware.
   const newUsername = req.body.username;
-  if (newUsername === undefined) {
-    res.status(400).json({
-      'error': 'Bad request',
-      'message': 'Body must include username.'
-    });
-    return;
-  }
 
   // Get the username from the request body, and make sure it's a string.
   if (typeof newUsername !== 'string') {

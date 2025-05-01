@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+import java.util.Date
 
 /**
  * This is our App Repository it is a singleton object so that we can access tables seamlessly through
@@ -15,16 +16,13 @@ import androidx.compose.runtime.State
 object AppRepository {
     // Initializes our path to our dao
     private lateinit var dao: AppDao
+    // Initializes our context of our app
+    private lateinit var appContext: Context
 
     // Private initialization of events as a mutable list
     private val _events = mutableStateOf<List<EventEntity>>(emptyList())
     // Accessible list of events via a get
     val events: State<List<EventEntity>> get() = _events
-
-    // Private initialization of accounts as a mutable list
-    private val _accounts = mutableStateOf<List<AccountEntity>>(emptyList())
-    // Accessible list of accounts via a get
-    val accounts: State<List<AccountEntity>> get() = _accounts
 
     // Private initialization of current account as a mutable state
     private val _currentAccount = mutableStateOf<AccountEntity?>(null)
@@ -37,6 +35,7 @@ object AppRepository {
      */
     fun initialize(context: Context) {
         dao = AppDatabase.getDatabase(context).appDao()
+        appContext = context.applicationContext
         observeDatabase()
     }
 
@@ -46,6 +45,7 @@ object AppRepository {
         CoroutineScope(Dispatchers.IO).launch {
             dao.getAllEvents().collect {
                 _events.value = it
+                deleteExpiredEvents()
             }
         }
     }
@@ -60,6 +60,8 @@ object AppRepository {
             if (response.isSuccessful) {
                 // We store the set of favorite events (could be empty)
                 val currentFavorites = _currentAccount.value?.favorited_events?.toSet() ?: emptySet()
+                // We store the set of notified events (could be empty)
+                val currentNotified = _currentAccount.value?.notified_events?.toSet() ?: emptySet()
                 // We update our list of events with the set of favorite events ticked to favorite
                 // and now we adjust the time zones of dates as we were not in the write time zone with our
                 // ISO info used the help functions Ethan made in the Main Activity
@@ -71,13 +73,20 @@ object AppRepository {
                     it.copy(
                         event_start_time = localStartTime,
                         event_end_time = localEndTime,
-                        is_favorited = currentFavorites.contains(it.eventid)
+                        is_favorited = currentFavorites.contains(it.eventid),
+                        is_notification = currentNotified.contains(it.eventid)
                     )
                 }?.map { it.toEventEntity() }
 
 
                 // If our events list isn't empty we upsert them to our local repo
                 if (events != null) dao.UpsertAll(events)
+
+                // Delete any events that have expired
+                deleteExpiredEvents()
+
+                // sync our current account data with the data on the api
+                syncAccountData(appContext)
             }
         } catch (e: Exception) {
             e.printStackTrace() // or log
@@ -126,6 +135,30 @@ object AppRepository {
     // 
     suspend fun toggleNotification(eventId: Int, isNotification: Boolean) {
         dao.updateNotificationStatus(eventId, isNotification)
+
+        // Get our current account
+        val currentAccount = _currentAccount.value
+        // Check to make sure we actually have an account
+        if (currentAccount != null) {
+            // Modify the notified_events list
+            val updatedNotifications = if (isNotification) {
+                // If event is notified we add the id to our accounts list of notified events
+                currentAccount.notified_events?.plus(eventId)
+            } else {
+                // If the event has been unnotified we remove the id from our accounts list of
+                // notified events
+                currentAccount.notified_events?.minus(eventId)
+            }
+
+            // Make new account instance with the new notified events
+            val updatedAccount = currentAccount.copy(notified_events = updatedNotifications)
+
+            // Upsert the account which updates the list of notified events
+            dao.upsertAccount(updatedAccount)
+
+            // Update the account local state
+            _currentAccount.value = updatedAccount
+        }
     }
 
     /**
@@ -145,6 +178,85 @@ object AppRepository {
         dao.upsertAccount(account)
 
     }
+
+    /**
+     * This function deletes events that have expired
+     */
+    private suspend fun deleteExpiredEvents() {
+        val today = Date().formatTo("yyyy-MM-dd")
+        // number of events deleted
+        val numDeletedEvents = dao.deleteExpiredEvents(today)
+        // If we deleted events handle cleanup otherwise not necessary
+        if(numDeletedEvents > 0){
+            // Handle cleanup of hanging favorites or notified events
+            deleteExpiredAccountFavoritesAndNotifications()
+        }
+    }
+
+    /**
+     * This function handles cleanup of favorited events that have passed or old notified events
+     * that have since passed.
+     */
+    private suspend fun deleteExpiredAccountFavoritesAndNotifications() {
+        // Get current account if no current account we just return
+        val currentAccount = _currentAccount.value ?: return
+
+        // We get the list of the current events in the database
+        val currentEventIds = dao.getAllEventIds()
+
+        // Remove any favorited ids that no longer exist
+        val updatedFavorites = currentAccount.favorited_events?.filter { currentEventIds.contains(it) }
+        // Remove any notified ids that no longer exist
+        val updatedNotifications = currentAccount.notified_events?.filter { currentEventIds.contains(it) }
+
+        // Compare the sets  and if they differ we update them otherwise we do nothing
+        if (updatedFavorites != currentAccount.favorited_events || updatedNotifications != currentAccount.notified_events) {
+            val updatedAccount = currentAccount.copy(
+                favorited_events = updatedFavorites,
+                notified_events = updatedNotifications
+            )
+            // Update out account
+            dao.upsertAccount(updatedAccount)
+            // Set our current account to this updated version
+            _currentAccount.value = updatedAccount
+        }
+    }
+
+    /**
+     * Syncs favorited events data and notified events data with the remote database
+     * @param context is the current context of the app
+     */
+    suspend fun syncAccountData(context: Context) {
+        // We get the current account if this value is null we return since they don't have an
+        // account (ie a first time log in)
+        val account = _currentAccount.value ?: return
+
+        // We make our favorites call with a placeholder for token as we get our token inside
+        // the safe API call
+        safeApiCall(appContext) { token ->
+            RetrofitApiClient.apiModel.updateFavorites(token, UpdateFavoritesRequest(account.favorited_events ?: emptyList()))
+        }
+
+        // We make our notifications call with a placeholder for token as we get our token inside
+        // the safe API call
+        safeApiCall(appContext) { token ->
+            RetrofitApiClient.apiModel.updateNotifications(token, UpdateNotificationsRequest(account.notified_events ?: emptyList()))
+        }
+    }
+
+    /**
+     * Syncs local username with remote username.
+     * @param username is the new username we will be switching our username to
+     */
+    suspend fun syncUsername(username: String) {
+        // We make our username call with a placeholder for token as we get our token inside
+        // the safe API call
+        safeApiCall(appContext) { token ->
+            RetrofitApiClient.apiModel.updateUsername(token, UpdateUsernameRequest(username))
+        }
+    }
+
+
 }
 
 /**
@@ -152,7 +264,7 @@ object AppRepository {
  */
 fun Event.toEventEntity(): EventEntity = EventEntity(
     eventid = this.eventid,
-    event_name = this.event_name?: "",
+    event_name = this.event_name,
     event_description = this.event_description?: "",
     event_location = this.event_location?: "",
     organizations = this.organizations?: emptyList(),
