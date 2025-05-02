@@ -399,6 +399,26 @@ class UserProfile: ObservableObject {
         })
     }
     
+    func setUsername(newUsername: String){
+        safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
+            request.httpMethod = "PUT"
+            let body: [String: Any] = [
+                "username": newUsername,
+            ]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("Success! Set username: \(data)")
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
     func getUserNotifiedEvents(){
         safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
@@ -415,16 +435,50 @@ class UserProfile: ObservableObject {
         })
     }
     
+    func setUserNotifiedEvents(events: [Int]){
+        safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
+            request.httpMethod = "PUT"
+            request.httpBody = try? JSONSerialization.data(withJSONObject: events)
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("Success! Set notified events: \(data)")
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
     func getUserFavoritedEvents(){
         safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
-            request.httpMethod = "GET"
+            request.httpMethod = "PUT"
             request.setValue(token, forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
                 print("Success! Got favorited events: \(data)")
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    func setUserFavoritedEvents(events: [Int]){
+        safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
+            request.httpMethod = "PUT"
+            request.httpBody = try? JSONSerialization.data(withJSONObject: events)
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("Success! Set favorited events: \(data)")
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
