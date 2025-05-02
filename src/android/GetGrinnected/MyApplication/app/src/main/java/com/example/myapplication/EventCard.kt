@@ -164,8 +164,12 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                                         notificationHandler.showSimpleNotificationInProgress(event)
                                     }
                                     else {
-                                    notificationHandler.showSimpleNotificationDelay(event)
-                                    notificationHandler.scheduleNotification(event)}
+                                        notificationHandler.showSimpleNotificationDelay(event)
+                                        val reminderItem = ReminderItem((getDifferenceInMillis(LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+                                            event.event_start_time.toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                        )), 1)
+                                        NotificationAlarmScheduler.schedule(reminderItem)
+                                        notificationHandler.scheduleNotification(event)}
                                 }
                             },
                     )
