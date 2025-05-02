@@ -194,6 +194,10 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     }
 }
 
+private fun NotificationAlarmScheduler.Companion.schedule(reminderItem: ReminderItem) {
+
+}
+
 private fun getDifferenceInMillis(date1: Date, date2: Date): Long {
     return (date2.time - date1.time)
 }

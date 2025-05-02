@@ -5,7 +5,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 
-class NotificationAlarmScheduler(
+
+abstract class NotificationAlarmScheduler(
     private val context: Context, override val AlarmReceiver: Unit
 ) : AlarmScheduler {
 
@@ -36,5 +37,8 @@ class NotificationAlarmScheduler(
             createPendingIntent(reminderItem)
         )
     }
+
+    companion object
+
 }
 
