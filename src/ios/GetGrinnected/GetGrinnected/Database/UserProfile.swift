@@ -381,6 +381,72 @@ class UserProfile: ObservableObject {
         makeRequest(token: "Bearer \(accessToken)")
     }
     
+    func getUsername(){
+        safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
+            request.httpMethod = "GET"
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("Success! Got username: \(data)")
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    func getUserNotifiedEvents(){
+        safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
+            request.httpMethod = "GET"
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("Success! Got notified events: \(data)")
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    func getUserFavoritedEvents(){
+        safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
+            request.httpMethod = "GET"
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("Success! Got favorited events: \(data)")
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    func getUserData(){
+        safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/data")!)
+            request.httpMethod = "GET"
+            request.setValue(token, forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("Success! Got data: \(data)")
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    
+    
     // all the things that could be in the API response
     // all marked as optional
     struct APIResponse: Codable {
