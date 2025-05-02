@@ -163,7 +163,7 @@ struct WeekView: View {
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.appBorder, lineWidth: 1)
                         }
-                    )//bacgkground
+                    )//background
                     .foregroundColor(.appTextPrimary)
                     .cornerRadius(8)
                 }

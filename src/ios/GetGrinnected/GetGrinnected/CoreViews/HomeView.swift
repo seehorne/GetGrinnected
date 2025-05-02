@@ -17,7 +17,7 @@ struct HomeView: View {
     
     
     //Sorting and Filtering parameters
-    @State private var sortOrder = SortOrder.eventTime
+    @State private var sortOrder = SortOrder.time
     @State private var filterType = FilterType.name
     @State private var filter = ""
     
@@ -36,20 +36,20 @@ struct HomeView: View {
                         VStack(spacing: 16) {
                             WeekView(selectedDate: $viewModel.viewedDate)
                                 .padding(.bottom, 4)
-                                .padding(.top, 120)
+                                .padding(.top, 140)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
                             EventList(parentView: viewModel, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
-                    .searchable(text: $searchText, prompt: "Search...")
                    .refreshable {
                        //force refresh through the button!
                        viewModel.forceRefresh() //only changes last change to nil
                    }
                 }//scroll view
                 .edgesIgnoringSafeArea(.top)
+                .searchable(text: $searchText, prompt: "Search...")
             }
             .navigationTitle("Calendar")
             .headerProminence(.increased)
