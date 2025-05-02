@@ -49,6 +49,7 @@ struct EventCard: View {
     let event: EventModel
     let isExpanded: Bool//The single card does not need a @binding or @state tag
     //simply based on this value, the expansion will show and not.
+    let userProfile = UserProfile()
     
     
     /** Some helper functions for the date*/
@@ -156,6 +157,8 @@ struct EventCard: View {
                             Button(action: {
                                 event.favorited.toggle()
                                 event.lastUpdated = Date() // mark as modified
+                                let temp = [Int]()
+                                userProfile.setUserFavoritedEvents(events: temp)
                                 try? modelContext.save()
                             }) {
                                 Image(systemName: event.favorited ? "heart.fill" : "heart")
@@ -168,6 +171,8 @@ struct EventCard: View {
                             
                             Button(action: {
                                 event.notified.toggle()
+                                let temp2 = [Int]()
+                                userProfile.setUserNotifiedEvents(events: temp2)
                                 try? modelContext.save()
                             }) {
                                 Image(systemName: event.notified ? "bell.fill" : "bell")
