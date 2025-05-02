@@ -164,6 +164,7 @@ class UserProfile: ObservableObject {
                              !aToken.isEmpty && !rToken.isEmpty {
                     UserDefaults.standard.set(decodedResponse.access_token, forKey: "accessToken")
                     UserDefaults.standard.set(decodedResponse.refresh_token, forKey: "refreshToken")
+                    self.updateLoginState(isLoggedIn: true)//change status to actually logged in
                     //in order to be in this condition we must have an access token so we're fine to assume its here
                     completion(.success(decodedResponse.message ?? "Success"))
                 }
@@ -342,6 +343,7 @@ class UserProfile: ObservableObject {
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
                     completion(.failure(error))
+                    self.updateLoginState(isLoggedIn: false)
                     return
                 }
                 guard let httpResponse = response as? HTTPURLResponse else {
