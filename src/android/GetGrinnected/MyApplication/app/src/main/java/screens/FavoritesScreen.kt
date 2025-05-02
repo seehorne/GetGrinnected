@@ -23,6 +23,7 @@ import com.example.myapplication.AppRepository
 import com.example.myapplication.EventCard
 import com.example.myapplication.toEvent
 import android.content.Context
+import androidx.compose.material3.HorizontalDivider
 
 /**
  * A composable function that represents the Favorites screen of our app.
@@ -70,6 +71,9 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
                 color = colorScheme.onBackground,
                 modifier = Modifier.padding(top = 16.dp))
         }
+        Spacer(modifier = Modifier.height(4.dp))
+
+        HorizontalDivider()
 
         Spacer(modifier = Modifier.height(16.dp))
 
