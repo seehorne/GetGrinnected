@@ -50,8 +50,24 @@ struct EventCard: View {
     let isExpanded: Bool//The single card does not need a @binding or @state tag
     //simply based on this value, the expansion will show and not.
     
+    let description: String //description used later
+    //let deepLink: URL //for now unneeded
     
     /** Some helper functions for the date*/
+    init(event: EventModel, isExpanded: Bool) {
+        self.event = event
+        self.isExpanded = isExpanded
+        //self.deepLink = URL(string: "GetGrinnected://item/\(event.id)")!
+        self.description = (
+        """
+        Event: \(event.name)
+        Location: \(event.location ?? "N/A")
+        Organization: By \(event.organizations.joined(separator: ", "))
+        Time: \(event.startTimeString ?? "N/A")
+        Link: https://github.com/seehorne/GetGrinnected
+        """//eventually add a link to the app instead of a link to the getGrinnected github!
+        )
+    }
 
     
     //body is how this is rendered
@@ -152,6 +168,16 @@ struct EventCard: View {
                         
                         
                         VStack {
+                            ShareLink(
+                                item: "Check out this event!\n",
+                                subject: Text("Join me at this event!"),
+                                message: Text("\(self.description)"),
+                                preview: SharePreview("Check this out!", image: Image(systemName: "square.and.arrow.up"))
+                            ) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(Color.colorBlue)
+                            }//can utilize
+                            
                             //component that can be reusable
                             Button(action: {
                                 event.favorited.toggle()
