@@ -221,6 +221,7 @@ class MainActivityKtTest {
                 onFontSizeChange = {}
             )
         }
+        composeTestRule.onNodeWithText("Appearance").performClick()
         composeTestRule.onNodeWithText("Switch to dark mode").assertExists()
         composeTestRule.onNode(isToggleable()).performClick()
         assert(darkTheme)
