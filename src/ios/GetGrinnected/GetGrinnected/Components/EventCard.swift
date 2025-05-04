@@ -177,6 +177,7 @@ struct EventCard: View {
                                 Image(systemName: "square.and.arrow.up")
                                     .foregroundColor(Color.colorBlue)
                             }//can utilize
+                            .padding(.vertical, 2)//adding space after
                             
                             //component that can be reusable
                             Button(action: {
@@ -188,8 +189,7 @@ struct EventCard: View {
                                     .foregroundColor(.border)
                                     .imageScale(.large)
                             }
-                            
-                            .padding(.vertical, 4)
+                            .padding(.vertical, 2)//adding space after
                             
                             
                             Button(action: {
@@ -201,7 +201,7 @@ struct EventCard: View {
                                     .imageScale(.large)
                             }
                         } //Vstack
-                        .padding(.vertical, 4)//adding space after
+                        .padding(.vertical, 2)//adding space after
                         .frame(alignment: .trailing)
                         
                         
