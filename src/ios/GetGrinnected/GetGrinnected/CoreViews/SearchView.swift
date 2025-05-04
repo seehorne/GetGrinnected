@@ -59,10 +59,11 @@ struct SearchView: View {
                     
                 }//header elements
                 
-                ScrollView(.vertical, showsIndicators: false){
+                ScrollView(.vertical, showsIndicators: true){
                     EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterToday: false)
                     
                 }//scroll view
+                .padding(.horizontal)
                 
             }//navigation stack
             .edgesIgnoringSafeArea(.top)
