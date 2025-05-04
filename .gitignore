@@ -33,4 +33,5 @@ node_modules
 #
 # Things that should live exclusively server side
 #
-./src/backend/event_data.json
+src/backend/event_data.json
+src/backend/Database/localOTP.db

@@ -13,7 +13,6 @@ import screens.EmailVerificationScreen
 import screens.LoginScreen
 import screens.SignupScreen
 import screens.WelcomeScreen
-
 /**
  * A composable function that is utilized for smooth navigation through login/signup process
  * @param modifier the modifier to be applied to page layouts navigated to.
@@ -30,7 +29,7 @@ fun AppNavigation(
     darkTheme: Boolean,
     onToggleTheme: (Boolean) -> Unit,
     startDestination: String,
-    tags: List<Check>,
+    tags: List<Check>
   // This handles our navigation system with a nav controller
 ){
 
@@ -62,19 +61,17 @@ fun AppNavigation(
             }
         }
         composable(
-            "verification/{email}/{flag}/{username}",
+            "verification/{email}/{flag}",
             arguments = listOf(
-                navArgument("username") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("flag"){ type = NavType.BoolType },
 
             )
         ) { backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username") ?: ""
             val email = backStackEntry.arguments?.getString("email") ?: ""
             val flag = backStackEntry.arguments?.getBoolean("flag") ?: false
 
-            EmailVerificationScreen(email, flag, username, navController = navController)
+            EmailVerificationScreen(email, flag, navController = navController)
         }
     }
 }

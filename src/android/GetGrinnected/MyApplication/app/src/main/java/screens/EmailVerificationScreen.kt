@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -35,13 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.DataStoreSettings
-import com.example.myapplication.LoginRequest
 import com.example.myapplication.R
 import com.example.myapplication.RetrofitApiClient
-import com.example.myapplication.SignupRequest
 import kotlinx.coroutines.launch
 import com.example.myapplication.AppRepository
-import com.example.myapplication.AccountEntity
+import com.example.myapplication.LoginRequest
+import com.example.myapplication.VerifyRequest
+import com.example.myapplication.toAccountEntity
 
 /**
  * A composable function that represents the email verification screen of our application.
@@ -53,13 +57,11 @@ import com.example.myapplication.AccountEntity
  * @param navController used to move through the app
  */
 @Composable
-fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navController: NavController, modifier: Modifier = Modifier) {
+fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavController, modifier: Modifier = Modifier) {
     // The code the user inputs
     var codeInput by remember { mutableStateOf("") }
     // General error messages
     var errMsg by remember { mutableStateOf("") }
-    // The real code to compare against
-    val validCode = "123456" // TODO: LOGIC TO GET CORRECT CODE
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
     // To access our theme colors
@@ -68,6 +70,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
     val typography = MaterialTheme.typography
     // The current context of our app
     val context = LocalContext.current
+    // Boolean associated with specifically a code error to shift field color
+    var errCode by remember { mutableStateOf(false) }
 
     // This sets up all of our elements in a column layout
     Column(
@@ -85,7 +89,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
         ) {
             // This is our app logo image
             Image(
-                painter = painterResource(id = R.drawable.gg_logo_2),
+                painter = painterResource(id = R.drawable.getgrinnected_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -109,8 +113,17 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
                 value = codeInput,
                 onValueChange = {
                     if (it.length <= 6) codeInput = it
+                    errCode = false
                 },
                 label = { Text("Verification Code", style = typography.labelLarge) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Lock,
+                        contentDescription = "Verification Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                isError = errCode,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
@@ -129,81 +142,105 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
 
             // This is our verify button
             Button(onClick = {
-                if (codeInput == validCode) {
-                    coroutineScope.launch {
-                        //  try {
-                        if (flag) {
-                            // Makes the api signup request
-                            //  val response = RetrofitApiClient.apiModel.signup(
-                            //    SignupRequest(email = email, account_username = username)
-                            // )
-                            // Assess if the request and creation of account was successful if so
-                            // nav to main if not show signup failure.
-                            //  if (response.isSuccessful && response.body()?.success == true) {
-                            // Creates a new accountEntity thus a new account to be added to our local repo
-                            val newAccount = AccountEntity(
-                                accountid = email.hashCode(), // this is just a temp id system for now till we get api stuff
-                                account_name = username,
-                                email = email,
-                                profile_picture = "", // Leaving this just in the event we decide to have profile pictures
-                                favorited_events = listOf(),
-                                drafted_events = listOf(),
-                                favorited_tags = listOf(),
-                                account_description = "",
-                                account_role = 0
-                            )
+                coroutineScope.launch {
+                    // Checks that the code input is 6 characters long since we hard
+                    // set that it can't be more than 6 in the input field
+                    if (codeInput.length < 6) {
+                        errMsg = "Please enter 6-digit code"
+                        errCode = true
+                        return@launch // Escapes launch due to missing username
+                    }
 
-                            // Upserts the account into the repo
-                            AppRepository.upsertAccount(newAccount)
-                            // Sets our current account from the given id
-                            AppRepository.setCurrentAccountById(newAccount.accountid)
-                            // Sets a persistent state for our logged in account via the id to reference else where in the app
-                            DataStoreSettings.setLoggedInAccountId(context, newAccount.accountid)
+                    try {
+                        // Contact the api to see if our OTP is correct
+                        val response = RetrofitApiClient.apiModel.verifyOTP(
+                            VerifyRequest(email = email, code = codeInput)
+                        )
+                        // If it is we continue
+                        if (response.isSuccessful && response.body()?.access_token != null) {
+                            // Store our access token as a variable
+                            val authToken = response.body()?.access_token
+                            // Sets our access token to the token we obtained
+                            DataStoreSettings.setAccessToken(context, authToken!!)
+                            // Sets our refresh token to the token we obtained
+                            DataStoreSettings.setRefreshToken(context, response.body()?.refresh_token!!)
+                            try {
+                                // Make a second call to get the full account data
+                                val accountResponse = RetrofitApiClient.apiModel.getUserData("Bearer $authToken")
 
-                            DataStoreSettings.setLoggedIn(context, true)
-                            navController.navigate("main") {
-                                popUpTo(0) { inclusive = true }
-                                launchSingleTop = true
+                                if (accountResponse.isSuccessful)
+                                {
+                                    // Gets the response as a user data type
+                                    val userData = accountResponse.body()
+
+                                    // If what is returned is non null
+                                    if (userData != null) {
+                                        // Converts user returned to an accountEntity
+                                        val accountEntity = userData.toAccountEntity()
+                                        // Upserts the account into our local Repo
+                                        AppRepository.upsertAccount(accountEntity)
+                                        // Sets our current account from the given id
+                                        AppRepository.setCurrentAccountById(accountEntity.accountid)
+                                        // Sets a persistent state for our logged in account via the id to reference else where in the app
+                                        DataStoreSettings.setLoggedInAccountId(context, accountEntity.accountid)
+                                        // Sets storage preference logged in to true
+                                        DataStoreSettings.setLoggedIn(context, true)
+                                        // If this is a login
+                                        if(!flag){
+                                            // Gets the current time
+                                            val now = System.currentTimeMillis()
+                                            // Syncs from API
+                                            AppRepository.syncFromApi()
+                                            // Sets the new LastSyncTime to now
+                                            DataStoreSettings.setLastSyncTime(context, now)
+                                        }
+                                        // Navigates to main page
+                                        navController.navigate("main") {
+                                            popUpTo(0) { inclusive = true }
+                                            launchSingleTop = true
+                                        }
+                                    }
+                                    // Handle if we authorization
+                                } else {
+                                    errMsg = accountResponse.errorBody()?.string() ?: "Failed to get user data."
+                                }
+                                // Handle network error if we can't leave the app for some reason
+                            } catch(e: Exception){
+                                errMsg = "Network error: ${e.localizedMessage}"
                             }
-                            // } else {
-                            //     errMsg = response.body()?.message ?: "Sign up failed"
-                            // }
+                            // Handles error if we couldn't verify the code or it was wrong
                         } else {
-                            // Makes the api login request
-                            //     val response = RetrofitApiClient.apiModel.login(
-                            //       LoginRequest(email = email)
-                            //   )
-                            // Assess if the request for login was successful if so
-                            // nav to main if not show login failure.
-                            //   if (response.isSuccessful && response.body()?.success == true) {
-                            // This is here so I remember how to handle this
-                            DataStoreSettings.setLoggedIn(context, true)
-                            navController.navigate("main") {
-                                popUpTo(0) { inclusive = true }
-                                launchSingleTop = true
-                            }
-                            //  } else {
-                            //    errMsg = response.body()?.message ?: "login failed"
-                            // }
+                            errMsg = "Incorrect code"
+                            errCode = true
                         }
                         // Failure specifically with a network connection ie couldn't leave our app
-                        //    } catch (e: Exception) {
-                        //      errMsg = "Network error: ${e.localizedMessage}"
-                        //   }
+                    } catch (e: Exception) {
+                        errMsg = "Network error: ${e.localizedMessage}"
                     }
-                } else {
-                    errMsg = "Incorrect code. Please try again."
                 }
             }) {
                 Text("Verify", style = typography.labelLarge)
             }
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // This is our resend code button that will resend the verification code
             TextButton(onClick = {
-                // TODO: LOGIC TO RESEND CODE
-                errMsg = "A new code has been sent to your email."
+                coroutineScope.launch {
+                    errMsg = try {
+                        // Gets a login response to send us another email
+                        val response = RetrofitApiClient.apiModel.login(LoginRequest(email))
+                        // If this is successful we tell them we sent an email
+                        if (response.isSuccessful) {
+                            "A new code has been sent to your email."
+                        } else {
+                            // Else we have some error for why we couldn't
+                            response.errorBody()?.string() ?: "Failed to resend code."
+                        }
+                        // This catches an issue where we couldn't leave the app
+                    } catch (e: Exception) {
+                        "Network error: ${e.localizedMessage}"
+                    }
+                }
             }) {
                 Text(
                     "Resend Code",
@@ -241,5 +278,5 @@ fun EmailVerificationScreen(email: String, flag: Boolean, username: String, navC
 @Preview (showBackground = true)
 @Composable
 fun EmailVerificationScreenPreview(){
-    EmailVerificationScreen(modifier= Modifier, username = "user", email= "", flag = true, navController = rememberNavController())
+    EmailVerificationScreen(modifier= Modifier, email= "", flag = true, navController = rememberNavController())
 }

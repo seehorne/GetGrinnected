@@ -20,9 +20,11 @@ struct InputView: View {
             if isSecureField {
                 SecureField(placeholder, text: $text)
                     .font(.system (size: 14))
+                    .autocapitalization(.none)
             } else {
                 TextField(placeholder, text: $text)
                     .font(.system (size: 14))
+                    .autocapitalization(.none)
             }
             Divider ()
         }

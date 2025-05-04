@@ -43,11 +43,16 @@ import SwiftUI
  The difference is object-oriented (struct structName: View) versus functional (@Viewbuilder \n func functionName(){})
  */
 struct EventCard: View {
+    @Environment(\.modelContext) private var modelContext
     
     //Event is the struct we defined in "Event" file, stores all information of JSON
-    let event: Event
+    let event: EventModel
     let isExpanded: Bool//The single card does not need a @binding or @state tag
     //simply based on this value, the expansion will show and not.
+    
+    
+    /** Some helper functions for the date*/
+
     
     //body is how this is rendered
     
@@ -73,12 +78,11 @@ struct EventCard: View {
                         //Vstack contains the text of the event.
                         VStack(alignment: .leading) {
                             //event name, check if null
-                            if(event.event_name != nil){
-                                
+                            if(event.name != "Unnamed Event"){
                                 //because it's optional type, we have to use ! to
                                 //tell the code that we are SURE it exists
                                 //putting variable into strings is "\(variable)"
-                                Text("\(event.event_name!)")
+                                Text("\(event.name)")
                                     .font(.headline) //determining font (make it big!)
                                     .foregroundStyle(.textPrimary)//this color is defined in assets
                                     .frame(alignment: .leading)//specifically adding leading alignment to get
@@ -86,9 +90,9 @@ struct EventCard: View {
                             
                             
                             //Check if null
-                            if(!event.organizations!.isEmpty) {
+                            if(!event.organizations.isEmpty) {
                                 //join the array with a ", "
-                                Text("By \(event.organizations!.joined(separator: ", "))")
+                                Text("By \(event.organizations.joined(separator: ", "))")
                                     .font(.subheadline)
                                     .foregroundStyle(.textPrimary)
                                 //alternatives for colors
@@ -97,41 +101,38 @@ struct EventCard: View {
                             }//organizations
                             
                             //Check if null
-                            if(event.event_location != nil){
-                                Text(event.event_location!)
+                            if(event.location != nil){
+                                Text(event.location!)
                                     .foregroundStyle(.textPrimary)
                                     .font(.caption)
                             }
                             
-                            
-                            //We want date and time on the same line, so we..
-                            if((event.event_date != nil) && (event.event_time != nil)){ //check if both are not nil, then..
-                                Text("\(event.event_date!) • \(event.event_time!)") //print out both strings and create a text bullet point inbetween the date and time
+                            // Formatted time string
+                            if(event.startTimeString != nil){ //lastly, check if ONLY the time is not nil.
+                                Text("\(event.startTimeString!)")
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
-                            } else if(event.event_date != nil){//otherwise, we check if ONLY the date is not nil.
-                                Text("\(event.event_date!)") //print out date
+                            } else if (event.date != nil) { //if the MOST beautiful string is not available, utilize the simple date (April 18th, for example), instead.
+                                //there may be a possibility that this event.date still stores information of the hour (where startimestring stores all that information), and minutes, but it's simply not showing because it's set to nil for some reason. lookinto this further after.
+                                Text("\(event.date!)")
                                     .font(.caption)
                                     .foregroundStyle(.textPrimary)
-                            } else if(event.event_time != nil){ //lastly, check if ONLY the time is not nil.
-                                Text("\(event.event_time!)")
-                                    .font(.caption)
-                                    .foregroundStyle(.textPrimary)
+                                
                             }
                             
                             
                             //Add description if our event is expanded
-                            if (isExpanded && event.event_description != nil){
-                                Text("\(event.event_description!)")
+                            if (isExpanded && event.descr != nil){
+                                Text("\(event.descr!)")
                                     .font(.caption) //determining font (make it big!)
                                     .foregroundStyle(.textPrimary)//this color is defined in assets
                                     .frame(alignment: .leading)//specifically adding leading alignment to get
                                     .lineLimit(1000, reservesSpace: false)
                             }
                           //Add event tags, checking both if expanded and event tags
-                            if(isExpanded && !event.tags!.isEmpty) {
+                            if(isExpanded && !event.tags.isEmpty) {
                                 //join the array with a ", "
-                                Text("Tags: \(event.tags!.joined(separator: ", "))")
+                                Text("Tags: \(event.tags.joined(separator: ", "))")
                                     .font(.caption2)
                                     .foregroundStyle(.textPrimary)
                                     .lineLimit(1000, reservesSpace: false)
@@ -152,23 +153,27 @@ struct EventCard: View {
                         
                         VStack {
                             //component that can be reusable
-                            CheckBox(
-                                items: [CheckBoxOption(
-                                    isChecked: false,
-                                    uiCompOne: "heart.fill",
-                                    uiCompTwo: "heart",
-                                    fillColor: .border )]
-                            ) //checkbox
-                            .imageScale(.large)
+                            Button(action: {
+                                event.favorited.toggle()
+                                event.lastUpdated = Date() // mark as modified
+                                try? modelContext.save()
+                            }) {
+                                Image(systemName: event.favorited ? "heart.fill" : "heart")
+                                    .foregroundColor(.border)
+                                    .imageScale(.large)
+                            }
                             
                             .padding(.vertical, 4)
                             
-                            CheckBox(items: [CheckBoxOption(
-                                isChecked: false,
-                                uiCompOne: "bell.fill",
-                                uiCompTwo: "bell",
-                                fillColor: .border)])
-                                .imageScale(.large)
+                            
+                            Button(action: {
+                                event.notified.toggle()
+                                try? modelContext.save()
+                            }) {
+                                Image(systemName: event.notified ? "bell.fill" : "bell")
+                                    .foregroundColor(.border)
+                                    .imageScale(.large)
+                            }
                         } //Vstack
                         .padding(.vertical, 4)//adding space after
                         .frame(alignment: .trailing)
@@ -221,16 +226,23 @@ struct EventCard: View {
  Preview type doesn't run when you run emulator
  */
 
+
+/**
+Commented preview out because eventcard now uses an EventDTO, which is not the current format of the parsed events.
+An active use of the eventcards is in eventlist!
+ 
+ Keeping this here so that it can be fixed. 
+ */
 //the preview is to test specific components
-struct EventCards_Previews: PreviewProvider {
-    static var previews: some View {
-        let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
-            let myEvents = EventData.parseEvents(json: myjson)
-        List{
-            EventCard(event: myEvents[0], isExpanded: false)
-            EventCard(event: myEvents[0], isExpanded: true)
-            
-        }
-    }
-}
+//struct EventCards_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let  myjson = "[{\"eventid\":28273,\"event_name\":\"SGA Concert\",\"event_description\":\"No description available\",\"event_location\":\"Main Hall Gardner Lounge\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 9\",\"event_time\":\"7 p.m. - 10 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-10T00:00:00.000Z\",\"event_end_time\":\"2025-04-10T03:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Alumni\",\"Faculty &amp; Staff\",\"General Public\",\"Prospective Students\",\"Student Families\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0},{\"eventid\":30810,\"event_name\":\"Concerts\",\"event_description\":\"\\n  Tabling for Starcleaner Reunion\\n\",\"event_location\":\"Rosenfield Center 1st Floor Lobby - Table 4\",\"organizations\":[\"Sga Concerts\"],\"rsvp\":0,\"event_date\":\"April 8\",\"event_time\":\"11 a.m. - 1 p.m.\",\"event_all_day\":0,\"event_start_time\":\"2025-04-08T16:00:00.000Z\",\"event_end_time\":\"2025-04-08T18:00:00.000Z\",\"tags\":[\"Music\",\"Student Activity\",\"Students\"],\"event_private\":0,\"repeats\":0,\"event_image\":null,\"is_draft\":0}]"
+//            let myEvents = EventData.parseEvents(json: myjson)
+//        
+//        List{
+//            EventCard(event: myEvents[0], isExpanded: false)
+//            EventCard(event: myEvents[0], isExpanded: true)
+//        }
+//    }
+//}
 

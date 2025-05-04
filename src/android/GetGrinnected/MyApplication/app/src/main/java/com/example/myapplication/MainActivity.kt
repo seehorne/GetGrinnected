@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -9,7 +10,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -31,7 +34,21 @@ class MainActivity : ComponentActivity() {
 
         // This syncs the info we have from the API
         lifecycleScope.launch {
-            AppRepository.syncFromApi()
+            // Gets the last time we synced with the API
+            val lastSyncTime = DataStoreSettings.getLastSyncTime(applicationContext).first()
+            // Gets the current time
+            val now = System.currentTimeMillis()
+            val hours = 3 // number of hours we want to wait till we refresh cache
+
+            // If the last time we Synced is null ie we have never synced or it has been
+            // More than 3 hrs (the math calculates the hours into milliseconds)
+            // since our last sync
+            if (lastSyncTime == null || now - lastSyncTime > hours * 60 * 60 * 1000) {
+                // Syncs from API
+                AppRepository.syncFromApi()
+                // Sets the new LastSyncTime to now
+                DataStoreSettings.setLastSyncTime(applicationContext, now)
+            }
         }
 
         lifecycleScope.launch {
@@ -54,11 +71,45 @@ class MainActivity : ComponentActivity() {
                 AppRepository.setCurrentAccountById(accountId)
             }
 
+            // We get our refresh token or a null value
+            val refreshToken = DataStoreSettings.getRefreshToken(applicationContext).firstOrNull()
+
+            // We check that the refresh token is none null
+            if (!refreshToken.isNullOrEmpty()) {
+                try {
+                    // Make a refreshToken call to our API
+                    val refreshResponse = RetrofitApiClient.apiModel.refreshToken("Bearer $refreshToken")
+
+                    // If it is successful a 403 error would mean we don't have a refreshToken
+                    if (refreshResponse.isSuccessful) {
+                        // Get new tokens
+                        val newAccessToken = refreshResponse.body()?.access_token
+                        val newRefreshToken = refreshResponse.body()?.refresh_token
+
+                        // So long as they are non-null we set the tokens
+                        if (newAccessToken != null && newRefreshToken != null) {
+                            // Save new tokens
+                            DataStoreSettings.setAccessToken(applicationContext, newAccessToken)
+                            DataStoreSettings.setRefreshToken(applicationContext, newRefreshToken)
+                            // Tokens refreshed successfully! User stays logged in.
+                        }
+                    } else {
+                        // Refresh token invalid or expired
+                        DataStoreSettings.clearUserSession(applicationContext)
+                    }
+                } catch (e: Exception) {
+                    // Network error of some sort likely unable to leave the app (this is allowed
+                    // since we have the cached events so long as they have been updated within 3hrs so we
+                    // won't clear session
+                    Toast.makeText(applicationContext, "No internet connection. You are offline.", Toast.LENGTH_LONG).show()
+                }
+            }
+
             setContent {
                 // Gets events from Repo
                 val eventEntities = AppRepository.events.value
                 // Turns events into event data class and then sorts them by event time
-                val events = eventEntities.map { it.toEvent() }.sortedBy { it.event_time }
+                val events = eventEntities.map { it.toEvent() }
 
                 // We get a string set of all the distinct tags
                 val tagsString = events.flatMap { it.tags }.distinct()
@@ -75,10 +126,22 @@ class MainActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
                             }
-                        }, 
-                      tags = tags.sortedBy{ it.label},                       
-                      startDestination = if (isLoggedIn) "main" else "welcome" // What screen to launch the app on
-                    )
+                        },
+                        tags = tags.sortedBy { it.label },
+                        startDestination = if (isLoggedIn) "main" else "welcome",
+                    ) // What screen to launch the app on
+                }
+            }
+            // Background task launched after we set our content
+            launch {
+                // Number of minutes we want to delay to update the remote database
+                val minutes = 1L // Currently it is every minute this can change
+                // Runs indefinitely as a background task
+                while (true) {
+                    // Sets the delay to send in minutes
+                    delay(minutes * 60 * 1000)
+                    // Syncs our current local data with the remote
+                    AppRepository.syncAccountData(context = applicationContext)
                 }
             }
         }

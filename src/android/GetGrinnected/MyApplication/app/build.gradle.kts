@@ -47,10 +47,12 @@ kotlin {
 }
 
 dependencies {
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
-    implementation ("com.google.code.gson:gson:2.10.1")
-    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation(libs.androidx.datastore.preferences.v100)
+    implementation(libs.kotlinx.serialization.json.v163)
+    implementation (libs.gson.v2101)
+    implementation(libs.androidx.material.icons.extended.v154)
+    implementation(libs.accompanist.permissions.v0311alpha)
+    implementation(libs.androidx.material)
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.core.ktx)
@@ -77,12 +79,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.ui.test.manifest)
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    val room_version = "2.7.0"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 
 }

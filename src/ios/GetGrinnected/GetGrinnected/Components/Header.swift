@@ -7,68 +7,91 @@
 
 import SwiftUI
 
-@ViewBuilder
-func Header(_ safeAreaTop: CGFloat, title: String, searchBarOn: Bool) -> some View {
+struct Header: View{
+    @Binding var inputText: String
+    var safeAreaTop: CGFloat
+    var title: String
+    var searchBarOn: Bool
     
-    VStack (){
-        //only have this on for the homescreen view
-        if(searchBarOn){
-            SearchBar()//search bar
+    init(
+        inputText: Binding<String> = .constant(
+            ""
+        ),
+        // <--- default binding to nil
+        safeAreaTop: CGFloat,
+        title: String,
+        searchBarOn: Bool
+    ) {
+        self._inputText = inputText
+        self.safeAreaTop = safeAreaTop
+        self.title = title
+        self.searchBarOn = searchBarOn
+    }
+
+    
+    var body: some View {
+        VStack (){
+            //title and other icons
+            HStack( spacing: 10){
+                Text(title)
+                    .font(.title)
+                    .bold()
+            }//hstack for content and buttons
+            .padding(.bottom)
+            .frame(maxWidth: .infinity)
+            
+            //only have this on for the homescreen view
+            if(searchBarOn){
+                HStack( spacing: 15){
+                    HStack(spacing: 8){
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.white)
+                        TextField("Search", text: Binding(
+                            get: { inputText },
+                            set: { inputText = $0 }))
+                        .tint(.white)
+                    }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 15)
+                    .background{
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(.black)
+                            .opacity(0.15)
+                    }//background
+                    
+                    
+                    //image
+                    Logo(size: 35)
+                }//HStack for searching
+                
+            }//only if searchbar is on
+            
+            
+        }//vstack of the header
+        .environment(\.colorScheme, .dark)
+        .padding(.horizontal, 15)
+        .padding(.top, safeAreaTop + 10)
+        .background{
+            Rectangle()
+                .fill(.colorBlue)
         }
-        
-        //title and other icons
-        HStack( spacing: 10){
-            Text(title)
-                .font(.title)
-                .bold()
-        }//hstack for content and buttons
-        .padding(.top,10)
-        .frame(maxWidth: .infinity)
-        
-        
-    }//vstack of the header
-    .environment(\.colorScheme, .dark)
-    .padding([.horizontal,.bottom], 15)
-    .padding(.top, safeAreaTop + 10)
-    .background{
-        Rectangle()
-            .fill(.colorBlue)
     }
 }
 
-@ViewBuilder
-func SearchBar() -> some View{
-    HStack( spacing: 15){
-        HStack(spacing: 8){
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.white)
-            
-            TextField("Search", text: .constant(""))
-                .tint(.white)
-        }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 15)
-        .background{
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(.white)
-                .opacity(0.35)
-        }//background
-        
-        Button{
-            
-        } label: {
-            //image
-            Logo(size: 35)
-        }
-    }//HStack for searching
-}
+
+
 
 #Preview {
     GeometryReader{proxy in
         let safeAreaTop = proxy.safeAreaInsets.top
         ScrollView(.vertical, showsIndicators: false){
             VStack(){
-                Header(safeAreaTop, title: "Header", searchBarOn: true)
+                //basic input here
+                Header(
+                    safeAreaTop: safeAreaTop,
+                    title: "Header",
+                    searchBarOn: false
+                )
                 
                 VStack{
                     ForEach(1...10, id: \.self){_ in
