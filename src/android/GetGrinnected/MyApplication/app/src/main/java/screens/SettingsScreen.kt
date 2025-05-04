@@ -2,8 +2,6 @@ package screens
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -59,6 +57,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.res.painterResource
 import androidx.core.net.toUri
 import com.example.myapplication.R
+import androidx.compose.material3.SwitchDefaults
 
 /**
  * A composable function that represents the Settings screen of our app.
@@ -99,12 +98,17 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     // State associated with whether there is an error in the username
     var usernameError by remember { mutableStateOf<String?>(null) }
 
+    // State associated with whether the fontsize drop down is expanded
     var fontSizeDropdownExpanded by remember { mutableStateOf(false) }
+    // The possible fontsize values
     val fontSizeOptions = FontSizePrefs.entries
+    // Keys associated with the enum of the selected fontsizes
     val selectedFontPref = FontSizePrefs.getFontPrefFromKey(fontSizeSetting)
 
     // Boolean associated with whether the delete account dialog needs to display or not
     var showDeleteDialog by remember { mutableStateOf(false) }
+    // Boolean associated with whether the sign out dialog needs to display or not
+    var showSignoutDialog by remember { mutableStateOf(false) }
 
     // Sets up our ui to follow a box layout
     Box(modifier = modifier.fillMaxSize()) {
@@ -133,6 +137,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
+            // Profile Section
             SettingsSection(title = "Profile") {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -236,6 +241,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Spacer(modifier = modifier.height(8.dp))
 
+            // Appearance Section
             // Setup a row to have the wording for the dark mode switch inline with the switch
             SettingsSection(title = "Appearance") {
                 Row(
@@ -250,13 +256,19 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                     // Switch to toggle dark or light mode
                     Switch(
                         checked = darkTheme,
-                        onCheckedChange = { onToggleTheme(it) }
+                        onCheckedChange = { onToggleTheme(it) },
+
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                            checkedTrackColor = MaterialTheme.colorScheme.secondary,
+                        )
                     )
                 }
             }
 
             Spacer(modifier = modifier.height(8.dp))
 
+            // Accessibility Section
             SettingsSection(title = "Accessibility") {
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text("Font Size:", style = typography.bodyLarge)
@@ -287,6 +299,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Spacer(modifier = modifier.height(8.dp))
 
+            // Notification Section
             SettingsSection(title = "Notifications") {
 
                 Spacer(modifier = modifier.height(4.dp))
@@ -305,8 +318,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Spacer(modifier = modifier.height(8.dp))
 
+            // About Section
             SettingsSection(title = "About") {
+                // Github URL
                 val githubUrl = "https://github.com/seehorne/GetGrinnected"
+                // Discord URL
                 val discordUrl = "https://discord.com/invite/e4PrM4RyEr"
 
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -327,11 +343,12 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
                         IconButton(onClick = {
+                            // Allows us to leave the app to go to said URL
                             val intent = Intent(Intent.ACTION_VIEW, githubUrl.toUri())
                             context.startActivity(intent)
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.github_mark), // Add this to your drawable
+                                painter = painterResource(id = R.drawable.github_mark),
                                 contentDescription = "GitHub",
                                 tint = colorScheme.tertiary,
                                 modifier = Modifier.size(32.dp)
@@ -339,11 +356,12 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         }
 
                         IconButton(onClick = {
+                            // Allows us to leave the app to go to said URL
                             val intent = Intent(Intent.ACTION_VIEW, discordUrl.toUri())
                             context.startActivity(intent)
                         }) {
                             Icon(
-                                painter = painterResource(R.drawable.discord_icon_svgrepo_com), // Add this too
+                                painter = painterResource(R.drawable.discord_icon_svgrepo_com),
                                 contentDescription = "Discord",
                                 tint = colorScheme.tertiary,
                                 modifier = Modifier.size(32.dp)
@@ -355,6 +373,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
             Spacer(modifier = modifier.height(4.dp))
 
+            // Delete Account Button
             TextButton(onClick = {showDeleteDialog = true},
                 modifier = Modifier
                 .padding(8.dp)
@@ -376,7 +395,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         )
                     },
                     confirmButton = {
-                        // Button to save the edited username
+                        // Button to confirm account deletion
                         TextButton(
                             onClick = {
                                 coroutineScope.launch {
@@ -386,7 +405,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                             },
                         ) {
                             Text(
-                                "Save",
+                                "Confirm",
                                 color = colorScheme.tertiary,
                                 style = typography.labelLarge)
 
@@ -410,15 +429,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             // This button handles our sign out process
             Button(
                 onClick = {  // Sets our logged in state to false
-                    coroutineScope.launch {
-                        // This resets user preferences to default states
-                        DataStoreSettings.clearUserSession(context)
-                        onToggleTheme(false)
-                    }
-                    navController.navigate("welcome") { // takes us to the welcome screen
-                        popUpTo(0) { inclusive = true } // pops the back stack
-                        launchSingleTop = true
-                    }
+                    showSignoutDialog = true
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -426,17 +437,67 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 Row {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Logout,
-                        contentDescription = "Edit Username",
+                        contentDescription = "Logout",
                         modifier = modifier.size(20.dp),
                         tint = colorScheme.onPrimary
                     )
                     Spacer(modifier.width(4.dp))
                     Text(
-                        "Sign Out",
+                        "Log Out",
                         style = typography.labelLarge
                     )
                 }
             }
+
+            if (showSignoutDialog) {
+                AlertDialog(
+                    // When we dismiss with our dismiss button we set our show boolean to false
+                    onDismissRequest = { showSignoutDialog = false },
+                    title = {
+                        Text(
+                            "Are you sure want to logout?",
+                            color = colorScheme.onBackground,
+                            style = typography.titleLarge
+                        )
+                    },
+                    confirmButton = {
+                        // Button to confirm logout
+                        TextButton(
+                            onClick = {
+                                coroutineScope.launch {
+                                    // This resets user preferences to default states
+                                    DataStoreSettings.clearUserSession(context)
+                                    onToggleTheme(false)
+                                }
+                                navController.navigate("welcome") { // takes us to the welcome screen
+                                    popUpTo(0) { inclusive = true } // pops the back stack
+                                    launchSingleTop = true
+                                }
+                                showSignoutDialog = false
+                            },
+                        ) {
+                            Text(
+                                "Confirm",
+                                color = colorScheme.tertiary,
+                                style = typography.labelLarge)
+
+                        }
+                    },
+                    dismissButton = {
+                        // This is our button to cancel the signout process
+                        TextButton(onClick = {
+                            showSignoutDialog = false
+                        }) {
+                            Text(
+                                "Cancel",
+                                color = colorScheme.tertiary,
+                                style = typography.labelLarge
+                            )
+                        }
+                    }
+                )
+            }
+            Spacer(modifier = modifier.height(8.dp))
         }
     }
 }
@@ -457,8 +518,11 @@ fun SettingsSection(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    // State associated with whether the care is expanded or not
     var expanded by remember { mutableStateOf(false) }
+    // Accessing colors from our theme
     val colorScheme = MaterialTheme.colorScheme
+    // Accessing font info from our theme
     val typography = MaterialTheme.typography
 
     Card(
@@ -477,18 +541,21 @@ fun SettingsSection(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                // Title of the card text
                 Text(
                     text = title,
                     style = typography.titleLarge,
                     color = colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
                 )
+                // Icon associated with expanded or not
                 Icon(
                     imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     contentDescription = "Toggle Section",
                     tint = colorScheme.onSurface
                 )
             }
+            // Handles the visibility and structure of content in the expanded state
             AnimatedVisibility(visible = expanded) {
                 Column(
                     modifier = Modifier
