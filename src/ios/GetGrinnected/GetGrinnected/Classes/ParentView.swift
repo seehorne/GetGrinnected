@@ -18,7 +18,7 @@ import Foundation
  */
 class EventListParentViewModel: ObservableObject {
     @Published var viewedDate = Date.now //contains info about viewed date
-    @Published var selectedTags = EventTags.any //about selected tags
+    @Published var selectedTags: Set<EventTags> = [] //about selected tags
     @Published var timeSpan: (start: Date, end: Date) = (Date(), Date().startOfNextDay)//time span by day
     @Published var lastFetched: Date? //about when last fetched to update
     @Published var forceRefreshRequested: Bool = false //about whether or not a force refresh was requested
