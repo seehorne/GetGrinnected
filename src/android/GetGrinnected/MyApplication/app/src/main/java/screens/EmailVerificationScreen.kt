@@ -136,7 +136,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                 Text(
                     text = errMsg,
                     color = colorScheme.error,
-                    style = typography.bodySmall
+                    style = typography.bodySmall,
+                    textAlign = TextAlign.Center,
                 )
             }
 

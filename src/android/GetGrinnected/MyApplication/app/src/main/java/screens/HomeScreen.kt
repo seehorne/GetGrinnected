@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -146,7 +147,8 @@ fun HomeScreen(tags: List<Check>) {
             //creates a row to align the logo and buttons on the home page
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             )
             {
                 // adds the logo to the top
@@ -154,14 +156,17 @@ fun HomeScreen(tags: List<Check>) {
                     painter = painterResource(id = R.drawable.getgrinnected_logo),
                     contentDescription = "App Logo",
                     modifier = Modifier
-                        .padding(25.dp)
+                        .padding(start = 6.dp, top = 25.dp, end = 6.dp)
                         .background(Color.White)
                         .size(50.dp)
                 )
+
                 // centers the buttons
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.weight(1f)
+                        .padding(top = 25.dp)
                 ) {
                     // creates day menu
                     Button(
@@ -179,11 +184,22 @@ fun HomeScreen(tags: List<Check>) {
                                 modifier = Modifier.size(20.dp)
                                     .semantics { role = Role.Button }
                             )
-                            Spacer(Modifier.size(8.dp))
+                            Spacer(Modifier.size(6.dp))
                             // displays selected day on button
-                            Text(daysList[selectedView].dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0, 3) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(formatter3), style = typography.labelLarge)
+                            Text(
+                                daysList[selectedView].dayOfWeek.getDisplayName(
+                                    java.time.format.TextStyle.FULL,
+                                    Locale.getDefault()
+                                ).substring(
+                                    0,
+                                    3
+                                ) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(
+                                    formatter3
+                                ), style = typography.labelLarge
+                            )
                         }
                     }
+                    Spacer(Modifier.size(6.dp))
                     // creates dropdown menu when button is clicked
                     DropdownMenu(
                         expanded = expanded.value,
@@ -207,14 +223,6 @@ fun HomeScreen(tags: List<Check>) {
                             })
                         }
                     }
-                }
-                // I don't know why this is necessary but was needed to properly space tag menu
-                Row(
-                    modifier = Modifier
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                ) {
                     // creates tags menu
                     Button(
                         onClick = { expanded2.value = true },
@@ -231,7 +239,7 @@ fun HomeScreen(tags: List<Check>) {
                                 modifier = Modifier.size(20.dp)
                                     .semantics { role = Role.Button }
                             )
-                            Spacer(Modifier.size(8.dp))
+                            Spacer(Modifier.size(6.dp))
 
                             Text("Tags", style = typography.labelLarge, maxLines = 1)
                         }

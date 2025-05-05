@@ -10,10 +10,10 @@ enum class FontSizePrefs(
     val fontSizeExtra: Int,
     val label: String
 ) {
-    SMALL("S", -2, "Small"),
-    DEFAULT("M", 0, "Medium"),
-    LARGE("L", 2, "Large"),
-    EXTRA_LARGE("XL", 4, "Extra Large");
+    SMALL("S", 2, "Small"),
+    DEFAULT("M", 4, "Medium"),
+    LARGE("L", 6, "Large"),
+    EXTRA_LARGE("XL", 8, "Extra Large");
 
 companion object {
         fun getFontPrefFromKey(key: String?): FontSizePrefs {
