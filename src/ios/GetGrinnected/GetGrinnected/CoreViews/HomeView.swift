@@ -31,7 +31,7 @@ struct HomeView: View {
                 VStack(){
                     Spacer()
                     //vertical scroll view to see more events
-                    ScrollView(.vertical, showsIndicators: false){
+                    ScrollView(.vertical, showsIndicators: true){
                         //vstack to have some spacing between header and main compoments
                         VStack(spacing: 16) {
                             WeekView(selectedDate: $viewModel.viewedDate)

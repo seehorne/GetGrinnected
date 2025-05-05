@@ -80,7 +80,7 @@ class UserProfile: ObservableObject {
     }
 
     func loginUser(email: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/login")!
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/session/login")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -124,7 +124,7 @@ class UserProfile: ObservableObject {
     }
     
     func verifyUser(email: String, code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/verify")!
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/session/verify")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -170,7 +170,7 @@ class UserProfile: ObservableObject {
     
     
     func signUpUser(email: String, user: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/signup")!
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/session/signup")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -217,7 +217,7 @@ class UserProfile: ObservableObject {
     //API call to resend OTP
     func resendOTP(email: String, completion: @escaping (Result<String, Error>) -> Void) {
         //make post request to correct route
-        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/resend-otp")!
+        let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/session/resend-code")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
