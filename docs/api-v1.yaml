@@ -10,7 +10,7 @@ tags:
   - name: session
     description: Session login and authorization.
   - name: user
-    description: Get and modify logged-in user settings.
+    description: Get and modify logged-in user data.
 paths:
   /session/login:
     post:
@@ -492,6 +492,31 @@ paths:
           $ref: '#/components/responses/InvalidToken'
         '404':
           $ref: '#/components/responses/NoSuchUser'
+  /user:
+    delete:
+      tags:
+        - user
+      summary: Delete user account.
+      description: Delete the account of the currently logged-in user.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Account deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Account successfully deleted."
+        '404':
+          description: Unknown database error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /events:
     get:
       tags:
@@ -784,7 +809,7 @@ components:
           example: Unknown error
         message:
           type: string
-          example: An unknown error has occured.
+          example: An unknown error has occurred.
     ErrorDateOrder:
       allOf:
         - $ref: '#/components/schemas/Error'

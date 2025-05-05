@@ -143,7 +143,7 @@ describe('Test API', () => {
     /*
      * CHECK ALL AUTHENTICATED API CALLS
      */
-    
+
     var refresh_token;
     var access_token;
     describe('Authenticated', () => {
@@ -331,7 +331,7 @@ describe('Test API', () => {
 
         /*
          * TEST /session/refresh ROUTE 
-         */ 
+         */
 
         describe('POST /session/refresh', () => {
             it('returns new tokens', async () => {
@@ -513,6 +513,82 @@ describe('Test API', () => {
                         assert.strictEqual(res.status, item.status, res.text);
                     });
                 }
+            });
+        });
+
+        /*
+         * Test user deletion by deleting the user we have in the test database.
+         *
+         * Because of this change, running the tests locally just got more
+         * complicated. You'll need to repopulate the database each time.
+         */
+        describe('DELETE /user', () => {
+            // here I am copy+pasting the auth tests, since this is the only
+            // DELETE route that won't save or cost us any extra lines of code.
+            describe('does not delete with incorrect authorization', () => {
+                const route = '/user'
+                it(`gives 401 when token is not provided`, async () => {
+                    // Make the request
+                    const res = await req
+                        // URL ending
+                        .delete(route)
+                        // Headers
+                        .set('Content-Type', 'application/json');
+
+                    assert.strictEqual(res.statusCode, 401, res.text);
+                });
+
+                it(`gives 403 when the token is not good`, async () => {
+                    // Make the request
+                    const res = await req
+                        // URL ending
+                        .delete(route)
+                        // Headers
+                        .set('Authorization', `Bearer invalid_token`)
+                        .set('Content-Type', 'application/json');
+
+                    assert.strictEqual(res.statusCode, 403, res.text);
+                });
+
+                it(`gives 404 when the user does not exist`, async () => {
+                    // Generate tokens for a user that's not really in the db.
+                    const fakeTokens = util.generateUserTokens('fake@example.com');
+
+                    // Make the request
+                    const res = await req
+                        // URL ending
+                        .delete(route)
+                        // Headers
+                        .set('Authorization', `Bearer ${fakeTokens.access}`)
+                        .set('Content-Type', 'application/json');
+
+                    assert.strictEqual(res.statusCode, 404, res.text);
+                });
+            });
+
+            // make sure it reports having deleted the user
+            it(`deletes the testing user`, async () => {
+                const res = await req
+                    .delete('/user')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json');
+
+                assert.strictEqual(res.statusCode, 200, res.text);
+            });
+
+            // when the user is deleted, their auth should start triggering error 404
+            // because they no longer exist in the database.
+            it(`stops authenticated methods from working once user deleted`, async () => {
+                // Make the request
+                const res = await req
+                    // I'm just gonna test an arbitrary authenticated method, rather than all.
+                    .get('/user/username')
+                    // Use our old access token in the header
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json');
+
+                // If we don't get a 404 ("no such user"), we're in trouble
+                assert.strictEqual(res.statusCode, 404, res.text);
             });
         });
     });
