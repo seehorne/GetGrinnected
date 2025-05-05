@@ -431,7 +431,7 @@ describe('Test API', () => {
                             .set('Authorization', `Bearer ${access_token}`)
                             .set('Content-Type', 'application/json');
                         assert.strictEqual(getRes.statusCode, 200, getRes.text);
-                        assert.strictEqual(getRes.text, `{"${name}_events":"[1,2]"}`);
+                        assert.strictEqual(getRes.text, `{"${name}_events":[1,2]}`);
                     });
                 });
 

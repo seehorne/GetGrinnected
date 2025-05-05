@@ -457,11 +457,10 @@ async function setUserEventArray(array_name, req, res, _next) {
 
     // Update that user's favorited events in the database. Turn the array into a
     // string so it will be handled properly by the DB query.
-    const stringified = JSON.stringify(existingIDs)
-    await database.modifyAccountField(email, array_name, JSON.stringify(stringified));
+    await database.modifyAccountField(email, array_name, JSON.stringify(existingIDs));
     res.json({
         'message': `Successfully updated ${array_name}.`,
-        'new_value': stringified  // send back what we did insert, because it may not match what they sent
+        'new_value': existingIDs  // send back what we did insert, because it may not match what they sent
     });
 }
 
