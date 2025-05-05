@@ -187,7 +187,7 @@ async function routeGetFavorited(req, res, _next) {
 async function routePutFavorited(req, res, next) {
   // Set the favorited_events array of that user, and let that function do the response.
   // This assumes the body has `favorited_events`, and the middleware makes sure that is true
-  await util.userDataSetArray('favorited_events', req, res, next);
+  await util.setUserEventArray('favorited_events', req, res, next);
 }
 
 /**
@@ -219,7 +219,7 @@ async function routeGetNotified(req, res, _next) {
 async function routePutNotified(req, res, next) {
   // Set the notified_events array of that user, and let that function do the response.
   // This requires the body contain `notified_events`, which we get thanks to the middleware
-  await util.userDataSetArray('notified_events', req, res, next);
+  await util.setUserEventArray('notified_events', req, res, next);
 }
 
 /**
