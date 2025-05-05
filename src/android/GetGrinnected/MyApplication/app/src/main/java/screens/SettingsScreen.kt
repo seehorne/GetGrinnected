@@ -1,6 +1,7 @@
 package screens
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +59,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.core.net.toUri
 import com.example.myapplication.R
 import androidx.compose.material3.SwitchDefaults
+import com.example.myapplication.AppRepository.deleteAccount
 
 /**
  * A composable function that represents the Settings screen of our app.
@@ -399,7 +401,18 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         TextButton(
                             onClick = {
                                 coroutineScope.launch {
-                                   //TODO Delete Account
+                                    val success = deleteAccount(context)
+                                    if (success) {
+                                        // clear user session
+                                        DataStoreSettings.clearUserSession(context)
+                                        onToggleTheme(false)
+                                        navController.navigate("welcome") {
+                                            popUpTo(0) { inclusive = true }
+                                            launchSingleTop = true
+                                        }
+                                    } else {
+                                        Toast.makeText(context, "Couldn't Delete Account at this time try again later", Toast.LENGTH_LONG).show()
+                                    }
                                 }
                                 showDeleteDialog = false
                             },

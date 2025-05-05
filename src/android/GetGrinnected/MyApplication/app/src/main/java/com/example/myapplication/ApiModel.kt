@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -47,4 +48,8 @@ interface ApiModel {
     // Async function to update the remote databases current username for a user
     @PUT("user/username")
     suspend fun updateUsername(@Header("Authorization") token: String, @Body usernameRequest: UpdateUsernameRequest): Response<SimpleMessageResponse>
+
+    // Async function to delete the user account
+    @DELETE("user")
+    suspend fun deleteAccount(@Header("Authorization") token: String): Response<SimpleMessageResponse>
 }
