@@ -42,6 +42,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.AppRepository
@@ -169,8 +175,9 @@ fun HomeScreen(tags: List<Check>) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Filled.DateRange,
-                                contentDescription = "Calendar Icon",
+                                contentDescription = "Select Day Filter",
                                 modifier = Modifier.size(20.dp)
+                                    .semantics { role = Role.Button }
                             )
                             Spacer(Modifier.size(8.dp))
                             // displays selected day on button
@@ -220,8 +227,9 @@ fun HomeScreen(tags: List<Check>) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Outlined.FilterAlt,
-                                contentDescription = "Filter Icon",
+                                contentDescription = "Select Tags Filters",
                                 modifier = Modifier.size(20.dp)
+                                    .semantics { role = Role.Button }
                             )
                             Spacer(Modifier.size(8.dp))
 
@@ -320,7 +328,13 @@ fun HomeScreen(tags: List<Check>) {
                 Text(
                     "No more events match filters",
                     style = typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    // This ensures we alert a screen reader when we have scrolled down to this section
+                    modifier = Modifier.semantics {
+                        liveRegion = LiveRegionMode.Polite
+                        contentDescription = "No more events match filters."
+                    }
+
                 )
                 Spacer(modifier = Modifier.height(120.dp))
 

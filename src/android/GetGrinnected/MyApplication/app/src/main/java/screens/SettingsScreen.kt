@@ -59,6 +59,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.core.net.toUri
 import com.example.myapplication.R
 import androidx.compose.material3.SwitchDefaults
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import com.example.myapplication.AppRepository.deleteAccount
 
 /**
@@ -124,7 +130,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Text(
                 text = "Preferences",
                 style = typography.headlineMedium,
-                color = colorScheme.onBackground
+                color = colorScheme.onBackground,
+                modifier = modifier.semantics { heading() }
             )
             Spacer(modifier = Modifier.height(4.dp))
             HorizontalDivider()
@@ -259,11 +266,13 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                     Switch(
                         checked = darkTheme,
                         onCheckedChange = { onToggleTheme(it) },
-
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
                             checkedTrackColor = MaterialTheme.colorScheme.secondary,
-                        )
+                        ),
+                        modifier = Modifier.semantics {
+                            stateDescription = if (darkTheme) "Dark mode is on" else "Dark mode is off"
+                        }
                     )
                 }
             }
@@ -351,7 +360,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.github_mark),
-                                contentDescription = "GitHub",
+                                contentDescription = "Press to Navigate to GitHub Repository",
                                 tint = colorScheme.tertiary,
                                 modifier = Modifier.size(32.dp)
                             )
@@ -364,7 +373,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.discord_icon_svgrepo_com),
-                                contentDescription = "Discord",
+                                contentDescription = "Press to Navigate to Discord",
                                 tint = colorScheme.tertiary,
                                 modifier = Modifier.size(32.dp)
                             )
@@ -382,7 +391,10 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 .fillMaxWidth()) {
                 Text(text = "Delete Account",
                     style = typography.bodyLarge,
-                    color = colorScheme.tertiary)
+                    color = colorScheme.tertiary,
+                    modifier = modifier.semantics {
+                        contentDescription = "Delete your account"
+                        role = Role.Button})
             }
 
             if (showDeleteDialog) {
@@ -549,6 +561,10 @@ fun SettingsSection(
             modifier = Modifier
                 .clickable { expanded = !expanded }
                 .padding(12.dp)
+                .semantics {
+                    role = Role.Button
+                    contentDescription = "$title section, ${if (expanded) "expanded" else "collapsed"}. Tap to ${if (expanded) "collapse" else "expand"}."
+                }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -560,6 +576,7 @@ fun SettingsSection(
                     style = typography.titleLarge,
                     color = colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
+                        .semantics { heading() }
                 )
                 // Icon associated with expanded or not
                 Icon(
