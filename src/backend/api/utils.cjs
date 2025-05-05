@@ -105,6 +105,47 @@ function validateUsername(username) {
     };
 }
 
+/**
+ * Determine whether an email address is valid (matches the correct patterns,
+ * we obviously can't check it actually points to an inbox)
+ *
+ * @param {*} email Email to check
+ * @returns Object with two keys.
+ * - `result`: `true` or `false`, is this email valid-looking?
+ * - `reason`: if not valid, why? Not meaningful if the email is valid.
+ */
+function validateEmail(email) {
+    // It should actually be a string, better check this lol.
+    if (typeof email !== 'string') {
+        return {
+            result: false,
+            reason: 'Email must be a string.'
+        };
+    }
+
+    // Make sure it's a grinnell email, all of them end with @grinnell.edu
+    if (!email.endsWith('@grinnell.edu')) {
+        return {
+            result: false,
+            reason: 'Email must end with @grinnell.edu.'
+        };
+    }
+
+    // It had better start with some actual text too.
+    if (email === '@grinnell.edu') {
+        return {
+            result: false,
+            reason: 'Email address must have a name at the front.'
+        }
+    }
+
+    // If we pass all the checks, return that it's valid.
+    return {
+        result: true,
+        reason: 'Valid email.'
+    }
+}
+
 async function sendOTP(email) {
     sendTo = email
     if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu'){
@@ -468,6 +509,7 @@ if (require.main !== module) {
     module.exports = {
         generateUserTokens,
         validateUsername,
+        validateEmail,
         otpFileCheck,
         otpFileClean,
         otpFileSave,

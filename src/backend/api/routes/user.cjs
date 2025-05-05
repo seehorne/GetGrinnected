@@ -67,17 +67,18 @@ async function routeSignUpNewUser(req, res, _next) {
 
   // Make sure the email is a grinnell email. If it does not, respond with
   // an appropriate error. 400 for "bad request"
-  if (!email.endsWith('@grinnell.edu')) {
+  var valid = util.validateEmail(email);
+  if (!valid.result) {
     res.status(400).json({
       'error': 'Invalid email',
-      'message': 'Email must end with @grinnell.edu.'
+      'message': valid.reason,
     });
     return;
   }
 
   // Make sure the username provided doesn't break any format rules.
   // If not, return HTTP 400 again.
-  const valid = util.validateUsername(username);
+  valid = util.validateUsername(username);
   if (!valid.result) {
     // reuse the reason returned by validateUsername if the check fails,
     // so we can have a more descriptive error
