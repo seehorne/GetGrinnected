@@ -147,10 +147,13 @@ function validateEmail(email) {
 }
 
 async function sendOTP(email) {
+    // Override: if they are attempting to log into the demo account, change
+    // where it will send the login.
     sendTo = email
     if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu'){
         sendTo = 'getgrinnected.demo@gmail.com'
     }
+
     // Send the user a one-time code by email.
     const code = sendCode(sendTo);
 
