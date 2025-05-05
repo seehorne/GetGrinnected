@@ -474,11 +474,7 @@ describe('Test API', () => {
 
                                 // the response for new_value should match the expected
                                 const resObject = JSON.parse(res.text);
-                                assert.strictEqual(
-                                    resObject.new_value,
-                                    JSON.stringify(expected),
-                                    res.text
-                                );
+                                assert.ok(arraysEqual(resObject.new_value, expected), res.text);
                             });
                         });
 
