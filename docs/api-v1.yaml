@@ -306,7 +306,7 @@ paths:
       security:
         - auth_token: []
       requestBody:
-        description: Array of new favorited event IDs.
+        description: Array of new favorited event IDs. Any nonexistent IDs will be ignored.
         content:
           application/json:
             schema:
@@ -319,7 +319,7 @@ paths:
                     type: integer
       responses:
         '200':
-          description: Successful update.
+          description: Successful update. Any nonexistent IDs will be ignored.
           content:
             application/json:
               schema:
@@ -328,6 +328,11 @@ paths:
                   message:
                     type: string
                     example: Successfully updated favorited_events.
+                  new_value:
+                    type: array
+                    example: [77]
+                    items:
+                      type: integer
         '400':
           description: Bad request.
           content:
@@ -377,7 +382,7 @@ paths:
       tags:
         - user
       summary: Change notified events list.
-      description: Overwrite the array of notified events with a new array.
+      description: Overwrite the array of notified events with a new array. Any nonexistent IDs will be ignored.
       security:
         - auth_token: []
       requestBody:
@@ -393,8 +398,8 @@ paths:
                   items:
                     type: integer
       responses:
-        '202':
-          description: Successful update.
+        '200':
+          description: Successful update. Any nonexistent IDs will be ignored.
           content:
             application/json:
               schema:
@@ -403,6 +408,11 @@ paths:
                   message:
                     type: string
                     example: Successfully updated notified events.
+                  new_value:
+                    type: array
+                    example: [2, 5]
+                    items:
+                      type: integer
         '400':
           description: Bad request.
           content:
