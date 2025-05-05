@@ -53,7 +53,6 @@ struct EventCard: View {
     let description: String //description used later
     //let deepLink: URL //for now unneeded
     
-    /** Some helper functions for the date*/
     init(event: EventModel, isExpanded: Bool) {
         self.event = event
         self.isExpanded = isExpanded
