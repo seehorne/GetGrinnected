@@ -168,117 +168,111 @@ describe('Test API', () => {
          */
 
         describe('Error handling', () => {
-            // These arrays are used to parameterize which routes we test.
+            // These tests check if our routes handle auth errors properly.
             //
             // A route is (in general) a way the API lets us interact with it.
             // The most important thing is the name, becuase it lets us construct
             // the URL we use to access it.
 
-            // For routes that we GET (read) information from, we only need the
-            // names in order to access them
-            const getRouteNames = [
-                '/user/data',
-                '/user/events/favorited',
-                '/user/events/notified',
-                '/user/username',
-            ];
-            // For routes that PUT (write) information, we also need to know what
-            // information we are writing to test them fully. That's why we add
-            // this "body" key within the object.
-            const putRouteData = [
-                { 'name': '/user/events/favorited', 'body': 'favorited_events' },
-                { 'name': '/user/events/notified', 'body': 'notified_events' },
-                { 'name': '/user/username', 'body': 'username' }
-            ];
-
             // Test all routes that PUT data
             describe('PUT routes', () => {
-                for (const item of putRouteData) {
-                    it(`PUT ${item.name} gives 400 when no body is included`, async () => {
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .put(item.name)
-                            // Headers
-                            .set('Authorization', `Bearer ${access_token}`)
-                            .set('Content-Type', 'application/json')
+                // For routes that PUT (write) information, we need to know what
+                // information we are writing to test them fully. That's why we add
+                // this "body" key within the object.
+                const putRouteData = [
+                    { 'name': '/user/events/favorited', 'body': 'favorited_events' },
+                    { 'name': '/user/events/notified', 'body': 'notified_events' },
+                    { 'name': '/user/username', 'body': 'username' }
+                ];
 
-                        assert.strictEqual(res.statusCode, 400, res.text);
+                it('give 400 when no body is included', { concurrency: true }, async t => {
+                    const cases = putRouteData.map(async ({ name }) => {
+                        await t.test(name, async () => {
+                            const res = await req
+                                .put(name)
+                                .set('Authorization', `Bearer ${access_token}`)
+                                .set('Content-Type', 'application/json');
+
+                            assert.strictEqual(res.statusCode, 400, res.text);
+                        });
                     });
 
-                    it(`PUT ${item.name} gives 400 when body is included without correct key`, async () => {
-                        // Create the request body, but omit the correct key.
-                        var jsonBody = {};
+                    await Promise.allSettled(cases);
+                });
 
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .put(item.name)
-                            // Headers
-                            .set('Authorization', `Bearer ${access_token}`)
-                            .set('Content-Type', 'application/json')
-                            // Body
-                            .send(jsonBody);
+                it('give 400 when body is included with wrong key', { concurrency: true }, async t => {
+                    const cases = putRouteData.map(async ({ name }) => {
+                        await t.test(name, async () => {
+                            const res = await req
+                                .put(name)
+                                .set('Authorization', `Bearer ${access_token}`)
+                                .set('Content-Type', 'application/json')
+                                .send({}); // send an empty body
 
-                        assert.strictEqual(res.statusCode, 400, res.text);
+                            assert.strictEqual(res.statusCode, 400, res.text);
+                        });
                     });
 
-                    it(`PUT ${item.name} gives 401 when token is not provided`, async () => {
-                        // Create the request body to have the required key
-                        var jsonBody = {};
-                        jsonBody[item.body] = 'fake_but_present';
+                    await Promise.allSettled(cases);
+                });
 
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .put(item.name)
-                            // Headers
-                            .set('Content-Type', 'application/json')
-                            // Body
-                            .send(jsonBody);
+                it('give 401 when token is not provided', { concurrency: true }, async t => {
+                    const cases = putRouteData.map(async ({ name, body }) => {
+                        var jsonBody = {}
+                        jsonBody[body] = 'fake_but_present';
 
-                        assert.strictEqual(res.statusCode, 401, res.text);
+                        await t.test(name, async () => {
+                            const res = await req
+                                .put(name)
+                                .set('Content-Type', 'application/json')
+                                .send(jsonBody);
+
+                            assert.strictEqual(res.statusCode, 401, res.text);
+                        });
                     });
 
-                    it(`PUT ${item.name} gives 403 when the token is not good`, async () => {
-                        // Create the request body to have the required key
-                        var jsonBody = {};
-                        jsonBody[item.body] = 'fake_but_present';
+                    await Promise.allSettled(cases);
+                });
 
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .put(item.name)
-                            // Headers
-                            .set('Authorization', `Bearer invalid_token`)
-                            .set('Content-Type', 'application/json')
-                            // Body
-                            .send(jsonBody);
+                it('give 403 when the token is not good', { concurrency: true }, async t => {
+                    const cases = putRouteData.map(async ({ name, body }) => {
+                        var jsonBody = {}
+                        jsonBody[body] = 'fake_but_present';
 
-                        assert.strictEqual(res.statusCode, 403, res.text);
+                        await t.test(name, async () => {
+                            const res = await req
+                                .put(name)
+                                .set('Content-Type', 'application/json')
+                                .set('Authorization', `Bearer invalid_token`)
+                                .send(jsonBody);
+
+                            assert.strictEqual(res.statusCode, 403, res.text);
+                        });
                     });
 
-                    it(`PUT ${item.name} gives 404 when the user does not exist`, async () => {
-                        // Generate tokens for a user that's not really in the db.
-                        const fakeTokens = util.generateUserTokens('fake@example.com');
+                    await Promise.allSettled(cases);
+                });
 
-                        // Create the request body to have the required key
-                        var jsonBody = {};
-                        jsonBody[item.body] = 'fake_but_present';
+                it('give 404 when the user does not exist', { concurrency: true }, async t => {
+                    const fakeTokens = util.generateUserTokens('fake@example.com');
 
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .put(item.name)
-                            // Headers
-                            .set('Authorization', `Bearer ${fakeTokens.access}`)
-                            .set('Content-Type', 'application/json')
-                            // Body
-                            .send(jsonBody);
+                    const cases = putRouteData.map(async ({ name, body }) => {
+                        var jsonBody = {}
+                        jsonBody[body] = 'fake_but_present';
 
-                        assert.strictEqual(res.statusCode, 404, res.text);
+                        await t.test(name, async () => {
+                            const res = await req
+                                .put(name)
+                                .set('Content-Type', 'application/json')
+                                .set('Authorization', `Bearer ${fakeTokens.access}`)
+                                .send(jsonBody);
+
+                            assert.strictEqual(res.statusCode, 404, res.text);
+                        });
                     });
-                }
+
+                    await Promise.allSettled(cases);
+                });
             });
 
             // Test all routes that GET data.
@@ -287,45 +281,58 @@ describe('Test API', () => {
             // check for that error.
             // (also I don't think I can parameterize doing a get vs a put request)
             describe('GET routes', () => {
-                for (const name of getRouteNames) {
-                    it(`GET ${name} gives 401 when token is not provided`, async () => {
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .get(name)
-                            // Headers
-                            .set('Content-Type', 'application/json');
+                const getRouteNames = [
+                    '/user/events/favorited',
+                    '/user/username',
+                    '/user/events/notified',
+                    '/user/data'
+                ];
 
-                        assert.strictEqual(res.statusCode, 401, res.text);
+                it('give 401 when token is not provided', { concurrency: true }, async t => {
+                    const cases = getRouteNames.map(async (name) => {
+                        await t.test(name, async () => {
+                            const res = await req
+                                .get(name)
+                                .set('Content-Type', 'application/json');
+
+                            assert.strictEqual(res.statusCode, 401);
+                        });
                     });
 
-                    it(`GET ${name} gives 403 when the token is not good`, async () => {
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .get(name)
-                            // Headers
-                            .set('Authorization', `Bearer invalid_token`)
-                            .set('Content-Type', 'application/json');
+                    await Promise.allSettled(cases);
+                });
 
-                        assert.strictEqual(res.statusCode, 403, res.text);
+                it('give 403 when token is not provided', { concurrency: true }, async t => {
+                    const cases = getRouteNames.map(async (name) => {
+                        await t.test(name, async () => {
+                            const res = await req
+                                .get(name)
+                                .set('Content-Type', 'application/json')
+                                .set('Authorization', `Bearer invalid_token`);
+
+                            assert.strictEqual(res.statusCode, 403);
+                        });
                     });
 
-                    it(`GET ${name} gives 404 when the user does not exist`, async () => {
-                        // Generate tokens for a user that's not really in the db.
-                        const fakeTokens = util.generateUserTokens('fake@example.com');
+                    await Promise.allSettled(cases);
+                });
 
-                        // Make the request
-                        const res = await req
-                            // URL ending
-                            .get(name)
-                            // Headers
-                            .set('Authorization', `Bearer ${fakeTokens.access}`)
-                            .set('Content-Type', 'application/json');
+                it('give 404 when user does not exist', { concurrency: true }, async t => {
+                    const fakeTokens = util.generateUserTokens('fake@example.com');
 
-                        assert.strictEqual(res.statusCode, 404, res.text);
+                    const cases = getRouteNames.map(async (name) => {
+                        await t.test(name, async () => {
+                            const res = await req
+                                .get(name)
+                                .set('Content-Type', 'application/json')
+                                .set('Authorization', `Bearer ${fakeTokens.access}`);
+
+                            assert.strictEqual(res.statusCode, 404, res.text);
+                        });
                     });
-                }
+
+                    await Promise.allSettled(cases);
+                });
             });
         });
 
@@ -403,58 +410,83 @@ describe('Test API', () => {
             'favorited',
             'notified'
         ]
-        for (const eventType of arrayEventTypes) {
-            describe(`GET + PUT /user/events/${eventType}`, () => {
-                it('modifies and gets valid events', async () => {
-                    const newItems = [1, 2];
+        describe(`GET + PUT /user/events/ arrays`, () => {
+            it('modifies and gets valid events', async t => {
+                const types = arrayEventTypes.map(async (name) => {
+                    await t.test(`${name}`, async () => {
+                        // Create the body, key depends on current eventType
+                        var body = {};
+                        body[`${name}_events`] = [1, 2];
 
-                    // Create the body, key depends on current eventType
-                    var body = {};
-                    body[`${eventType}_events`] = newItems
+                        // Make sure it adds the items
+                        const putRes = await req
+                            .put(`/user/events/${name}`)
+                            .set('Authorization', `Bearer ${access_token}`)
+                            .set('Content-Type', 'application/json')
+                            .send(body);
+                        assert.strictEqual(putRes.statusCode, 200, putRes.text);
 
-                    // Make sure it adds the items
-                    const putRes = await req
-                        .put(`/user/events/${eventType}`)
-                        .set('Authorization', `Bearer ${access_token}`)
-                        .set('Content-Type', 'application/json')
-                        .send(body);
-                    assert.strictEqual(putRes.statusCode, 200, putRes.text);
-
-                    const getRes = await req
-                        .get(`/user/events/${eventType}`)
-                        .set('Authorization', `Bearer ${access_token}`)
-                        .set('Content-Type', 'application/json');
-                    assert.strictEqual(getRes.statusCode, 200, getRes.text);
-                    assert.strictEqual(getRes.text, `{"${eventType}_events":[1,2]}`);
+                        const getRes = await req
+                            .get(`/user/events/${name}`)
+                            .set('Authorization', `Bearer ${access_token}`)
+                            .set('Content-Type', 'application/json');
+                        assert.strictEqual(getRes.statusCode, 200, getRes.text);
+                        assert.strictEqual(getRes.text, `{"${name}_events":[1,2]}`);
+                    });
                 });
 
-                describe('accepts valid inputs and rejects invalid ones', () => {
-                    const inputs = [
-                        { 'input': [], 'status': 200 },
-                        { 'input': [1], 'status': 200 },
-                        { 'input': [5], 'status': 400 },
-                        { 'input': 'a literal string', 'status': 400 },
-                        { 'input': 1, 'status': 400 },
-                    ];
-
-                    for (item of inputs) {
-                        it(`gives ${item.status} on input ${JSON.stringify(item.input)}`, async () => {
-                            // Construct body with differing event type
-                            var body = {};
-                            body[`${eventType}_events`] = item.input;
-
-                            const res = await req
-                                .put(`/user/events/${eventType}`)
-                                .set('Authorization', `Bearer ${access_token}`)
-                                .set('Content-Type', 'application/json')
-                                .send(body);
-
-                            assert.strictEqual(res.statusCode, item.status, res.text);
-                        });
-                    }
-                });
+                await Promise.allSettled(types);
             });
-        }
+
+            it('accepts valid inputs and rejects invalid ones', async t => {
+                const testInputs = [
+                    // these should match the input because they are valid
+                    { 'input': [], 'expected': [] },
+                    { 'input': [1], 'expected': [1] },
+                    { 'input': [1, 2], 'expected': [1, 2] },
+                    // this should filter out the invalid but keep the valid
+                    { 'input': [1, 5], 'expected': [1] },
+                    // these should reject all the invalid
+                    { 'input': [5], 'expected': [] },
+                    { 'input': 'a literal string', 'expected': [] },
+                    { 'input': 1, 'expected': [] },
+                ];
+
+                // this mapping tests over both types of array
+                const types = arrayEventTypes.map(async (name) => {
+                    await t.test(`${name}`, async tInner => {
+
+                        // this mapping tests over all the test inputs
+                        const cases = testInputs.map(async ({ input, expected }) => {
+                            await tInner.test(`${JSON.stringify(input)} -> ${JSON.stringify(expected)}`, async () => {
+                                // Construct body with differing event type
+                                var body = {};
+                                body[`${name}_events`] = input;
+
+                                const res = await req
+                                    .put(`/user/events/${name}`)
+                                    .set('Authorization', `Bearer ${access_token}`)
+                                    .set('Content-Type', 'application/json')
+                                    .send(body);
+
+                                // all requests should give code 200
+                                assert.strictEqual(res.statusCode, 200, res.text);
+
+                                // the response for new_value should match the expected
+                                const resObject = JSON.parse(res.text);
+                                assert.ok(arraysEqual(resObject.new_value, expected), res.text);
+                            });
+                        });
+
+                        // wait for all cases to evaluate
+                        await Promise.allSettled(cases);
+                    });
+                });
+
+                // and wait for both types to be evaluated
+                await Promise.allSettled(types);
+            });
+        });
 
         /*
          * TEST /user/username ROUTE
@@ -484,7 +516,7 @@ describe('Test API', () => {
                 assert.strictEqual(getRes.text, `{"username":"${newName}"}`);
             });
 
-            describe('accepts valid usernames and rejects invalid ones', () => {
+            it('accepts valid usernames and rejects invalid ones', { concurrency: true }, async t => {
                 const usernames = [
                     { 'username': 'a', 'status': 200 },
                     { 'username': 'abc123', 'status': 200 },
@@ -500,19 +532,24 @@ describe('Test API', () => {
                     { 'username': 'twenty_characters_max', 'status': 400 },
                     { 'username': 'inv@l!d char$', 'status': 400 },
                     { 'username': '1997', 'status': 400 },
+                    { 'username': '', 'status': 400 }
                 ];
 
-                for (item of usernames) {
-                    it(`gives code ${item.status} for username ${item.username}`, async () => {
+                // Map tests using the test context `t` onto the username array
+                const cases = usernames.map(async ({ username, status }) => {
+                    await t.test(`"${username}"`, async () => {
                         const res = await req
                             .put('/user/username')
                             .set('Authorization', `Bearer ${access_token}`)
                             .set('Content-Type', 'application/json')
-                            .send({ 'username': item.username });
+                            .send({ 'username': username });
 
-                        assert.strictEqual(res.status, item.status, res.text);
+                        assert.strictEqual(res.statusCode, status, res.text);
                     });
-                }
+                });
+
+                // Await all of the tests to be evaluated
+                await Promise.allSettled(cases);
             });
         });
 

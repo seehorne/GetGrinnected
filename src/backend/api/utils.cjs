@@ -416,69 +416,51 @@ async function asyncFilter(array, predicate) {
  * - `object` is an array
  * - all elements of `object` correspond to a valid event ID
  */
-async function eventsExist(object) {
+async function filterExistingEvents(object) {
     // Make sure the object is actually an array.
+    // If it is not, return an empty array to represent that.
     const isArray = Array.isArray(object);
     if (!isArray) {
-        return {
-            'result': false,
-            'message': 'Object is not an array.'
-        };
+        return [];
     }
     const array = object;
 
-    // Filter the array by which items do NOT exist.
-    const badIDs = await asyncFilter(array, async (item) => {
+    // Filter the array by which items exist (are not undefined)
+    const goodIDs = await asyncFilter(array, async (item) => {
         const event = await database.getEventByID(item);
-        return event === undefined;
+        return event !== undefined;
     });
 
-    // If there are any items that do not match with an event, return that.
-    if (badIDs.length !== 0) {
-        return {
-            'result': false,
-            'message': `Items ${JSON.stringify(badIDs)} did not correspond to actual event IDs.`
-        };
-    }
-
-    // Otherwise we're good, and we can return true with no message.
-    return {
-        'result': true,
-        'message': 'Success'
-    };
+    // Return that array of IDs.
+    return goodIDs;
 }
 
 /**
- * Handle a request to set an array in user data for a single user, with a parameter
- * that lets you set which array gets modified.
+ * Handle a request to set a user data array containing event IDs.
  * 
  * @param {*} array_name  Which array name to set. Should match up with the account table.
- * @param {*} req  Express request.
- * @param {*} res  Express response.
+ * @param {*} req  Express request. Body must contain `array_name` object, but this
+ * function makes sure it is an array and behaves appropriately.
+ * @param {*} res  Express response. Will always be sent a success, but the array that goes back 
  * @param {*} _next  Next function to call from express, unused.
  */
-async function userDataSetArray(array_name, req, res, _next) {
+async function setUserEventArray(array_name, req, res, _next) {
     // Get the email from the request, assuming it was set by the middleware.
     const email = req.email;
 
     // The new array will be in the request body under the proper array name.
     const newArray = req.body[array_name];
 
-    // Make sure the array is all integers, and that all elements are real events
-    const exist = await eventsExist(newArray);
-    if (!exist.result) {
-        res.status(400).json({
-            'error': 'Invalid request',
-            'message': exist.message
-        });
-        return;
-    }
+    // Get an array of which items are IDs that exist.
+    // If it is invalid for any reason, we'll get an empty array.
+    const existingIDs = await filterExistingEvents(newArray);
 
     // Update that user's favorited events in the database. Turn the array into a
     // string so it will be handled properly by the DB query.
-    await database.modifyAccountField(email, array_name, JSON.stringify(newArray));
+    await database.modifyAccountField(email, array_name, JSON.stringify(existingIDs));
     res.json({
-        'message': `Successfully updated ${array_name}`
+        'message': `Successfully updated ${array_name}.`,
+        'new_value': existingIDs  // send back what we did insert, because it may not match what they sent
     });
 }
 
@@ -492,7 +474,7 @@ if (require.main !== module) {
         sendOTP,
         parseParamDate,
         parseQueryTags,
-        eventsExist,
-        userDataSetArray,
+        filterExistingEvents,
+        setUserEventArray,
     };
 }
