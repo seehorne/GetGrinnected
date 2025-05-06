@@ -6,15 +6,17 @@ servers:
   - url: https://node16049-csc324--spring2025.us.reclaim.cloud/
 tags:
   - name: events
-    description: Getting calendar events. 
+    description: Retrieve calendar events. 
+  - name: session
+    description: Session login and authorization.
   - name: user
-    description: Logging in and changing user settings.
+    description: Get and modify logged-in user data.
 paths:
-  /user/login:
+  /session/login:
     post:
       tags:
-        - user
-      summary: Log in.
+        - session
+      summary: Log into existing account.
       description: |
         Log in an existing user, which will send a one-time code to their email. 
         
@@ -66,11 +68,11 @@ paths:
                     example: No email
                   message:
                     example: An email must be provided in the body of the request.
-  /user/signup:
+  /session/signup:
     post:
       tags:
-        - user
-      summary: Sign up.
+        - session
+      summary: Sign up for new account.
       description: |
         Sign up a new user account. 
         
@@ -115,10 +117,10 @@ paths:
                     example: Invalid username
                   message:
                     example: Username must not contain the sequences '_.', '._', '..', or '__'.
-  /user/resend-otp:
+  /session/resend-code:
     post:
       tags:
-        - user
+        - session
       summary: Resend OTP code for login/signup.
       description: |
         Resend an OTP code to a user, such as if they do not recieve their code when logging in.
@@ -167,10 +169,10 @@ paths:
                     example: No email
                   message:
                     example: An email must be provided in the body of the request.
-  /user/verify:
+  /session/verify:
     post:
       tags:
-        - user
+        - session
       summary: Verify recieved OTP code.
       description: |
         Verify the OTP code that has been sent to a user's email. If the code is correct and has not expired, an authorization and a refresh token will be sent back.
@@ -240,11 +242,11 @@ paths:
           $ref: '#/components/responses/InvalidToken'
         '404':
           $ref: '#/components/responses/NoSuchUser'
-  /user/token-refresh:
+  /session/refresh:
     post:
       tags:
-        - user
-      summary: Refresh user tokens when logged in.
+        - session
+      summary: Refresh tokens when already logged in.
       description: Refresh user tokens using a refresh token, which you can only get by logging in previously.
       security:
         - refresh_token: []
@@ -304,7 +306,7 @@ paths:
       security:
         - auth_token: []
       requestBody:
-        description: Array of new favorited event IDs.
+        description: Array of new favorited event IDs. Any nonexistent IDs will be ignored.
         content:
           application/json:
             schema:
@@ -317,7 +319,7 @@ paths:
                     type: integer
       responses:
         '200':
-          description: Successful update.
+          description: Successful update. Any nonexistent IDs will be ignored.
           content:
             application/json:
               schema:
@@ -326,6 +328,11 @@ paths:
                   message:
                     type: string
                     example: Successfully updated favorited_events.
+                  new_value:
+                    type: array
+                    example: [77]
+                    items:
+                      type: integer
         '400':
           description: Bad request.
           content:
@@ -375,7 +382,7 @@ paths:
       tags:
         - user
       summary: Change notified events list.
-      description: Overwrite the array of notified events with a new array.
+      description: Overwrite the array of notified events with a new array. Any nonexistent IDs will be ignored.
       security:
         - auth_token: []
       requestBody:
@@ -391,8 +398,8 @@ paths:
                   items:
                     type: integer
       responses:
-        '202':
-          description: Successful update.
+        '200':
+          description: Successful update. Any nonexistent IDs will be ignored.
           content:
             application/json:
               schema:
@@ -401,6 +408,11 @@ paths:
                   message:
                     type: string
                     example: Successfully updated notified events.
+                  new_value:
+                    type: array
+                    example: [2, 5]
+                    items:
+                      type: integer
         '400':
           description: Bad request.
           content:
@@ -472,12 +484,49 @@ paths:
                   message:
                     type: string
                     example: Successfully updated username.
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: Invalid username
+                  message:
+                    example: Username must contain at least one letter.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/InvalidToken'
         '404':
           $ref: '#/components/responses/NoSuchUser'
+  /user:
+    delete:
+      tags:
+        - user
+      summary: Delete user account.
+      description: Delete the account of the currently logged-in user.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+          description: Account deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Account successfully deleted."
+        '404':
+          description: Unknown database error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /events:
     get:
       tags:
@@ -770,7 +819,7 @@ components:
           example: Unknown error
         message:
           type: string
-          example: An unknown error has occured.
+          example: An unknown error has occurred.
     ErrorDateOrder:
       allOf:
         - $ref: '#/components/schemas/Error'

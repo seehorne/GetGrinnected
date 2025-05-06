@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.ui.theme.MyApplicationTheme
@@ -57,6 +58,8 @@ class MainActivity : ComponentActivity() {
             val isLoggedIn = DataStoreSettings.getLoggedIn(applicationContext).first()
             val isDarkMode = DataStoreSettings.getDarkMode(applicationContext).first()
             val darkTheme = mutableStateOf(isDarkMode)
+            // This is the font size we have stored for the user
+            val storedFontSize = DataStoreSettings.getFontSize(applicationContext).first()
 
             /* The dark theme value is passed down to the switch that we toggle it at
             and then the onToggleTheme is a lambda function that allows us to switch
@@ -117,7 +120,15 @@ class MainActivity : ComponentActivity() {
                 // We turn this string of tags into a mutable list of check objects
                 val tags = rememberSaveable(tagsString) { tagsString.map { Check(mutableStateOf(false), it) }.toMutableList() }
 
-                MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/) {
+                // State stored as a mutable to handle the fontsize if it is empty we set it to default of medium
+                val storedFontSizeState = rememberSaveable { mutableStateOf(storedFontSize ?: FontSizePrefs.DEFAULT.key) }
+                // This is the actually stored state this is used as the state we pass as the "key" which
+                // is effectively the string of our current selected font size
+                val fontSizePref = remember(storedFontSizeState.value) {
+                    FontSizePrefs.getFontPrefFromKey(storedFontSizeState.value)
+                }
+
+                MyApplicationTheme(darkTheme = darkTheme.value, dynamicColor = false /* ensures our theme is displayed*/, fontSizePrefs = fontSizePref) {
                     AppNavigation(
                         darkTheme = darkTheme.value,
                         onToggleTheme = {
@@ -129,6 +140,15 @@ class MainActivity : ComponentActivity() {
                         },
                         tags = tags.sortedBy { it.label },
                         startDestination = if (isLoggedIn) "main" else "welcome",
+                        fontSizeSetting = fontSizePref.key,
+                        onFontSizeChange = { key ->
+                            // On change we set the stored value reactive state to this new value
+                            storedFontSizeState.value = key
+                            // Updated our preference for the set fontSize
+                            lifecycleScope.launch {
+                                DataStoreSettings.setFontSize(applicationContext, key)
+                            }
+                        }
                     ) // What screen to launch the app on
                 }
             }

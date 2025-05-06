@@ -256,7 +256,17 @@ object AppRepository {
         }
     }
 
-
+    /**
+     * Deletes user account
+     * @param context the current context of the app.
+     * @return a boolean value associated with whether deletion was successful or not
+     */
+    suspend fun deleteAccount(context: Context): Boolean {
+        val response = safeApiCall(context) { token ->
+            RetrofitApiClient.apiModel.deleteAccount(token)
+        }
+        return response.isSuccessful
+    }
 }
 
 /**

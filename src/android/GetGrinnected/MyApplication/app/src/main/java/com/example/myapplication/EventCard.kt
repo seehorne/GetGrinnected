@@ -31,6 +31,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -72,13 +76,15 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
     // Sets up composable to be a card for our info
     Card(
         colors = CardDefaults.cardColors(containerColor = colorScheme.secondaryContainer),
-        //elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = modifier
             .defaultMinSize(minHeight = 120.dp)
             .padding(horizontal = 8.dp)
-            .clickable
-        {
+            .clickable {
                 expanded.value = !expanded.value
+            }
+            .semantics(mergeDescendants = true) {
+                contentDescription = "Event card for ${event.event_name}, tap to ${if (expanded.value) "collapse" else "expand"}"
+                role = Role.Button
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -97,18 +103,21 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             ) {
                 // Makes a column within the row to display the name of the event
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = event.event_name,
-                        style = typography.titleLarge,
-                        color = colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
-                    )
+
+                    event.event_name.let {
+                        Text(
+                            text =  it,
+                            style = typography.titleLarge,
+                            color = colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "${event.event_date} at ${event.event_time}",
                         style = typography.bodyMedium,
                         color = colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(2.dp))
-                    event.event_location?.let { Text(text = it, 
+                    event.event_location?.let { Text(text = it,
                                                      style = typography.bodyMedium,
                                                       color = colorScheme.onSurface)
                     }
@@ -126,7 +135,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     // This is our favorite icon
                     Icon(
                         imageVector = if (event.is_favorited) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Favorite Icon",
+                        contentDescription = if (event.is_favorited) "Unfavorite event" else "Favorite event",
                         tint = colorScheme.tertiary,
                         modifier = Modifier
                             .size(40.dp)
@@ -140,7 +149,7 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                     // This is our notification icon
                     Icon(
                         imageVector = if (event.is_notification) Icons.Filled.Notifications else Icons.Outlined.Notifications,
-                        contentDescription = "Notification Icon",
+                        contentDescription =  if (event.is_notification) "Turn off notifications" else "Turn on notifications",
                         tint = colorScheme.tertiary,
                         modifier = Modifier
                             .size(40.dp)

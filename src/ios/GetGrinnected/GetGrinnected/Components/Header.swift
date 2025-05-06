@@ -36,6 +36,7 @@ struct Header: View{
                 Text(title)
                     .font(.title)
                     .bold()
+                    .foregroundStyle(.colorWhite)
             }//hstack for content and buttons
             .padding(.bottom)
             .frame(maxWidth: .infinity)

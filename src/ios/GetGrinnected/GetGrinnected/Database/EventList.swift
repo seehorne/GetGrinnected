@@ -9,6 +9,22 @@ import SwiftData //swift data is how we cache information
 import SwiftUI
 
 
+
+
+/**
+ EventList takes EventDTO, converts into cached EventModel. If event already exists in cache, updates information.
+ Searching, filtering and forcerefreshing is all in this file.
+ */
+enum SortOrder: String, Identifiable, CaseIterable {
+    case name, time
+    var id: Self { self}
+}
+
+enum FilterType: String, Identifiable, CaseIterable {
+    case name, favorites //different sorting options, for now removing organization and tag
+    var id: Self { self } //identifiable protocol
+}
+
 /**
  EventList takes EventDTO, converts into cached EventModel. If event already exists in cache, updates information.
  Searching, filtering and forcerefreshing is all in this file.
@@ -27,78 +43,81 @@ struct EventList: View {
     @State private var refreshTimer: Timer? //a timer to count when we refresh
     @State private var isLoading = false //set loading states
     
+    //Sorting and Filtering parameters
+    @State private var sortOrder: SortOrder
+    @State private var filterType: FilterType
+    @State private var filter: String
+    
     
     //the initializer for the eventlist is the sorting function!
     init(
-        selectedEvent: Int?,
         parentView: EventListParentViewModel,
-        sortOrder: [SortDescriptor<EventModel>] = [],
-        searchString: String,
-        filterToday: Bool = false,
-        showFavorites: Bool = false
+        selectedEvent: Int?,
+        sortOrder: SortOrder,
+        filterType: FilterType,
+        filter: String,
+        filterToday: Bool = false
     ){
         //set selected event to selected event
         self.selectedEvent = selectedEvent
         self._parentView = ObservedObject(wrappedValue: parentView) //set parent view to an observed object of parent view
+        self.sortOrder = sortOrder
+        self.filter = filter
+        self.filterType = filterType
         
         
         //apply sort order, default if no title or organization provided
-        let finalSortOrder = sortOrder.isEmpty ? [SortDescriptor(
-            \EventModel.startTime //sort by time
-        )] : sortOrder
+        let sortDescriptors: [SortDescriptor<EventModel>] =
+        switch sortOrder {
+        case .name:
+            [SortDescriptor(\EventModel.name)]
+        case .time:
+            [SortDescriptor(\EventModel.startTime)]
+        }
         
         //set timespans to explain what view is showing (debugging purposes)
         let timeSpanStart = parentView.timeSpan.start
         let timeSpanEnd = parentView.timeSpan.end
         
-        //debugging purposes
-        print("EventList initialized with timespan: \(timeSpanStart) to \(timeSpanEnd), filterToday: \(filterToday)")
+        //filtering
+        var predicate: Predicate<EventModel>
+        
+        if filter.isEmpty {
+            predicate = #Predicate { event in
+                (filterToday //filter today by the start time and end time
+                          ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
+                          : true) //if not filtering for today, return true
+                  &&
+                  // search filtering: if it's empty, simply write true (so all events are present), or whatever event name contains that search
+                  (filter.isEmpty || event.name.localizedStandardContains(filter))}
+        } else{
+            switch filterType{
+                case .name:
+                    predicate = #Predicate<EventModel> {event in
+                        (filterToday //filter today by the start time and end time
+                                  ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
+                                  : true) //if not filtering for today, return true
+                          &&
+                          // search filtering: if it's empty, simply write true (so all events are present), or whatever event name contains that search
+                          (filter.isEmpty || event.name.localizedStandardContains(filter))
+                    }
+                case .favorites:
+                    predicate = #Predicate<EventModel> {event in
+                        event.favorited && (filter.isEmpty || event.name.localizedStandardContains(filter))
+                    }
+            }
+        }
         
         //initialize events according to those sorting specificatinos
         _events = Query(
-            filter: buildFilterPredicate(
-                timeSpanStart: timeSpanStart,
-                timeSpanEnd: timeSpanEnd,
-                filterToday: filterToday,
-                searchString: searchString,
-                showFavorites: showFavorites
-            ),
-            sort: finalSortOrder,
+            filter: predicate,
+            sort: sortDescriptors,
             animation: .default
         )//sort by name default animation
         
     } //init
     //space so it's easier to distinguish different components of this view
     
-    
-    
-    
-    
-    
-    /**
-     Buildpredicate is used to input into the query. This is so that the query is able to run efficiently
-     otherwise the compiler freaks out.
-     */
-    private func buildFilterPredicate(
-        timeSpanStart: Date,
-        timeSpanEnd: Date,
-        filterToday: Bool,
-        searchString: String,
-        showFavorites: Bool
-    ) -> Predicate<EventModel> {
-        return #Predicate<EventModel> { event in
-            // Time filter condition
-            return (filterToday //filter today by the start time and end time
-                    ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
-                    : true) //if not filtering for today, return true
-            &&
-            // search filtering: if it's empty, simply write true (so all events are present), or whatever event name contains that search
-            (searchString.isEmpty || event.name.localizedStandardContains(searchString))
-            &&
-            //if the event is favorited, show the event. ShowFavorites is only on for the favorites page
-            (showFavorites ? event.favorited : true)
-        }
-    }
     
     //main event body view
     var body: some View {
@@ -132,24 +151,28 @@ struct EventList: View {
                                 }
                             }
                         }//tap each event, and it sets id = to that event
+                        .onChange(of: event.favorited) { _, _ in
+                            try? modelContext.save()
+                            print("Success Save for Event\(event.id)")
+                            
+                        }
                     
                 }//foreach
             }//if loading, else, fetch.
             
         }//vstack
-        .onAppear{
-            //fetch events on initial appear
+        .onChange(of: parentView.forceRefreshRequested){
             Task {
-                await fetchEvents()
+                await updateEvents()
             }
-            
-            //refresh on timer, every 5 minutes for now!
-            refreshTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true){ _ in
+        }
+        .onAppear{
+            //refresh on timer, every 30 minutes for now!
+            refreshTimer = Timer.scheduledTimer(withTimeInterval: 1800, repeats: true){ _ in
                 Task {
-                    await fetchEvents()
+                    await updateEvents()
                 }
             }
-                
         }
         .onDisappear {
             //if view disappears, invalidate timers, so it doesn't refresh every time!
@@ -159,22 +182,29 @@ struct EventList: View {
     }//body
     
     
-    
-    /// Fetching events
+    private func updateEvents() async {
+        print("1: updateEvents called")
+        if let eventstoUpdate = await fetchEvents(){
+            await DTOtoCache(eventDTOs: eventstoUpdate)
+            print("2: updateEvents success")
+        } else {
+            print("3: no events to update")
+        }
+    }
     
     //Function Fetch Events
     /**
      Returns nothing:
      once called, shows isloading ot be true, and resets error message
      */
-    private func fetchEvents() async {
+    private func fetchEvents() async -> [EventDTO]? {
         //determine if we should fetch based on last fetched time, time interval (date selected), and if a force refresh was requested
         let shouldFetch = parentView.lastFetched == nil || Date().timeIntervalSince(parentView.lastFetched!) >= parentView.cacheExpiration || parentView.forceRefreshRequested
         
         //use cache data
         if !shouldFetch{
             print("using cached data")
-            return //return to escape from the fetched events function
+            return []//return to escape from the fetched events function
         }
         
         //if loading, set to true, to show loading view
@@ -200,7 +230,7 @@ struct EventList: View {
                 .run {
                     isLoading = false
                 } //set to false if you failed to fetch data
-            return
+            return []
         }//guard let
             
             
@@ -208,6 +238,16 @@ struct EventList: View {
         let eventDTOs = EventData.parseEvents(json: jsonString)
             
             
+        
+        //note that fetch is complete
+        await MainActor.run {
+            print("Fetch complete.")
+        }
+        
+        return eventDTOs
+    } //fetchEvents
+    
+    private func DTOtoCache(eventDTOs: [EventDTO]) async {
         // Update on main thread since we're changing published properties
         await MainActor.run {
             //add all existing ids to events
@@ -235,7 +275,9 @@ struct EventList: View {
                     existing.location = dto.event_location ?? existing.location
                     
                     //handle saving data, so no overwriting
-                    print("favorited \(existing.name)\(existing.favorited)")
+                    if(existing.favorited){
+                        print("favorited \(existing.name)\(existing.favorited)")
+                    }
                     existing.favorited = existing.favorited
                         
                     //handle arrays carefully
@@ -311,12 +353,7 @@ struct EventList: View {
             print("API fetch completed at \(Date())")
         } // await MainActor
         
-        
-        //note that fetch is complete
-        await MainActor.run {
-            print("Fetch complete. Found \(events.count) events for timespan \(parentView.timeSpan.start) to \(parentView.timeSpan.end)")
-        }
-    } //fetchEvents
+    }
     
     
     /**

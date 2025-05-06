@@ -9,6 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 
 /**
  * A composable function that creates a checkbox and associated text
@@ -28,7 +30,9 @@ fun CheckBox(check: Check) {
         //creates a checkbox
         Checkbox(
             checked = check.checked.value,
-            onCheckedChange = { check.checked.value = it }
+            onCheckedChange = { check.checked.value = it },
+            modifier = Modifier
+                .semantics { contentDescription = "Tag: ${check.label}, ${if (check.checked.value) "selected" else "not selected"}" }
         )
         // checkbox label
         Text (check.label)

@@ -39,6 +39,8 @@ import screens.SettingsScreen
  *  @param onToggleTheme a lambda function passed down from previous screen that calls back to the
  *  function instated in the call the AppNavigation in the MainActivity.
  *  @param navController this is the nav Controller to our login flow process to be used in sign out functionality
+ *  @param fontSizeSetting String associated with the current font size setting we have selected
+ *  @param onFontSizeChange String call back function that allows us to change the state of the font size
  */
 
 @SuppressLint("NewApi")
@@ -50,7 +52,9 @@ fun MainPage(
     onToggleTheme: (Boolean) -> Unit,
     tags: List<Check>,
     navController: NavController,
-    account: AccountEntity
+    account: AccountEntity,
+    fontSizeSetting: String,
+    onFontSizeChange: (String) -> Unit
 ) {
     // Creates our navbar
     val bottomNavController = rememberNavController()
@@ -61,14 +65,6 @@ fun MainPage(
         NavItem("Search", Icons.Default.Search),
         NavItem("Favorites", Icons.Default.Favorite),
         NavItem("Settings", Icons.Default.Settings),
-    )
-    // For demo purposes only
-    val sampleOrgs = listOf(
-        User(1, "test", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1),
-        User(1, "test2", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test3", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"),listOf(), "a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test4", "test@test.com", "profile picture", listOf(1, 2), listOf(1, 2), listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
-        User(1, "test5", "test@test.com",  "profile picture", listOf(1, 2), listOf(1, 2),  listOf("music", "fun"), listOf(),"a relatively long description to give me a good idea of what the look of the about section will entail if an org has more info to discuss about themselves", 1, true),
     )
 
     // Creates a scaffold composable to work from
@@ -112,7 +108,7 @@ fun MainPage(
 
 
             composable("Favorites") { FavoritesScreen() }
-            composable("Settings") { SettingsScreen(orgs = sampleOrgs, account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController ) }
+            composable("Settings") { SettingsScreen(account = account.toUser(), darkTheme = darkTheme, onToggleTheme = onToggleTheme, navController = navController, fontSizeSetting = fontSizeSetting, onFontSizeChange = onFontSizeChange ) }
 
         }
     }

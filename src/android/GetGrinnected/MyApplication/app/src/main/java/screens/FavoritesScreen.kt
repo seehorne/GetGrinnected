@@ -23,6 +23,12 @@ import com.example.myapplication.AppRepository
 import com.example.myapplication.EventCard
 import com.example.myapplication.toEvent
 import android.content.Context
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 
 /**
  * A composable function that represents the Favorites screen of our app.
@@ -68,8 +74,12 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
             Text("Favorite Events",
                 style = typography.headlineMedium,
                 color = colorScheme.onBackground,
-                modifier = Modifier.padding(top = 16.dp))
+                modifier = Modifier.padding(top = 16.dp)
+                    .semantics { heading() })
         }
+        Spacer(modifier = Modifier.height(4.dp))
+
+        HorizontalDivider()
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -86,7 +96,13 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
                     "You haven't favorited any events yet.",
                     style = typography.titleLarge,
                     color = colorScheme.onBackground,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    // This ensures we alert a screen reader when we have no favorited events yet
+                    modifier = Modifier.semantics {
+                        liveRegion = LiveRegionMode.Polite
+                        contentDescription = "You haven't favorited any events yet"
+                    }
+
                 )
             }
         } else {

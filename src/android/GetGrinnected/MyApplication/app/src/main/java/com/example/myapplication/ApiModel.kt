@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -13,11 +14,11 @@ import retrofit2.http.PUT
  */
 interface ApiModel {
     // Async function for login request
-    @POST("user/login")
+    @POST("session/login")
     suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
 
     // Async function for signup request
-    @POST("user/signup")
+    @POST("session/signup")
     suspend fun signup(@Body request: SignupRequest): Response<AuthResponse>
 
     // Async function to get events
@@ -25,7 +26,7 @@ interface ApiModel {
     suspend fun getEvents(): Response<List<Event>>
 
     // Async function to verify code for OTP
-    @POST("user/verify")
+    @POST("session/verify")
     suspend fun verifyOTP(@Body request: VerifyRequest): Response<AuthResponse>
 
     // Async function to get user info given an access token
@@ -33,7 +34,7 @@ interface ApiModel {
     suspend fun getUserData(@Header("Authorization") token: String): Response<User>
 
     // Async function to refresh auth tokens
-    @POST("user/token-refresh")
+    @POST("session/refresh")
     suspend fun refreshToken(@Header("Authorization") refreshToken: String): Response<TokenRefreshResponse>
 
     // Async function to update the remote databases list of favorited events for a user
@@ -47,4 +48,8 @@ interface ApiModel {
     // Async function to update the remote databases current username for a user
     @PUT("user/username")
     suspend fun updateUsername(@Header("Authorization") token: String, @Body usernameRequest: UpdateUsernameRequest): Response<SimpleMessageResponse>
+
+    // Async function to delete the user account
+    @DELETE("user")
+    suspend fun deleteAccount(@Header("Authorization") token: String): Response<SimpleMessageResponse>
 }

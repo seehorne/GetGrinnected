@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -119,7 +121,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Lock,
-                        contentDescription = "Verification Icon",
+                        contentDescription = "Verification input field Icon",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -134,7 +136,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                 Text(
                     text = errMsg,
                     color = colorScheme.error,
-                    style = typography.bodySmall
+                    style = typography.bodySmall,
+                    textAlign = TextAlign.Center,
                 )
             }
 
@@ -185,15 +188,12 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                                         DataStoreSettings.setLoggedInAccountId(context, accountEntity.accountid)
                                         // Sets storage preference logged in to true
                                         DataStoreSettings.setLoggedIn(context, true)
-                                        // If this is a login
-                                        if(!flag){
-                                            // Gets the current time
-                                            val now = System.currentTimeMillis()
-                                            // Syncs from API
-                                            AppRepository.syncFromApi()
-                                            // Sets the new LastSyncTime to now
-                                            DataStoreSettings.setLastSyncTime(context, now)
-                                        }
+                                        // Gets the current time
+                                        val now = System.currentTimeMillis()
+                                        // Syncs from API
+                                        AppRepository.syncFromApi()
+                                        // Sets the new LastSyncTime to now
+                                        DataStoreSettings.setLastSyncTime(context, now)
                                         // Navigates to main page
                                         navController.navigate("main") {
                                             popUpTo(0) { inclusive = true }
@@ -245,7 +245,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                 Text(
                     "Resend Code",
                     style = typography.labelLarge,
-                    color = colorScheme.primary
+                    color = colorScheme.primary,
+                    modifier = modifier.semantics { contentDescription = "Press to Resend Verification Code" }
                 )
             }
 
@@ -264,7 +265,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                 Text(
                     "Cancel",
                     style = typography.labelLarge,
-                    color = colorScheme.primary
+                    color = colorScheme.primary,
+                    modifier = modifier.semantics { contentDescription = "Press to navigate back to previous screen" }
                 )
             }
         }

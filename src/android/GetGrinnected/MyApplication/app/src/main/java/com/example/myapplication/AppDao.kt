@@ -16,7 +16,7 @@ interface AppDao {
     fun getAllEvents(): Flow<List<EventEntity>>
 
     // Deletes events that have expired by a day and returns the number of deleted events
-    @Query("DELETE FROM events WHERE event_date < :currentDate")
+    @Query("DELETE FROM events WHERE substr(event_start_time, 1, 10) < :currentDate")
     suspend fun deleteExpiredEvents(currentDate: String): Int
 
     // Gets events by a given id should probably switch this to a flow
