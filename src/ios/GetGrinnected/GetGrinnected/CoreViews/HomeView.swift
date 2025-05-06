@@ -26,20 +26,18 @@ struct HomeView: View {
                     Spacer()
                     //vertical scroll view to see more events
                     ScrollView(.vertical, showsIndicators: false){
-                        ZStack {
-                            //vstack to have some spacing between header and main compoments
-                            VStack(spacing: 16) {
-                                WeekView(selectedDate: $viewModel.viewedDate)
-                                    .padding(.bottom, 4)
-                                    .padding(.top, 120)
-                                
-                                //event list view for all the events (may have to pass in some arguments according to the day
-                                EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, filterToday: searchText.isEmpty, showFavorites: false)
-                            }
-                            .padding(.top)//padding on top
+                        //vstack to have some spacing between header and main compoments
+                        VStack(spacing: 16) {
+                            WeekView(selectedDate: $viewModel.viewedDate)
+                                .padding(.bottom, 4)
+                                .padding(.top, 120)
                             
-                            TagMultiSelector(title: "Tags", parentView: viewModel)
+                            TagMultiSelector(title: "Tags")
+                            
+                            //event list view for all the events (may have to pass in some arguments according to the day
+                            EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, filterToday: searchText.isEmpty, showFavorites: false)
                         }
+                        .padding(.top)//padding on top
                     }
                     .searchable(text: $searchText, prompt: "Search...")
                     .refreshable {
@@ -71,10 +69,6 @@ struct HomeView: View {
         }
     }//main body view
 }
-
-
-
-
 
 #Preview() {
     HomeView()

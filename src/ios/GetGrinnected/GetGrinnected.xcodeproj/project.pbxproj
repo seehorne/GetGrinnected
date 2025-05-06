@@ -25,7 +25,6 @@
 		0CF63C402DA5FE8F009744F8 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF63C382DA5FE79009744F8 /* XCTest.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C02ED382DB68CF40023BCF5 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C02ED372DB68CF40023BCF5 /* DateExtension.swift */; };
 		4C66FD782DC73DDC00CEB5EA /* TagMultiSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C66FD772DC73DDC00CEB5EA /* TagMultiSelector.swift */; };
-		4C66FD892DC856CB00CEB5EA /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C66FD882DC856C800CEB5EA /* test.swift */; };
 		4CA0C5752DA4BF6500059803 /* CheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5742DA4BF6500059803 /* CheckBox.swift */; };
 		4CA0C5772DA5D16200059803 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0C5762DA5D15300059803 /* Header.swift */; };
 		4CCCD6CB2DA5DBC000F1A806 /* Organizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */; };
@@ -123,7 +122,6 @@
 		0CF63C382DA5FE79009744F8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4C02ED372DB68CF40023BCF5 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DateExtension.swift; path = GetGrinnected/Classes/DateExtension.swift; sourceTree = SOURCE_ROOT; };
 		4C66FD772DC73DDC00CEB5EA /* TagMultiSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagMultiSelector.swift; sourceTree = "<group>"; };
-		4C66FD882DC856C800CEB5EA /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		4CA0C5742DA4BF6500059803 /* CheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBox.swift; sourceTree = "<group>"; };
 		4CA0C5762DA5D15300059803 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		4CCCD6CA2DA5DBC000F1A806 /* Organizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organizations.swift; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 				4CA0C5762DA5D15300059803 /* Header.swift */,
 				4CA0C5742DA4BF6500059803 /* CheckBox.swift */,
 				4C66FD772DC73DDC00CEB5EA /* TagMultiSelector.swift */,
-				4C66FD882DC856C800CEB5EA /* test.swift */,
 				CACCD4642DA318EE001D31C0 /* EventCard.swift */,
 				CACCD4482DA31696001D31C0 /* ColorTheme.swift */,
 				CACCD4492DA31696001D31C0 /* InputField.swift */,
@@ -495,7 +492,6 @@
 				CAE884192DBB6B5100AC9401 /* ArrayTransformer.swift in Sources */,
 				CACCD4592DA31696001D31C0 /* ColorTheme.swift in Sources */,
 				CACCD45A2DA31696001D31C0 /* HomeView.swift in Sources */,
-				4C66FD892DC856CB00CEB5EA /* test.swift in Sources */,
 				CACCD45B2DA31696001D31C0 /* MainNavView.swift in Sources */,
 				0CC0E1FA2DBDC33400B179C5 /* VerificationView.swift in Sources */,
 				CACCD45C2DA31696001D31C0 /* SettingsView.swift in Sources */,
