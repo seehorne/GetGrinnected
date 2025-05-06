@@ -338,12 +338,37 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
+                        text = "GetGrinnected was developed by Grinnellians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed about campus events.",
+                        style = typography.bodyMedium,
+                        color = colorScheme.onBackground
+                    )
+
+                    Text(
                         text = "Acknowledgements",
                         style = typography.titleMedium,
                         color = colorScheme.onBackground
                     )
+
                     Text(
-                        text = "Some text about stakeholders or mission",
+                        text = "We are deeply grateful to the amazing individuals who helped bring GetGrinnected to life:",
+                        style = typography.bodyMedium,
+                        color = colorScheme.onBackground
+                    )
+
+                    Text(
+                        text = "Logo Design:\n" +
+                                "• Rei \n" +
+                                "Testing & Stakeholder Feedback:\n" +
+                                "• Yuina Iseki\n" +
+                                "• Lily Freeman\n" +
+                                "• Regan Stambaugh\n" +
+                                "Development Team:\n" +
+                                "• Ellie Seehorn \n" +
+                                "• Michael Paulin \n" +
+                                "• Budhil Thijm \n" +
+                                "• Almond Heil \n" +
+                                "• Ethan Hughes \n" +
+                                "• Anthony Schwindt",
                         style = typography.bodyMedium,
                         color = colorScheme.onBackground
                     )
