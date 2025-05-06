@@ -35,11 +35,10 @@ struct HomeView: View {
                             TagMultiSelector(title: "Tags")
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(selectedEvent: -1, parentView: viewModel, searchString: searchText, filterToday: searchText.isEmpty, showFavorites: false)
+                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: SortOrder.name, filterType: FilterType.name, filter: searchText, filterToday: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
-                    .searchable(text: $searchText, prompt: "Search...")
                     .refreshable {
                         //force refresh through the button!
                         viewModel.forceRefresh() //only changes last change to nil
@@ -66,6 +65,9 @@ struct HomeView: View {
             // update start and end of time span when you are viewing a different day
             viewModel.timeSpan.start = newValue
             viewModel.timeSpan.end = newValue.startOfNextDay
+        }
+        .refreshable {
+            viewModel.forceRefresh()
         }
     }//main body view
 }
