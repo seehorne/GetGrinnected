@@ -134,18 +134,24 @@ async function routeVerifyOTP(req, res, _next) {
   // we can assume they exist thanks to the middleware.
   const email = req.body.email;
   const code = req.body.code;
+  bypass = false;
+
+  if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu'){
+    //give permission to verify regardless of the input
+    bypass= true;
+  }
 
   // Check the OTP code the user entered against the codes we have stored.
   // If it does not match (wrong code or expired), return the same error with
   // HTTP status 400.
   validCode = await util.otpFileCheck(DBPATH, email, code)
-  if (!validCode) {
+  if (!validCode && !bypass) {//the code is wrong AND we don't have permission to bypass
     res.status(400).json({
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
     });
     return;
-  } else {
+  } else {//the code was right OR we have permission to bypass (for apple account)
     // Generate tokens for that user
     const tokens = util.generateUserTokens(email);
 
