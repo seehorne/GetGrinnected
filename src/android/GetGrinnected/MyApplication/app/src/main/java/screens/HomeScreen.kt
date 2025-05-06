@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -42,6 +43,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.AppRepository
@@ -140,7 +147,8 @@ fun HomeScreen(tags: List<Check>) {
             //creates a row to align the logo and buttons on the home page
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             )
             {
                 // adds the logo to the top
@@ -148,14 +156,17 @@ fun HomeScreen(tags: List<Check>) {
                     painter = painterResource(id = R.drawable.getgrinnected_logo),
                     contentDescription = "App Logo",
                     modifier = Modifier
-                        .padding(25.dp)
+                        .padding(start = 6.dp, top = 25.dp, end = 6.dp)
                         .background(Color.White)
                         .size(50.dp)
                 )
+
                 // centers the buttons
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.weight(1f)
+                        .padding(top = 25.dp)
                 ) {
                     // creates day menu
                     Button(
@@ -169,14 +180,26 @@ fun HomeScreen(tags: List<Check>) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Filled.DateRange,
-                                contentDescription = "Calendar Icon",
+                                contentDescription = "Select Day Filter",
                                 modifier = Modifier.size(20.dp)
+                                    .semantics { role = Role.Button }
                             )
-                            Spacer(Modifier.size(8.dp))
+                            Spacer(Modifier.size(6.dp))
                             // displays selected day on button
-                            Text(daysList[selectedView].dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()).substring(0, 3) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(formatter3), style = typography.labelLarge)
+                            Text(
+                                daysList[selectedView].dayOfWeek.getDisplayName(
+                                    java.time.format.TextStyle.FULL,
+                                    Locale.getDefault()
+                                ).substring(
+                                    0,
+                                    3
+                                ) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(
+                                    formatter3
+                                ), style = typography.labelLarge
+                            )
                         }
                     }
+                    Spacer(Modifier.size(6.dp))
                     // creates dropdown menu when button is clicked
                     DropdownMenu(
                         expanded = expanded.value,
@@ -200,14 +223,6 @@ fun HomeScreen(tags: List<Check>) {
                             })
                         }
                     }
-                }
-                // I don't know why this is necessary but was needed to properly space tag menu
-                Row(
-                    modifier = Modifier
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                ) {
                     // creates tags menu
                     Button(
                         onClick = { expanded2.value = true },
@@ -220,10 +235,11 @@ fun HomeScreen(tags: List<Check>) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Outlined.FilterAlt,
-                                contentDescription = "Filter Icon",
+                                contentDescription = "Select Tags Filters",
                                 modifier = Modifier.size(20.dp)
+                                    .semantics { role = Role.Button }
                             )
-                            Spacer(Modifier.size(8.dp))
+                            Spacer(Modifier.size(6.dp))
 
                             Text("Tags", style = typography.labelLarge, maxLines = 1)
                         }
@@ -320,7 +336,13 @@ fun HomeScreen(tags: List<Check>) {
                 Text(
                     "No more events match filters",
                     style = typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    // This ensures we alert a screen reader when we have scrolled down to this section
+                    modifier = Modifier.semantics {
+                        liveRegion = LiveRegionMode.Polite
+                        contentDescription = "No more events match filters."
+                    }
+
                 )
                 Spacer(modifier = Modifier.height(120.dp))
 

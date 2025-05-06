@@ -1,6 +1,7 @@
 package screens
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +59,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.core.net.toUri
 import com.example.myapplication.R
 import androidx.compose.material3.SwitchDefaults
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.example.myapplication.AppRepository.deleteAccount
 
 /**
  * A composable function that represents the Settings screen of our app.
@@ -122,7 +130,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
             Text(
                 text = "Preferences",
                 style = typography.headlineMedium,
-                color = colorScheme.onBackground
+                color = colorScheme.onBackground,
+                modifier = modifier.semantics { heading() }
             )
             Spacer(modifier = Modifier.height(4.dp))
             HorizontalDivider()
@@ -257,11 +266,13 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                     Switch(
                         checked = darkTheme,
                         onCheckedChange = { onToggleTheme(it) },
-
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
                             checkedTrackColor = MaterialTheme.colorScheme.secondary,
-                        )
+                        ),
+                        modifier = Modifier.semantics {
+                            stateDescription = if (darkTheme) "Dark mode is on" else "Dark mode is off"
+                        }
                     )
                 }
             }
@@ -327,12 +338,37 @@ fun SettingsScreen(modifier: Modifier = Modifier,
 
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
+                        text = "GetGrinnected was developed by Grinnellians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed about campus events.",
+                        style = typography.bodyMedium,
+                        color = colorScheme.onBackground
+                    )
+
+                    Text(
                         text = "Acknowledgements",
                         style = typography.titleMedium,
                         color = colorScheme.onBackground
                     )
+
                     Text(
-                        text = "Some text about stakeholders or mission",
+                        text = "We are deeply grateful to the amazing individuals who helped bring GetGrinnected to life:",
+                        style = typography.bodyMedium,
+                        color = colorScheme.onBackground
+                    )
+
+                    Text(
+                        text = "Logo Design:\n" +
+                                "• Rei \n" +
+                                "Testing & Stakeholder Feedback:\n" +
+                                "• Yuina Iseki\n" +
+                                "• Lily Freeman\n" +
+                                "• Regan Stambaugh\n" +
+                                "Development Team:\n" +
+                                "• Ellie Seehorn \n" +
+                                "• Michael Paulin \n" +
+                                "• Budhil Thijm \n" +
+                                "• Almond Heil \n" +
+                                "• Ethan Hughes \n" +
+                                "• Anthony Schwindt",
                         style = typography.bodyMedium,
                         color = colorScheme.onBackground
                     )
@@ -349,7 +385,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.github_mark),
-                                contentDescription = "GitHub",
+                                contentDescription = "Press to Navigate to GitHub Repository",
                                 tint = colorScheme.tertiary,
                                 modifier = Modifier.size(32.dp)
                             )
@@ -362,7 +398,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.discord_icon_svgrepo_com),
-                                contentDescription = "Discord",
+                                contentDescription = "Press to Navigate to Discord",
                                 tint = colorScheme.tertiary,
                                 modifier = Modifier.size(32.dp)
                             )
@@ -380,7 +416,10 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                 .fillMaxWidth()) {
                 Text(text = "Delete Account",
                     style = typography.bodyLarge,
-                    color = colorScheme.tertiary)
+                    color = colorScheme.tertiary,
+                    modifier = modifier.semantics {
+                        contentDescription = "Delete your account"
+                        role = Role.Button})
             }
 
             if (showDeleteDialog) {
@@ -399,7 +438,18 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                         TextButton(
                             onClick = {
                                 coroutineScope.launch {
-                                   //TODO Delete Account
+                                    val success = deleteAccount(context)
+                                    if (success) {
+                                        // clear user session
+                                        DataStoreSettings.clearUserSession(context)
+                                        onToggleTheme(false)
+                                        navController.navigate("welcome") {
+                                            popUpTo(0) { inclusive = true }
+                                            launchSingleTop = true
+                                        }
+                                    } else {
+                                        Toast.makeText(context, "Couldn't Delete Account at this time try again later", Toast.LENGTH_LONG).show()
+                                    }
                                 }
                                 showDeleteDialog = false
                             },
@@ -536,6 +586,10 @@ fun SettingsSection(
             modifier = Modifier
                 .clickable { expanded = !expanded }
                 .padding(12.dp)
+                .semantics {
+                    role = Role.Button
+                    contentDescription = "$title section, ${if (expanded) "expanded" else "collapsed"}. Tap to ${if (expanded) "collapse" else "expand"}."
+                }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -547,6 +601,7 @@ fun SettingsSection(
                     style = typography.titleLarge,
                     color = colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
+                        .semantics { heading() }
                 )
                 // Icon associated with expanded or not
                 Icon(
