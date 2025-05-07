@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -265,17 +264,18 @@ fun HomeScreen(tags: List<Check>) {
                                 Text("Tags", style = typography.labelLarge, maxLines = 1)
                             }
                         }
-                        DropdownMenu(
-                            expanded = expanded2.value,
-                            onDismissRequest = { expanded2.value = false }) {
-                            DropdownMenuItem(
-                                text = { Text("Unselect All") },
-                                onClick = {
-                                    for (t in tags.indices) {
-                                        tags[t].checked.value = false
-                                    }
-                                },
-                            )
+                    }
+                    DropdownMenu(
+                        expanded = expanded2.value,
+                        onDismissRequest = { expanded2.value = false }) {
+                        DropdownMenuItem(
+                            text = { Text("Clear All") },
+                            onClick = {
+                                for (t in tags.indices) {
+                                    tags[t].checked.value = false
+                                }
+                            },
+                        )
                             for (tag in tags.indices) {
                                 DropdownMenuItem(
                                     text = { CheckBox(check = tags[tag]) },

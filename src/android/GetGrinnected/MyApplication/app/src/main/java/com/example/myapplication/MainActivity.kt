@@ -138,7 +138,7 @@ class MainActivity : ComponentActivity() {
                                 DataStoreSettings.setDarkMode(applicationContext, it)
                             }
                         },
-                        tags = tags.sortedBy { it.label },
+                        tags = tags.sortedBy { it.label.uppercase() },
                         startDestination = if (isLoggedIn) "main" else "welcome",
                         fontSizeSetting = fontSizePref.key,
                         onFontSizeChange = { key ->
