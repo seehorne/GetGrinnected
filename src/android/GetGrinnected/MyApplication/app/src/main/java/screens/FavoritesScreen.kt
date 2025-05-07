@@ -24,11 +24,19 @@ import com.example.myapplication.EventCard
 import com.example.myapplication.toEvent
 import android.content.Context
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import com.example.myapplication.SnackBarController
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * A composable function that represents the Favorites screen of our app.
@@ -57,59 +65,77 @@ fun FavoritesScreen(modifier: Modifier = Modifier) {
     // List of on the favorited events
     val favoritedEvents = events.filter { it.is_favorited }
 
-    // This sets up the screen to be a column
-    Column(
-        modifier = modifier
-            .padding(horizontal = 8.dp)
-            .fillMaxSize()
-            .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // We set up a row for the favorite events title
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text("Favorite Events",
-                style = typography.headlineMedium,
-                color = colorScheme.onBackground,
-                modifier = Modifier.padding(top = 16.dp)
-                    .semantics { heading() })
-        }
-        Spacer(modifier = Modifier.height(4.dp))
+    // Host for our snack bar
+    val snackbarHostState = remember { SnackbarHostState() }
+    // Coroutine scope to run background tasks
+    val coroutineScope = rememberCoroutineScope()
 
-        HorizontalDivider()
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // If they don't have any favorited events we display the text otherwise we display their events
-        if (favoritedEvents.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-
-                Text(
-                    "You haven't favorited any events yet.",
-                    style = typography.titleLarge,
-                    color = colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    // This ensures we alert a screen reader when we have no favorited events yet
-                    modifier = Modifier.semantics {
-                        liveRegion = LiveRegionMode.Polite
-                        contentDescription = "You haven't favorited any events yet"
-                    }
-
-                )
+    LaunchedEffect(Unit) {
+        SnackBarController.events.collectLatest { event ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(event.message)
             }
-        } else {
-            // For every event we fill an event card composable
-            favoritedEvents.forEach { event ->
-                EventCard(event = event, modifier = Modifier)
-                Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+
+    // This sets up the screen to be a column
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding ->
+        Column(
+            modifier = modifier
+                .padding(padding)
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // We set up a row for the favorite events title
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Favorite Events",
+                    style = typography.headlineMedium,
+                    color = colorScheme.onBackground,
+                    modifier = Modifier.padding(top = 16.dp)
+                        .semantics { heading() })
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+
+            HorizontalDivider()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // If they don't have any favorited events we display the text otherwise we display their events
+            if (favoritedEvents.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Text(
+                        "You haven't favorited any events yet.",
+                        style = typography.titleLarge,
+                        color = colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
+                        // This ensures we alert a screen reader when we have no favorited events yet
+                        modifier = Modifier.semantics {
+                            liveRegion = LiveRegionMode.Polite
+                            contentDescription = "You haven't favorited any events yet"
+                        }
+
+                    )
+                }
+            } else {
+                // For every event we fill an event card composable
+                favoritedEvents.forEach { event ->
+                    EventCard(event = event, modifier = Modifier)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }
