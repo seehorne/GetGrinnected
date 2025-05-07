@@ -516,21 +516,56 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                             )
 
                             Text(
-                                text = "Logo Design:\n" +
-                                        "• Rei Yamada \n" +
-                                        "Testing & Stakeholder Feedback:\n" +
-                                        "• Yuina Iseki\n" +
+                                text = "Logo Design",
+                                style = typography.titleMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "• Rei Yamada",
+                                style = typography.bodyMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "Testing & Stakeholder Feedback",
+                                style = typography.titleMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "• Yuina Iseki\n" +
                                         "• Lily Freeman\n" +
-                                        "• Regan Stambaugh\n" +
-                                        "Development Team:\n" +
-                                        "• Ellie Seehorn \n" +
+                                        "• Regan Stambaugh",
+                                style = typography.bodyMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "Development Team",
+                                style = typography.titleMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "• Ellie Seehorn \n" +
                                         "• Michael Paulin \n" +
                                         "• Budhil Thijm \n" +
                                         "• Almond Heil \n" +
                                         "• Ethan Hughes \n" +
-                                        "• Anthony Schwindt \n" +
-                                        "Faculty:\n" +
-                                        "• TBD WITH WHAT LEAH SAYS IS GOOD",
+                                        "• Anthony Schwindt",
+                                style = typography.bodyMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "Faculty Instructor",
+                                style = typography.titleMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "• Prof. Leah",
                                 style = typography.bodyMedium,
                                 color = colorScheme.onBackground
                             )
