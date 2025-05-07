@@ -16,6 +16,14 @@
 >
 > Links to each bug in the issue tracker.
 
+We have other issues tagged with "Bug" from this sprint because we had more than 3 bugs, but here are the bugs required for this part of the assignment.
+
+1. <https://trello.com/c/wV1lMEbg>
+
+2. TODO: FILL THIS IN.
+
+3. TODO: FILL THIS IN.
+
 # (5) Wrap-Up Work
 
 > TODO: DELETE WHEN COMPLETED.
