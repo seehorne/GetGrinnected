@@ -31,8 +31,16 @@ jobs:
     - name: Build MkDocs
       run: python3 -m mkdocs build --site-dir=_site
 
+    # Temp measure: output to an artifact, so that it can be downloaded if needed
+    - name: Upload built artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mkdocs-dir
+        path: _site/
+        retention-days: 5
+
     # Upload to server directory
-    - name: Deploy
+    - name: Deploy to sites@grinnell
       uses: burnett01/rsync-deployments@7.0.2
       with:
         # -v       : Verbose, print all transfers
