@@ -264,7 +264,6 @@ fun HomeScreen(tags: List<Check>) {
                                 Text("Tags", style = typography.labelLarge, maxLines = 1)
                             }
                         }
-                    }
                     DropdownMenu(
                         expanded = expanded2.value,
                         onDismissRequest = { expanded2.value = false }) {
