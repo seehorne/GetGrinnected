@@ -1,12 +1,13 @@
 name: Build and Deploy MkDocs
 
 on:
-  # Run on pushes to specified branches.
+  # Run on pushes to main (i.e. when we merge a PR)
   push:
-    branches: [$default-branch]
+    branches: [main]
+    # Only run if the docs files have changed
     paths:
-      - docs/**
       - mkdocs.yml
+      - docs/**
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
