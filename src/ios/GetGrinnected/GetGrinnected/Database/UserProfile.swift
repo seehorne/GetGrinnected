@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 /**
  Class for creating a new user profile. For now, we will keep isPowerUser and isAdmin both false.
@@ -13,6 +14,7 @@ import Foundation
  */
 
 class UserProfile: ObservableObject {
+    
     //set email and set password after validating them
     private var emailText = ""
     
@@ -22,6 +24,8 @@ class UserProfile: ObservableObject {
     
     //private storage for password
     private var _password: String = ""
+
+    
     
     
     //For now, we do not need this but I have this here just in case.
@@ -329,8 +333,8 @@ class UserProfile: ObservableObject {
     
     
     //request builder, the actual call we care about
-    func safeApiCall( requestBuilder: @escaping (String) -> URLRequest,
-                      completion: @escaping (Result<Data, Error>) -> Void) {
+    func safeApiCall( requestBuilder: @escaping (String) async -> URLRequest,
+                      completion: @escaping (Result<Data, Error>) -> Void) async {
         //Get current access token
         guard let accessToken = UserDefaults.standard.string(forKey: "accessToken") else {
             completion(.failure(APIError.unauthorized))
@@ -338,12 +342,12 @@ class UserProfile: ObservableObject {
         }
         //Make the API call
         //this is an internal function, not my favorite, but does the job
-        func makeRequest(token: String) {
-            var request = requestBuilder(token)
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        func makeRequest(token: String) async{
+            var request = await requestBuilder(token)
+            let task = URLSession.shared.dataTask(with: request) { [self] data, response, error in
                 if let error = error {
                     completion(.failure(error))
-                    self.updateLoginState(isLoggedIn: false)
+                    updateLoginState(isLoggedIn: false)
                     return
                 }
                 guard let httpResponse = response as? HTTPURLResponse else {
@@ -356,7 +360,7 @@ class UserProfile: ObservableObject {
                         switch result {
                         case .success(let newToken):
                             let retryRequest = requestBuilder(newToken)
-                            URLSession.shared.dataTask(with: retryRequest) { data, response, error in
+                            URLSession.shared.data(with: retryRequest) { data, response, error in
                                 if let error = error {
                                     completion(.failure(error))
                                     return
@@ -367,7 +371,7 @@ class UserProfile: ObservableObject {
                                 }
 
                                 completion(.success(data))
-                            }.resume()
+                            }
                         case .failure(let refreshError):
                             completion(.failure(refreshError))
                         }
@@ -380,11 +384,11 @@ class UserProfile: ObservableObject {
             }
             task.resume()
         }
-        makeRequest(token: "Bearer \(accessToken)")
+        await makeRequest(token: "Bearer \(accessToken)")
     }
     
-    func getUsername(){
-        safeApiCall(requestBuilder: { token in
+    func getUsername() async{
+        await safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
             request.httpMethod = "GET"
             request.setValue(token, forHTTPHeaderField: "Authorization")
@@ -399,8 +403,8 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func setUsername(newUsername: String){
-        safeApiCall(requestBuilder: { token in
+    func setUsername(newUsername: String) async{
+        await safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
             request.httpMethod = "PUT"
             let body: [String: Any] = [
@@ -419,8 +423,8 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func getUserNotifiedEvents(){
-        safeApiCall(requestBuilder: { token in
+    func getUserNotifiedEvents() async{
+        await safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
             request.httpMethod = "GET"
             request.setValue(token, forHTTPHeaderField: "Authorization")
@@ -435,8 +439,8 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func setUserNotifiedEvents(events: [Int]){
-        safeApiCall(requestBuilder: { token in
+    func setUserNotifiedEvents(events: [Int]) async{
+        await safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
             request.httpMethod = "PUT"
             request.httpBody = try? JSONSerialization.data(withJSONObject: events)
@@ -452,8 +456,8 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func getUserFavoritedEvents(){
-        safeApiCall(requestBuilder: { token in
+    func getUserFavoritedEvents() async{
+        await safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
             request.httpMethod = "PUT"
             request.setValue(token, forHTTPHeaderField: "Authorization")
@@ -468,8 +472,8 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func setUserFavoritedEvents(events: [Int]){
-        safeApiCall(requestBuilder: { token in
+    func setUserFavoritedEvents(events: [Int])async{
+        await safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
             request.httpMethod = "PUT"
             request.httpBody = try? JSONSerialization.data(withJSONObject: events)
@@ -485,8 +489,8 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func getUserData(){
-        safeApiCall(requestBuilder: { token in
+    func getUserData() async{
+        await safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/data")!)
             request.httpMethod = "GET"
             request.setValue(token, forHTTPHeaderField: "Authorization")
@@ -499,6 +503,18 @@ class UserProfile: ObservableObject {
                 print(self.getErrorMessage(error: error))
             }
         })
+    }
+    
+    
+    func fetchFavoritedEventIDs(from context: ModelContext) -> [Int] {
+        let predicate = #Predicate<EventModel> { $0.favorited }
+        let descriptor = FetchDescriptor<EventModel>(predicate: predicate)
+
+        if let results = try? context.fetch(descriptor) {
+            return results.map { $0.id }
+        } else {
+            return []
+        }
     }
     
     

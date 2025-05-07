@@ -159,7 +159,9 @@ struct EventCard: View {
                                 event.lastUpdated = Date() // mark as modified
                                 let temp = [Int]()
                                 userProfile.setUserFavoritedEvents(events: temp)
-                                try? modelContext.save()
+                                let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
+                                userProfile.setUserFavoritedEvents(events: favorites)
+                                //todo: save this back to the cache with the get call
                             }) {
                                 Image(systemName: event.favorited ? "heart.fill" : "heart")
                                     .foregroundColor(.border)
