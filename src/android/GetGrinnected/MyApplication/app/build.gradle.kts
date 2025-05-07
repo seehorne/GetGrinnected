@@ -47,6 +47,8 @@ kotlin {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-runtime-compose")
+    implementation("androidx.compose.material3:material3:1.3.2")
     implementation(libs.androidx.datastore.preferences.v100)
     implementation(libs.kotlinx.serialization.json.v163)
     implementation (libs.gson.v2101)

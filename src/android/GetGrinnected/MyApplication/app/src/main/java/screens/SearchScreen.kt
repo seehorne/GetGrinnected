@@ -1,108 +1,140 @@
 package screens
 
+//noinspection UsingMaterialAndMaterial3Libraries
+//noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
-//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.AppRepository
 import com.example.myapplication.Event
 import com.example.myapplication.toEvent
+import com.example.myapplication.ui.theme.SearchViewModel
+import kotlinx.coroutines.flow.flowOf
 
+
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
-
 @Composable
-fun SearchScreen(){
-    var query by rememberSaveable { mutableStateOf("") }
-    // Gets events from our repo
+fun SearchScreen(viewModel: SearchViewModel) {
+    val searchQuery by remember { mutableStateOf("               ") }
     val eventEntities by AppRepository.events
     // Converts them to event data type
     val events = eventEntities.map { it.toEvent() }
-    val searchedEvent = mutableListOf<Event>()
-    // Filter items based on query
+    val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
+    SearchScreen(
+        searchQuery = searchQuery.toString(),
+        searchResults = searchResults,
+        onSearchQueryChange = {viewModel.onSearchQueryChange(it) }
+    )
+}
 
-    val filteredItems by remember {
-        derivedStateOf {
-            if (query.isEmpty()) {
-                events
-            } else {
-                for (cardnum in events.indices) {
-                    if (events[cardnum].event_name.contains(query)){
-                        searchedEvent.add(events[cardnum])
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchScreen(
+    searchQuery: String,
+    searchResults: List<Event>,
+    onSearchQueryChange: (String) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .semantics { isTraversalGroup = true }
+    ) {
+        SearchBar(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .semantics { traversalIndex = 0f },
+            query = searchQuery,
+            onQueryChange = onSearchQueryChange,
+            onSearch = {},
+            placeholder = {
+                Text(text = "Search movies")
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = null
+                )
+            },
+            trailingIcon = {
+                if (searchQuery.isNotEmpty()) {
+                    IconButton(onClick = { onSearchQueryChange("") }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentDescription = "Clear search"
+                        )
                     }
                 }
-            }
-        }
-    }
-
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        CustomizableSearchBar(
-            query = query,
-            onQueryChange = { query = it },
-            onSearch = { /* Handle search submission */ },
-            searchResults = searchedEvent,
-            onResultClick = { query = it },
-            // Customize appearance with optional parameters
-            placeholder = { Text("Search desserts") },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-            trailingIcon = { Icon(Icons.Default.MoreVert, contentDescription = "More options") },
-            supportingContent = { Text("Android dessert") },
-            leadingContent = { Icon(Icons.Filled.Star, contentDescription = "Starred item") }
+            },
+            content = {},
+            active = true,
+            onActiveChange = {},
+            tonalElevation = 0.dp
         )
 
-        // Display the filtered list below the search bar
-        LazyColumn(
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                top = 72.dp, // Provides space for the search bar
-                end = 16.dp,
-                bottom = 16.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.semantics {
-                traversalIndex = 1f
-            },
-        ) {
-            //items(count = filteredItems.size) {
-             //   Text(text = filteredItems[it])
-            //}
-        }
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(32.dp),
+        contentPadding = PaddingValues(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(
+            count = searchResults.size,
+            key = { index -> searchResults[index].eventid },
+            itemContent = { index ->
+                val event = searchResults[index]
+                EventListItem(event = event)
+            }
+        )
+    }
+}}
+
+
+
+@Composable
+fun EventListItem(
+    event: Event,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(text = event.event_name)
+        event.event_time?.let { Text(text = it) }
     }
 }
 
+
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomizableSearchBar(
@@ -172,3 +204,4 @@ fun CustomizableSearchBar(
         }
     }
 }
+*/
