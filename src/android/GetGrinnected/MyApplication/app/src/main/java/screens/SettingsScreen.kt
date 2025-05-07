@@ -128,6 +128,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     var showEditEmailDialog by remember { mutableStateOf(false) }
     // String associated with storing and changing the username of an account when we edit
     var newEmail by remember { mutableStateOf(account.email) }
+    // State associated with whether there is an error in the email
+    var emailError by remember { mutableStateOf<String?>(null) }
 
     // Host for our snack bar
     val snackbarHostState = remember { SnackbarHostState() }
@@ -301,6 +303,94 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                 // This is our button to cancel the editing to the username
                                 TextButton(onClick = {
                                     showEditUsernameDialog = false
+                                }) {
+                                    Text(
+                                        "Cancel",
+                                        color = colorScheme.tertiary,
+                                        style = typography.labelLarge
+                                    )
+                                }
+                            }
+                        )
+                    }
+
+                    // We check to see if showEdit dialog is set to true and if it is we display the editing email
+                    if (showEditEmailDialog) {
+                        AlertDialog(
+                            // When we dismiss with our dismiss button we set our show boolean to false
+                            onDismissRequest = { showEditEmailDialog = false },
+                            title = {
+                                Text(
+                                    "Edit Email",
+                                    color = colorScheme.onBackground,
+                                    style = typography.titleLarge
+                                )
+                            },
+                            text = {
+                                Column {
+                                    // Makes the text field to enter the input
+                                    OutlinedTextField(
+                                        value = newEmail,
+                                        onValueChange = {
+                                            newEmail = it
+                                            // Check that the Email is valid
+                                            emailError = validateEmail(it)
+                                        },
+                                        singleLine = true,
+                                        isError = emailError != null,
+                                        label = {
+                                            Text(
+                                                "Email",
+                                                color = colorScheme.onBackground,
+                                                style = typography.labelLarge
+                                            )
+                                        }
+                                    )
+                                    // If we have a validation issue with Email we display the issue with
+                                    // the associated error
+                                    if (emailError != null) {
+                                        Text(
+                                            text = emailError ?: "",
+                                            color = colorScheme.error,
+                                            style = typography.bodySmall
+                                        )
+                                    }
+                                }
+                            },
+                            confirmButton = {
+                                // Button to save the edited email
+                                TextButton(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            // Makes a new account entity with the new Email
+                                            val updatedAccount =
+                                                account.copy(email = newEmail)
+                                            // Upserts ie updates the account name
+                                            AppRepository.upsertAccount(updatedAccount.toAccountEntity())
+                                            // Sets our current active account to the given account
+                                            AppRepository.setCurrentAccountById(updatedAccount.accountid)
+                                            // Sends our updated username to the remote database
+                                            /*TODO SEND EMAIL CALL*/
+                                            // Sends snack bar
+                                            SnackBarController.sendEvent(SnackBarEvent("Email was updated"))
+                                            // Closes the editing dialog
+                                            showEditEmailDialog = false
+                                        }
+                                    },
+                                    // If email is valid the button will be enabled otherwise it will be disabled
+                                    enabled = emailError == null
+                                ) {
+                                    Text(
+                                        "Save",
+                                        color = colorScheme.tertiary,
+                                        style = typography.labelLarge
+                                    )
+                                }
+                            },
+                            dismissButton = {
+                                // This is our button to cancel the editing to the email
+                                TextButton(onClick = {
+                                    showEditEmailDialog = false
                                 }) {
                                     Text(
                                         "Cancel",
