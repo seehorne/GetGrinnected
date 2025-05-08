@@ -3,6 +3,8 @@ package screens
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.AppRepository
 import com.example.myapplication.Event
+import com.example.myapplication.EventCard
 import com.example.myapplication.toEvent
 import com.example.myapplication.ui.theme.SearchViewModel
 import kotlinx.coroutines.flow.flowOf
@@ -43,18 +46,19 @@ import kotlinx.coroutines.flow.flowOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(viewModel: SearchViewModel) {
-    val searchQuery by remember { mutableStateOf("               ") }
+    val searchQuery = viewModel.searchQuery
     val eventEntities by AppRepository.events
     // Converts them to event data type
     val events = eventEntities.map { it.toEvent() }
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
     SearchScreen(
-        searchQuery = searchQuery.toString(),
-        searchResults = searchResults,
+        searchQuery = searchQuery,
+        searchResults = events,
         onSearchQueryChange = {viewModel.onSearchQueryChange(it) }
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
@@ -75,7 +79,7 @@ fun SearchScreen(
             onQueryChange = onSearchQueryChange,
             onSearch = {},
             placeholder = {
-                Text(text = "Search movies")
+                Text(text = "Search Events")
             },
             leadingIcon = {
                 Icon(
@@ -95,26 +99,25 @@ fun SearchScreen(
                     }
                 }
             },
-            content = {},
+            content = {
+                LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(
+                    count = searchResults.size,
+                    key = { index -> searchResults[index].eventid },
+                    itemContent = { index ->
+                        val event = searchResults[index]
+                        EventCard(event = event)
+                    }
+                )
+            }},
             active = true,
             onActiveChange = {},
             tonalElevation = 0.dp
         )
-
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(32.dp),
-        contentPadding = PaddingValues(16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(
-            count = searchResults.size,
-            key = { index -> searchResults[index].eventid },
-            itemContent = { index ->
-                val event = searchResults[index]
-                EventListItem(event = event)
-            }
-        )
-    }
 }}
 
 
@@ -129,6 +132,7 @@ fun EventListItem(
         modifier = modifier.fillMaxWidth()
     ) {
         Text(text = event.event_name)
+        event.event_date?.let { Text(text = it) }
         event.event_time?.let { Text(text = it) }
     }
 }

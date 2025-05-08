@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class SearchViewModel : ViewModel() {
@@ -22,7 +24,7 @@ class SearchViewModel : ViewModel() {
     // Converts them to event data type
     val events = eventEntities.map { it.toEvent() }
     private val eventFlow = flowOf(events)
-    private var searchQuery by mutableStateOf("")
+    var searchQuery by mutableStateOf("")
     val searchResults: StateFlow<List<Event>> =
     snapshotFlow { searchQuery }
     .combine(eventFlow)
@@ -31,7 +33,7 @@ class SearchViewModel : ViewModel() {
             searchQuery.isNotEmpty() -> event.filter {
                 events[0].event_description.contains(searchQuery, ignoreCase = true)
             }
-            else -> event
+            else -> events
         }
     }.stateIn(
     scope = viewModelScope,
@@ -42,6 +44,13 @@ class SearchViewModel : ViewModel() {
         searchQuery = newQuery
     }
 }
+
+//fun contains(event: List<Event>): Boolean{
+//    for (e in event.indices){
+ //       if
+ //   }
+ //   return month
+//}
 
 
 
