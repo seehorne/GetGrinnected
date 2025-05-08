@@ -21,7 +21,7 @@ enum SortOrder: String, Identifiable, CaseIterable {
 }
 
 enum FilterType: String, Identifiable, CaseIterable {
-    case name, favorites //different sorting options, for now removing organization and tag
+    case name, favorites//, tags //different sorting options, for now removing organization
     var id: Self { self } //identifiable protocol
 }
 
@@ -105,6 +105,12 @@ struct EventList: View {
                     predicate = #Predicate<EventModel> {event in
                         event.favorited && (filter.isEmpty || event.name.localizedStandardContains(filter))
                     }
+                //case .tags:
+//                    predicate = #Predicate<EventModel> {event in
+//                        !(event.tags.intersection(parentView.selectedTags).isEmpty)
+//                        &&
+//                        (filter.isEmpty || event.name.localizedStandardContains(filter))
+//                    }
             }
         }
         
@@ -161,9 +167,13 @@ struct EventList: View {
             }//if loading, else, fetch.
             
         }//vstack
-        .onChange(of: parentView.forceRefreshRequested){
-            Task {
-                await updateEvents()
+        .onChange(of: parentView.forceRefreshRequested) { oldValue, newValue in
+            print("forceRefreshRequested changed: \(newValue)")
+            
+            if newValue { // update events if we forced refresh
+                Task {
+                    await updateEvents()
+                }
             }
         }
         .onAppear{
@@ -185,11 +195,21 @@ struct EventList: View {
     private func updateEvents() async {
         print("1: updateEvents called")
         if let eventstoUpdate = await fetchEvents(){
+            updatePossibleTags(events: eventstoUpdate) // update the tags we can filter by
             await DTOtoCache(eventDTOs: eventstoUpdate)
             print("2: updateEvents success")
         } else {
             print("3: no events to update")
         }
+    }
+    
+    /*
+     This function goes through the tags of the provided list of events and changes the possible tags in the parent view to contain them
+     */
+    private func updatePossibleTags(events: [EventDTO]) {
+        let tagSet = Set(events.compactMap{ $0.tags }.flatMap{ $0 })
+        parentView.possibleTags = tagSet
+        print("updated tags")
     }
     
     //Function Fetch Events

@@ -10,35 +10,37 @@ import SwiftUI
 struct TagMultiSelector: View {
     // The title of the dropdown menu
     @State var title: String
-    // Whether or not the dropdown is expanded or not
-    @State private var isExpanded: Bool = false
-    // The tags we have selected
-    @State var selectedTags: Set<EventTags> = []
+    // The parent view where we store the selected events
+    @ObservedObject var parentView: EventListParentViewModel
     
     var body: some View {
         Menu (title) {
-            // make a row for a clear button
-            TagMultiSelectorRow(tag: "Clear",
-                                isSelected: false,
-                                showCheck: false) {
-                // remove tags from selected tags
-                selectedTags.removeAll()
-            } //TagMultiSelectorRow
-            
-            //look at each tag
-            ForEach(EventTags.allCases, id: \.self) { tag in
-                // make a row for the current tag that is checked if selected or not
-                TagMultiSelectorRow(tag: tag.rawValue,
-                                    isSelected: selectedTags.contains(tag),
-                                    showCheck: true) {
-                    // add or remove tag if tapped
-                    if selectedTags.contains(tag) {
-                        selectedTags.remove(tag)
-                    } else {
-                        selectedTags.insert(tag)
-                    }
+            if !parentView.possibleTags.isEmpty {
+                // make a row for a clear button
+                TagMultiSelectorRow(tag: "Clear",
+                                    isSelected: false,
+                                    showCheck: false) {
+                    // remove tags from selected tags
+                    parentView.selectedTags.removeAll()
                 } //TagMultiSelectorRow
-            } //ForEach
+                
+                //look at each tag
+                ForEach(Array(parentView.possibleTags).sorted(), id: \.self) { tag in
+                    // make a row for the current tag that is checked if selected or not
+                    TagMultiSelectorRow(tag: tag,
+                                        isSelected: parentView.selectedTags.contains(tag),
+                                        showCheck: true) {
+                        // add or remove tag if tapped
+                        if parentView.selectedTags.contains(tag) {
+                            parentView.selectedTags.remove(tag)
+                        } else {
+                            parentView.selectedTags.insert(tag)
+                        }
+                    } //TagMultiSelectorRow
+                } //ForEach
+            } else {
+                Text("No tags found")
+            }
         } //Menu
         .buttonStyle(.bordered)
         .foregroundColor(.appTextPrimary)
@@ -72,7 +74,11 @@ struct TagMultiSelectorRow: View {
 } //TagMultiSelectorRow
 
 #Preview {
-    TagMultiSelector(title: "Tags")
+    var parentView = EventListParentViewModel()
+    parentView.possibleTags = ["test 1", "test 2", "test 3"]
     
-    Spacer()
+    return VStack {
+        TagMultiSelector(title: "Tags", parentView: parentView)
+        Spacer()
+    }
 }

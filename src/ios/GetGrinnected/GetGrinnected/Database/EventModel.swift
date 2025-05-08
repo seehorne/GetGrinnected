@@ -101,6 +101,7 @@ final class EventModel: Hashable { // hashable for uniqueness
         self.is_draft = dto.is_draft
         self.favorited = false
         self.lastUpdated = Date()
+        //self.tagEnums = []
 //        self.isSelected = false
         self.notified = false
     }
