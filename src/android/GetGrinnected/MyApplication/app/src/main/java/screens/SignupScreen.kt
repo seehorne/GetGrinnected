@@ -304,11 +304,11 @@ fun SignupScreenPreview(){
  * @return either null if we pass validation or a string reporting the associated error
  */
 fun validateUsername(username: String): String? {
-    // Set of allowed characters Alphabetical and periods and underscores
+    // Set of allowed characters Alphabetical, Numeric and periods and underscores
     val allowedChars = Regex("^[a-zA-Z0-9._]+$")
     // If the username contains characters that aren't allowed we display the following error
     if (!allowedChars.matches(username)) {
-        return "Username can only include letters, '.', and '_'"
+        return "Username can only include letters, numbers, '.', and '_'"
     }
     // Set of letters
     val letters = Regex("[a-zA-Z]")
