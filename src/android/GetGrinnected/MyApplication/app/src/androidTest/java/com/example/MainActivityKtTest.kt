@@ -96,6 +96,27 @@ class MainActivityKtTest {
   composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
  }
 */
+
+ @Test
+ fun signUpScreen_SignInButton_NavigatesCorrectly() {
+     composeTestRule.setContent { AppNavigation(
+         darkTheme = false, onToggleTheme = {},
+         startDestination = "signup",
+         tags = mutableListOf<Check>(),
+         fontSizeSetting = "M",
+         onFontSizeChange = {}
+     ) }
+
+     composeTestRule.waitUntil(timeoutMillis = 5_000) {
+         composeTestRule.onAllNodesWithText("Sign in").fetchSemanticsNodes().isNotEmpty()
+     }
+     composeTestRule.onNodeWithText("Sign in").assertExists().performClick()
+
+     composeTestRule.waitUntil(timeoutMillis = 5_000) {
+         composeTestRule.onAllNodesWithText("Login to your account").fetchSemanticsNodes().isNotEmpty()
+     }
+     composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
+ }
  /**
   * Tests whether we can go from the welcome screen to the login and then use the
   * join now button to go to the signup page
