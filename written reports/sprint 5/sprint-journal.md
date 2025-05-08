@@ -34,8 +34,4 @@ We have other issues tagged with "Bug" from this sprint because we had more than
 
 # (7) Blog Post
 
-> TODO: DELETE WHEN COMPLETED.
->
-> [Blog Post](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.uxyoiwcvs3f) in Sprint Description
->
-> Write up all sections, almond suggests we use a separate document and just give the path to it in this section. That way it's self-contained.
+The blog post can be found inside the same directory as this file, with the name `blog-post.md`. (path `written reports/sprint 5/blog-post.md` from the top of the repository)
