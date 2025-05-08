@@ -112,9 +112,7 @@ class MainActivityKtTest {
      }
      composeTestRule.onNodeWithText("Sign in").assertExists().performClick()
 
-     composeTestRule.waitUntil(timeoutMillis = 5_000) {
-         composeTestRule.onAllNodesWithText("Login to your account").fetchSemanticsNodes().isNotEmpty()
-     }
+     composeTestRule.waitForIdle()
      composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
  }
  /**
@@ -300,4 +298,27 @@ class MainActivityKtTest {
         composeTestRule.onNodeWithText("Login").performClick()
         composeTestRule.onNodeWithText("Please enter email").assertIsDisplayed()
     }
+
+    /**
+     * Test to ensure that font size selection changes to the fontsize enum we have selected.
+     */
+    @Test
+    fun settingsScreen_FontSizeDropdown_SetsSize() {
+        var selectedFontSize = ""
+        composeTestRule.setContent {
+            SettingsScreen(
+                account = User(1, "user", "email@grinnell.edu", "", listOf(), listOf(), listOf(), listOf(), "", 0),
+                darkTheme = false,
+                onToggleTheme = {},
+                navController = rememberNavController(),
+                fontSizeSetting = "M",
+                onFontSizeChange = { selectedFontSize = it }
+            )
+        }
+        composeTestRule.onNodeWithText("Accessibility").performClick()
+        composeTestRule.onNodeWithText("Medium").performClick()
+        composeTestRule.onNodeWithText("Large").performClick()
+        assert(selectedFontSize == "L")
+    }
+
 }
