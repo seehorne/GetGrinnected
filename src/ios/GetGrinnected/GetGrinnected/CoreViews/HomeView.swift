@@ -14,6 +14,8 @@ struct HomeView: View {
     @StateObject private var viewModel = EventListParentViewModel()
     @State private var searchText = ""
     @State private var isLoading = true
+    // The type of filter we are using on the event list
+    @State private var filterType: FilterType = .name
     
     //Main view body
     var body: some View {
@@ -37,7 +39,7 @@ struct HomeView: View {
                             TagMultiSelector(title: "Tags", parentView: viewModel)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: SortOrder.time, filterType: FilterType.name, filter: searchText, filterToday: searchText.isEmpty)
+                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: SortOrder.time, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
