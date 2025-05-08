@@ -105,7 +105,7 @@ fun MainPage(
             // Set of routes to for our navbar to follow
             composable("Home") { HomeScreen(tags = tags) }
 
-            composable("Search") { SearchScreen(viewModel = SearchViewModel()) }
+            composable("Search") { SearchScreen() }
 
 
             composable("Favorites") { FavoritesScreen() }

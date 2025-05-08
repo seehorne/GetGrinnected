@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.volley)
     implementation(libs.transport.api)
     implementation(libs.firebase.database.ktx)
+    implementation(libs.androidx.benchmark.macro)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core.v350)

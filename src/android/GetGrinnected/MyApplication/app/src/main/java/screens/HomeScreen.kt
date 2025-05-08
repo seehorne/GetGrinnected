@@ -209,14 +209,8 @@ fun HomeScreen(tags: List<Check>) {
                                 Text(
                                     daysList[day].dayOfWeek.getDisplayName(
                                         java.time.format.TextStyle.FULL,
-                                        Locale.getDefault()
-                                    ).substring(
-                                        0,
-                                        3
-                                    ) + ", " + toMonth(daysList[day]) + " " + daysList[day].format(
-                                        formatter3
-                                    ), style = typography.labelLarge
-                                )
+                                        Locale.getDefault()).substring(0, 3) + ", " + toMonth(daysList[day]) + " " + daysList[day].format(formatter3), style = typography.labelLarge)
+
                             }, onClick = {
                                 selectedView = day
                                 expanded.value = false
