@@ -1,13 +1,9 @@
 package screens
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinsp ection Usin gMaterialAndMaterial3Libraries
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,51 +18,36 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.example.myapplication.AppRepository
 import com.example.myapplication.Event
-import com.example.myapplication.toDate
 import com.example.myapplication.toEvent
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SearchScreen() {
-    // remembers what page the app is on
-    var selectedView by remember { mutableIntStateOf(0) }
-    val expanded = remember { mutableStateOf(false) }
     // holds dates for the current view dropdown
     val today = LocalDate.now()
     val days = 6
@@ -78,8 +59,7 @@ fun SearchScreen() {
     val eventEntities by AppRepository.events
     // Converts them to event data type
     val events = eventEntities.map { it.toEvent() }
-    val formatter3 = DateTimeFormatter.ofPattern("dd")
-// String associated with storing and changing the username of an account when we edit
+    // String associated with storing and changing the username of an account when we edit
     var description by remember { mutableStateOf("") }
     val search = remember {
         mutableStateOf(false)
@@ -93,6 +73,7 @@ fun SearchScreen() {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) { // creates day menu
+            /*
             Text(
                 "Advanced Search",
                 style = typography.titleLarge,
@@ -102,6 +83,7 @@ fun SearchScreen() {
                     liveRegion = LiveRegionMode.Polite
                     contentDescription = "Advanced Search for events"
                 })
+             */
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -123,7 +105,7 @@ fun SearchScreen() {
             )
         }
         Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) { // creates day menu
-            //selectedDate = DatePickerDocked()
+            selectedDate = datePickerDocked()
         }
         Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) { // creates day menu
             Button(
@@ -145,21 +127,18 @@ fun SearchScreen() {
                 for (e in events.indices){
                     if (selectedDate != ""){
                         if (events[e].event_name.uppercase().contains(description.uppercase())
-                            && events[e].event_start_time.contains(selectedDate)) {
+                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
                             sortedEvents.add(events[e])
                         } else if (events[e].event_description.uppercase().contains(description.uppercase())
-                            && events[e].event_start_time.contains(selectedDate)
-                        ) {
+                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
                             sortedEvents.add(events[e])
                         } else if ((events[e].organizations?.toString()?.uppercase()
                                 ?.contains(description.uppercase()) ?: true) == true
-                            && events[e].event_start_time.contains(selectedDate)
-                        ) {
+                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
                             sortedEvents.add(events[e])
                         }else if (events[e].event_location?.uppercase()
                                 ?.contains(description.uppercase()) ?: true
-                            && events[e].event_start_time.contains(selectedDate)
-                        ) {
+                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
                             sortedEvents.add(events[e])
                         }
                     }
@@ -184,7 +163,7 @@ fun SearchScreen() {
             } else{
                 if (selectedDate != ""){
                     for (e in events.indices) {
-                        if (events[e].event_start_time.contains(selectedDate.substring(0..3)+"-"+selectedDate.substring(5..6) + "-" + selectedDate.substring(8..9))){
+                        if (events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))){
                             sortedEvents.add(events[e])
                         }
                     }
@@ -202,10 +181,15 @@ fun SearchScreen() {
 
 
 
-
+/**
+ * Creates a date picking composable as designed Android developer.com
+ * It creates a calendar dropdown that makes selecting any day easy.
+ * Currently doesn't work as it is off by a day and its return value is not the correct date format
+ * @return a String date that was selected
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDocked(): String{
+fun datePickerDocked(): String{
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     val selectedDate = datePickerState.selectedDateMillis?.let {
@@ -257,104 +241,13 @@ fun DatePickerDocked(): String{
     return selectedDate
 }
 
-@Composable
-fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
-    var showModal by remember { mutableStateOf(false) }
-
-    OutlinedTextField(
-        value = selectedDate?.let { convertMillisToDate(it) } ?: "",
-        onValueChange = { },
-        label = { Text("DOB") },
-        placeholder = { Text("MM/DD/YYYY") },
-        trailingIcon = {
-            Icon(Icons.Default.DateRange, contentDescription = "Select date")
-        },
-        modifier = modifier
-            .fillMaxWidth()
-            .pointerInput(selectedDate) {
-                awaitEachGesture {
-                    // Modifier.clickable doesn't work for text fields, so we use Modifier.pointerInput
-                    // in the Initial pass to observe events before the text field consumes them
-                    // in the Main pass.
-                    awaitFirstDown(pass = PointerEventPass.Initial)
-                    val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
-                    if (upEvent != null) {
-                        showModal = true
-                    }
-                }
-            }
-    )
-
-    if (showModal) {
-        DatePickerModal(
-            onDateSelected = { selectedDate = it },
-            onDismiss = { showModal = false }
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerModal(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    ) {
-        DatePicker(state = datePickerState)
-    }
-}
+/**
+ * takes a millis and returns a date
+ */
 fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     return formatter.format(Date(millis))
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
