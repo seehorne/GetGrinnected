@@ -32,6 +32,12 @@ We have other issues tagged with "Bug" from this sprint because we had more than
 >
 > Describe what we did for our wrap-up work.
 
+## External Docs Changes
+
+One piece of wrap-up work, a loose end that we wanted to tie up, was reevaluating our external documentation. In the original Documentation Plan we made lofty plans, intending to create a wiki-like project with pages not only on app features but also common workflows.
+
+Based on feedback sessions with stakeholders, it seems like such a large scale source of documentation may not be helpful to users. Instead, we decided to modify our docs so that their sections would be easily visible in the navigation panel on the side and leave the rest unchanged (of course, keeping them up to date for new features).
+
 # (7) Blog Post
 
 The blog post can be found inside the same directory as this file, with the name `blog-post.md`. (path `written reports/sprint 5/blog-post.md` from the top of the repository)

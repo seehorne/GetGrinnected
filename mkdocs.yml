@@ -1,9 +1,18 @@
 # see https://www.mkdocs.org/user-guide/writing-your-docs/#configure-pages-and-navigation
 nav:
   - Home: index.md
-  - Android: android.md
-  - iOS: apple.md
-  - API v1: api-v1.md
+  - iOS User Guide:
+    - 'Login & Signup': ios/login-signup.md
+    - General Navigation: ios/navigation.md
+    - Home: ios/home.md
+    - Settings: ios/settings.md
+  - Android User Guide:
+    - 'Login & Signup': android/login-signup.md
+    - General Navigation: android/navigation.md
+    - Home: android/home.md
+    - Settings: android/settings.md
+  - Developer Guide:
+    - API v1: dev/api-v1.md
 
 ################################################################################
 
@@ -16,14 +25,20 @@ site_url: https://getgrinnected.sites.grinnell.edu/docs/
 theme: 
   name: material
 
+# mkdocs plugins
 plugins:
   - render_swagger
 
+# material markdown extensions
 markdown_extensions:
+  - admonition
   - attr_list
+  - pymdownx.details
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences
 
+# load custom css
 extra_css:
-  - swagger-code-colors.css
+  - dev/swagger-code-colors.css  # fixes swagger rendering issue
