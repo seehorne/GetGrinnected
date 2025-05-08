@@ -3,8 +3,12 @@
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "express-validator": "^7.2.1",
     "fs": "^0.0.1-security",
-    "mysql2": "^3.14.0"
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.14.0",
+    "nodemailer": "^6.10.1",
+    "sqlite3": "^5.1.7"
   },
   "scripts": {
     "test": "node --test",
@@ -12,7 +16,8 @@
     "get_events": "node ./src/backend/fetch_events.js",
     "add_to_db": "node ./src/backend/database_add.js",
     "drop_file": "node ./src/backend/drop_expired_json.js",
-    "drop_db": "node ./src/backend/drop_expired_db.js"
+    "drop_db": "node ./src/backend/drop_expired_db.js",
+    "drop_cancelled": "node ./src/backend/drop_cancelled_json.js"
   },
   "devDependencies": {
     "lodash": "^4.17.21",

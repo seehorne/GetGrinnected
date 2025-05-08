@@ -9,28 +9,32 @@ import Foundation
 import SwiftUI
 
 struct MainNavView: View {
+    // boolean to keep track if we are logged in
+    @Binding var isLoggedIn: Bool
+    
     var body: some View {
+        //creates the bottom bar for navigatio
         TabView {
-            HomescreenView()
+            HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house.fill")
                 }
-            CalendarView()
+            SearchView()
                 .tabItem {
-                    Label("Calendar", systemImage: "calendar")
+                    Label("Search", systemImage: "magnifyingglass")
                 }
             FavoritesView()
                 .tabItem {
                     Label("Favorites", systemImage: "heart.fill")
                 }
-            ProfileView()
+            SettingsView(isLoggedIn: $isLoggedIn)
                 .tabItem {
-                    Label("Profile", systemImage: "person.fill")
+                    Label("Settings", systemImage: "gearshape.fill")
                 }
         }
     }
 }
 
 #Preview {
-    MainNavView()
+    MainNavView(isLoggedIn: .constant(true))
 }

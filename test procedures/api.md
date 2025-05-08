@@ -1,7 +1,9 @@
 # API - Manual Test Procedure
 
-The API can only fully be tested when it is in production and can communicate with the database.
-This testing currently can't be done automatically, so must be done by a person.
+The login functionality of the API can only fully be tested when it is in production, 
+since it requires email connectivity.
+
+That is what this manual testing plan covers.
 
 # Setup
 
@@ -9,11 +11,11 @@ To set up the test, do the following steps.
 
 1. Push all API changes to a branch.
 
-2. SSH into Reclaim Cloud.
+2. SSH into Reclaim Cloud, and log into the Node.js Application servers.
 
 3. Change to the project directory and pull from git.
    ```
-   cd ~/ROOT/
+   cd ~/live_test/
    git pull
    ```
 
@@ -22,119 +24,122 @@ To set up the test, do the following steps.
    git checkout <YOUR_BRANCH>
    ```
 
-5. Stop the currently-running API process.
-   ```
-   sudo systemctl stop nodejs
-   ```
-
-6. Run the API from your checked-out directory
+5. Run the API from your checked-out directory.
    ```
    npm ci
-   sudo node src/backend/api.js
+   node src/backend/api/api.cjs
    ```
 
 # What to test
 
-For these steps, open a second terminal not connected to the server. 
+For these steps, open a second terminal also connected to the Node.js application servers.
 
-## Ensure API online
+## Delete your user account
 
-1. Perform a curl request on the `/` route of the server.
-   ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/'
-   ```
-   
-   > This will request the server load its default page, and then send the data back to you.
-   > It prints the server's response to your screen by default.
+The easiest way to delete your user account is to go to <https://node16113-csc324--spring2025.us.reclaim.cloud/>.
 
-2. Ensure the output says "API online!"
+This will delete your account information including favorited events,
+so make sure you're okay with doing this or take a backup first!
 
-## Get all events
+1. Log in as `root` user.
 
-1. Perform this curl request.
-   ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events' | jq
-   ```
+2. Click "Databases" in top bar.
 
-   > By piping the response of the server into `jq`, it will organize the JSON the server
-   > sends back to make it print prettily. Otherwise, it'll just be a block of text.
+3. Click "GetGrinnected" from the list, then "accounts" from the list that appears.
 
-2. Confirm that the output shows multiple events.
+4. Locate your user account, and click the "⊖ Delete" button. Confirm your choice.
 
-3. Find a tag that appears multiple times, such as "Multicultural" or "Student". Copy its text.
+## Sign up for a new account
 
-## Get tagged events
+1. Make a request to the `/session/signup` API endpoint, specifying the new account you want to create.
 
-1. Perform a new curl request, substituting `TAGNAME` for the tag you copied.
+   For instance, this is almond's request since they do testing a lot and wanna copy+paste.
 
-   Make sure to HTML escape it, such as by replacing spaces with `%20`.
-   ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="TAGNAME"' | jq
+   ```bash
+   curl \
+      -H 'Content-Type: application/json' \
+      --request POST \
+      --data '{"email":"heilalmond@grinnell.edu", "username":"almond"}' \
+      http://localhost:8080/session/signup | jq
    ```
 
-2. Confirm that all events shown in the output have the tag you copied.
+2. Confirm the response is positive. It should look like this.
 
-3. Find a tag that appears in at least one item outputted, but not all. Copy its text as well.
-
-## Get multi-tagged events
-
-1. Perform a new curl request, subsituting `TAG1` and `TAG2` for the two tag names you copied.
-
-   Make sure to HTML escape them, such as by replacing spaces with `%20`.
-   ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="TAG1"&tag="TAG2"' | jq
+   ```json
+   {
+      "message":"Account created, and OTP successfully sent."
+   }
    ```
 
-2. Confirm that all events shown have both of the tags you specified.
+## Verify your signup OTP code
 
-## Compare get output lengths
+1. Check your Grinnell outlook for an email from getgrinnected@gmail.com,
+   and copy the code inside.
 
-1. In sequence, repeat the three `curl` commands you did before. Instead of piping them into `jq`, pipe them into `wc -c`.
+2. Use the code to send another POST request, this time to the `/session/verify`
+   endpoint.
 
-   > By piping into `wc -c` instead of `jq`, your computer will count how many characters are in each
-   > output rather than printing the whole text to the screen. This gives an easy-to-read summary.
-
-2. Say the sizes are s1, s2, and s3 in order of the curl commands. Make sure that s1 > s2 > s3.
-
-## Get nonexistent tagged events
-
-1. Perform this curl request.
-   ```
-   curl 'https://node16049-csc324--spring2025.us.reclaim.cloud/events?tag="doesnotexist"' | jq
+   ```bash
+   curl \
+      -H 'Content-Type: application/json' \
+      --request POST \
+      --data '{"email":"heilalmond@grinnell.edu", "code":"123456"}' \
+      http://localhost:8080/session/verify | jq
    ```
 
-2. Confirm the output is an empty array.
+3. Make sure your response looks good. Here's mine, only I changed the tokens to be the example one from <https://jwt.io> so I'm not leaking anything.
 
-## Get events between dates
+   Your `refresh_token` and `access_token` *should* be different strings from each other, but
+   it's tedious to check by hand and an automated test takes care of it.
 
-TODO: This section cannot yet be written.
+   ```json
+   {
+      "message": "Successfully authenticated",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+   }
+   ```
 
-## Get tagged events between dates
+## Log into your existing account
 
-TODO: This section cannot yet be written.
+1. Now that your account is created, send a login request to it.
+
+   ```bash
+   curl \
+      -H 'Content-Type: application/json' \
+      --request POST \
+      --data '{"email":"heilalmond@grinnell.edu"}' \
+      http://localhost:8080/session/login | jq
+   ```
+
+2. It should respond with this.
+
+   ```json
+   {
+      "message": "OTP successfully sent."
+   }
+   ```
+
+## Verify your login OTP code
+
+Follow the exact same steps under "Verify your signup OTP code".
+The behavior should be the same.
 
 # Teardown
 
 When you are done, undo everything you did in the setup.
 
-1. Change back to the main branch.
+1. Press Ctrl+C to stop your running API.
+
+2. Change back to the most up-to-date version of the main branch.
    ```
    git checkout main
+   git pull
    ```
 
-2. Delete your testing branch.
+3. Delete your testing branch.
    ```
    git branch -D <YOUR_BRANCH>
    ```
 
-3. Restart the system process for the API.
-   ```
-   sudo systemctl start nodejs
-   ```
-
-4. Confirm that the process is marked as running.
-   ```
-   sudo systemctl status nodejs
-   ```
-
-5. Close your ssh session.
+4. Close your ssh session.

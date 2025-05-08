@@ -9,19 +9,21 @@ import SwiftUI
 
 struct SignUpView: View{
     @Binding var isLoggedIn: Bool
-    
     //connect to LoginView and ContentView's isLogged In
-    @EnvironmentObject var authManager: AuthManager
     
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
-    
+    @State private var success = Bool()
     @StateObject private var userProfile = UserProfile()
     @State private var signupError = ""
     
     var body: some View{
         VStack(spacing: 20) {
+            Text("Create Account")
+                .bold()
+                .font(.title)
+                .foregroundColor(.textPrimary)
             
             /** input fields*/
             //Username
@@ -35,11 +37,6 @@ struct SignUpView: View{
                       title: "Grinnell Email",
                       placeholder: "Enter your Grinnell Email.. (@grinnell.edu)")
             
-            //Signin Password Text Fields
-            InputView(text: $password,
-                      title: "Password",
-                      placeholder: "Enter your password...",
-                      isSecureField: true)
             
             //error
             if !signupError.isEmpty{
@@ -52,11 +49,24 @@ struct SignUpView: View{
             //Signup button
             
             Button {
-                attemptSignUp()
+                signupError = "" //clear the error message
+                userProfile.signUpUser(email: email, user: username) { result in
+                    switch result {
+                    case .success(let output):
+                        print("API Response: \(output)")
+                        success=true
+                    case .failure(let error):
+                        print("API call failed: \(error.localizedDescription)")
+                        success=false
+                        //render API error message if there was an error
+                        signupError = userProfile.getErrorMessage(error: error);
+                    }
+                }
+                    
             } label: {
                 HStack{
                     Text("SIGN UP")
-                        .fontWeight(.light)
+                        .fontWeight(.medium)
                         .padding()
                         .foregroundColor(Color.white)
                     Image(systemName: "arrow.right")
@@ -69,9 +79,11 @@ struct SignUpView: View{
             .cornerRadius(10)
             .padding(.top, 24)
             
+            .navigationDestination(isPresented: $success) {
+                VerificationView(email: email, isLoggedIn: $isLoggedIn)
+            }
         }//VStack
         .padding()
-        .navigationTitle("Create Account")
         
     }//Body
     
@@ -96,7 +108,6 @@ struct SignUpView: View{
         }
         
         
-    
         //**YET TO BE IMPLEMENTED: Check in database if this user already exists*//
         //Check if user already exists
         //userProfile.alreadyExists()

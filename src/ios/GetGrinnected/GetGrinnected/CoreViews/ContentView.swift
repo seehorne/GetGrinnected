@@ -9,16 +9,21 @@ import Foundation
 import SwiftUI
 
 struct ContentView: View {
-    @State private var isLoggedIn = false
+    @AppStorage("isLoggedIn") private var isLoggedIn = false
+    
+    // store standard font size of 20 in app storage
+    @AppStorage("FontSize") private var fontSize: Double = 20.0
     
     var body: some View {
         Group {
             if isLoggedIn {
-                MainNavView()
+                MainNavView(isLoggedIn: $isLoggedIn)
+                    .navigationBarBackButtonHidden(true)
             } else{
                 LoginView(isLoggedIn: $isLoggedIn)
             }
         }
+        .font(.system(size: fontSize))
     }//body
 }
 

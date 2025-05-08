@@ -3,82 +3,141 @@ package screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.myapplication.Event
+import com.example.myapplication.AppRepository
 import com.example.myapplication.EventCard
+import com.example.myapplication.toEvent
+import android.content.Context
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
+import com.example.myapplication.SnackBarController
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
- * A composable function that represents the Favorites screen of our app. (More to come)
+ * A composable function that represents the Favorites screen of our app.
  *
  * @param modifier Modifier to be applied to the screen layout.
- * @param events List of events to be displayed on favorites screen.
  */
 
 @Composable
-fun FavoritesScreen(modifier: Modifier = Modifier, events: List<Event>) {
+fun FavoritesScreen(modifier: Modifier = Modifier) {
+    // Handles the scrolling state
     val scrollState = rememberScrollState()
+    // Allows our screen to be scrollable
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
 
+    // Accessing colors from our theme
+    val colorScheme = MaterialTheme.colorScheme
+    // Accessing font info from our theme
+    val typography = MaterialTheme.typography
+
+    // Gets event Entities from local Repo
+    val eventEntities by AppRepository.events
+    // Converts eventEntities to events
+    val event = eventEntities.map { it.toEvent() }
+    // List of events sorted by time
+    val events = event.sortedBy { it.event_time }
+    // List of on the favorited events
     val favoritedEvents = events.filter { it.is_favorited }
 
-    Column(
-        modifier = modifier
-            .padding(horizontal = 8.dp)
-            .fillMaxSize()
-            .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text("Favorite Events", fontSize = 28.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 16.dp))
-        }
+    // Host for our snack bar
+    val snackbarHostState = remember { SnackbarHostState() }
+    // Coroutine scope to run background tasks
+    val coroutineScope = rememberCoroutineScope()
 
-        if (favoritedEvents.isEmpty()) {
-            Text("You haven't favorited any events yet.", modifier = Modifier.padding(16.dp))
-        } else {
-            favoritedEvents.forEach { event ->
-                EventCard(event = event, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 8.dp))
+    LaunchedEffect(Unit) {
+        SnackBarController.events.collectLatest { event ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(event.message)
+            }
+        }
+    }
+
+    // This sets up the screen to be a column
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding ->
+        Column(
+            modifier = modifier
+                .padding(padding)
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // We set up a row for the favorite events title
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Favorite Events",
+                    style = typography.headlineMedium,
+                    color = colorScheme.onBackground,
+                    modifier = Modifier.padding(top = 16.dp)
+                        .semantics { heading() })
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+
+            HorizontalDivider()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // If they don't have any favorited events we display the text otherwise we display their events
+            if (favoritedEvents.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Text(
+                        "You haven't favorited any events yet.",
+                        style = typography.titleLarge,
+                        color = colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
+                        // This ensures we alert a screen reader when we have no favorited events yet
+                        modifier = Modifier.semantics {
+                            liveRegion = LiveRegionMode.Polite
+                            contentDescription = "You haven't favorited any events yet"
+                        }
+
+                    )
+                }
+            } else {
+                // For every event we fill an event card composable
+                favoritedEvents.forEach { event ->
+                    EventCard(event = event, modifier = Modifier)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }
 }
 
-
-
-/**
- * Preview used specifically for UI design purposes
- */
-@Preview (showBackground = true)
-@Composable
-fun FavoritesPreview() {
-    val sampleEvents = listOf(
-        Event(1, "Concert Night", "Live music and fun really long description to really push the sizing as far as I can to see waht it would look like if you did this and had a longer description for an event just in general for any normal event!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0, 0,"h", 0,true),
-        Event(2, "Crafternoon", "Lots of fun arts and crafts", "Downtown Theater",listOf("NAMI"), 0,"2025-05-01", "6:30 PM", 0,"8:00 PM", "8:00 PM", listOf("art, fun"), 0,0,"h", 0),
-        Event(3, "Concert Night2", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
-        Event(4, "Concert Night3", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
-        Event(5, "Concert Night4", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
-        Event(6, "Concert Night5", "Live music and fun!", "Downtown Theater",listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
-        Event(7, "Concert Night6", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM", 0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h", 0, true),
-        Event(8, "Concert Night7", "Live music and fun!","Downtown Theater", listOf("Music Club"), 0,"2025-04-20", "8:00 PM",  0,"8:00 PM", "8:00 PM", listOf("music", "fun"), 0,0,"h",0, true),
-    )
-
-    FavoritesScreen(events = sampleEvents)
-}

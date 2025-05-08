@@ -1,6 +1,8 @@
 # see https://www.mkdocs.org/user-guide/writing-your-docs/#configure-pages-and-navigation
 nav:
   - Home: index.md
+  - Android: android.md
+  - iOS: apple.md
   - API v1: api-v1.md
 
 ################################################################################
@@ -16,6 +18,12 @@ theme:
 
 plugins:
   - render_swagger
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_css:
   - swagger-code-colors.css

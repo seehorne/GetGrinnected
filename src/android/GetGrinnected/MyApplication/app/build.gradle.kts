@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -39,8 +40,21 @@ android {
     }
 }
 
-dependencies {
+kotlin {
+    sourceSets.all {
+        kotlin.srcDir("build/generated/ksp/${name}/kotlin")
+    }
+}
 
+dependencies {
+    implementation(libs.androidx.datastore.preferences.v100)
+    implementation(libs.kotlinx.serialization.json.v163)
+    implementation (libs.gson.v2101)
+    implementation(libs.androidx.material.icons.extended.v154)
+    implementation(libs.accompanist.permissions.v0311alpha)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.tools.core)
+    implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -52,13 +66,22 @@ dependencies {
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.ui.test.junit4.android)
     implementation(libs.androidx.fragment.ktx)
-    implementation ("androidx.navigation:navigation-compose:2.7.6")
+    implementation (libs.androidx.navigation.compose.v276)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.volley)
+    implementation(libs.transport.api)
+    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    androidTestImplementation(libs.androidx.espresso.core.v350)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.ui.test.manifest)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+
 }

@@ -1,3 +1,3 @@
 # API v1
 
-!!swagger api-description.json!!
+!!swagger api-v1.yaml!!

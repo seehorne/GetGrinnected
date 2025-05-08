@@ -20,6 +20,13 @@ const pool = mysql.createPool({
 }).promise()
 
 /**
+ * End the connection to the database pool.
+ */
+function end() {
+    pool.end();
+}
+
+/**
  * insertEventsFromScrape
  * 
  * uses scraped json file to fill events into database
@@ -104,13 +111,13 @@ function queryAllTags(tags) {
  * \returns      A string that serves as a SQL selector for those dates
  */
 function queryBetweenDates(start, end) {
-    // events where the start and end times are set
-    // TODO: comparisons seem to not be working. need more work
-    const event_time_between = `(event_start_time < FROM_UNIXTIME(${pool.escape(start)}) AND event_end_time > FROM_UNIXTIME(${pool.escape(end)}))`
-
-    // TODO: handle events that are marked all day and therefore don't have a start time and end time
-    // could it be done when scraping, maybe? this will SUCK to do in mysql.
-
+    // Construct a query for events that happen entirely between params
+    //
+    // "entirely between" means
+    //   event_start_time is AFTER start param
+    //     AND
+    //   event_end_time is BEFORE end param
+    const event_time_between = `(event_start_time >= ${pool.escape(start)} AND event_end_time <= ${pool.escape(end)})`
     return event_time_between;
 }
 
@@ -149,38 +156,56 @@ async function getEventsBetween(start, end) {
  */
 async function getEventsBetweenWithTags(start, end, tags) {
     const query = 'SELECT * FROM events WHERE ' + queryBetweenDates(start, end)
-        + ' AND ' + queryContainsAllTags(tags);
+        + ' AND ' + queryAllTags(tags);
     const [events] = await pool.query(query);
     return events;
 }
 
+/**
+ * Return whether a username has an account associated with it.
+ * 
+ * @param {*} username  The username to check
+ * @returns  The JSON representation of that user if they exist, or `undefined`
+ *           if they do not.
+ */
 async function getAccount(username){
     const [account] = await pool.query(`
        SELECT * 
        FROM accounts
        WHERE account_name = ?
         `, [username]);
-        return account[0]; 
+    
+    return account[0]; 
 }
 
-async function createAccount(username, email, password){
+async function getAccountByEmail(email) {
+    const [account] = await pool.query(`
+        SELECT * 
+        FROM accounts
+        WHERE email = ?
+         `, [email]);
+     
+     return account[0]; 
+}
 
+/**
+ * Create a new account with a username and email.
+ * 
+ * @param {string} username  Username of account
+ * @param {string} email     Grinnell email to create account for
+ * @throws   Error if user already exists.
+ * @returns  Result of the DB query once it is completed.
+ */
+async function createAccount(username, email){
     const existing_account = await getAccount(username);
 
     if(existing_account){
         throw new Error("User already exists.");
     }
-
-    // Setting saltRounds to 10 as it is what I have found is recommended but it is also different from app to app
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-
-    const hashedPassword = await bcrypt.hash(password, salt);
-
     const result = await pool.query(`
         INSERT INTO
-        accounts (account_name, email, password)
-        VALUES (?, ?, ?, ?)`, [username, email, hashedPassword]);
+        accounts (account_name, email)
+        VALUES (?, ?)`, [username, email]);
     
         return result;
 }
@@ -206,11 +231,20 @@ async function dropExpiredEvents(){
     return result;
 }
 
+async function getEventByID(id) {
+    const [event] = await pool.query(`
+        SELECT * 
+        FROM events
+        WHERE eventid = ?
+         `, [id]);
+
+    return event[0];
+}
+
 async function verifyLogin(username, password){
+    const existingAccount = await getAccount(username);
 
-    const existing_account = await getAccount(username);
-
-    if(!existing_account){
+    if(!existingAccount){
         return false; // No user found case
     }
 
@@ -255,6 +289,38 @@ async function testLogins() {
     console.log(log3);
 }
 
+/**
+ * Modify one field of a user account.
+ * 
+ * @param {string} email  Email of user to modify.
+ * @param {string} field  Field to modify
+ * @param {*} newValue  New value to write to that field
+ */
+async function modifyAccountField(email, field, newValue) {
+    const account = await getAccountByEmail(email);
+    if (!account) {
+        throw new Error('No such account to modify');
+    }
+
+    // ?'s will get filled by: field, newValue, email.
+    // NOTE: we need to avoid escaping the field, but this is okay because it will never be user inputted.
+    const sql = `UPDATE accounts SET ${field} = ? WHERE email = ?`
+
+    const result = await pool.query(sql, [newValue, email]);
+    return result;
+}
+
+async function deleteAccount(email) {
+    const account = await getAccountByEmail(email);
+    if (!account) {
+        throw new Error('No account to delete');
+    }
+
+    const sql = `DELETE FROM accounts WHERE email = ?`
+    const result = await pool.query(sql, email);
+    return result;
+}
+
 if (require.main === module) {
     // File is being used as a script. Run it.
     insertEventsFromScrape();
@@ -262,11 +328,18 @@ if (require.main === module) {
 } else {
     // File is being used as a module. Export it.
     module.exports = {
+        end,
+        createAccount,
+        deleteAccount,
         dropExpiredEvents,
+        getAccount,
+        getAccountByEmail,
         getEvents,
         getEventsBetween,
         getEventsBetweenWithTags,
         getEventsWithTags,
         insertEventsFromScrape,
+        modifyAccountField,
+        getEventByID,
     };
 }
