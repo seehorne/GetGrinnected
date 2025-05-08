@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
@@ -34,8 +32,8 @@ fun CheckBox(check: Check) {
             modifier = Modifier
                 .semantics { contentDescription = "Tag: ${check.label}, ${if (check.checked.value) "selected" else "not selected"}" }
         )
-        // checkbox label
-        Text (check.label)
+        // checkbox label adjusted to capitalize first letter
+        Text (check.label.substring(0,1).uppercase() + check.label.substring(1) )
     }
 
 }

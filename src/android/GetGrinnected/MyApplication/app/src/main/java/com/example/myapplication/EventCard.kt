@@ -143,6 +143,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
                                 // This tells our database to update the events favorited status
                                 CoroutineScope(Dispatchers.IO).launch {
                                     AppRepository.toggleFavorite(event.eventid, !event.is_favorited)
+                                    // Sends snack bar that the event was favorited or unfavorited
+                                    SnackBarController.sendEvent(
+                                        SnackBarEvent(
+                                            if (!event.is_favorited) "${event.event_name} was added to your favorites"
+                                            else "${event.event_name} was removed from your favorites"
+                                        )
+                                    )
                                 }
                             },
                     )
