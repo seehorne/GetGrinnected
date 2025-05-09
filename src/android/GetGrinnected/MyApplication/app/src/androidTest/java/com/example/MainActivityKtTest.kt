@@ -13,10 +13,14 @@ import com.example.myapplication.AppNavigation
 import com.example.myapplication.Check
 import com.example.myapplication.MainPage
 import com.example.myapplication.User
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import screens.FavoritesScreen
 import screens.LoginScreen
 import screens.SettingsScreen
 import screens.SignupScreen
+import screens.validateEmail
+import screens.validateUsername
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityKtTest {
@@ -24,6 +28,7 @@ class MainActivityKtTest {
  @get:Rule
  val composeTestRule = createComposeRule()
 
+    /* UI TESTING */
  /**
   * Tests whether we can go from the welcome screen to the login screen
   */
@@ -75,27 +80,25 @@ class MainActivityKtTest {
   */
 /* Still is not passing in CI
  @Test
- fun signupScreen_SigninButton_NavigatesCorrectly() {
-  composeTestRule.setContent { AppNavigation(
-      darkTheme = false, onToggleTheme = {},
-      event = listOf(
-          Event(eventid = 22349,event_name = "MLC Meeting", event_description = "\n  Meetings for MLC Student Leaders\n", event_location = "Rosenfield Center 209 (B&amp;C) - Academic Classroom", organizations = listOf("Affairs"), rsvp = 0, event_date = "April 8", event_time = "Noon - 1 p.m.", event_all_day = 0, event_start_time = "2025-04-08T17:00:00.000Z", event_end_time = "2025-04-08T18:00:00.000Z", tags = listOf("Multicultural","Student Activity","Students"), event_private = 0, repeats =0, event_image = "null", is_draft = 0)
-      ),
-      eventnum = 1,
-      startDestination = "signup"
-  ) }
+ fun signUpScreen_SignInButton_NavigatesCorrectly() {
+     composeTestRule.setContent { AppNavigation(
+         darkTheme = false, onToggleTheme = {},
+         startDestination = "signup",
+         tags = mutableListOf<Check>(),
+         fontSizeSetting = "M",
+         onFontSizeChange = {}
+     ) }
 
-  composeTestRule.waitUntil(timeoutMillis = 10_000) {
-   composeTestRule.onAllNodesWithText("Sign in").fetchSemanticsNodes().isNotEmpty()
-  }
-  composeTestRule.onNodeWithText("Sign in").assertExists().performClick()
+     composeTestRule.waitUntil(timeoutMillis = 5_000) {
+         composeTestRule.onAllNodesWithText("Sign in").fetchSemanticsNodes().isNotEmpty()
+     }
+     composeTestRule.onNodeWithText("Sign in").assertExists().performClick()
 
-  composeTestRule.waitUntil(timeoutMillis = 10_000) {
-   composeTestRule.onAllNodesWithText("Login to your account").fetchSemanticsNodes().isNotEmpty()
-  }
-  composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
+     composeTestRule.waitForIdle()
+     composeTestRule.onNodeWithText("Login to your account").assertIsDisplayed()
  }
-*/
+ */
+
  /**
   * Tests whether we can go from the welcome screen to the login and then use the
   * join now button to go to the signup page
@@ -173,38 +176,6 @@ class MainActivityKtTest {
   val expectedScreenText: String
  )
 
-    /** Currently working on this test couldn't get it done before deadline.
-    /**
-     * Parameterized Test to ensure the navigation bar works as anticipated.
-     */
-    @Test
-    fun calendarPage_Dropdown_NavigatesToAllViews() {
-        val destinations = listOf(
-            NavTestData("Month View", "April"),
-            NavTestData("Day View", "DayView"),
-            NavTestData("Week View", "WeekView"),
-        )
-
-        composeTestRule.setContent {
-            CalendarScreen()
-        }
-        destinations.forEach { (tabText, expectedScreenText) ->
-                composeTestRule.onNodeWithText("Month").performClick()
-                composeTestRule.waitUntil(timeoutMillis = 5_000) {
-                    composeTestRule.onAllNodesWithText(tabText).fetchSemanticsNodes().isNotEmpty()
-                }
-                composeTestRule.onNodeWithText(tabText).assertExists().performClick()
-
-                composeTestRule.waitUntil(timeoutMillis = 5_000) {
-                    composeTestRule.onAllNodesWithText(expectedScreenText).fetchSemanticsNodes()
-                        .isNotEmpty()
-                }
-
-                composeTestRule.onNodeWithText(expectedScreenText).assertIsDisplayed()
-        }
-    }
-    **/
-
     /**
      * Tests the dark mode switch works as intended
      */
@@ -264,7 +235,7 @@ class MainActivityKtTest {
 
         composeTestRule.onNodeWithText("Email").performTextInput("user@grinnell.edu")
         composeTestRule.onNodeWithText("Sign up").performClick()
-        composeTestRule.onNodeWithText("Username can only include letters, '.', and '_'").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Username can only include letters, numbers, '.', and '_'").assertIsDisplayed()
     }
 
     /**
@@ -278,5 +249,144 @@ class MainActivityKtTest {
 
         composeTestRule.onNodeWithText("Login").performClick()
         composeTestRule.onNodeWithText("Please enter email").assertIsDisplayed()
+    }
+
+    /**
+     * Test to ensure that font size selection on the settings page
+     * changes to the fontsize enum we have selected.
+     */
+    @Test
+    fun settingsScreen_FontSizeDropdown_SetsSize() {
+        var selectedFontSize = ""
+        composeTestRule.setContent {
+            SettingsScreen(
+                account = User(1, "user", "email@grinnell.edu", "", listOf(), listOf(), listOf(), listOf(), "", 0),
+                darkTheme = false,
+                onToggleTheme = {},
+                navController = rememberNavController(),
+                fontSizeSetting = "M",
+                onFontSizeChange = { selectedFontSize = it }
+            )
+        }
+        composeTestRule.onNodeWithText("Accessibility").performClick()
+        composeTestRule.onNodeWithText("Medium").performClick()
+        composeTestRule.onNodeWithText("Large").performClick()
+        assert(selectedFontSize == "L")
+    }
+
+    /* UNIT TESTING HELPER FUNCTIONS */
+
+    // Tests for validateUsername Function
+
+    /**
+     * Test to ensure legal usernames return null
+     */
+    @Test
+    fun validUsername_ReturnsNull() {
+        // 3 possible examples of legal usernames within our scheme
+        assertNull(validateUsername("anthony_yay"))
+        assertNull(validateUsername("anthony.yay"))
+        assertNull(validateUsername("anthony123"))
+    }
+
+    /**
+     * Tests that if a username has characters not in our allowed list that we give it an error
+     * explaining the characters allowed in a username
+     */
+    @Test
+    fun usernameWithInvalidCharacters_ReturnsCorrectError() {
+        assertEquals("Username can only include letters, numbers, '.', and '_'", validateUsername("@ops"))
+    }
+
+    /**
+     * Tests that if a username has no characters that we tell the user they need at least
+     * a single letter.
+     */
+    @Test
+    fun usernameWithoutLetters_ReturnsCorrectError() {
+        assertEquals("Username must contain at least one letter", validateUsername("123"))
+    }
+
+    /**
+     * Tests that if a username has consecutive periods that we tell the user that they cannot have
+     * multiple ..s in a row
+     */
+    @Test
+    fun usernameWithConsecutivePeriods_ReturnsCorrectError() {
+        assertEquals("Username cannot contain two or more '.' in a row", validateUsername("periods..woah"))
+    }
+
+    /**
+     * Tests that if a username has consecutive underscores that we tell the user that they cannot have
+     * multiple __s in a row
+     */
+    @Test
+    fun usernameWithConsecutiveUnderscores_ReturnsCorrectError() {
+        assertEquals("Username cannot contain two or more '_' in a row", validateUsername("yay__testing"))
+    }
+
+    /**
+     * Tests that if a username has consecutive period and underscore that we tell the user that they cannot have
+     * said pattern
+     */
+    @Test
+    fun usernameWithPeriodUnderscore_ReturnsCorrectError() {
+        assertEquals("Username cannot contain a '.' followed by a '_'", validateUsername("first._way"))
+    }
+
+    /**
+     * Tests that if a username has consecutive underscore and period that we tell the user that they cannot have
+     * said pattern
+     */
+    @Test
+    fun usernameWithUnderscorePeriod_ReturnsCorrectError() {
+        assertEquals("Username cannot contain a '_' followed by a '.'", validateUsername("other_.way"))
+    }
+
+    /**
+     * Tests that if a username has a period or underscore as the starting letter that we report
+     * the correct error in our return
+     */
+    @Test
+    fun usernameStartsWithInvalidCharacter_ReturnsCorrectError() {
+        assertEquals("Username cannot start with '.' or '_'", validateUsername(".start"))
+        assertEquals("Username cannot start with '.' or '_'", validateUsername("_start"))
+    }
+
+    /**
+     * Tests that if a username has a period or underscore as the ending letter that we report
+     * the correct error in our return
+     */
+    @Test
+    fun usernameEndsWithInvalidCharacter_ReturnsCorrectError() {
+        assertEquals("Username cannot end with '.' or '_'", validateUsername("end."))
+        assertEquals("Username cannot end with '.' or '_'", validateUsername("end_"))
+    }
+
+    /**
+     * Tests that if a username is longer than 20 characters that we return the correct error
+     * saying they can't do that.
+     */
+    @Test
+    fun usernameExceedsMaxLength_ReturnsCorrectError() {
+        assertEquals("Username must be no more that 20 characters long", validateUsername("superduperextralongusernamebecausewhynot"))
+    }
+
+    // Tests for validateEmail Function
+
+    /**
+     * Tests that a grinnell email returns null as we would expect
+     */
+    @Test
+    fun validEmail_ReturnsNull(){
+        assertNull(validateEmail("schwindt2@grinnell.edu"))
+    }
+
+    /**
+     * Tests that a non-grinnell email returns the correct error
+     */
+    @Test
+    fun invalidEmail_ReturnsCorrectError(){
+        assertEquals("Email must end with @grinnell.edu", validateEmail("test@test.com"))
     }
 }
