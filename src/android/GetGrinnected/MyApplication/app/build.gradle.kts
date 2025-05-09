@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.GetGrinnected.myapplication"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.GetGrinnected.myapplication"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

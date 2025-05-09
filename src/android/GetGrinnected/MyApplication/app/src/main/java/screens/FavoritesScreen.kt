@@ -17,12 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.AppRepository
-import com.example.myapplication.EventCard
-import com.example.myapplication.toEvent
-import android.content.Context
+import com.GetGrinnected.myapplication.AppRepository
+import com.GetGrinnected.myapplication.EventCard
+import com.GetGrinnected.myapplication.toEvent
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -34,7 +32,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import com.example.myapplication.SnackBarController
+import com.GetGrinnected.myapplication.SnackBarController
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

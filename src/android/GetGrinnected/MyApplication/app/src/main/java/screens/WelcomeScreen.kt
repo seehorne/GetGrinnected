@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.R
+import com.GetGrinnected.myapplication.R
 
 /**
  * A composable function that represents the Welcome screen of our application.

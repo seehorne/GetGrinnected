@@ -2,6 +2,7 @@ package screens
 
 import android.content.Intent
 import android.widget.Toast
+import com.GetGrinnected.myapplication.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,17 +39,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.AppRepository
-import com.example.myapplication.DataStoreSettings
-import com.example.myapplication.User
+import com.GetGrinnected.myapplication.AppRepository
+import com.GetGrinnected.myapplication.DataStoreSettings
+import com.GetGrinnected.myapplication.User
 import kotlinx.coroutines.launch
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.OutlinedTextField
-import com.example.myapplication.FontSizePrefs
-import com.example.myapplication.toAccountEntity
+import com.GetGrinnected.myapplication.FontSizePrefs
+import com.GetGrinnected.myapplication.toAccountEntity
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.foundation.layout.ColumnScope
@@ -60,7 +61,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.res.painterResource
 import androidx.core.net.toUri
-import com.example.myapplication.R
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -68,9 +68,9 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
-import com.example.myapplication.AppRepository.deleteAccount
-import com.example.myapplication.SnackBarController
-import com.example.myapplication.SnackBarEvent
+import com.GetGrinnected.myapplication.AppRepository.deleteAccount
+import com.GetGrinnected.myapplication.SnackBarController
+import com.GetGrinnected.myapplication.SnackBarEvent
 import kotlinx.coroutines.flow.collectLatest
 
 /**

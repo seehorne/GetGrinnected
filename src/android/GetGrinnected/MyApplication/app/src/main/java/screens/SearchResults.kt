@@ -21,8 +21,8 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.Event
-import com.example.myapplication.EventCard
+import com.GetGrinnected.myapplication.Event
+import com.GetGrinnected.myapplication.EventCard
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
