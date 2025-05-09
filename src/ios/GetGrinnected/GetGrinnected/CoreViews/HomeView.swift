@@ -14,42 +14,41 @@ struct HomeView: View {
     @StateObject private var viewModel = EventListParentViewModel()
     @State private var searchText = ""
     @State private var isLoading = true
-    
-    
-    //Sorting and Filtering parameters
-    @State private var sortOrder = SortOrder.time
-    @State private var filterType = FilterType.name
-    @State private var filter = ""
+    // The type of filter we are using on the event list
+    @State private var filterType: FilterType = .name
     
     //Main view body
     var body: some View {
         //geomtry view to have header
         GeometryReader{proxy in
-            //no safe area so the header goes all the way to the top
+            let safeAreaTop = proxy.safeAreaInsets.top
+            
             //vstack of header and events
             NavigationStack{
                 VStack(){
-                    Spacer()
+                    // Header is outside of scrollable so it does not move
+                    Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Home", searchBarOn: false)
+                    
                     //vertical scroll view to see more events
-                    ScrollView(.vertical, showsIndicators: true){
+                    ScrollView(.vertical, showsIndicators: false){
                         //vstack to have some spacing between header and main compoments
                         VStack(spacing: 16) {
                             WeekView(selectedDate: $viewModel.viewedDate)
                                 .padding(.bottom, 4)
-                                .padding(.top, 140)
+                            
+                            TagMultiSelector(title: "Tags", parentView: viewModel)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
+                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: SortOrder.time, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
-                   .refreshable {
-                       //force refresh through the button!
-                       viewModel.forceRefresh() //only changes last change to nil
-                   }
-                }//scroll view
+                    .refreshable {
+                        //force refresh through the button!
+                        viewModel.forceRefresh() //only changes last change to nil
+                    }
+                } //scroll view
                 .edgesIgnoringSafeArea(.top)
-                .searchable(text: $searchText, prompt: "Search...")
             }
             .navigationTitle("Calendar")
             .headerProminence(.increased)
@@ -76,10 +75,6 @@ struct HomeView: View {
         }
     }//main body view
 }
-
-
-
-
 
 #Preview() {
     HomeView()

@@ -101,7 +101,6 @@ final class EventModel: Hashable { // hashable for uniqueness
         self.is_draft = dto.is_draft
         self.favorited = false
         self.lastUpdated = Date()
-//        self.isSelected = false
         self.notified = false
     }
 
@@ -110,7 +109,6 @@ final class EventModel: Hashable { // hashable for uniqueness
     init() {
         self.id = 0
         self.name = ""
-//        self.isSelected = false
         self.notified = false
     }
     
