@@ -44,9 +44,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.R
-import com.example.myapplication.RetrofitApiClient
-import com.example.myapplication.SignupRequest
+import com.GetGrinnected.myapplication.R
+import com.GetGrinnected.myapplication.RetrofitApiClient
+import com.GetGrinnected.myapplication.SignupRequest
 import kotlinx.coroutines.launch
 
 /**

@@ -37,9 +37,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import com.example.myapplication.AppRepository
-import com.example.myapplication.Event
-import com.example.myapplication.toEvent
+import com.GetGrinnected.myapplication.AppRepository
+import com.GetGrinnected.myapplication.Event
+import com.GetGrinnected.myapplication.toEvent
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date

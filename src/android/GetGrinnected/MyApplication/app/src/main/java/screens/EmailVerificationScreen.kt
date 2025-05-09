@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -40,14 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.DataStoreSettings
-import com.example.myapplication.R
-import com.example.myapplication.RetrofitApiClient
+import com.GetGrinnected.myapplication.DataStoreSettings
+import com.GetGrinnected.myapplication.R
+import com.GetGrinnected.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
-import com.example.myapplication.AppRepository
-import com.example.myapplication.LoginRequest
-import com.example.myapplication.VerifyRequest
-import com.example.myapplication.toAccountEntity
+import com.GetGrinnected.myapplication.AppRepository
+import com.GetGrinnected.myapplication.LoginRequest
+import com.GetGrinnected.myapplication.VerifyRequest
+import com.GetGrinnected.myapplication.toAccountEntity
 
 /**
  * A composable function that represents the email verification screen of our application.
