@@ -34,14 +34,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.LoginRequest
-import com.example.myapplication.R
-import com.example.myapplication.RetrofitApiClient
+import com.GetGrinnected.myapplication.LoginRequest
+import com.GetGrinnected.myapplication.R
+import com.GetGrinnected.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
 
 /**
@@ -130,7 +132,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Email,
-                        contentDescription = "Email Icon",
+                        contentDescription = "Email input field Icon",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -221,6 +223,7 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                     Text(
                         text = "Join now",
                         style = typography.labelLarge,
+                        modifier = modifier.semantics { contentDescription = "Sign Up for an account" }
                     )
                 }
             }

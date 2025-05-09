@@ -12,13 +12,14 @@ import Foundation
  
  viewedDate: the date is currently being viewed. default is today
  lastDate: the furthest date in the future we can see. default is 2 weeks
- selectedTags: the tags selected to filter by. default is any
+ selectedTags: the set of tags selected to filter by. default is empty
  timeSpan: the time span we want to see events for. default is now to the start of tomorrow
  
  */
 class EventListParentViewModel: ObservableObject {
     @Published var viewedDate = Date.now //contains info about viewed date
-    @Published var selectedTags = EventTags.any //about selected tags
+    @Published var selectedTags: Set<String> = [] //the tags we have selected to filter by
+    @Published var possibleTags: Set<String> = [] //the tags all events have that we can filter by
     @Published var timeSpan: (start: Date, end: Date) = (Date(), Date().startOfNextDay)//time span by day
     @Published var lastFetched: Date? //about when last fetched to update
     @Published var forceRefreshRequested: Bool = false //about whether or not a force refresh was requested

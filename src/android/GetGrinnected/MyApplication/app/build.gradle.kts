@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.GetGrinnected.myapplication"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.GetGrinnected.myapplication"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -47,6 +47,8 @@ kotlin {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-runtime-compose")
+    implementation("androidx.compose.material3:material3:1.3.2")
     implementation(libs.androidx.datastore.preferences.v100)
     implementation(libs.kotlinx.serialization.json.v163)
     implementation (libs.gson.v2101)
@@ -71,6 +73,7 @@ dependencies {
     implementation(libs.volley)
     implementation(libs.transport.api)
     implementation(libs.firebase.database.ktx)
+    implementation(libs.androidx.benchmark.macro)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core.v350)
@@ -83,5 +86,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+    testImplementation(kotlin("test"))
 
 }

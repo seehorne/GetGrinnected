@@ -310,6 +310,17 @@ async function modifyAccountField(email, field, newValue) {
     return result;
 }
 
+async function deleteAccount(email) {
+    const account = await getAccountByEmail(email);
+    if (!account) {
+        throw new Error('No account to delete');
+    }
+
+    const sql = `DELETE FROM accounts WHERE email = ?`
+    const result = await pool.query(sql, email);
+    return result;
+}
+
 if (require.main === module) {
     // File is being used as a script. Run it.
     insertEventsFromScrape();
@@ -319,6 +330,7 @@ if (require.main === module) {
     module.exports = {
         end,
         createAccount,
+        deleteAccount,
         dropExpiredEvents,
         getAccount,
         getAccountByEmail,

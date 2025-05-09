@@ -106,12 +106,12 @@ function run() {
 
   // Login and signups will be done through POST requests, which is because you
   // have to send information and there's the metaphor of creating something new.
-  app.post('/user/login',
+  app.post('/session/login',
     [middlewareBodyExists('email')],
     user.routeSendOTP
   );
   app.post(
-    '/user/signup',
+    '/session/signup',
     [
       middlewareBodyExists('email'),
       middlewareBodyExists('username'),
@@ -121,7 +121,7 @@ function run() {
 
   // Resend an OTP code by POSTing the email you need it sent to.
   app.post(
-    '/user/resend-otp',
+    '/session/resend-code',
     [middlewareBodyExists('email')],
     user.routeSendOTP
   );
@@ -129,12 +129,19 @@ function run() {
   // OTP code verification also through a POST request. If successful, it will
   // send back the needed authentication tokens.
   app.post(
-    '/user/verify',
+    '/session/verify',
     [
       middlewareBodyExists('email'),
       middlewareBodyExists('code')
     ],
     user.routeVerifyOTP
+  );
+
+  // When logged in, you can refresh your own tokens whenever needed.
+  app.post(
+    '/session/refresh',
+    [middlewareVerifyJWT(REFRESH_JWT)],
+    user.routeRefreshTokens
   );
 
   /*
@@ -143,13 +150,6 @@ function run() {
    * These routes are protected by JWT verification (the middlewareVerifyJWT function)
    * since they correspond to a particular user.
    */
-
-  // When logged in, you can refresh your own tokens whenever needed.
-  app.post(
-    '/user/token-refresh',
-    [middlewareVerifyJWT(REFRESH_JWT)],
-    user.routeRefreshTokens
-  );
 
   // Get your own data by requesting it with a GET request.
   app.get(
@@ -201,6 +201,13 @@ function run() {
       middlewareVerifyJWT(ACCESS_JWT)
     ],
     user.routePutUsername
+  );
+
+  // Delete account by sending a request while logged in
+  app.delete(
+    '/user',
+    [middlewareVerifyJWT(ACCESS_JWT)],
+    user.routeDeleteAccount
   );
 }
 

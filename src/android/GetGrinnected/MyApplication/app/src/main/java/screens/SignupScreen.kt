@@ -36,14 +36,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.R
-import com.example.myapplication.RetrofitApiClient
-import com.example.myapplication.SignupRequest
+import com.GetGrinnected.myapplication.R
+import com.GetGrinnected.myapplication.RetrofitApiClient
+import com.GetGrinnected.myapplication.SignupRequest
 import kotlinx.coroutines.launch
 
 /**
@@ -111,7 +114,11 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
             Text(
                 text = "Welcome to GetGrinnected",
                 style = typography.headlineMedium,
-                color = colorScheme.onBackground
+                color = colorScheme.onBackground,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -135,7 +142,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Person,
-                        contentDescription = "Email Icon",
+                        contentDescription = "Username field input icon",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -165,7 +172,7 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Email,
-                        contentDescription = "Email Icon",
+                        contentDescription = "Email input field icon",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -264,7 +271,9 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                     color = colorScheme.onBackground
                 )
                 TextButton(onClick = { navController.navigate("login") }) {
-                    Text(text = "Sign in", style = typography.labelLarge)
+                    Text(text = "Sign in",
+                        style = typography.labelLarge,
+                        modifier = modifier.semantics { contentDescription = "Log in to your account" })
                 }
             }
 
@@ -295,11 +304,11 @@ fun SignupScreenPreview(){
  * @return either null if we pass validation or a string reporting the associated error
  */
 fun validateUsername(username: String): String? {
-    // Set of allowed characters Alphabetical and periods and underscores
+    // Set of allowed characters Alphabetical, Numeric and periods and underscores
     val allowedChars = Regex("^[a-zA-Z0-9._]+$")
     // If the username contains characters that aren't allowed we display the following error
     if (!allowedChars.matches(username)) {
-        return "Username can only include letters, '.', and '_'"
+        return "Username can only include letters, numbers, '.', and '_'"
     }
     // Set of letters
     val letters = Regex("[a-zA-Z]")

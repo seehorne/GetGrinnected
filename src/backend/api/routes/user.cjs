@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
 const DBPATH = './src/backend/Database/localOTP.db'
@@ -123,31 +122,6 @@ async function routeSignUpNewUser(req, res, _next) {
 }
 
 /**
- * Generate new user tokens for a specific email address.
- * 
- * @param {string} email  Email to generate the tokens for.
- * @returns  An object with two keys:
- * - refresh for the user's refresh token
- * - access for the user's access token
- */
-function generateUserTokens(email) {
-  // Use JSON Web Tokens to create two tokens for the user,
-  // a long-lived refresh token and a short-lived access token.
-  const refreshToken = jwt.sign(
-    { email },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '30d' }
-  );
-  const accessToken = jwt.sign(
-    { email },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' }
-  );
-
-  return { 'refresh': refreshToken, 'access': accessToken };
-}
-
-/**
  * Verify an OTP code.
  * 
  * @param {*} req  Express request. Body should contain email logging into,
@@ -160,20 +134,26 @@ async function routeVerifyOTP(req, res, _next) {
   // we can assume they exist thanks to the middleware.
   const email = req.body.email;
   const code = req.body.code;
+  bypass = false;
+
+  if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu'){
+    //give permission to verify regardless of the input
+    bypass= true;
+  }
 
   // Check the OTP code the user entered against the codes we have stored.
   // If it does not match (wrong code or expired), return the same error with
   // HTTP status 400.
   validCode = await util.otpFileCheck(DBPATH, email, code)
-  if (!validCode) {
+  if (!validCode && !bypass) {//the code is wrong AND we don't have permission to bypass
     res.status(400).json({
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
     });
     return;
-  } else {
+  } else {//the code was right OR we have permission to bypass (for apple account)
     // Generate tokens for that user
-    const tokens = generateUserTokens(email);
+    const tokens = util.generateUserTokens(email);
 
     // Send those tokens back to the user in a successful response.
     res.json({
@@ -213,7 +193,7 @@ async function routeGetFavorited(req, res, _next) {
 async function routePutFavorited(req, res, next) {
   // Set the favorited_events array of that user, and let that function do the response.
   // This assumes the body has `favorited_events`, and the middleware makes sure that is true
-  await util.userDataSetArray('favorited_events', req, res, next);
+  await util.setUserEventArray('favorited_events', req, res, next);
 }
 
 /**
@@ -245,7 +225,7 @@ async function routeGetNotified(req, res, _next) {
 async function routePutNotified(req, res, next) {
   // Set the notified_events array of that user, and let that function do the response.
   // This requires the body contain `notified_events`, which we get thanks to the middleware
-  await util.userDataSetArray('notified_events', req, res, next);
+  await util.setUserEventArray('notified_events', req, res, next);
 }
 
 /**
@@ -320,7 +300,7 @@ async function routeRefreshTokens(req, res, _next) {
   const email = req.email;
 
   // Generate and send the new tokens
-  const tokens = generateUserTokens(email);
+  const tokens = util.generateUserTokens(email);
   res.json({
     'message': 'Successfully refreshed',
     'refresh_token': tokens.refresh,
@@ -328,8 +308,37 @@ async function routeRefreshTokens(req, res, _next) {
   });
 }
 
+/**
+ * Delete the account of the currently logged-in user.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} _next 
+ */
+async function routeDeleteAccount(req, res, _next) {
+  // Get the email to delete, we know it is included thanks to the middleware.
+  const email = req.email;
+
+  // Ask the database to delete that account
+  try {
+    await db.deleteAccount(email);
+
+    // Return a successful delete
+    res.json({
+      'message': 'Account successfully deleted.'
+    });
+  } catch (error) {
+    // If an error happens, respond saying there was an error instead
+    res.status(404).json({
+      'error': 'Unknown error',
+      'message': error.toString()
+    });
+  }
+}
+
 if (require.main !== module) {
   module.exports = {
+    routeDeleteAccount,
     routeGetFavorited,
     routeGetNotified,
     routeGetUserData,

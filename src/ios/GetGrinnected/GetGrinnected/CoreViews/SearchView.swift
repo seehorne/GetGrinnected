@@ -24,7 +24,7 @@ struct SearchView: View {
     
     
     //Sorting and Filtering parameters
-    @State private var sortOrder = SortOrder.eventTime
+    @State private var sortOrder = SortOrder.time
     @State private var filterType = FilterType.name
     @State private var filter = ""
     
@@ -59,10 +59,11 @@ struct SearchView: View {
                     
                 }//header elements
                 
-                ScrollView(.vertical, showsIndicators: false){
+                ScrollView(.vertical, showsIndicators: true){
                     EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterToday: false)
                     
                 }//scroll view
+                .padding(.horizontal)
                 
             }//navigation stack
             .edgesIgnoringSafeArea(.top)

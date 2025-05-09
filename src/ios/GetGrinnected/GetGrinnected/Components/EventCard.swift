@@ -51,8 +51,23 @@ struct EventCard: View {
     //simply based on this value, the expansion will show and not.
     let userProfile = UserProfile()
     
+    let description: String //description used later
+    //let deepLink: URL //for now unneeded
     
-    /** Some helper functions for the date*/
+    init(event: EventModel, isExpanded: Bool) {
+        self.event = event
+        self.isExpanded = isExpanded
+        //self.deepLink = URL(string: "GetGrinnected://item/\(event.id)")!
+        self.description = (
+        """
+        Event: \(event.name)
+        Location: \(event.location ?? "N/A")
+        Organization: By \(event.organizations.joined(separator: ", "))
+        Time: \(event.startTimeString ?? "N/A")
+        Link: https://github.com/seehorne/GetGrinnected
+        """//eventually add a link to the app instead of a link to the getGrinnected github!
+        )
+    }
 
     
     //body is how this is rendered
@@ -153,6 +168,17 @@ struct EventCard: View {
                         
                         
                         VStack {
+                            ShareLink(
+                                item: "Check out this event!\n",
+                                subject: Text("Join me at this event!"),
+                                message: Text("\(self.description)"),
+                                preview: SharePreview("Check this out!", image: Image(systemName: "square.and.arrow.up"))
+                            ) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(.border)
+                            }//can utilize
+                            .padding(.vertical, 2)//adding space after
+                            
                             //component that can be reusable
                             Button(action: {
                                 event.favorited.toggle()
@@ -167,8 +193,7 @@ struct EventCard: View {
                                     .foregroundColor(.border)
                                     .imageScale(.large)
                             }
-                            
-                            .padding(.vertical, 4)
+                            .padding(.vertical, 2)//adding space after
                             
                             
                             Button(action: {
@@ -182,7 +207,7 @@ struct EventCard: View {
                                     .imageScale(.large)
                             }
                         } //Vstack
-                        .padding(.vertical, 4)//adding space after
+                        .padding(.vertical, 2)//adding space after
                         .frame(alignment: .trailing)
                         
                         

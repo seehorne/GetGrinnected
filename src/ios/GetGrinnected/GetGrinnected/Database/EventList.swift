@@ -16,12 +16,12 @@ import SwiftUI
  Searching, filtering and forcerefreshing is all in this file.
  */
 enum SortOrder: String, Identifiable, CaseIterable {
-    case eventName, eventTime
+    case name, time
     var id: Self { self}
 }
 
 enum FilterType: String, Identifiable, CaseIterable {
-    case name, favorites //different sorting options, for now removing organization and tag
+    case name, favorites //different sorting options, for now removing organization
     var id: Self { self } //identifiable protocol
 }
 
@@ -69,9 +69,9 @@ struct EventList: View {
         //apply sort order, default if no title or organization provided
         let sortDescriptors: [SortDescriptor<EventModel>] =
         switch sortOrder {
-        case .eventName:
+        case .name:
             [SortDescriptor(\EventModel.name)]
-        case .eventTime:
+        case .time:
             [SortDescriptor(\EventModel.startTime)]
         }
         
@@ -82,7 +82,8 @@ struct EventList: View {
         //filtering
         var predicate: Predicate<EventModel>
         
-        if filter.isEmpty {
+        if !filter.isEmpty {
+            print("filter is empty")
             predicate = #Predicate { event in
                 (filterToday //filter today by the start time and end time
                           ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
@@ -91,8 +92,10 @@ struct EventList: View {
                   // search filtering: if it's empty, simply write true (so all events are present), or whatever event name contains that search
                   (filter.isEmpty || event.name.localizedStandardContains(filter))}
         } else{
+            print("making filter predicate")
             switch filterType{
                 case .name:
+                    print("filtering by name")
                     predicate = #Predicate<EventModel> {event in
                         (filterToday //filter today by the start time and end time
                                   ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
@@ -102,6 +105,7 @@ struct EventList: View {
                           (filter.isEmpty || event.name.localizedStandardContains(filter))
                     }
                 case .favorites:
+                    print("filtering by favorites")
                     predicate = #Predicate<EventModel> {event in
                         event.favorited && (filter.isEmpty || event.name.localizedStandardContains(filter))
                     }
@@ -139,31 +143,59 @@ struct EventList: View {
             } else {
                 //for every event, based on ID
                 ForEach(events, id: \.id) { event in
-                    //add an event card of that event that..
-                    EventCard(event: event, isExpanded: (event.id == selectedEvent))//selects based on if the selected event is the same as the event ID
-                        .onTapGesture { //on tap..
-                            withAnimation(.easeInOut) { //changes selectedEvent to this event, (and thus expands it)
-                                //select event
-                                if (event.id == selectedEvent){
-                                    selectedEvent = -1
-                                } else {
-                                    selectedEvent = event.id
+                    // check if there are selected tags
+                    if !parentView.selectedTags.isEmpty {
+                        // check if the current event has any of the selected tags
+                        if !Set(event.tags).intersection(parentView.selectedTags).isEmpty {
+                            //add an event card of that event that..
+                            EventCard(event: event, isExpanded: (event.id == selectedEvent))//selects based on if the selected event is the same as the event ID
+                                .onTapGesture { //on tap..
+                                    withAnimation(.easeInOut) { //changes selectedEvent to this event, (and thus expands it)
+                                        //select event
+                                        if (event.id == selectedEvent){
+                                            selectedEvent = -1
+                                        } else {
+                                            selectedEvent = event.id
+                                        }
+                                    }
+                                }//tap each event, and it sets id = to that event
+                                .onChange(of: event.favorited) { _, _ in
+                                    try? modelContext.save()
+                                    print("Success Save for Event\(event.id)")
+                                    
                                 }
+                        } //if
+                    } //if
+                    else { // if there are not selected tags
+                        //add an event card of that event that..
+                        EventCard(event: event, isExpanded: (event.id == selectedEvent))//selects based on if the selected event is the same as the event ID
+                            .onTapGesture { //on tap..
+                                withAnimation(.easeInOut) { //changes selectedEvent to this event, (and thus expands it)
+                                    //select event
+                                    if (event.id == selectedEvent){
+                                        selectedEvent = -1
+                                    } else {
+                                        selectedEvent = event.id
+                                    }
+                                }
+                            }//tap each event, and it sets id = to that event
+                            .onChange(of: event.favorited) { _, _ in
+                                try? modelContext.save()
+                                print("Success Save for Event\(event.id)")
+                                
                             }
-                        }//tap each event, and it sets id = to that event
-                        .onChange(of: event.favorited) { _, _ in
-                            try? modelContext.save()
-                            print("Success Save for Event\(event.id)")
-                            
-                        }
-                    
+                    }
                 }//foreach
             }//if loading, else, fetch.
             
         }//vstack
-        .onChange(of: parentView.forceRefreshRequested){
-            Task {
-                await updateEvents()
+        .onChange(of: parentView.forceRefreshRequested) { oldValue, newValue in
+            print("forceRefreshRequested changed: \(newValue)")
+            
+            if newValue { // update events if we forced refresh
+                Task {
+                    await updateEvents()
+                }
             }
         }
         .onAppear{
@@ -185,11 +217,21 @@ struct EventList: View {
     private func updateEvents() async {
         print("1: updateEvents called")
         if let eventstoUpdate = await fetchEvents(){
+            updatePossibleTags(events: eventstoUpdate) // update the tags we can filter by
             await DTOtoCache(eventDTOs: eventstoUpdate)
             print("2: updateEvents success")
         } else {
             print("3: no events to update")
         }
+    }
+    
+    /*
+     This function goes through the tags of the provided list of events and changes the possible tags in the parent view to contain them
+     */
+    private func updatePossibleTags(events: [EventDTO]) {
+        let tagSet = Set(events.compactMap{ $0.tags }.flatMap{ $0 })
+        parentView.possibleTags = tagSet
+        print("updated tags")
     }
     
     //Function Fetch Events

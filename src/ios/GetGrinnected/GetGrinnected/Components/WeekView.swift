@@ -128,8 +128,8 @@ struct WeekView: View {
                 // pulldown for the week
                 Image(systemName: "chevron.down")
                     .foregroundColor(.appTextSecondary)
-                    .frame(width: 40, height: 40)
-                    .font(.system(size: 18))
+                    //.frame(width: 40, height: 40)
+                    .imageScale(.large)
                 
                 //a spacer for aesthetics
                 Spacer()
@@ -163,23 +163,10 @@ struct WeekView: View {
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.appBorder, lineWidth: 1)
                         }
-                    )//bacgkground
+                    )//background
                     .foregroundColor(.appTextPrimary)
                     .cornerRadius(8)
                 }
-                // OPACITY EFFECT
-//                .opacity(isDateInDisplayedWeek(Date(), for: weekOffset) ? 0 : 1)
-                
-                // SCALED EFFECT
-//                .scaleEffect(isDateInDisplayedWeek(Date(), for: weekOffset) ? 0.8 : 1)
-//                .opacity(isDateInDisplayedWeek(Date(), for: weekOffset) ? 0 : 1)
-//                .animation(.easeInOut, value: isDateInDisplayedWeek(Date(), for: weekOffset))
-                
-                // FADE WITH BLUR EFFECT
-//                .opacity(isDateInDisplayedWeek(Date(), for: weekOffset) ? 0 : 1)
-//                .blur(radius: isDateInDisplayedWeek(Date(), for: weekOffset) ? 10 : 0)
-//                .animation(.easeInOut, value: isDateInDisplayedWeek(Date(), for: weekOffset))
-                
                 // COMBINE MULTIPLE EFFECT
                 .opacity(isDateInDisplayedWeek(Date(), for: weekOffset) ? 0 : 1)// If we are in currentw eek, will change color
                 .offset(y: isDateInDisplayedWeek(Date(), for: weekOffset) ? 20 : 0) // will move offscreen be present we are in current week
@@ -225,7 +212,6 @@ struct WeekView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never)) //
             .frame(height: 70) //set the frame to 70
-            
         }
         .padding(.horizontal) //horizontal padding
         .onChange(of: selectedDate) { _, newDate in //when you change the week..
@@ -244,3 +230,9 @@ struct WeekView: View {
         }//on change
     }//vstack
 }//Weekview
+
+#Preview {
+    @Previewable @StateObject var viewModel = EventListParentViewModel()
+    
+    WeekView(selectedDate: $viewModel.viewedDate)
+}
