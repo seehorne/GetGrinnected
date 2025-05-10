@@ -296,7 +296,6 @@ async function otpFileCheck(filename, email, code) {
             if (entry.oldEmail) {
                 oldEmail = entry.oldEmail
             }
-            console.log(`checking OTP file, got old email = ${JSON.stringify(entry.oldEmail)}`);
         }
 
         // If the return value is true, delete that row from the database -- they
@@ -317,7 +316,6 @@ async function otpFileCheck(filename, email, code) {
         'status': success,
         'oldEmail': oldEmail
     };
-    console.log(`gonna return ${JSON.stringify(ret)}`);
     return ret;
 }
 

@@ -37,7 +37,7 @@ For these steps, open up a second terminal and `ssh` it into the application ser
 Then, go to the dir this test file's scripts are in.
 
 ```bash
-cd ~/live-test/test\ procedures/api_scripts/
+cd ~/live_test/test\ procedures/api_scripts/
 ```
 
 This directory has some scripts that automate the requests. They're a little jank, but they work if you use them in the intended way. They're only dev tools, so hopefully you can understand.
@@ -56,6 +56,9 @@ so make sure you're okay with doing this or take a backup first!
 3. Click "GetGrinnected" from the list, then "accounts" from the list that appears.
 
 4. Locate the `manual_test` account, and click the "⊖ Delete" button. Confirm your choice.
+
+   NOTE: If you were not the last person to test, you may also need to delete your account since there can only be
+   one account per email.
 
 ## Sign up for a new account.
 
