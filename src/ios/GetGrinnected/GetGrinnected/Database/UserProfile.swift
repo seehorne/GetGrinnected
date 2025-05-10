@@ -377,13 +377,14 @@ class UserProfile: ObservableObject {
                                 completion(.failure(refreshError))
                             }
                         }
-//                        guard let data = data else{
-//                            completion(.failure(APIError.invalidResponse))
-//                            return
-//                        }
-//                        completion(.success(data))
                     return
                     }
+                //handle it if it ISNT a 403
+                guard let data = data else {
+                    completion(.failure(APIError.invalidResponse))
+                    return
+                }
+                completion(.success(data))
                 }
             task.resume()
             }
