@@ -209,6 +209,17 @@ function run() {
     [middlewareVerifyJWT(ACCESS_JWT)],
     user.routeDeleteAccount
   );
+
+  // Update your email by sending a PUT request while logged in,
+  // where the body of that request includes the desired new email.
+  app.put(
+    '/user/email',
+    [
+      middlewareBodyExists('new_email'),
+      middlewareVerifyJWT(ACCESS_JWT),
+    ],
+    user.routeChangeEmail
+  );
 }
 
 /**

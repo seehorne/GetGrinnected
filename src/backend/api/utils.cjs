@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
 
-const { sendCode } = require('../one_time_code.cjs')
+const { sendCode: sendEmailCode } = require('../one_time_code.cjs')
 const database = require('../db_connect.js');
 const SALT_ROUNDS = 10;
 const DBPATH = './src/backend/Database/localOTP.db'
@@ -16,20 +16,20 @@ const DBPATH = './src/backend/Database/localOTP.db'
  * - access for the user's access token
  */
 function generateUserTokens(email) {
-  // Use JSON Web Tokens to create two tokens for the user,
-  // a long-lived refresh token and a short-lived access token.
-  const refreshToken = jwt.sign(
-    { email },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '30d' }
-  );
-  const accessToken = jwt.sign(
-    { email },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' }
-  );
+    // Use JSON Web Tokens to create two tokens for the user,
+    // a long-lived refresh token and a short-lived access token.
+    const refreshToken = jwt.sign(
+        { email },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: '30d' }
+    );
+    const accessToken = jwt.sign(
+        { email },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '15m' }
+    );
 
-  return { 'refresh': refreshToken, 'access': accessToken };
+    return { 'refresh': refreshToken, 'access': accessToken };
 }
 
 /**
@@ -146,16 +146,23 @@ function validateEmail(email) {
     }
 }
 
-async function sendOTP(email) {
+/**
+ * Send a one-time code to an email address,
+ * either for new account creation or email change.
+ *
+ * @param {string} email Email to send to
+ * @param {string} oldEmail (optional) Old email address, if included it means the user is changing their email address.
+ */
+async function sendOTP(email, oldEmail) {
     // Override: if they are attempting to log into the demo account, change
     // where it will send the login.
     sendTo = email
-    if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu'){
+    if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu') {
         sendTo = 'getgrinnected.demo@gmail.com'
     }
 
     // Send the user a one-time code by email.
-    const code = sendCode(sendTo);
+    const code = sendEmailCode(sendTo);
 
     // Calculate the expiration time of the OTP from right now.
     const expiration_mins = 15;
@@ -172,8 +179,7 @@ async function sendOTP(email) {
     };
 
     // Save the data to the local OTP database before returning
-    await otpFileSave(DBPATH, otpData.email, otpData.code, otpData.expire);
-    return otpData;
+    await otpFileSave(DBPATH, otpData.email, otpData.code, otpData.expire, oldEmail);
 }
 
 /**
@@ -183,8 +189,9 @@ async function sendOTP(email) {
  * @param {string} email     Email associated with OTP
  * @param {string} code      Hashed code associated with OTP
  * @param {string} expire    Expiration date of OTP code
+ * @param {string} oldEmail  (optional) Old email address, if included it means the user is changing their email address.
  */
-async function otpFileSave(filename, email, code, expire) {
+async function otpFileSave(filename, email, code, expire, oldEmail) {
     // Salt and hash the code before we store it
     const salt = await bcrypt.genSalt(SALT_ROUNDS);
     const hashedCode = await bcrypt.hash(code, salt);
@@ -193,19 +200,24 @@ async function otpFileSave(filename, email, code, expire) {
     // if the file does not exist it will be created
     const db = new sqlite3.Database(filename);
 
+    // If oldEmail is not defined, we will insert null for it
+    if (oldEmail === undefined) { oldEmail = null; }
+
     // Run all these commands in sequence.
     db.serialize(() => {
         // Create the table if this is our first time opening the db.
         // If it's not the first time, `IF NOT EXISTS` makes it do nothing
         //
         // email is the `PRIMARY KEY`, so each email can only appear once.
-        db.run(`
-            CREATE TABLE IF NOT EXISTS data(
+        // oldEmail is allowed to be null because it isn't always used
+        db.run(
+            `CREATE TABLE IF NOT EXISTS data(
                 email TEXT NOT NULL PRIMARY KEY,
                 hashedCode TEXT NOT NULL,
-                expire TEXT NOT NULL
-            ) STRICT
-        `);
+                expire TEXT NOT NULL,
+                oldEmail TEXT
+            ) STRICT`
+        );
 
         // Attempt to insert the provided email, code, and expiration date.
         //
@@ -213,11 +225,14 @@ async function otpFileSave(filename, email, code, expire) {
         // email is the primary key, and we handle that conflict in the 
         // `ON CONFLICT` part by updating the existing entry instead.
         db.run(
-            `INSERT INTO data (email, hashedCode, expire)
-                VALUES        (?, ?, ?)
-                ON CONFLICT (email)
-                DO UPDATE SET hashedCode=excluded.hashedCode, expire=excluded.expire`,
-            [email, hashedCode, expire]
+            `INSERT INTO data (email, hashedCode, expire, oldEmail)
+                VALUES        (?, ?, ?, ?)
+                ON CONFLICT (email) DO UPDATE
+                SET
+                    hashedCode=excluded.hashedCode,
+                    expire=excluded.expire,
+                    oldEmail=excluded.oldEmail`,
+            [email, hashedCode, expire, oldEmail]
         );
     });
 
@@ -232,8 +247,9 @@ async function otpFileSave(filename, email, code, expire) {
  * @param {string} email     Email associated with OTP
  * @param {string} code      Hashed code associated with OTP
  * 
- * @returns true if the OTP exists in the file and is not expired, false if
- * expired or nonexistent.
+ * @returns object with these keys.
+ * - `status` - true or false, did the code validate?
+ * - `oldEmail` - if defined, this is the email they are changing away from.
  */
 async function otpFileCheck(filename, email, code) {
     // Define a function that gets the row matching an email.
@@ -257,12 +273,13 @@ async function otpFileCheck(filename, email, code) {
     const db = new sqlite3.Database(filename);
 
     // Evaluate whether the OTP code is good or not
-    var return_value = false;
+    var success = false;
+    var oldEmail = undefined;
     try {
         // Check the db for that email. If it does not exist, just return false
         const entry = await getEmail(db, email);
         if (entry === undefined) {
-            return_value = false;
+            success = false;
         } else {
             // Calculate the current date and the expiry date
             const now = new Date();
@@ -273,26 +290,35 @@ async function otpFileCheck(filename, email, code) {
             // - it is before the expiration date
             const code_match = await bcrypt.compare(code, entry.hashedCode);
             const not_expired = now <= expiry;
-            return_value = code_match && not_expired;
+            success = code_match && not_expired;
+
+            // If oldEmail is defined in the entry we got, make sure to store for later
+            if (entry.oldEmail) {
+                oldEmail = entry.oldEmail
+            }
+            console.log(`checking OTP file, got old email = ${JSON.stringify(entry.oldEmail)}`);
         }
 
         // If the return value is true, delete that row from the database -- they
         // have used their OTP code.
-        if (return_value) {
+        if (success) {
             db.run(`DELETE FROM data WHERE email = ?`, email);
         }
     } catch (err) {
         console.log('Error:' + err);
-        return_value = false;
+        success = false;
     } finally {
-        // Always close the db! No matter what
+        // Close the db after, whether we catch an error or not
         db.close();
     }
 
-
-    // Return after we have completed our try/catch/finally, to be sure the
-    // db connection has been closed.
-    return return_value;
+    // Construct and return an object for the user
+    const ret = {
+        'status': success,
+        'oldEmail': oldEmail
+    };
+    console.log(`gonna return ${JSON.stringify(ret)}`);
+    return ret;
 }
 
 /**
