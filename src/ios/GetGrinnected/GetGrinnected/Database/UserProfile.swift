@@ -302,7 +302,9 @@ class UserProfile: ObservableObject {
         let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/session/refresh")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
+        //request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
+        //request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 completion(.failure(error))
@@ -412,15 +414,19 @@ class UserProfile: ObservableObject {
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
             request.httpMethod = "PUT"
             let body: [String: Any] = [
-                "username": newUsername,
+                "account_name": newUsername,
             ]
             request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Set username: \(data)")
+                //print("Success! Set username: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
@@ -431,12 +437,15 @@ class UserProfile: ObservableObject {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
             request.httpMethod = "GET"
-             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Got notified events: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
@@ -445,15 +454,23 @@ class UserProfile: ObservableObject {
     
     func setUserNotifiedEvents(events: [Int]) {
          safeApiCall(requestBuilder: { token in
-            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
+             let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!
+            var request = URLRequest(url: url)
             request.httpMethod = "PUT"
-            request.httpBody = try? JSONSerialization.data(withJSONObject: events)
-             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             let body: [String: Any] = [
+                 "notified_events": events,
+             ]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Set notified events: \(data)")
+                //print("Success! Set notified events: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
@@ -462,14 +479,20 @@ class UserProfile: ObservableObject {
     
     func getUserFavoritedEvents() {
          safeApiCall(requestBuilder: { token in
-            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
+             let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!
+             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Got favorited events: \(data)")
+                //print("Success! Got favorited events: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
@@ -478,15 +501,26 @@ class UserProfile: ObservableObject {
     
     func setUserFavoritedEvents(events: [Int]){
          safeApiCall(requestBuilder: { token in
-            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
+             let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!
+             var request = URLRequest(url: url)
             request.httpMethod = "PUT"
-            request.httpBody = try? JSONSerialization.data(withJSONObject: events)
-             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             let body: [String: Any] = [
+                 "favorited_events": events,
+             ]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+             //print(request.httpBody)
+             print("Bearer \(token)") //checking if this is malformed or smth
+             //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Set favorited events: \(data)")
+                //print("Success! Set favorited events: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
@@ -497,12 +531,17 @@ class UserProfile: ObservableObject {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/data")!)
             request.httpMethod = "GET"
-             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Got data: \(data)")
+                //print("Success! Got data: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
