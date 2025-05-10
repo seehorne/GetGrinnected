@@ -630,6 +630,23 @@ describe('Test API', () => {
                 assert.strictEqual(res.statusCode, 404, res.text);
             });
         });
+
+        describe('GET /user/email', () => {
+            it(`gets the user's email`, async () => {
+                // Make request
+                const res = await req
+                    .get('/user/email')
+                    // Use our old access token in the header
+                    .set('Authorization', `Bearer ${access_token}`);
+
+                // Verify the code and contents
+                assert.strictEqual(res.statusCode, 200, res.text);
+                assert.strictEqual(
+                    res.text,
+                    '{"email":"email@example.com"}'
+                );
+            });
+        })
     });
 });
 
