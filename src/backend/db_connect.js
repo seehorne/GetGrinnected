@@ -321,6 +321,23 @@ async function deleteAccount(email) {
     return result;
 }
 
+async function changeUserEmail(oldEmail, newEmail) {
+    // Check that the old account exists and the new one doesn't already
+    const shouldExist = await getAccountByEmail(oldEmail);
+    if (!shouldExist) {
+        throw new Error('No previous account with old email');
+    }
+    const shouldNotExist = await getAccountByEmail(newEmail);
+    if (shouldNotExist) {
+        throw new Error('Account already exists with new email')
+    }
+
+    // Actually perform the switch
+    const sql = `UPDATE accounts SET email = ? WHERE email = ?`;
+    const result = await pool.query(sql, [newEmail, oldEmail]);
+    return result;
+}
+
 if (require.main === module) {
     // File is being used as a script. Run it.
     insertEventsFromScrape();
@@ -341,5 +358,6 @@ if (require.main === module) {
         insertEventsFromScrape,
         modifyAccountField,
         getEventByID,
+        changeUserEmail,
     };
 }

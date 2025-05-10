@@ -67,17 +67,18 @@ async function routeSignUpNewUser(req, res, _next) {
 
   // Make sure the email is a grinnell email. If it does not, respond with
   // an appropriate error. 400 for "bad request"
-  if (!email.endsWith('@grinnell.edu')) {
+  var valid = util.validateEmail(email);
+  if (!valid.result) {
     res.status(400).json({
       'error': 'Invalid email',
-      'message': 'Email must end with @grinnell.edu.'
+      'message': valid.reason,
     });
     return;
   }
 
   // Make sure the username provided doesn't break any format rules.
   // If not, return HTTP 400 again.
-  const valid = util.validateUsername(username);
+  valid = util.validateUsername(username);
   if (!valid.result) {
     // reuse the reason returned by validateUsername if the check fails,
     // so we can have a more descriptive error
@@ -109,6 +110,8 @@ async function routeSignUpNewUser(req, res, _next) {
   }
 
   // Having passed all the checks, we can now create that user in the database
+  // TODO: can account creation be put off until they verify? that would be nice,
+  // but is enough extra work I'm not sure it would be feasible right now.
   await db.createAccount(username, email);
 
   // With the account created, send them an email.
@@ -144,14 +147,23 @@ async function routeVerifyOTP(req, res, _next) {
   // Check the OTP code the user entered against the codes we have stored.
   // If it does not match (wrong code or expired), return the same error with
   // HTTP status 400.
-  validCode = await util.otpFileCheck(DBPATH, email, code)
-  if (!validCode && !bypass) {//the code is wrong AND we don't have permission to bypass
+  checkResult = await util.otpFileCheck(DBPATH, email, code)
+  if (!checkResult.status && !bypass) {//the code is wrong AND we don't have permission to bypass
     res.status(400).json({
       'error': 'Bad code',
       'message': 'Could not verify OTP.'
     });
     return;
-  } else {//the code was right OR we have permission to bypass (for apple account)
+  } else {//the code is wrong AND we don't have permission to bypass
+    // If the user is changing their email get the database to handle that.
+    if (checkResult.oldEmail !== undefined) {
+      // The email that the user includes in their verify request is the new one.
+      // Use that, along with the old email, to change their account.
+      const newEmail = email;
+      await db.changeUserEmail(checkResult.oldEmail, newEmail);
+      console.log('finished with db changed email');
+    }
+
     // Generate tokens for that user
     const tokens = util.generateUserTokens(email);
 
@@ -311,9 +323,9 @@ async function routeRefreshTokens(req, res, _next) {
 /**
  * Delete the account of the currently logged-in user.
  * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} _next 
+ * @param {*} req Express request
+ * @param {*} res Express response
+ * @param {*} _next Express error handler or next function, unused.
  */
 async function routeDeleteAccount(req, res, _next) {
   // Get the email to delete, we know it is included thanks to the middleware.
@@ -336,9 +348,69 @@ async function routeDeleteAccount(req, res, _next) {
   }
 }
 
+/**
+ * Handle a user request to change their email address. This route sends an email
+ * to their new address asking if they want to change it. The email will only be changed
+ * if they actually send that verification code.
+ * 
+ * @param {*} req Express request
+ * @param {*} res Express response. Will be given HTTP 202 "Accepted" on success, or errors.
+ * @param {*} _next Express error handler/next callback. Unused.
+ */
+async function routeChangeEmail(req, res, _next) {
+  const newEmail = req.body.new_email;
+  const oldEmail = req.email;
+
+  // Reject the response if the email isn't good.
+  const valid = util.validateEmail(newEmail);
+  if (!valid.result) {
+    res.status(400).json({
+      'error': 'Invalid email',
+      'message': valid.reason,
+    });
+    return;
+  }
+
+  // OVERRIDE: Also reject the response if they are trying to change the email
+  // of the demo account. We just don't allow that.
+  if (
+    newEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu' ||
+    oldEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu'
+  ) {
+    res.status(400).json({
+      'error': 'Cannot change email',
+      'message': 'Cannot change to or from the email associated with the demo account.'
+    });
+    return;
+  }
+
+  // Send them a one-time code to that new email, keeping the old email in the DB too.
+  console.log(`sending otp to new ${newEmail} old ${oldEmail}`);
+  await util.sendOTP(newEmail, oldEmail);
+  res.status(202).json({
+    'message': 'Verification code sent to new email.'
+  });
+}
+
+/**
+ * Route to get the email address a user is logged in with.
+ * 
+ * @param {*} req Express request
+ * @param {*} res Express response. Will be given HTTP 200 "OK" on success, or errors.
+ * @param {*} _next Express error handler/next callback. Unused.
+ */
+async function routeGetEmail(req, res, _next) {
+  // The email is parsed as part of JWT checking, so we already know it exists
+  res.json({
+    'email': req.email
+  });
+}
+
 if (require.main !== module) {
   module.exports = {
+    routeChangeEmail,
     routeDeleteAccount,
+    routeGetEmail,
     routeGetFavorited,
     routeGetNotified,
     routeGetUserData,

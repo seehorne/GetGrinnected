@@ -182,6 +182,7 @@ describe('Test API', () => {
                 const putRouteData = [
                     { 'name': '/user/events/favorited', 'body': 'favorited_events' },
                     { 'name': '/user/events/notified', 'body': 'notified_events' },
+                    { 'name': '/user/email', 'body': 'new_email' },
                     { 'name': '/user/username', 'body': 'username' }
                 ];
 
@@ -285,6 +286,7 @@ describe('Test API', () => {
                     '/user/events/favorited',
                     '/user/username',
                     '/user/events/notified',
+                    '/user/username',
                     '/user/data'
                 ];
 
@@ -550,6 +552,24 @@ describe('Test API', () => {
 
                 // Await all of the tests to be evaluated
                 await Promise.allSettled(cases);
+            });
+        });
+
+        /* Make sure we can get our own email address. */
+        describe('GET /user/email', () => {
+            it(`gets the user's email`, async () => {
+                // Make request
+                const res = await req
+                    .get('/user/email')
+                    // Use our old access token in the header
+                    .set('Authorization', `Bearer ${access_token}`);
+
+                // Verify the code and contents
+                assert.strictEqual(res.statusCode, 200, res.text);
+                assert.strictEqual(
+                    res.text,
+                    '{"email":"email@example.com"}'
+                );
             });
         });
 
