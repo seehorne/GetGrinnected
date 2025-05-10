@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 struct SettingsView: View {
     // store standard font size of 20 in app storage
@@ -72,27 +73,28 @@ struct SettingsView: View {
                         
                         //content
                         VStack {
-//                            HStack {
-//                                // spacer to right align button
-//                                Spacer()
-//                                
-//                                // Logout button
-//                                Button(action: {
-//                                    // we are logging out
-//                                    isLoggedIn = false
-//                                }) {
-//                                    Text("Logout")
-//                                        .foregroundColor(.border)
-//                                    Image(systemName: "rectangle.portrait.and.arrow.right")
-//                                        .imageScale(.large)
-//                                } //Button
-//                                .navigationDestination(isPresented: $isLoggedIn) {
-//                                    ContentView()
-//                                }
-//                            }
+                            HStack {
+                                // spacer to right align button
+                                Spacer()
+                                
+                                // Logout button
+                                Button(action: {
+                                    print(username)
+                                    // set the username that has been typed
+                                    userProfile.setUsername(username)
+                                    print("username submitted")
+                                    print(username)
+                                }) {
+                                    Text("Submit username change")
+                                        .foregroundColor(.border)
+                                    Image(systemName: "square.and.arrow.up")
+                                        .imageScale(.large)
+                                } //Button
+                            }
                             
                             //change username
-                            changeUsername()
+                            //changeUsername()
+                            
                             
                             // switch for light/dark mode
                             toggleLightDark()
