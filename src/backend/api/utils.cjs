@@ -296,66 +296,6 @@ async function otpFileCheck(filename, email, code) {
 }
 
 /**
- * Clean up any expired entries in the OTP database.
- * 
- * @param {*} filename  Filename of database to clean, e.g. `otp.sqlite`.
- */
-async function otpFileClean(filename) {
-    // Define a function that deletes the row matching an email.
-    // It uses a promise to structure itself because the DB runs async.
-    // To use it, `await deleteEmail`.
-    function deleteEmail(db, email) {
-        return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM data WHERE email = ?`;
-
-            db.run(sql, email, (err, _row) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-    const now = new Date();
-
-    const db = new sqlite3.Database(filename);
-
-    var to_delete = [];
-    db.serialize(() => {
-        // Find all rows that should be deleted
-        const sql = `SELECT * FROM data`
-        db.each(sql, async (err, row) => {
-            if (err) {
-                console.log('Error:' + err);
-            } else {
-                if (new Date(row.expire) < now) {
-                    to_delete.push(row.email);
-                }
-            }
-        });
-
-        // Do the actual deleting
-        const statement = db.prepare(`DELETE FROM data WHERE email = ?`);
-        for (const email of to_delete) {
-            console.log(`delete ${email}`);
-            statement.run(email);
-        }
-
-    });
-    //alphabetically sort? some sort of db call to that effect
-
-    // TODO: WRITE ME
-    // Get the current time
-
-    // Open connection to the database
-
-    // Delete all db entries that have already expired
-
-    // Close the database connection
-}
-
-/**
  * Parse from a time URL parameter to a Unix timestamp.
  *
  * @param timeParam String representing a date.
@@ -514,7 +454,6 @@ if (require.main !== module) {
         validateUsername,
         validateEmail,
         otpFileCheck,
-        otpFileClean,
         otpFileSave,
         sendOTP,
         parseParamDate,
