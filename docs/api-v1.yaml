@@ -80,7 +80,7 @@ paths:
         - Username or email are not provided in request body
         - Username or email are already associated with an account
         - Email does not end with @grinnell.edu
-        - Username does not follow rules (see <https://getgrinnected.sites.grinnell.edu/docs/apple/#sign-up>)
+        - Username does not follow rules (see <https://getgrinnected.sites.grinnell.edu/docs/ios/login-signup/#sign-up>)
       requestBody:
         required: true
         content:
@@ -464,7 +464,7 @@ paths:
       security:
         - auth_token: []
       requestBody:
-        description: New username,
+        description: New username, must fulfil username requirements (<https://getgrinnected.sites.grinnell.edu/docs/ios/login-signup/#sign-up>)
         content:
           application/json:
             schema:
@@ -496,6 +496,80 @@ paths:
                     example: Invalid username
                   message:
                     example: Username must contain at least one letter.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+  /user/email:
+    get:
+      tags:
+        - user
+      summary: Get email.
+      description: Get email of currently logged-in user.
+      security:
+        - auth_token: []
+      responses:
+        '200':
+            description: Successful request.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: example@grinnell.edu
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InvalidToken'
+        '404':
+          $ref: '#/components/responses/NoSuchUser'
+    put:
+      tags:
+        - user
+      summary: Change email.
+      description: |
+        Start the process of changing email, which sends a one-time code to the new email before the change can be made.
+        
+        On success a verification code will be sent to the specified new email, and then a request must be sent to `/session/verify` within 15 minutes in order to verify the change.
+      security:
+        - auth_token: []
+      requestBody:
+        description: New email address,
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_email:
+                  type: string
+                  example: new_email@grinnell.edu
+      responses:
+        '202':
+          description: Accepted, verification code has been sent to email.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Verification code sent to new email.
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                properties:
+                  error:
+                    example: Invalid email
+                  message:
+                    example: Email must end with @grinnell.edu.
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
