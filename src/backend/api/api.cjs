@@ -203,15 +203,13 @@ function run() {
     user.routePutUsername
   );
 
-  // Delete account by sending a request while logged in
-  app.delete(
-    '/user',
-    [middlewareVerifyJWT(ACCESS_JWT)],
-    user.routeDeleteAccount
-  );
 
-  // Update your email by sending a PUT request while logged in,
-  // where the body of that request includes the desired new email.
+  // Email: GET (read) and PUT (write)
+  app.get(
+    '/user/email',
+    middlewareVerifyJWT(ACCESS_JWT),
+    user.routeGetEmail
+  )
   app.put(
     '/user/email',
     [
@@ -219,6 +217,13 @@ function run() {
       middlewareVerifyJWT(ACCESS_JWT),
     ],
     user.routeChangeEmail
+  );
+
+  // Delete account by sending a request while logged in
+  app.delete(
+    '/user',
+    [middlewareVerifyJWT(ACCESS_JWT)],
+    user.routeDeleteAccount
   );
 }
 
