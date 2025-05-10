@@ -462,7 +462,7 @@ class UserProfile: ObservableObject {
     func getUserFavoritedEvents() {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
-            request.httpMethod = "PUT"
+            request.httpMethod = "GET"
             request.setValue(token, forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
