@@ -182,6 +182,7 @@ describe('Test API', () => {
                 const putRouteData = [
                     { 'name': '/user/events/favorited', 'body': 'favorited_events' },
                     { 'name': '/user/events/notified', 'body': 'notified_events' },
+                    { 'name': '/user/email', 'body': 'new_email' },
                     { 'name': '/user/username', 'body': 'username' }
                 ];
 
