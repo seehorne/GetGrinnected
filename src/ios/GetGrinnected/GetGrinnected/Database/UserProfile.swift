@@ -377,11 +377,12 @@ class UserProfile: ObservableObject {
                                 completion(.failure(refreshError))
                             }
                         }
-                        guard let data = data else{
-                            completion(.failure(APIError.invalidResponse))
-                            return
-                        }
-                        completion(.success(data))
+//                        guard let data = data else{
+//                            completion(.failure(APIError.invalidResponse))
+//                            return
+//                        }
+//                        completion(.success(data))
+                    return
                     }
                 }
             task.resume()
