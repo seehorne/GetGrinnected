@@ -367,16 +367,16 @@ async function routeChangeEmail(req, res, _next) {
 
   // OVERRIDE: Also reject the response if they are trying to change the email
   // of the demo account. We just don't allow that.
-  // if (
-  //   newEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu' ||
-  //   oldEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu'
-  // ) {
-  //   res.status(400).json({
-  //     'error': 'Cannot change email',
-  //     'message': 'Cannot change to or from the email associated with the demo account.'
-  //   });
-  //   return;
-  // }
+  if (
+    newEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu' ||
+    oldEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu'
+  ) {
+    res.status(400).json({
+      'error': 'Cannot change email',
+      'message': 'Cannot change to or from the email associated with the demo account.'
+    });
+    return;
+  }
 
   // Send them a one-time code to that new email, keeping the old email in the DB too.
   console.log(`sending otp to new ${newEmail} old ${oldEmail}`);
