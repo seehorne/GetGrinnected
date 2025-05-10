@@ -72,24 +72,24 @@ struct SettingsView: View {
                         
                         //content
                         VStack {
-                            HStack {
-                                // spacer to right align button
-                                Spacer()
-                                
-                                // Logout button
-                                Button(action: {
-                                    // we are logging out
-                                    isLoggedIn = false
-                                }) {
-                                    Text("Logout")
-                                        .foregroundColor(.border)
-                                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                                        .imageScale(.large)
-                                } //Button
-                                .navigationDestination(isPresented: $isLoggedIn) {
-                                    ContentView()
-                                }
-                            }
+//                            HStack {
+//                                // spacer to right align button
+//                                Spacer()
+//                                
+//                                // Logout button
+//                                Button(action: {
+//                                    // we are logging out
+//                                    isLoggedIn = false
+//                                }) {
+//                                    Text("Logout")
+//                                        .foregroundColor(.border)
+//                                    Image(systemName: "rectangle.portrait.and.arrow.right")
+//                                        .imageScale(.large)
+//                                } //Button
+//                                .navigationDestination(isPresented: $isLoggedIn) {
+//                                    ContentView()
+//                                }
+//                            }
                             
                             //change username
                             changeUsername()
