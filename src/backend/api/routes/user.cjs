@@ -381,7 +381,7 @@ async function routeChangeEmail(req, res, _next) {
   // Send them a one-time code to that new email, keeping the old email in the DB too.
   console.log(`sending otp to new ${newEmail} old ${oldEmail}`);
   await util.sendOTP(newEmail, oldEmail);
-  res.json({
+  res.status(202).json({
     'message': 'Verification code sent to new email.'
   });
 }
