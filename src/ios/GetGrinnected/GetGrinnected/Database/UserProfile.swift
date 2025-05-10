@@ -320,7 +320,7 @@ class UserProfile: ObservableObject {
                     UserDefaults.standard.set(decodedResponse.access_token, forKey: "accessToken")
                     UserDefaults.standard.set(decodedResponse.refresh_token, forKey: "refreshToken")
                     //in order to be in this condition we must have an access token so we're fine to assume its here
-                    completion(.success("Bearer \(String(describing: decodedResponse.access_token))"))
+                    completion(.success(aToken))
                 }
                 else {
                     completion(.failure(APIError.unauthorized))
@@ -388,14 +388,14 @@ class UserProfile: ObservableObject {
                 }
             task.resume()
             }
-            makeRequest(token: "Bearer \(accessToken)")
+        makeRequest(token: accessToken)
         }
     
     func getUsername() {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
             request.httpMethod = "GET"
-            request.setValue(token, forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
@@ -415,7 +415,7 @@ class UserProfile: ObservableObject {
                 "username": newUsername,
             ]
             request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-            request.setValue(token, forHTTPHeaderField: "Authorization")
+             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
@@ -431,7 +431,7 @@ class UserProfile: ObservableObject {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
             request.httpMethod = "GET"
-            request.setValue(token, forHTTPHeaderField: "Authorization")
+             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
@@ -448,7 +448,7 @@ class UserProfile: ObservableObject {
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
             request.httpMethod = "PUT"
             request.httpBody = try? JSONSerialization.data(withJSONObject: events)
-            request.setValue(token, forHTTPHeaderField: "Authorization")
+             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
@@ -464,7 +464,7 @@ class UserProfile: ObservableObject {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
             request.httpMethod = "GET"
-            request.setValue(token, forHTTPHeaderField: "Authorization")
+             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
@@ -481,7 +481,7 @@ class UserProfile: ObservableObject {
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!)
             request.httpMethod = "PUT"
             request.httpBody = try? JSONSerialization.data(withJSONObject: events)
-            request.setValue(token, forHTTPHeaderField: "Authorization")
+             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
@@ -497,7 +497,7 @@ class UserProfile: ObservableObject {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/data")!)
             request.httpMethod = "GET"
-            request.setValue(token, forHTTPHeaderField: "Authorization")
+             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             return request
         }, completion: { result in
             switch result {
