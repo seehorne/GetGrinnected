@@ -24,32 +24,30 @@ struct CheckBoxOption {
 }
 
 struct CheckBox: View {
+    @State var item: CheckBoxOption
     
-    @State var items: [CheckBoxOption]
     var body: some View {
         VStack {
-            // Display each check box item
-            ForEach($items, id: \.name) { $item in
-                HStack {
-                    Image(systemName: item.isChecked ? item.uiCompOne : item.uiCompTwo)
-                        .foregroundColor(item.isChecked ? item.fillColor : Color(.gray))
-                        .onTapGesture { // if image is tapped, toggle checkmark
+            // Display checkbox
+            HStack {
+                Image(systemName: item.isChecked ? item.uiCompOne : item.uiCompTwo)
+                    .foregroundColor(item.isChecked ? item.fillColor : Color(.gray))
+                    .onTapGesture { // if image is tapped, toggle checkmark
+                        item.isChecked.toggle()
+                    }
+                
+                if(item.name != nil) {
+                    Text(item.name!)
+                        .onTapGesture { // if text is tapped, toggle checkmark
                             item.isChecked.toggle()
-                        }
-                    
-                    if(item.name != nil) {
-                        Text(item.name!)
-                            .onTapGesture { // if text is tapped, toggle checkmark
-                                item.isChecked.toggle()
-                            } //Text
-                    } //if
-                } //HStack
-            } // ForEach
+                        } //Text
+                } //if
+            } //HStack
         } //VStack
     } //body
 } // CheckBox
 
 #Preview {
-    CheckBox(items: [CheckBoxOption(name: "Not checked", isChecked: false, uiCompOne: "checkmark.square.fill", uiCompTwo: "square", fillColor: .appRed),
-                     CheckBoxOption(name: "Checked", isChecked: true, uiCompOne: "checkmark.square.fill", uiCompTwo: "square", fillColor: .border)])
+    CheckBox(item: CheckBoxOption(name: "Not checked", isChecked: false, uiCompOne: "checkmark.square.fill", uiCompTwo: "square", fillColor: .border))
+    CheckBox(item: CheckBoxOption(name: "Checked", isChecked: true, uiCompOne: "checkmark.square.fill", uiCompTwo: "square", fillColor: .border))
 }

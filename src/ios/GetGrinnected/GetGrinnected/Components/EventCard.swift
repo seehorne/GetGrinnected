@@ -174,7 +174,7 @@ struct EventCard: View {
                                 preview: SharePreview("Check this out!", image: Image(systemName: "square.and.arrow.up"))
                             ) {
                                 Image(systemName: "square.and.arrow.up")
-                                    .foregroundColor(Color.colorBlue)
+                                    .foregroundColor(.border)
                             }//can utilize
                             .padding(.vertical, 2)//adding space after
                             

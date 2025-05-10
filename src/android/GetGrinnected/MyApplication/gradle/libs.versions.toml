@@ -36,6 +36,7 @@ toolsCore = "1.0.0-alpha13"
 media3CommonKtx = "1.6.0"
 transportApi = "4.0.0"
 firebaseDatabaseKtx = "21.0.0"
+benchmarkMacro = "1.3.4"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -85,6 +86,7 @@ androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-c
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 transport-api = { group = "com.google.android.datatransport", name = "transport-api", version.ref = "transportApi" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
+androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro", version.ref = "benchmarkMacro" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

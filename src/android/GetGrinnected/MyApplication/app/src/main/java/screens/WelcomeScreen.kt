@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -17,11 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.R
+import com.GetGrinnected.myapplication.R
 
 /**
  * A composable function that represents the Welcome screen of our application.
@@ -57,7 +59,6 @@ fun WelcomeScreen(modifier: Modifier, navController: NavController) {
                 painter = painterResource(id = R.drawable.getgrinnected_logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
-                    .fillMaxWidth()
                     .size(250.dp)
             )
 
@@ -66,7 +67,11 @@ fun WelcomeScreen(modifier: Modifier, navController: NavController) {
             Text(
                 text = "Welcome to GetGrinnected",
                 style = typography.headlineMedium,
-                color = colorScheme.onBackground
+                color = colorScheme.onBackground,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(24.dp))
