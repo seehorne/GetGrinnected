@@ -286,6 +286,7 @@ describe('Test API', () => {
                     '/user/events/favorited',
                     '/user/username',
                     '/user/events/notified',
+                    '/user/username',
                     '/user/data'
                 ];
 

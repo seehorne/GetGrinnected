@@ -386,10 +386,25 @@ async function routeChangeEmail(req, res, _next) {
   });
 }
 
+/**
+ * Route to get the email address a user is logged in with.
+ * 
+ * @param {*} req Express request
+ * @param {*} res Express response. Will be given HTTP 200 "OK" on success, or errors.
+ * @param {*} _next Express error handler/next callback. Unused.
+ */
+async function routeGetEmail(req, res, _next) {
+  // The email is parsed as part of JWT checking, so we already know it exists
+  res.json({
+    'email': req.email
+  });
+}
+
 if (require.main !== module) {
   module.exports = {
     routeChangeEmail,
     routeDeleteAccount,
+    routeGetEmail,
     routeGetFavorited,
     routeGetNotified,
     routeGetUserData,
