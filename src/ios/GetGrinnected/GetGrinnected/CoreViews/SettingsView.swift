@@ -27,7 +27,7 @@ struct SettingsView: View {
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
     @State private var basicInput: String = ""
-    @State private var userProfile = UserProfile()
+    //@State private var userProfile = UserProfile()
     @State private var loggedOut: Bool = false
     
     @State var isFontSizeSelected = false
@@ -43,32 +43,6 @@ struct SettingsView: View {
                 Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
-                
-                //content
-                VStack {
-                    HStack {
-                        // spacer to right align button
-                        Spacer()
-                        
-                        // Logout button
-                        Button(action: {
-                            // we are logging out
-                            //isLoggedIn = false
-                            userProfile.updateLoginState(isLoggedIn: false)
-                            loggedOut = true
-                        }) {
-                            Text("Logout")
-                                .foregroundColor(.border)
-                            Image(systemName: "rectangle.portrait.and.arrow.right")
-                                .imageScale(.large)
-                        } //Button
-                        .navigationDestination(isPresented: $loggedOut) {
-                            ContentView()
-                        }
-                    }
-                    
-                    InputView(text: $username, title: "Change Username", placeholder: "Username")
-                        .padding()
                     
                     //content
                     VStack {
@@ -79,72 +53,99 @@ struct SettingsView: View {
                             // Logout button
                             Button(action: {
                                 // we are logging out
-                                isLoggedIn = false
+                                //isLoggedIn = false
+                                userProfile.updateLoginState(isLoggedIn: false)
+                                loggedOut = true
                             }) {
                                 Text("Logout")
                                     .foregroundColor(.border)
                                 Image(systemName: "rectangle.portrait.and.arrow.right")
                                     .imageScale(.large)
                             } //Button
-                            .navigationDestination(isPresented: $isLoggedIn) {
+                            .navigationDestination(isPresented: $loggedOut) {
                                 ContentView()
                             }
                         }
                         
-                        //change username
-                        changeUsername()
+                        InputView(text: $username, title: "Change Username", placeholder: "Username")
+                            .padding()
                         
-                        // switch for light/dark mode
-                        toggleLightDark()
-                        
-                        //fontsize
-                        fontSizeSelector(selection: isFontSizeSelected)
-                            .onTapGesture {
-                                withAnimation(.easeInOut){
-                                    isFontSizeSelected.toggle()
+                        //content
+                        VStack {
+                            HStack {
+                                // spacer to right align button
+                                Spacer()
+                                
+                                // Logout button
+                                Button(action: {
+                                    // we are logging out
+                                    isLoggedIn = false
+                                }) {
+                                    Text("Logout")
+                                        .foregroundColor(.border)
+                                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                                        .imageScale(.large)
+                                } //Button
+                                .navigationDestination(isPresented: $isLoggedIn) {
+                                    ContentView()
                                 }
                             }
-                        
-                        //about section
-                        about(selection: isSectionSelected)
-                            .onTapGesture {
-                                withAnimation(.easeInOut){
-                                    isSectionSelected.toggle()
+                            
+                            //change username
+                            changeUsername()
+                            
+                            // switch for light/dark mode
+                            toggleLightDark()
+                            
+                            //fontsize
+                            fontSizeSelector(selection: isFontSizeSelected)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut){
+                                        isFontSizeSelected.toggle()
+                                    }
                                 }
-                            }
-                        
-                        //acknolwedgements
-                        acknowledgements(selection: isAckSelected)
-                            .onTapGesture {
-                                withAnimation(.easeInOut){
-                                    isAckSelected.toggle()
+                            
+                            //about section
+                            about(selection: isSectionSelected)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut){
+                                        isSectionSelected.toggle()
+                                    }
                                 }
-                            }
+                            
+                            //acknolwedgements
+                            acknowledgements(selection: isAckSelected)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut){
+                                        isAckSelected.toggle()
+                                    }
+                                }
+                            
+                            
+                        } //about
+                        .padding()
                         
-                        
-                    } //about
-                    .padding()
-                    
-                }   //vstack
-            }   //Scroll view
-            .edgesIgnoringSafeArea(.top)
-            .foregroundColor(.border)
-            .tint(.border)
-            
-        }//GeometryReader
-        .preferredColorScheme(viewColorScheme)
-        // run switchAppearance when the view is shown
-        .onAppear {
-            switchAppearance()
-        }
-        // changes the viewColorScheme when lightModeOn is changed
-        .onChange(of: lightModeOn){ oldValue, newValue in
-            if newValue == true {
-                viewColorScheme = .light
-            } else {
-                viewColorScheme = .dark
+                    }   //vstack
+                }   //Scroll view
+                .edgesIgnoringSafeArea(.top)
+                .foregroundColor(.border)
+                .tint(.border)
+                
+            }//GeometryReader
+            .preferredColorScheme(viewColorScheme)
+            // run switchAppearance when the view is shown
+            .onAppear {
+                switchAppearance()
             }
-        } //onChange
+            // changes the viewColorScheme when lightModeOn is changed
+            .onChange(of: lightModeOn){ oldValue, newValue in
+                if newValue == true {
+                    viewColorScheme = .light
+                } else {
+                    viewColorScheme = .dark
+                }
+            } //onChange
+        }
     } //body
     
     /*

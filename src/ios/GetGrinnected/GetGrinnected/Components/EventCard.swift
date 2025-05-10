@@ -184,9 +184,12 @@ struct EventCard: View {
                                 event.favorited.toggle()
                                 event.lastUpdated = Date() // mark as modified
                                 let temp = [Int]()
-                                userProfile.setUserFavoritedEvents(events: temp)
-                                let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
-                                userProfile.setUserFavoritedEvents(events: favorites)
+                                Task{
+                                    print("Trying to favorite save")
+                                    userProfile.setUserFavoritedEvents(events: temp)
+                                    let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
+                                    userProfile.setUserFavoritedEvents(events: favorites)
+                                }
                                 //todo: save this back to the cache with the get call
                             }) {
                                 Image(systemName: event.favorited ? "heart.fill" : "heart")
@@ -199,8 +202,13 @@ struct EventCard: View {
                             Button(action: {
                                 event.notified.toggle()
                                 let temp2 = [Int]()
-                                userProfile.setUserNotifiedEvents(events: temp2)
-                                try? modelContext.save()
+                                Task{
+                                    print("trying to notify save")
+                                    userProfile.setUserNotifiedEvents(events: temp2)
+                                    try? modelContext.save()
+                                    let notifs = userProfile.fetchNotifiedEventIDs(from: modelContext)
+                                    userProfile.setUserFavoritedEvents(events: notifs)
+                                }
                             }) {
                                 Image(systemName: event.notified ? "bell.fill" : "bell")
                                     .foregroundColor(.border)
