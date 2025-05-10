@@ -207,7 +207,7 @@ struct EventCard: View {
                                     userProfile.setUserNotifiedEvents(events: temp2)
                                     try? modelContext.save()
                                     let notifs = userProfile.fetchNotifiedEventIDs(from: modelContext)
-                                    userProfile.setUserFavoritedEvents(events: notifs)
+                                    userProfile.setUserNotifiedEvents(events: notifs)
                                 }
                             }) {
                                 Image(systemName: event.notified ? "bell.fill" : "bell")

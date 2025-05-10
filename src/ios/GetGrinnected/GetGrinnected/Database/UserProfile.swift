@@ -555,8 +555,10 @@ class UserProfile: ObservableObject {
 
         if let results = try? context.fetch(descriptor) {
             print(results.map { $0.id })
+            print("in context fetch favorites")
             return results.map { $0.id }
         } else {
+            print("in \"else\" favorites")
             return []
         }
     }
@@ -567,9 +569,11 @@ class UserProfile: ObservableObject {
         let descriptor = FetchDescriptor<EventModel>(predicate: predicate)
 
         if let results = try? context.fetch(descriptor) {
+            print("in context fetch notifications")
             print(results.map { $0.id })
             return results.map { $0.id }
         } else {
+            print("in \"else\" notifications")
             return []
         }
     }
