@@ -52,19 +52,18 @@ struct SearchView: View {
                         Spacer()
                         
                         InputView(text: $filter, title: "Search by name", placeholder: "search here!")
-                            .padding(.horizontal)
+                            .padding()
                         
 
                         NavigationLink(destination:  SearchResults(parentView: parentView, selectedEvent: selectedEvent, isLoading: isLoading, refreshTimer: refreshTimer, sortOrder: $sortOrder, filterType: $filterType, filter: $filter)) {
                             HStack(){
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.white)
-                                Text("Search")
+                                Text("\(Image(systemName: "magnifyingglass"))  Search")
                                     .font(.headline)
                                     .foregroundStyle(Color.white)
+                                    .padding()
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.appBlue.opacity(0.75))
+                                            .fill(Color.appBlue)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 8)
                                                     .stroke(Color.appBorder, lineWidth: 1)
@@ -72,6 +71,7 @@ struct SearchView: View {
                                     )//nice background for searching
                             }
                         } //link to search, search through here
+                        Spacer()
                     }
                 }//navigation view
                 
