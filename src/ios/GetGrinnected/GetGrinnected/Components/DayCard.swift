@@ -67,7 +67,7 @@ struct DayView: View {
         }
         //then if the color is weekend, we make the color
         // our primary color, and if not secondary.
-        return isWeekend ? .appTextPrimary : .appTextSecondary
+        return .appTextPrimary
     }//color
     
     //Change border color according to if it's selected, or if the day card is today
