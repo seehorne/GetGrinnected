@@ -11,10 +11,6 @@ These are the categories of our post:
 
 If other groups also choose to create a "Spring 2025" category we would also like to be included under that tag. However, it seems like that organization is not consistent across past blog posts, and we wouldn't want to contribute further to that inconsistency.
 
-# TODO: PICTURES.
-
-TODO: DELETE THIS SECTION. PICTURES SHOULD BE INCLUDED THROUGHOUT THE TEXT, AT LEAST 3.
-
 ---
 
 # GetGrinnected
@@ -25,9 +21,7 @@ See our code: <https://github.com/seehorne/GetGrinnected/>
 
 # Overview
 
-GetGrinnected is an app designed to give Grinnell students an easy way to find and attend events around campus.
-
-TODO: SUMMARIZE THE REST OF THE POST BUT LIKE REALLY QUICKLY, THIS SHOULD BE SO EASY TO READ.
+GetGrinnected is a cross-platform app for Grinnell students to discover and keep track of campus events. It pulls data from the Grinnell College calendar and presents it in a clean, searchable, and personalized way. You can browse upcoming events, filter by tags, mark your favorites, and get notifications so you stay up to date! After designing, testing, and revising through numerous stages of feedback, our team built an app from start to finish, designing the UI, building the backend, managing user accounts, and syncing everything with the college’s event data. Now it’s ready for beta testing!
 
 # Motivation
 
@@ -35,11 +29,21 @@ For those unfamiliar with the Midwest, arriving in the middle of Iowa as a first
 
 # Product
 
-GetGrinnected is a native app for iOS and Android. It reads publicly-available event information from the college and 
+GetGrinnected is a cross-platform app offered on iOS and Android. It reads publicly available event information from the college calendar and displays the information in a cohesive, intuitive, accessible, one-stop shop sort of way for events happening on campus. It offers the user the ability to search, sort, and favorite events to find campus activities that interest them. Additionally, users can turn on notifications to be reminded before an event happens! 
 
-TODO: DESCRIBE THE PRODUCT IN PROPER DETAIL
+From a Technical and Developmental perspective, our app is composed of 4 primary components:
 
-TODO: DESCRIBE THAT PEOPLE ARE USING IT (HOPEFULLY) AND LINK TO WHERE IT CAN BE GOTTEN
+- 2 Front ends
+    - Swift (iOS)
+    - Kotlin (Android)
+- API (Node.js)
+- Database (SQL)
+
+The API and Database are hosted via Reclaim Cloud services provided by the college.
+
+Currently, the app is available in beta testing via TestFlight via the QR code below on the left, or you can sign up for testing by filling out the form from the QR Code on the right.
+
+<img src="images\Test Flight QR Code.png" width = "25%"> <img src="images\Android Tester Form QR Code.png" width = "25%">
 
 # Process
 
