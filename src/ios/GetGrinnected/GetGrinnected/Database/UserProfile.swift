@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUICore
 
 /**
  Class for creating a new user profile. For now, we will keep isPowerUser and isAdmin both false.
@@ -24,7 +25,7 @@ class UserProfile: ObservableObject {
     
     //private storage for password
     private var _password: String = ""
-
+    @Environment(\.modelContext) private var modelContext
     
     
     
@@ -414,7 +415,7 @@ class UserProfile: ObservableObject {
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
             request.httpMethod = "PUT"
             let body: [String: Any] = [
-                "account_name": newUsername,
+                "username": newUsername,
             ]
             request.httpBody = try? JSONSerialization.data(withJSONObject: body)
              request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -424,6 +425,11 @@ class UserProfile: ObservableObject {
             switch result {
             case .success(let data):
                 //print("Success! Set username: \(data)")
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("Raw API Response: \(raw)")
+                } else {
+                    print("Couldn't decode raw data to UTF-8 string.")
+                }
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse.message ?? "Success but no response to print")
                 }
@@ -492,6 +498,17 @@ class UserProfile: ObservableObject {
                 //print("Success! Got favorited events: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse.message ?? "Success but no response to print")
+                    do{
+                        let favoritedIDs = decodedResponse.favorited_events ?? []
+                        let fetchDescriptor = FetchDescriptor<EventModel>()
+                        let allEvents = try self.modelContext.fetch(fetchDescriptor)
+                        for event in allEvents {
+                                event.favorited = favoritedIDs.contains(event.id)
+                        }
+                    }
+                    catch{
+                        print("Error decoding or fetching: \(error)")
+                    }
                 }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
@@ -586,6 +603,8 @@ class UserProfile: ObservableObject {
         let message: String?
         let refresh_token: String?
         let access_token: String?
+        let favorited_events: [Int]?
+        let notified_events: [Int]?
     }
     
     /*

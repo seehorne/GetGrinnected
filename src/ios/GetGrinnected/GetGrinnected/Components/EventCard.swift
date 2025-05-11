@@ -187,8 +187,11 @@ struct EventCard: View {
                                 Task{
                                     print("Trying to favorite save")
                                     userProfile.setUserFavoritedEvents(events: temp)
+                                    //try? modelContext.save()
                                     let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
                                     userProfile.setUserFavoritedEvents(events: favorites)
+                                    userProfile.getUserFavoritedEvents()
+                                    try? modelContext.save()
                                 }
                                 //todo: save this back to the cache with the get call
                             }) {
@@ -205,9 +208,10 @@ struct EventCard: View {
                                 Task{
                                     print("trying to notify save")
                                     userProfile.setUserNotifiedEvents(events: temp2)
-                                    try? modelContext.save()
+                                    //try? modelContext.save()
                                     let notifs = userProfile.fetchNotifiedEventIDs(from: modelContext)
                                     userProfile.setUserNotifiedEvents(events: notifs)
+                                    try? modelContext.save()
                                 }
                             }) {
                                 Image(systemName: event.notified ? "bell.fill" : "bell")
