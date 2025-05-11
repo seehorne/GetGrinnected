@@ -248,6 +248,7 @@ struct SettingsView: View {
                         }
                         
                     }//hstack
+                    .padding()
                 }//vstack
                 .transition(.asymmetric(
                     insertion: .move(edge: .top),
@@ -309,7 +310,7 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition
-                .padding(.horizontal)
+                .padding()
                 
             }//seleciton
             
