@@ -44,22 +44,26 @@ TODO: DESCRIBE THAT PEOPLE ARE USING IT (HOPEFULLY) AND LINK TO WHERE IT CAN BE 
 # Process
 
 After establishing our idea for GetGrinnected, we began constructing a paper prototype! Divvying up pages and processes to different team members, and that's when the vision really started to come together. From sticky notes to heavy-duty construction paper, we used it all to bring our app to life. 
-TODO IMAGES OF EXAMPLES OF PAGES
+
+<img src="..\sprint 1\images\Budhil_Favorites_2.jpg" width="25%"> <img src="..\sprint 1\images\Image added IMG_8365.jpg" width="29%"> <img src = "..\sprint 1\images\ellie_IMG_3352.jpg" width = "29%">
 
 Then it was time to show it off to stakeholders. We set meetings and dates with fellow Grinnellians who took time out of their days to help us refine our vision. Their feedback was crucial, especially so early on in our development process when we were still trying to build our mental model of the app.
-TODO IMAGES OF STAKEHOLDER MEETINGS
+
+<img src="..\sprint 1\images\people_photos_testing\almond-Lily-test-3.jpeg" width = "25%"> <img src="..\sprint 1\images\people_photos_testing\leah_destany_test_1.jpg" width = "25%"> <img src="..\sprint 1\images\people_photos_testing\Michael-Professor-test-3.jpeg" width = "25%">
 
 With their feedback, we made it to the next development step, PLANNING, PLANNING, PLANNING. We had a lot of the what UI and mentally figured out, but that was only the first piece of the puzzle; we lacked the who, where, why, and how. Who was going to implement each component? Where were we going to host it? Store data? Why is each feature important? How are we going to do this? This led us to diagramming our database, fleshing out use cases, and setting a defined list of requirements for our product.
 
-TODO IMAGES OF DIAGRAMS, MEETINGS, ETC.
+<img src="..\sprint 2\images\SoftwareInterfaces.jpg" width = "25%"> <img src = "../sprint 2/images/Database_Diagram.jpeg" width = "30%" >
 
 After planning, it was time to put the preparation into action and begin implementation. This was bumpy and definitely where we learned a lot about what goes into software development. But between clear communication via Discord and in-person group meetings, we made forward progress! 
 
-TODO EARLY ON SCREEN SHOTS FROM DEVELOPMENT
+<img src= "images\Home Screen Swift OG.png" width = "25%"> <img src= "" width = "25%">
 
 However, about halfway through development, we hit one of our largest challenges! Our ambition! While being excited and passionate about the project was important, it had caused us to vastly overestimate the scope of what we could accomplish in a semester as new software developers. Thus, we had a crucial group meeting where we came back to the requirements we had set and discussed what was really necessary. What made our app our app? This meeting allowed us to reframe our objectives and hone in on the highest-impact features. The choice to make these shifts was a pivotal step in our learning.
 
 Upon adjusting our aims, we spent many weeks implementing features, API calls, testing, etc. With implementation came the oh so dreaded merge conflicts. These were inevitable challenges that afflict most who utilize version control for larger projects. However, we learned that by clearly communicating the section of a project we would be working on and the progress we were making, it allowed us to mitigate these conflicts. While we couldn’t entirely avoid these conflicts, we managed to decrease the frequency at which we ran into them while maintaining parallel development across sub-teams. 
+
+TODO SCREENT SHOTS OF APP
 
 During our implementation, we had the opportunity to meet with our previous stakeholders from the prototype period, who could test our actual application. They offered us vital feedback, and it was actually at this point that we contacted Rei about logo design and settled on a color scheme for the app! 
 
