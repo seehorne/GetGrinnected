@@ -203,6 +203,22 @@ function run() {
     user.routePutUsername
   );
 
+
+  // Email: GET (read) and PUT (write)
+  app.get(
+    '/user/email',
+    middlewareVerifyJWT(ACCESS_JWT),
+    user.routeGetEmail
+  )
+  app.put(
+    '/user/email',
+    [
+      middlewareBodyExists('new_email'),
+      middlewareVerifyJWT(ACCESS_JWT),
+    ],
+    user.routeChangeEmail
+  );
+
   // Delete account by sending a request while logged in
   app.delete(
     '/user',
