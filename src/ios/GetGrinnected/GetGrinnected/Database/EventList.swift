@@ -56,7 +56,7 @@ struct EventList: View {
         sortOrder: SortOrder,
         filterType: FilterType,
         filter: String,
-        filterToday: Bool = false
+        filterByDate: Bool = false
     ){
         //set selected event to selected event
         self.selectedEvent = selectedEvent
@@ -85,7 +85,7 @@ struct EventList: View {
         if !filter.isEmpty {
             print("filter is empty")
             predicate = #Predicate { event in
-                (filterToday //filter today by the start time and end time
+                (filterByDate //filter today by the start time and end time
                           ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
                           : true) //if not filtering for today, return true
                   &&
@@ -97,7 +97,7 @@ struct EventList: View {
                 case .name:
                     print("filtering by name")
                     predicate = #Predicate<EventModel> {event in
-                        (filterToday //filter today by the start time and end time
+                        (filterByDate //filter today by the start time and end time
                                   ? event.startTime.flatMap {$0 >= timeSpanStart && $0 <= timeSpanEnd} ?? false //check the dates, otherwise false (not in that date)
                                   : true) //if not filtering for today, return true
                           &&
