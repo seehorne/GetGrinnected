@@ -34,9 +34,83 @@ struct SearchView: View {
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack{ //contains pickers
                 //searchbar
-                SearchBar(inputText: $filter, safeAreaTop: safeAreaTop)
+                Header(safeAreaTop: safeAreaTop, title: "Search", searchBarOn: false)
                 
-                //header elements
+                NavigationView {
+                    //header elements
+                    VStack{
+                        //input for searching
+                        
+                        //filtering list
+                        Picker("Search by by", selection: $filterType) {
+                            ForEach(FilterType.allCases) { filterType in
+                                Text("Search By by \(filterType)")
+                            }
+                        }
+                        .padding(.horizontal) //horizontal padding
+                        
+                        Spacer()
+                        
+                        InputView(text: $filter, title: "Search by name", placeholder: "search here!")
+                            .padding(.horizontal)
+                        
+
+                        NavigationLink(destination:  SearchResults(parentView: parentView, selectedEvent: selectedEvent, isLoading: isLoading, refreshTimer: refreshTimer, sortOrder: $sortOrder, filterType: $filterType, filter: $filter)) {
+                            HStack(){
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.white)
+                                Text("Search")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.white)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.appBlue.opacity(0.75))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .stroke(Color.appBorder, lineWidth: 1)
+                                            )
+                                    )//nice background for searching
+                            }
+                        } //link to search, search through here
+                    }
+                }//navigation view
+                
+            } //navigation stack
+            .edgesIgnoringSafeArea(.top)
+        }//geometry reader
+        
+    }//body
+}
+
+struct SearchResults: View {
+    
+    //parentview that observes values if change
+    @ObservedObject var parentView: EventListParentViewModel
+    @State private var selectedEvent: Int?
+    @State private var isLoading = false //set loading states
+    @State private var refreshTimer: Timer? //a timer to count when we refresh
+    
+    
+    //Sorting and Filtering parameters
+    @Binding private var sortOrder: SortOrder
+    @Binding private var filterType: FilterType
+    @Binding private var filter: String
+    
+    init(parentView: EventListParentViewModel, selectedEvent: Int? = nil, isLoading: Bool = false, refreshTimer: Timer? = nil, sortOrder: Binding<SortOrder>, filterType: Binding<FilterType>, filter: Binding<String>) {
+        self.parentView = parentView
+        self.selectedEvent = selectedEvent
+        self.isLoading = isLoading
+        self.refreshTimer = refreshTimer
+        self._sortOrder = sortOrder
+        self._filterType = filterType
+        self._filter = filter
+    }
+    
+    var body: some View {
+        VStack{
+            //main view
+            ScrollView(.vertical, showsIndicators: true){
+                //selectors
                 HStack{
                     //creating a selector of sort order
                     Picker("Sort Order", selection: $sortOrder){
@@ -49,25 +123,17 @@ struct SearchView: View {
                     
                     Spacer()
                     
-                    //filtering list
-                    Picker("Search by by", selection: $filterType) {
-                        ForEach(FilterType.allCases) { filterType in
-                            Text("Search By by \(filterType)")
-                        }
-                    }
-                    .padding(.horizontal) //horizontal padding
+                    TagMultiSelector(title: "Select Tags", parentView: parentView)
                     
                 }//header elements
+                .padding()
                 
-                ScrollView(.vertical, showsIndicators: true){
-                    EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterToday: false)
-                    
-                }//scroll view
-                .padding(.horizontal)
+                //eventlist
+                EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterToday: false)
                 
-            }//navigation stack
-            .edgesIgnoringSafeArea(.top)
-        }//geometry reader
+            }//scroll view
+            .padding(.horizontal)
+        }
         
-    }//body
+    }
 }
