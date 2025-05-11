@@ -50,7 +50,7 @@ final class EventModel: Hashable { // hashable for uniqueness
     var lastUpdated: Date = Date() //set last updated date to today.
 
     // UI-only flags (not persisted in SwiftData)
-    @Transient var notified: Bool = false
+    var notified: Bool = false
 
     //initialization from a DTO
     init(from dto: EventDTO) {
