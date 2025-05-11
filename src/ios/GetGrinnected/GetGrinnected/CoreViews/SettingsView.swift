@@ -31,9 +31,10 @@ struct SettingsView: View {
     //@State private var userProfile = UserProfile()
     @State private var loggedOut: Bool = false
     
-    @State var isFontSizeSelected = false
-    @State var isSectionSelected = false
-    @State var isAckSelected = false
+    @State var isProfileSelected = false
+    @State var isAppearanceSelected = false
+    @State var isAccessibilitySelected = false
+    @State var isAboutSelected = false
     
     var body: some View {
         
@@ -67,11 +68,10 @@ struct SettingsView: View {
                             }
                         }
                         
-                        InputView(text: $username, title: "Change Username", placeholder: "Username")
-                            .padding()
-                        
                         //content
                         VStack {
+                            profileEditing()
+                            
                             HStack {
                                 // spacer to right align button
                                 Spacer()
@@ -93,31 +93,13 @@ struct SettingsView: View {
                                                 
                             
                             // switch for light/dark mode
-                            toggleLightDark()
+                            appearance()
                             
                             //fontsize
-                            fontSizeSelector(selection: isFontSizeSelected)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut){
-                                        isFontSizeSelected.toggle()
-                                    }
-                                }
+                            accessibility()
                             
                             //about section
-                            about(selection: isSectionSelected)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut){
-                                        isSectionSelected.toggle()
-                                    }
-                                }
-                            
-                            //acknolwedgements
-                            acknowledgements(selection: isAckSelected)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut){
-                                        isAckSelected.toggle()
-                                    }
-                                }
+                            about()
                             
                             
                         } //about
@@ -165,29 +147,74 @@ struct SettingsView: View {
     //because we are using this in main, we are to use "some View" and not "any View"
 
     /**
-     Changeusername function
-     to hold ui components of changing username. this is useful to make it expandable.
+     Profile editing function
+     to hold ui components of changing username and email. this is useful to make it expandable.
      */
-    func changeUsername() -> some View {
-        // change username field
-        InputView(text: $username, title: "Change Username", placeholder: "Username")
+    func profileEditing() -> some View {
+        VStack {
+            HStack {
+                Text("Profile")
+                Image(systemName: isProfileSelected ? "chevron.down" : "chevron.left")
+            }
+            .font(.headline)
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.appContainer.opacity(0.75))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.appBorder, lineWidth: 1)
-                    )
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            
+            if isProfileSelected {
+                // change username field
+                HStack {
+                    Text("Username:")
+                    
+                    Spacer()
+                    
+                    Text("\(username)")
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+//                    .transition(.move(edge: .top)) //alternative transition
+                
+                // change email field
+                HStack {
+                    Text("Email:")
+                    
+                    Spacer()
+                    
+                    Text("\(username)")
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+//                    .transition(.move(edge: .top)) //alternative transition
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.appContainer.opacity(0.75))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.appBorder, lineWidth: 1)
+                )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {
+            withAnimation(.easeInOut){
+                isProfileSelected.toggle()
+            }
+        }
     }//username change
     
     /**
-     toggleLightDark()
+     appearance()
      change lightdark
      */
-    func toggleLightDark() -> some View {
+    func appearance() -> some View {
         Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
             .padding()
             .background(
@@ -202,16 +229,19 @@ struct SettingsView: View {
     }//lightdark
     
     /**
-     fontSizeSelector()
+     accessibility()
      */
-    func fontSizeSelector(selection: Bool) -> some View{
+    func accessibility() -> some View{
         VStack {
-                Text("Font Size")
-                    .font(.headline)
-                    .padding(.top)
-                    .padding(.bottom)
+                HStack{
+                    Text("Accessibility")
+                    Image(systemName: isAccessibilitySelected ? "chevron.down" : "chevron.left")
+                }
+                .font(.headline)
+                .padding(.top)
+                .padding(.bottom)
 
-                if selection {
+                if isAccessibilitySelected {
                     VStack {
                         // slider for text size
                         Slider(
@@ -244,19 +274,28 @@ struct SettingsView: View {
                     )
             )
             .clipShape(RoundedRectangle(cornerRadius: 8))
+            .onTapGesture {
+                withAnimation(.easeInOut){
+                    isAccessibilitySelected.toggle()
+                }
+            }
     }
     
     /**
      section()
      */
-    func about(selection: Bool) -> some View {
+    func about() -> some View {
         VStack{
-            Text("About")
+            HStack {
+                Text("About")
+                Image(systemName: isAboutSelected ? "chevron.down" : "chevron.left")
+            }
                 .font(.headline)
                 .padding(.top)
                 .padding(.bottom)
             
-            if(selection){
+            
+            if(isAboutSelected){
                 VStack{
                     Text("Get Grinnected was developed by Grinnelians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed abotu campus events.")
                     Text("We have a discord, so for those interested in expanding the toolbox offered to Grinnellians, please join! Here are our socials and github: ")
@@ -283,6 +322,45 @@ struct SettingsView: View {
                 ))
                 .padding(.horizontal)
             }//selection
+            
+            if(isAboutSelected){
+                VStack{
+                    Text("Acknowledgements")
+                        .font(.title)
+                    
+                    Text("Logo Design")
+                        .font(.headline)
+                    Text("Rei Yamada")
+                        .padding(.bottom)
+                    
+                    Text("Testing and Stakeholder Feedback")
+                        .font(.headline)
+                    Text("Yuina Iseki")
+                    Text("Lily Freeman")
+                    Text("Regan Stambaugh")
+                        .padding(.bottom)
+                        
+                    Text("Development Team")
+                        .font(.headline)
+                    Text("Ellie Seehorn '25")
+                    Text("Michael Paulin '25")
+                    Text("Almond Heil '25")
+                    Text("Budhil Thijm '25")
+                    Text("Ethan Hughes '25")
+                    Text("Anthony Schwindt '25")
+                        .padding(.bottom)
+                    
+                    Text("Faculty Instructor")
+                        .font(.headline)
+                    Text("Professor Leah Pearlmutter")
+                        .padding(.bottom)
+                }
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition
+                
+            }//seleciton
         }//vstack
         .frame(maxWidth:.infinity)
         .background(
@@ -294,65 +372,12 @@ struct SettingsView: View {
                 )
         ) //background
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {
+            withAnimation(.easeInOut){
+                isAboutSelected.toggle()
+            }
+        }
         
-    }
-    
-    /**
-     acknowledgements()
-     */
-    func acknowledgements(selection: Bool) -> some View {
-        VStack{
-            Text("Acknowledgements")
-                .padding(.top)
-                .font(.headline)
-                .padding(.bottom)
-            
-            
-            if(selection){
-                VStack{
-                    Text("Logo Design")
-                        .font(.headline)
-                    Text("Rei Yamada")
-                    
-                    Text("Testing and Stakeholder Feedback")
-                        .font(.headline)
-                    Text("Yuina Iseki")
-                    Text("Lily Freeman")
-                    Text("Regan Stambaugh")
-                        
-                    Text("Development Team")
-                        .font(.headline)
-                    Text("Ellie Seehorn '25")
-                    Text("Michael Paulin '25")
-                    Text("Almond Heil '25")
-                    Text("Budhil Thijm '25")
-                    Text("Ethan Hughes '25")
-                    Text("Anthony Schwindt '25")
-                    
-                    Text("Faculty Instructor")
-                        .font(.headline)
-                    Text("Professor Leah Pearlmutter")
-                }
-                .transition(.asymmetric(
-                    insertion: .move(edge: .top),
-                    removal: .move(edge: .top)
-                ))//transition
-                .padding()
-                
-            }//seleciton
-            
-        }//vstack
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.appContainer.opacity(0.75))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.appBorder, lineWidth: 1)
-                )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
     
 } //ProfileView
