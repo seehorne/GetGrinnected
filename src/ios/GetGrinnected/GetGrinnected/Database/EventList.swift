@@ -47,6 +47,7 @@ struct EventList: View {
     @State private var sortOrder: SortOrder
     @State private var filterType: FilterType
     @State private var filter: String
+    @StateObject private var userProfile = UserProfile()
     
     
     //the initializer for the eventlist is the sorting function!
@@ -223,6 +224,10 @@ struct EventList: View {
         } else {
             print("3: no events to update")
         }
+        print("getting favorites")
+        userProfile.getUserFavoritedEvents(context: modelContext)
+        print("getting notification")
+        userProfile.getUserNotifiedEvents(context: modelContext)
     }
     
     /*
