@@ -183,15 +183,15 @@ struct EventCard: View {
                             Button(action: {
                                 event.favorited.toggle()
                                 event.lastUpdated = Date() // mark as modified
-                                let temp = [Int]()
                                 Task{
                                     print("Trying to favorite save")
                                     userProfile.getUserFavoritedEvents(context: modelContext)
                                     print("Just got all the existing favorites")
-                                    userProfile.setUserFavoritedEvents(events: temp)
+                                    //userProfile.setUserFavoritedEvents(events: temp)
                                     //try? modelContext.save()
                                     let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
                                     userProfile.setUserFavoritedEvents(events: favorites)
+                                    //now, an up to date list of the notified events
                                     userProfile.getUserFavoritedEvents(context: modelContext)
                                     try? modelContext.save()
                                 }
@@ -206,13 +206,14 @@ struct EventCard: View {
                             
                             Button(action: {
                                 event.notified.toggle()
-                                let temp2 = [Int]()
                                 Task{
                                     print("trying to notify save")
-                                    userProfile.setUserNotifiedEvents(events: temp2)
+                                    userProfile.getUserNotifiedEvents(context: modelContext)
+                                    //userProfile.setUserNotifiedEvents(events: temp2)
                                     //try? modelContext.save()
                                     let notifs = userProfile.fetchNotifiedEventIDs(from: modelContext)
                                     userProfile.setUserNotifiedEvents(events: notifs)
+                                    userProfile.getUserNotifiedEvents(context: modelContext)
                                     try? modelContext.save()
                                 }
                             }) {

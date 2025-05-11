@@ -439,7 +439,7 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func getUserNotifiedEvents() {
+    func getUserNotifiedEvents(context: ModelContext) {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
             request.httpMethod = "GET"
@@ -449,8 +449,29 @@ class UserProfile: ObservableObject {
         }, completion: { result in
             switch result {
             case .success(let data):
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("Raw JSON response: \(jsonString)")
+                }
+                //print("Success! Got favorited events: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse)
                     print(decodedResponse.message ?? "Success but no response to print")
+                    DispatchQueue.main.async {
+                        do {
+                            let notifiedIDs = decodedResponse.notified_events ?? []
+                            print(notifiedIDs)
+                            let fetchDescriptor = FetchDescriptor<EventModel>()
+                            let allEvents = try context.fetch(fetchDescriptor)
+                            for event in allEvents {
+                                if notifiedIDs.contains(event.id) {
+                                    event.notified = true
+                                    print(event.id)
+                                }
+                            }
+                        } catch {
+                            print("Error decoding or fetching: \(error)")
+                        }
+                    }
                 }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
@@ -525,25 +546,6 @@ class UserProfile: ObservableObject {
             }
         })
     }
-//                    do{
-//                        let favoritedIDs = decodedResponse.favorited_events ?? []
-//                        let fetchDescriptor = FetchDescriptor<EventModel>()
-//                        let allEvents = try context.fetch(fetchDescriptor)
-//                        for event in allEvents {
-//                            event.favorited = favoritedIDs.contains(event.id)
-//                            print(event.id)
-//                            print(event.favorited)
-//                        }
-//                    }
-//                    catch{
-//                        print("Error decoding or fetching: \(error)")
-//                    }
-//                }
-//            case .failure(let error):
-//                print(self.getErrorMessage(error: error))
-//            }
-//        })
-//    }
     
     func setUserFavoritedEvents(events: [Int]){
          safeApiCall(requestBuilder: { token in
