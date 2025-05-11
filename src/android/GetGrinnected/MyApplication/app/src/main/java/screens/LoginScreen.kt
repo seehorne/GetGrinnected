@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
@@ -45,6 +46,7 @@ import com.GetGrinnected.myapplication.LoginRequest
 import com.GetGrinnected.myapplication.R
 import com.GetGrinnected.myapplication.RetrofitApiClient
 import kotlinx.coroutines.launch
+import com.GetGrinnected.myapplication.DataStoreSettings
 
 /**
  * A composable function that represents the Login screen of our application.
@@ -75,6 +77,8 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
     val typography = MaterialTheme.typography
+    // The current context of our app
+    val context = LocalContext.current
 
 
     // Manages Keyboard focus and allows us to pull to specific locations
@@ -183,9 +187,12 @@ fun LoginScreen(modifier: Modifier, navController: NavController) {
                             // Assess if the request and validation of login was successful if so
                             // nav to main if not show login failure.
                             if (emailResponse.isSuccessful) {
-                            navController.navigate("verification/${email}/${signUp}") {
-                                popUpTo(0) { inclusive = true }
-                                launchSingleTop = true
+                                // Sets our pending verification states so that we return to the proper
+                                // page if we leave the app to check an the email
+                                DataStoreSettings.setPendingVerification(context, email, signUp)
+                                navController.navigate("verification/${email}/${signUp}") {
+                                    popUpTo(0) { inclusive = true }
+                                    launchSingleTop = true
                             }
                             } else {
                                 errMsg = if(emailResponse.errorBody()?.string()?.contains("No such user") == true){

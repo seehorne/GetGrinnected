@@ -193,6 +193,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                                         AppRepository.syncFromApi()
                                         // Sets the new LastSyncTime to now
                                         DataStoreSettings.setLastSyncTime(context, now)
+                                        // Clears all of our states associated with verification
+                                        DataStoreSettings.clearPendingVerification(context)
                                         // Navigates to main page
                                         navController.navigate("main") {
                                             popUpTo(0) { inclusive = true }
@@ -252,12 +254,20 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
             // This is our cancel button that navigates back to the sign up page
             TextButton(onClick = {
                 if (flag) {
-                    navController.navigate("signup") {
-                        popUpTo("verification") { inclusive = true }
+                    coroutineScope.launch {
+                        // Clears all of our states associated with verification
+                        DataStoreSettings.clearPendingVerification(context)
+                        navController.navigate("signup") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 } else {
-                    navController.navigate("login") {
-                        popUpTo("verification") { inclusive = true }
+                    coroutineScope.launch {
+                        // Clears all of our states associated with verification
+                        DataStoreSettings.clearPendingVerification(context)
+                        navController.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 }
             }) {

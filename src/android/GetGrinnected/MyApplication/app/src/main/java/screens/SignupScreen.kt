@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
@@ -48,6 +49,7 @@ import com.GetGrinnected.myapplication.R
 import com.GetGrinnected.myapplication.RetrofitApiClient
 import com.GetGrinnected.myapplication.SignupRequest
 import kotlinx.coroutines.launch
+import com.GetGrinnected.myapplication.DataStoreSettings
 
 /**
  * A composable function that represents the Signup screen of our application.
@@ -84,6 +86,8 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
     val typography = MaterialTheme.typography
+    // The current context of our app
+    val context = LocalContext.current
 
     // This sets up the general look of the entire screen
     Column(
@@ -232,10 +236,12 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                             )
                             // Assess if the request and if the email was available
                             if (response.isSuccessful) {
-                            // Sets our logged in state to true
-                            navController.navigate("verification/${email}/${signUp}") {
-                                popUpTo(0) { inclusive = true }
-                                launchSingleTop = true
+                                // Sets our pending verification states so that we return to the proper
+                                // page if we leave the app to check an the email
+                                DataStoreSettings.setPendingVerification(context, email, signUp)
+                                navController.navigate("verification/${email}/${signUp}") {
+                                    popUpTo(0) { inclusive = true }
+                                    launchSingleTop = true
                             }
                             } else {
                                 errMsg = if(response.errorBody()?.string()?.contains("Username exists") == true){

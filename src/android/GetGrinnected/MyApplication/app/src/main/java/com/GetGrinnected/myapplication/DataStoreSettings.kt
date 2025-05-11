@@ -29,6 +29,10 @@ object DataStoreSettings {
     private val LAST_SYNC_TIME = longPreferencesKey("last_sync_time")
     // Preference key for the font size
     private val FONT_SIZE = stringPreferencesKey("font_size")
+    // Preference key for when a user is trying too do a verification step
+    private val PENDING_EMAIL = stringPreferencesKey("pending_email")
+    // Preference key for which page we came from to get to verification ie the signup flag
+    private val PENDING_FLAG = booleanPreferencesKey("pending_flag")
 
     /**
      * Setter for logged in value
@@ -176,4 +180,43 @@ object DataStoreSettings {
         }
     }
 
+    /**
+     * Sets the necessary values when we move into the verification stage
+     * @param context is the current context of the app
+     * @param email is the current email of the account being verified
+     * @param flag is whether we are doing a signup or a login verification
+     */
+    suspend fun setPendingVerification(context: Context, email: String, flag: Boolean) {
+        context.dataStore.edit {
+            it[PENDING_EMAIL] = email
+            it[PENDING_FLAG] = flag
+        }
+    }
+
+    /**
+     * Getter for the email we are trying to verify
+     * @param context is the current app context
+     */
+    fun getPendingVerificationEmail(context: Context): Flow<String?> {
+        return context.dataStore.data.map { it[PENDING_EMAIL] }
+    }
+
+    /**
+     * Getter for the flag associated with going to signup or login
+     * @param context is the current app context
+     */
+    fun getPendingVerificationFlag(context: Context): Flow<Boolean?> {
+        return context.dataStore.data.map { it[PENDING_FLAG] }
+    }
+
+    /**
+     * Clears all of the data stores associated with the verification process
+     * @param context is the current app context
+     */
+    suspend fun clearPendingVerification(context: Context) {
+        context.dataStore.edit {
+            it.remove(PENDING_EMAIL)
+            it.remove(PENDING_FLAG)
+        }
+    }
 }
