@@ -190,7 +190,7 @@ struct EventCard: View {
                                     //try? modelContext.save()
                                     let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
                                     userProfile.setUserFavoritedEvents(events: favorites)
-                                    userProfile.getUserFavoritedEvents()
+                                    userProfile.getUserFavoritedEvents(context: modelContext)
                                     try? modelContext.save()
                                 }
                                 //todo: save this back to the cache with the get call

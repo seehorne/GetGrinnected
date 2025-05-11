@@ -483,7 +483,8 @@ class UserProfile: ObservableObject {
         })
     }
     
-    func getUserFavoritedEvents() {
+    func getUserFavoritedEvents(context: ModelContext) {
+        print("calling getUserFavoritedEvents")
          safeApiCall(requestBuilder: { token in
              let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!
              var request = URLRequest(url: url)
@@ -501,9 +502,11 @@ class UserProfile: ObservableObject {
                     do{
                         let favoritedIDs = decodedResponse.favorited_events ?? []
                         let fetchDescriptor = FetchDescriptor<EventModel>()
-                        let allEvents = try self.modelContext.fetch(fetchDescriptor)
+                        let allEvents = try context.fetch(fetchDescriptor)
                         for event in allEvents {
-                                event.favorited = favoritedIDs.contains(event.id)
+                            event.favorited = favoritedIDs.contains(event.id)
+                            print(event.id)
+                            print(event.favorited)
                         }
                     }
                     catch{
