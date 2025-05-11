@@ -53,12 +53,21 @@ With their feedback, we made it to the next development step, PLANNING, PLANNING
 
 TODO IMAGES OF DIAGRAMS, MEETINGS, ETC.
 
-After planning, it was time to put the preparation into action and begin implementation. This was bumpy and definitely where we learned a lot about what goes into software development. We utilized Discord 
+After planning, it was time to put the preparation into action and begin implementation. This was bumpy and definitely where we learned a lot about what goes into software development. But between clear communication via Discord and in-person group meetings, we made forward progress! 
 
+TODO EARLY ON SCREEN SHOTS FROM DEVELOPMENT
 
-# (OPTIONAL) Advice
+However, about halfway through development, we hit one of our largest challenges! Our ambition! While being excited and passionate about the project was important, it had caused us to vastly overestimate the scope of what we could accomplish in a semester as new software developers. Thus, we had a crucial group meeting where we came back to the requirements we had set and discussed what was really necessary. What made our app our app? This meeting allowed us to reframe our objectives and hone in on the highest-impact features. The choice to make these shifts was a pivotal step in our learning.
 
-TODO: EITHER WRITE OR DELETE SECTION. GUIDANCE TO FUTURE 324 STUDENTS.
+Upon adjusting our aims, we spent many weeks implementing features, API calls, testing, etc. With implementation came the oh so dreaded merge conflicts. These were inevitable challenges that afflict most who utilize version control for larger projects. However, we learned that by clearly communicating the section of a project we would be working on and the progress we were making, it allowed us to mitigate these conflicts. While we couldn’t entirely avoid these conflicts, we managed to decrease the frequency at which we ran into them while maintaining parallel development across sub-teams. 
+
+During our implementation, we had the opportunity to meet with our previous stakeholders from the prototype period, who could test our actual application. They offered us vital feedback, and it was actually at this point that we contacted Rei about logo design and settled on a color scheme for the app! 
+
+From then on, it was group meetings, Discord updates, and presentations, all while steadily chipping away at the vision we had laid out 14 weeks prior. And finally, here, as we are writing this blog post for you, we are getting the beta version of our app out into the hands of Grinnellians! While we had challenges, highs and lows, and many all-nighters during this process, we truly were able to gain an understanding of what it takes and what goes into seeing an app through from a mental model to an application with a user base!
+
+# Advice
+
+If there was any advice we could offer future CSC-324 students, it would be this. Pick a project that you are truly passionate about, something you need, a friend needs, something that truly motivates you. And then communicate early and often with your teammates about any successes and challenges you experience. It is going to be challenging, and there are going to be points when you feel lost in the development, but know that this is normal and you will figure it out, and that this is a perfect time to talk to your teammates about how you’re feeling. In the end, have a blast and take a second to reflect on just how much you have learned and take pride in the vision you brought to life!
 
 # Acknowledgements
 
