@@ -295,6 +295,10 @@ class UserProfile: ObservableObject {
     }
     
     //this function refreshes the access token and keeps it local for the user
+    //it pulls out the the existing refresh token from UserDefaults to see if its still valid
+    //if it isn't, forces logout
+    //otherwise, makes an API call to get new tokens, and saves them back to be used in future
+    //authorization calls
     func refreshAccessToken(completion: @escaping (Result<String, Error>) -> Void) {
         guard let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") else {
             completion(.failure(APIError.unauthorized))
@@ -337,6 +341,10 @@ class UserProfile: ObservableObject {
     
     
     //request builder, the actual call we care about
+    //any authorized call (ie that requires being logged in, should be made wrapped in this)
+    //it will check if the access token is fine, and if it is, make the call
+    //if the access token isn't fine, it will attempt to refresh it, and if it can do so, then make the call
+    //if after an attempted refresh, the code still isnt fine, the user shouldn't be logged in, so they get logged out
     func safeApiCall( requestBuilder: @escaping (String) -> URLRequest,
                       completion: @escaping (Result<Data, Error>) -> Void) {
         //Get current access token
@@ -394,6 +402,8 @@ class UserProfile: ObservableObject {
         makeRequest(token: accessToken)
         }
     
+    
+    //this calls the API to get the username as stored in the database
     func getUsername() {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
@@ -410,6 +420,7 @@ class UserProfile: ObservableObject {
         })
     }
     
+    //this takes user input for a username change and sends it to the API to be stored in the database
     func setUsername(newUsername: String) {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
@@ -439,6 +450,10 @@ class UserProfile: ObservableObject {
         })
     }
     
+    //this function takes a model context as a parameter, so that it can save and update the events saved by a user as notified
+    //it gets these events by pulling the API for the IDs that are marked by the user as notified
+    //then it goes through all events s.t. they can be marked that way in local storage as well
+    //it must be passed this model context from a View, as that is the only place model contexts can actually be updated
     func getUserNotifiedEvents(context: ModelContext) {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!)
@@ -452,10 +467,11 @@ class UserProfile: ObservableObject {
                 if let jsonString = String(data: data, encoding: .utf8) {
                     print("Raw JSON response: \(jsonString)")
                 }
-                //print("Success! Got favorited events: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse)
                     print(decodedResponse.message ?? "Success but no response to print")
+                    //this has to be done on the main thread, since its using a model context
+                    //so even though this isn't an explicitly async function, we have to put it here
                     DispatchQueue.main.async {
                         do {
                             let notifiedIDs = decodedResponse.notified_events ?? []
@@ -479,6 +495,9 @@ class UserProfile: ObservableObject {
         })
     }
     
+    //this function takes an int array as a parameter, specifically one of all the IDs a user has marked as notified
+    //this array is based on the events they have clicked the bell icon for, in the moment of call or previous
+    //it then sends this array to the API so that the local notified events can be present there too
     func setUserNotifiedEvents(events: [Int]) {
          safeApiCall(requestBuilder: { token in
              let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/notified")!
@@ -494,7 +513,6 @@ class UserProfile: ObservableObject {
         }, completion: { result in
             switch result {
             case .success(let data):
-                //print("Success! Set notified events: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse.message ?? "Success but no response to print")
                 }
@@ -504,6 +522,10 @@ class UserProfile: ObservableObject {
         })
     }
     
+    //this function takes a model context as a parameter, so that it can save and update the events saved by a user as favorited
+    //it gets these events by pulling the API for the IDs that are marked by the user as favorited
+    //then it goes through all events s.t. they can be marked that way in local storage as well
+    //it must be passed this model context from a View, as that is the only place model contexts can actually be updated
     func getUserFavoritedEvents(context: ModelContext) {
         print("calling getUserFavoritedEvents")
          safeApiCall(requestBuilder: { token in
@@ -520,10 +542,11 @@ class UserProfile: ObservableObject {
                 if let jsonString = String(data: data, encoding: .utf8) {
                     print("Raw JSON response: \(jsonString)")
                 }
-                //print("Success! Got favorited events: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse)
                     print(decodedResponse.message ?? "Success but no response to print")
+                    //this has to be done on the main thread, since its using a model context
+                    //so even though this isn't an explicitly async function, we have to put it here
                     DispatchQueue.main.async {
                         do {
                             let favoritedIDs = decodedResponse.favorited_events ?? []
@@ -547,6 +570,9 @@ class UserProfile: ObservableObject {
         })
     }
     
+    //this function takes an int array as a parameter, specifically one of all the IDs a user has marked as favorited
+    //this array is based on the events they have clicked the heart icon for, in the moment of call or previous
+    //it then sends this array to the API so that the local favorited events can be present there too
     func setUserFavoritedEvents(events: [Int]){
          safeApiCall(requestBuilder: { token in
              let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!
@@ -575,6 +601,7 @@ class UserProfile: ObservableObject {
         })
     }
     
+    //this function is used to get all of a user's data, basically pulls their db entry and returns it to the app
     func getUserData()  {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/data")!)
@@ -596,7 +623,11 @@ class UserProfile: ObservableObject {
         })
     }
     
-    
+    //this function makes an int array of all the IDs a user has marked as favorited
+    //this array is sourced from the cache's account of what has been favorited
+    //it goes through all the events, and picks out the ones that match the predicate of favorited
+    //then puts all their ids in an array
+    //if no events have been favorited, this returns an empty array
     func fetchFavoritedEventIDs(from context: ModelContext) -> [Int] {
         let predicate = #Predicate<EventModel> { $0.favorited }
         let descriptor = FetchDescriptor<EventModel>(predicate: predicate)
@@ -611,7 +642,11 @@ class UserProfile: ObservableObject {
         }
     }
     
-    
+    //this function makes an int array of all the IDs a user has marked as notified
+    //this array is sourced from the cache's account of what has been notified
+    //it goes through all the events, and picks out the ones that match the predicate of notified
+    //then puts all their ids in an array
+    //if no events have been notified, this returns an empty array
     func fetchNotifiedEventIDs(from context: ModelContext) -> [Int] {
         let predicate = #Predicate<EventModel> { $0.notified }
         let descriptor = FetchDescriptor<EventModel>(predicate: predicate)

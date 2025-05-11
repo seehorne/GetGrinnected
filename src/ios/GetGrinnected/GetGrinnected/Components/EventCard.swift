@@ -187,8 +187,6 @@ struct EventCard: View {
                                     print("Trying to favorite save")
                                     userProfile.getUserFavoritedEvents(context: modelContext)
                                     print("Just got all the existing favorites")
-                                    //userProfile.setUserFavoritedEvents(events: temp)
-                                    //try? modelContext.save()
                                     let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
                                     userProfile.setUserFavoritedEvents(events: favorites)
                                     //now, an up to date list of the notified events
@@ -209,8 +207,6 @@ struct EventCard: View {
                                 Task{
                                     print("trying to notify save")
                                     userProfile.getUserNotifiedEvents(context: modelContext)
-                                    //userProfile.setUserNotifiedEvents(events: temp2)
-                                    //try? modelContext.save()
                                     let notifs = userProfile.fetchNotifiedEventIDs(from: modelContext)
                                     userProfile.setUserNotifiedEvents(events: notifs)
                                     userProfile.getUserNotifiedEvents(context: modelContext)

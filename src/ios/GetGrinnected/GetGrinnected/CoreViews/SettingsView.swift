@@ -54,7 +54,6 @@ struct SettingsView: View {
                             // Logout button
                             Button(action: {
                                 // we are logging out
-                                //isLoggedIn = false
                                 userProfile.updateLoginState(isLoggedIn: false)
                                 loggedOut = true
                             }) {
@@ -77,7 +76,7 @@ struct SettingsView: View {
                                 // spacer to right align button
                                 Spacer()
                                 
-                                // Logout button
+                                // username change
                                 Button(action: {
                                     print(username)
                                     // set the username that has been typed
