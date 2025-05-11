@@ -63,11 +63,12 @@ struct SearchView: View {
                         TextField("Search by \(filterType.rawValue.capitalized)", text: $filter)
                             .font(.callout)
                             .autocapitalization(.none)
-                            .padding()
+                            .padding()//for general text to be padded in the background
+                            .padding(.horizontal)//for the text field to not at the edge
                             .background(
                                 RoundedRectangle(cornerRadius: 20, style: .circular)
                                     .fill(.gray.opacity(0.25))
-                                    .padding()
+                                    .padding(.horizontal) //for the rectangle to be not at the edge
                             )
                         
                         /**
