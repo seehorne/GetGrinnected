@@ -29,6 +29,10 @@ struct SearchView: View {
     @State private var filter = ""
     
     
+    //for date picker
+    @State private var startDate = Date()
+    @State private var endDate = Date()
+    
     var body: some View{
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
@@ -40,8 +44,9 @@ struct SearchView: View {
                     //header elements
                     VStack{
                         //input for searching
-                        
-                        //filtering list
+                        /**
+                         Search by picker..
+                         */
                         Picker("Search by", selection: $filterType) {
                             ForEach(FilterType.allCases) { filterType in
                                 Text("Search by \(filterType)")
@@ -50,10 +55,58 @@ struct SearchView: View {
                         .pickerStyle(.segmented)
                         .padding(.horizontal) //horizontal padding
                         
-                        Spacer()
-                        
-                        InputView(text: $filter, title: "Search by name", placeholder: "search here!")
+                        //input view for searching
+                        Text("Search here:")
+                            .foregroundStyle(.textSecondary)
+                            .padding(.horizontal)
+                            .padding(.top)
+                        TextField("Search by \(filterType.rawValue.capitalized)", text: $filter)
+                            .font(.callout)
+                            .autocapitalization(.none)
                             .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 20, style: .circular)
+                                    .fill(.gray.opacity(0.25))
+                                    .padding()
+                            )
+                        
+                        /**
+                         Date pickers
+                         */
+                        Text("Select Date")
+                            .foregroundStyle(.textSecondary)
+                            .padding(.horizontal)
+                            .padding(.top)
+                        DatePicker(
+                            "Start Date",
+                            selection: $startDate,
+                             displayedComponents: [.date, .hourAndMinute]
+                        )
+                        .padding()
+                        .onChange(of: startDate) {
+                            // Update parentView timeSpan start
+                            parentView.timeSpan.start = startDate
+                            
+                            // Ensure end date is not before new start date
+                            if endDate < startDate {
+                                endDate = startDate
+                            }
+                        }//on change
+                        
+                        //set date end-range
+                        DatePicker(
+                            "End Date",
+                            selection: $endDate,
+                            //24 * 60 * 60  = 24 hours, 60 minutes, 60 seconds
+                            in:  startDate.addingTimeInterval(24 * 60 * 60)...,
+                            displayedComponents: [.date, .hourAndMinute]
+                        )
+                        .padding()
+                        .onChange(of: endDate) {
+                            // Update parentView timeSpan end
+                            parentView.timeSpan.end = endDate
+                        }//onchange
+                        
                         
 
                         NavigationLink(destination:  SearchResults(parentView: parentView, selectedEvent: selectedEvent, isLoading: isLoading, refreshTimer: refreshTimer, sortOrder: $sortOrder, filterType: $filterType, filter: $filter)) {
@@ -127,7 +180,7 @@ struct SearchResults: View {
                 .padding()
                 
                 //eventlist
-                EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterToday: false)
+                EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterByDate: true)
                 
             }//scroll view
             .padding(.horizontal)

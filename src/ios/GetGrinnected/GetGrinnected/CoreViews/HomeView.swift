@@ -52,7 +52,7 @@ struct HomeView: View {
                             .padding(.horizontal)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
+                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterByDate: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
