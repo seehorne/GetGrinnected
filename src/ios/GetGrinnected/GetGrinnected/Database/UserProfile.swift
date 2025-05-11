@@ -47,11 +47,12 @@ class UserProfile: ObservableObject {
     }//function set email
     
     
-    func setUsername(_ newUsername: String){
+    func setLocalUsername(newUsername: String){
        usernameText = newUsername
+       UserDefaults.standard.set(newUsername, forKey: "username")
     }
     
-    func setPassword(_ newPassword: String) -> Bool {
+    func setLocalPassword(_ newPassword: String) -> Bool {
         if validatePassword(newPassword){
             _password = newPassword
             isPasswordValid = true
@@ -413,7 +414,13 @@ class UserProfile: ObservableObject {
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Got username: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                    if decodedResponse.username != nil {
+                        print(decodedResponse.username!)
+                        self.setLocalUsername(newUsername: decodedResponse.username!)
+                    }
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
@@ -672,7 +679,7 @@ class UserProfile: ObservableObject {
         let access_token: String?
         let favorited_events: [Int]?
         let notified_events: [Int]?
-        let username: [Int]?
+        let username: String?
     }
     
     /*

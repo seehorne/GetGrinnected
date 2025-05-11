@@ -19,7 +19,8 @@ struct SettingsView: View {
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
     // our users username
-    @State private var username: String = "user123"
+    @State private var username: String
+    @State private var errorMessage: String
     
     @StateObject private var userProfile = UserProfile()
     
@@ -35,8 +36,14 @@ struct SettingsView: View {
     @State var isSectionSelected = false
     @State var isAckSelected = false
     
+    init(username: String, isLoggedIn: Binding<Bool>) {
+        self._isLoggedIn = isLoggedIn
+        self._username = State(initialValue: UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded")
+        self.errorMessage = ""
+    }
+    
+    
     var body: some View {
-        
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
@@ -134,6 +141,8 @@ struct SettingsView: View {
             // run switchAppearance when the view is shown
             .onAppear {
                 switchAppearance()
+                userProfile.getUsername()
+                username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
             }
             // changes the viewColorScheme when lightModeOn is changed
             .onChange(of: lightModeOn){ oldValue, newValue in
@@ -357,7 +366,7 @@ struct SettingsView: View {
 } //ProfileView
 
 #Preview {
-    SettingsView(isLoggedIn: .constant(true))
+    SettingsView(username: "123", isLoggedIn: .constant(true))
 }
 
 

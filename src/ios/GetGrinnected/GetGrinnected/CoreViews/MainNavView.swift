@@ -27,7 +27,7 @@ struct MainNavView: View {
                 .tabItem {
                     Label("Favorites", systemImage: "heart.fill")
                 }
-            SettingsView(isLoggedIn: $isLoggedIn)
+            SettingsView(username:  UserDefaults.standard.string(forKey: "username") ?? "", isLoggedIn: $isLoggedIn)
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
