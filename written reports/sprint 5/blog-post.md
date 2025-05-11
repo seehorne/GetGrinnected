@@ -43,7 +43,18 @@ TODO: DESCRIBE THAT PEOPLE ARE USING IT (HOPEFULLY) AND LINK TO WHERE IT CAN BE 
 
 # Process
 
-TODO: OUR PROCESS, ONE OR TWO LESSONS LEARNED
+After establishing our idea for GetGrinnected, we began constructing a paper prototype! Divvying up pages and processes to different team members, and that's when the vision really started to come together. From sticky notes to heavy-duty construction paper, we used it all to bring our app to life. 
+TODO IMAGES OF EXAMPLES OF PAGES
+
+Then it was time to show it off to stakeholders. We set meetings and dates with fellow Grinnellians who took time out of their days to help us refine our vision. Their feedback was crucial, especially so early on in our development process when we were still trying to build our mental model of the app.
+TODO IMAGES OF STAKEHOLDER MEETINGS
+
+With their feedback, we made it to the next development step, PLANNING, PLANNING, PLANNING. We had a lot of the what UI and mentally figured out, but that was only the first piece of the puzzle; we lacked the who, where, why, and how. Who was going to implement each component? Where were we going to host it? Store data? Why is each feature important? How are we going to do this? This led us to diagramming our database, fleshing out use cases, and setting a defined list of requirements for our product.
+
+TODO IMAGES OF DIAGRAMS, MEETINGS, ETC.
+
+After planning, it was time to put the preparation into action and begin implementation. This was bumpy and definitely where we learned a lot about what goes into software development. We utilized Discord 
+
 
 # (OPTIONAL) Advice
 
