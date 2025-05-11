@@ -14,29 +14,37 @@ To set up the test, do the following steps.
 2. SSH into Reclaim Cloud, and log into the Node.js Application servers.
 
 3. Change to the project directory and pull from git.
-   ```
+   ```bash
    cd ~/live_test/
    git pull
    ```
 
 4. Check out your branch.
-   ```
+   ```bash
    git checkout <YOUR_BRANCH>
    ```
 
 5. Run the API from your checked-out directory.
-   ```
+   ```bash
    npm ci
    node src/backend/api/api.cjs
    ```
 
 # What to test
 
-For these steps, open a second terminal also connected to the Node.js application servers.
+For these steps, open up a second terminal and `ssh` it into the application servers as well.
 
-## Delete your user account
+Then, go to the dir this test file's scripts are in.
 
-The easiest way to delete your user account is to go to <https://node16113-csc324--spring2025.us.reclaim.cloud/>.
+```bash
+cd ~/live_test/test\ procedures/api_scripts/
+```
+
+This directory has some scripts that automate the requests. They're a little jank, but they work if you use them in the intended way. They're only dev tools, so hopefully you can understand.
+
+## Delete the user account
+
+The easiest way to delete a user account without logging into it is to go to <https://node16113-csc324--spring2025.us.reclaim.cloud/>.
 
 This will delete your account information including favorited events,
 so make sure you're okay with doing this or take a backup first!
@@ -47,83 +55,91 @@ so make sure you're okay with doing this or take a backup first!
 
 3. Click "GetGrinnected" from the list, then "accounts" from the list that appears.
 
-4. Locate your user account, and click the "⊖ Delete" button. Confirm your choice.
+4. Locate the `manual_test` account, and click the "⊖ Delete" button. Confirm your choice.
 
-## Sign up for a new account
+   NOTE: If you were not the last person to test, you may also need to delete your account since there can only be
+   one account per email.
 
-1. Make a request to the `/session/signup` API endpoint, specifying the new account you want to create.
+## Sign up for a new account.
 
-   For instance, this is almond's request since they do testing a lot and wanna copy+paste.
-
-   ```bash
-   curl \
-      -H 'Content-Type: application/json' \
-      --request POST \
-      --data '{"email":"heilalmond@grinnell.edu", "username":"almond"}' \
-      http://localhost:8080/session/signup | jq
-   ```
-
-2. Confirm the response is positive. It should look like this.
-
-   ```json
-   {
-      "message":"Account created, and OTP successfully sent."
-   }
-   ```
-
-## Verify your signup OTP code
-
-1. Check your Grinnell outlook for an email from getgrinnected@gmail.com,
-   and copy the code inside.
-
-2. Use the code to send another POST request, this time to the `/session/verify`
-   endpoint.
+1. Run the signup script, providing a grinnell email you can check.
 
    ```bash
-   curl \
-      -H 'Content-Type: application/json' \
-      --request POST \
-      --data '{"email":"heilalmond@grinnell.edu", "code":"123456"}' \
-      http://localhost:8080/session/verify | jq
+   EMAIL=<YOUR EMAIL HERE> ./sign-up.sh
    ```
 
-3. Make sure your response looks good. Here's mine, only I changed the tokens to be the example one from <https://jwt.io> so I'm not leaking anything.
+2. Get the one-time code sent to your email.
 
-   Your `refresh_token` and `access_token` *should* be different strings from each other, but
-   it's tedious to check by hand and an automated test takes care of it.
-
-   ```json
-   {
-      "message": "Successfully authenticated",
-      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-   }
-   ```
-
-## Log into your existing account
-
-1. Now that your account is created, send a login request to it.
+3. Verify that code.
 
    ```bash
-   curl \
-      -H 'Content-Type: application/json' \
-      --request POST \
-      --data '{"email":"heilalmond@grinnell.edu"}' \
-      http://localhost:8080/session/login | jq
+   ./verify-login.sh <YOUR CODE HERE>
    ```
 
-2. It should respond with this.
+4. Confirm that the tokens `verify-login.sh` set are valid by attempting to do a refresh.
+   It will show you the formatted response, and you should confirm it looks correct.
 
-   ```json
-   {
-      "message": "OTP successfully sent."
-   }
+   ```bash
+   ./refresh.sh
    ```
 
-## Verify your login OTP code
+## Log into that account
 
-Follow the exact same steps under "Verify your signup OTP code".
-The behavior should be the same.
+1. Run the login script, giving the same email.
+
+   ```bash
+   EMAIL=<YOUR EMAIL HERE> ./login.sh
+   ```
+
+2. Check your email for the code.
+
+3. Verify that code.
+
+   ```bash
+   ./verify-login.sh <YOUR CODE HERE>
+   ```
+
+4. Confirm that the tokens `verify-login.sh` set are valid by attempting to do a refresh.
+   It will show you the formatted response, and you should confirm it looks correct.
+
+   ```bash
+   ./refresh.sh
+   ```
+
+## Change your email address
+
+**WARNING:** This is hard to test, because you need access not just to another email
+but to another Grinnell email. To test properly, you will need to make a code modification.
+
+1. Stop the running API with ctrl+c.
+
+2. Edit `src/backend/api/routes/user.cjs`, and change the function `routeChangeEmail`
+   to comment out the code block starting with `util.validateEmail(newEmail)`. You can restart
+   the API code now.
+
+3. Run the change email script. For this script, you must give the new email as a parameter.
+
+   ```bash
+   ./change-email.sh <YOUR NON-GRINNELL EMAIL HERE>
+   ```
+
+4. In your non-grinnell email, check for the code. Then, you can verify the change.
+
+   ```bash
+   ./verify-change-email.sh <CODE HERE> <NON-GRINNELL EMAIL HERE>
+   ```
+
+5. Confirm that the tokens `verify-login.sh` set are valid by attempting to do a refresh.
+   It will show you the formatted response, and you should confirm it looks correct.
+
+   ```bash
+   ./refresh.sh
+   ```
+
+## Change your email back
+
+Follow the exact same steps under "Change your email address", but now change
+your email from the non-Grinnell address back to your Grinnell one. 
 
 # Teardown
 
