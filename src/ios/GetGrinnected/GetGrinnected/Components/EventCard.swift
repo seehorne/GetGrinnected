@@ -49,6 +49,7 @@ struct EventCard: View {
     let event: EventModel
     let isExpanded: Bool//The single card does not need a @binding or @state tag
     //simply based on this value, the expansion will show and not.
+    let userProfile = UserProfile()
     
     let description: String //description used later
     //let deepLink: URL //for now unneeded
@@ -182,7 +183,17 @@ struct EventCard: View {
                             Button(action: {
                                 event.favorited.toggle()
                                 event.lastUpdated = Date() // mark as modified
-                                try? modelContext.save()
+                                Task{
+                                    print("Trying to favorite save")
+                                    userProfile.getUserFavoritedEvents(context: modelContext)
+                                    print("Just got all the existing favorites")
+                                    let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)
+                                    userProfile.setUserFavoritedEvents(events: favorites)
+                                    //now, an up to date list of the notified events
+                                    userProfile.getUserFavoritedEvents(context: modelContext)
+                                    try? modelContext.save()
+                                }
+                                //todo: save this back to the cache with the get call
                             }) {
                                 Image(systemName: event.favorited ? "heart.fill" : "heart")
                                     .foregroundColor(.border)
@@ -193,7 +204,14 @@ struct EventCard: View {
                             
                             Button(action: {
                                 event.notified.toggle()
-                                try? modelContext.save()
+                                Task{
+                                    print("trying to notify save")
+                                    userProfile.getUserNotifiedEvents(context: modelContext)
+                                    let notifs = userProfile.fetchNotifiedEventIDs(from: modelContext)
+                                    userProfile.setUserNotifiedEvents(events: notifs)
+                                    userProfile.getUserNotifiedEvents(context: modelContext)
+                                    try? modelContext.save()
+                                }
                             }) {
                                 Image(systemName: event.notified ? "bell.fill" : "bell")
                                     .foregroundColor(.border)

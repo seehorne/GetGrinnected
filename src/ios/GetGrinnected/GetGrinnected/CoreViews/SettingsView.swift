@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 struct SettingsView: View {
     // store standard font size of 20 in app storage
@@ -27,6 +28,8 @@ struct SettingsView: View {
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
     @State private var basicInput: String = ""
+    //@State private var userProfile = UserProfile()
+    @State private var loggedOut: Bool = false
     
     @State var isFontSizeSelected = false
     @State var isSectionSelected = false
@@ -51,72 +54,96 @@ struct SettingsView: View {
                             // Logout button
                             Button(action: {
                                 // we are logging out
-                                isLoggedIn = false
+                                userProfile.updateLoginState(isLoggedIn: false)
+                                loggedOut = true
                             }) {
                                 Text("Logout")
                                     .foregroundColor(.border)
                                 Image(systemName: "rectangle.portrait.and.arrow.right")
                                     .imageScale(.large)
                             } //Button
-                            .navigationDestination(isPresented: $isLoggedIn) {
+                            .navigationDestination(isPresented: $loggedOut) {
                                 ContentView()
                             }
                         }
                         
-                        //change username
-                        changeUsername()
+                        InputView(text: $username, title: "Change Username", placeholder: "Username")
+                            .padding()
                         
-                        // switch for light/dark mode
-                        toggleLightDark()
-                        
-                        //fontsize
-                        fontSizeSelector(selection: isFontSizeSelected)
-                            .onTapGesture {
-                                withAnimation(.easeInOut){
-                                    isFontSizeSelected.toggle()
-                                }
+                        //content
+                        VStack {
+                            HStack {
+                                // spacer to right align button
+                                Spacer()
+                                
+                                // username change
+                                Button(action: {
+                                    print(username)
+                                    // set the username that has been typed
+                                    userProfile.setUsername(username)
+                                    print("username submitted")
+                                    print(username)
+                                }) {
+                                    Text("Submit username change")
+                                        .foregroundColor(.border)
+                                    Image(systemName: "square.and.arrow.up")
+                                        .imageScale(.large)
+                                } //Button
                             }
-                        
-                        //about section
-                        about(selection: isSectionSelected)
-                            .onTapGesture {
-                                withAnimation(.easeInOut){
-                                    isSectionSelected.toggle()
+                                                
+                            
+                            // switch for light/dark mode
+                            toggleLightDark()
+                            
+                            //fontsize
+                            fontSizeSelector(selection: isFontSizeSelected)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut){
+                                        isFontSizeSelected.toggle()
+                                    }
                                 }
-                            }
-                        
-                        //acknolwedgements
-                        acknowledgements(selection: isAckSelected)
-                            .onTapGesture {
-                                withAnimation(.easeInOut){
-                                    isAckSelected.toggle()
+                            
+                            //about section
+                            about(selection: isSectionSelected)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut){
+                                        isSectionSelected.toggle()
+                                    }
                                 }
-                            }
+                            
+                            //acknolwedgements
+                            acknowledgements(selection: isAckSelected)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut){
+                                        isAckSelected.toggle()
+                                    }
+                                }
+                            
+                            
+                        } //about
+                        .padding()
                         
-                        
-                    } //about
-                    .padding()
-                    
-                }   //vstack
-            }   //Scroll view
-            .edgesIgnoringSafeArea(.top)
-            .foregroundColor(.border)
-            .tint(.border)
-            
-        }//GeometryReader
-        .preferredColorScheme(viewColorScheme)
-        // run switchAppearance when the view is shown
-        .onAppear {
-            switchAppearance()
-        }
-        // changes the viewColorScheme when lightModeOn is changed
-        .onChange(of: lightModeOn){ oldValue, newValue in
-            if newValue == true {
-                viewColorScheme = .light
-            } else {
-                viewColorScheme = .dark
+                    }   //vstack
+                }   //Scroll view
+                .edgesIgnoringSafeArea(.top)
+                .foregroundColor(.border)
+                .tint(.border)
+                
+            }//GeometryReader
+            .preferredColorScheme(viewColorScheme)
+            // run switchAppearance when the view is shown
+            .onAppear {
+                switchAppearance()
             }
-        } //onChange
+            // changes the viewColorScheme when lightModeOn is changed
+            .onChange(of: lightModeOn){ oldValue, newValue in
+                if newValue == true {
+                    viewColorScheme = .light
+                } else {
+                    viewColorScheme = .dark
+                }
+            } //onChange
+        }
     } //body
     
     /*
@@ -295,7 +322,7 @@ struct SettingsView: View {
                         
                     Text("Development Team")
                         .font(.headline)
-                    Text("Ellie Seahorn '25")
+                    Text("Ellie Seehorn '25")
                     Text("Michael Paulin '25")
                     Text("Almond Heil '25")
                     Text("Budhil Thijm '25")
