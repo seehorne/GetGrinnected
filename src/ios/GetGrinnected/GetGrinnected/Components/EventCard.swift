@@ -186,6 +186,8 @@ struct EventCard: View {
                                 let temp = [Int]()
                                 Task{
                                     print("Trying to favorite save")
+                                    userProfile.getUserFavoritedEvents(context: modelContext)
+                                    print("Just got all the existing favorites")
                                     userProfile.setUserFavoritedEvents(events: temp)
                                     //try? modelContext.save()
                                     let favorites = userProfile.fetchFavoritedEventIDs(from: modelContext)

@@ -496,21 +496,28 @@ class UserProfile: ObservableObject {
         }, completion: { result in
             switch result {
             case .success(let data):
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("Raw JSON response: \(jsonString)")
+                }
                 //print("Success! Got favorited events: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse)
                     print(decodedResponse.message ?? "Success but no response to print")
-                    do{
-                        let favoritedIDs = decodedResponse.favorited_events ?? []
-                        let fetchDescriptor = FetchDescriptor<EventModel>()
-                        let allEvents = try context.fetch(fetchDescriptor)
-                        for event in allEvents {
-                            event.favorited = favoritedIDs.contains(event.id)
-                            print(event.id)
-                            print(event.favorited)
+                    DispatchQueue.main.async {
+                        do {
+                            let favoritedIDs = decodedResponse.favorited_events ?? []
+                            print(favoritedIDs)
+                            let fetchDescriptor = FetchDescriptor<EventModel>()
+                            let allEvents = try context.fetch(fetchDescriptor)
+                            for event in allEvents {
+                                if favoritedIDs.contains(event.id) {
+                                    event.favorited = true
+                                    print(event.id)
+                                }
+                            }
+                        } catch {
+                            print("Error decoding or fetching: \(error)")
                         }
-                    }
-                    catch{
-                        print("Error decoding or fetching: \(error)")
                     }
                 }
             case .failure(let error):
@@ -518,6 +525,25 @@ class UserProfile: ObservableObject {
             }
         })
     }
+//                    do{
+//                        let favoritedIDs = decodedResponse.favorited_events ?? []
+//                        let fetchDescriptor = FetchDescriptor<EventModel>()
+//                        let allEvents = try context.fetch(fetchDescriptor)
+//                        for event in allEvents {
+//                            event.favorited = favoritedIDs.contains(event.id)
+//                            print(event.id)
+//                            print(event.favorited)
+//                        }
+//                    }
+//                    catch{
+//                        print("Error decoding or fetching: \(error)")
+//                    }
+//                }
+//            case .failure(let error):
+//                print(self.getErrorMessage(error: error))
+//            }
+//        })
+//    }
     
     func setUserFavoritedEvents(events: [Int]){
          safeApiCall(requestBuilder: { token in
