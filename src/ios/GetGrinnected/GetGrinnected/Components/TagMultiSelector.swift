@@ -14,7 +14,7 @@ struct TagMultiSelector: View {
     @ObservedObject var parentView: EventListParentViewModel
     
     var body: some View {
-        Menu (title) {
+        Menu () {
             if !parentView.possibleTags.isEmpty {
                 // make a row for a clear button
                 TagMultiSelectorRow(tag: "Clear",
@@ -41,12 +41,22 @@ struct TagMultiSelector: View {
             } else {
                 Text("No tags found")
             }
-        } //Menu
-        .buttonStyle(.bordered)
+        } label: {
+            Label(title, systemImage: "chevron.down")
+                .padding(.all, 3)
+                .font(.subheadline)
+                .foregroundColor(.white)
+                .background(Color.appContainer.opacity(0.75))
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.appContainer, lineWidth: 1)
+                )
+        }
         .foregroundColor(.appTextPrimary)
         .font(.title3)
-        .border(.border)
         .menuActionDismissBehavior(.disabled) // make the menu not close when you tap something
+        
     } //body
 } //TagMultiSelector
 

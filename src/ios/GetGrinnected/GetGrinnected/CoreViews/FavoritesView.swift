@@ -36,6 +36,24 @@ struct FavoritesView: View {
                 ScrollView(.vertical, showsIndicators: false){
                 //content of eventlist, show favorites true!, no search string
                     VStack{
+                        //selectors and tags
+                        HStack{
+                            //creating a selector of sort order
+                            Picker("Sort by", selection: $sortOrder) {
+                                ForEach(SortOrder.allCases) { sortOrder in
+                                    Text("Sort by \(sortOrder.rawValue.capitalized)")
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            
+                            TagMultiSelector(title: "Select Tags", parentView: parentView)
+                            
+                            
+                            
+                        }//header elements
+                        .padding()
+                        
+                        
                         //if empty show that no events are in that time period
                         if events.isEmpty{
                             //a more helpful empty message

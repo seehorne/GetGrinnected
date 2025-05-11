@@ -258,6 +258,7 @@ struct SettingsView: View {
             Text("About")
                 .font(.headline)
                 .padding(.top)
+                .padding(.bottom)
             
             if(selection){
                 VStack{
@@ -283,6 +284,7 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))
+                .padding(.horizontal)
             }//selection
         }//vstack
         .frame(maxWidth:.infinity)
@@ -306,6 +308,7 @@ struct SettingsView: View {
             Text("Acknowledgements")
                 .padding(.top)
                 .font(.headline)
+                .padding(.bottom)
             
             
             if(selection){
@@ -337,6 +340,7 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition
+                .padding(.horizontal)
                 
             }//seleciton
             
