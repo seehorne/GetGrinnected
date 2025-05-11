@@ -42,11 +42,12 @@ struct SearchView: View {
                         //input for searching
                         
                         //filtering list
-                        Picker("Search by by", selection: $filterType) {
+                        Picker("Search by", selection: $filterType) {
                             ForEach(FilterType.allCases) { filterType in
-                                Text("Search By by \(filterType)")
+                                Text("Search by \(filterType)")
                             }
                         }
+                        .pickerStyle(.segmented)
                         .padding(.horizontal) //horizontal padding
                         
                         Spacer()
@@ -57,7 +58,7 @@ struct SearchView: View {
 
                         NavigationLink(destination:  SearchResults(parentView: parentView, selectedEvent: selectedEvent, isLoading: isLoading, refreshTimer: refreshTimer, sortOrder: $sortOrder, filterType: $filterType, filter: $filter)) {
                             HStack(){
-                                Text("\(Image(systemName: "magnifyingglass"))  Search")
+                                Text("\(Image(systemName: "magnifyingglass")) Search")
                                     .font(.headline)
                                     .foregroundStyle(Color.white)
                                     .padding()
@@ -113,15 +114,12 @@ struct SearchResults: View {
                 //selectors
                 HStack{
                     //creating a selector of sort order
-                    Picker("Sort Order", selection: $sortOrder){
-                        //for all cases of our possible sort orders
+                    Picker("Sort by", selection: $sortOrder) {
                         ForEach(SortOrder.allCases) { sortOrder in
-                            Text("Sort by \(sortOrder)")
+                            Text("Sort by \(sortOrder.rawValue.capitalized)")
                         }
                     }
-                    .padding(.horizontal) //horizontal padding, so the sortorder dropdown isn't right on the leftside of the screen
-                    
-                    Spacer()
+                    .pickerStyle(.segmented)
                     
                     TagMultiSelector(title: "Select Tags", parentView: parentView)
                     

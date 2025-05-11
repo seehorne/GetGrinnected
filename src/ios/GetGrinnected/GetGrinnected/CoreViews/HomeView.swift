@@ -16,6 +16,7 @@ struct HomeView: View {
     @State private var isLoading = true
     // The type of filter we are using on the event list
     @State private var filterType: FilterType = .name
+    @State private var sortOrder: SortOrder = .time
     
     //Main view body
     var body: some View {
@@ -36,10 +37,22 @@ struct HomeView: View {
                             WeekView(selectedDate: $viewModel.viewedDate)
                                 .padding(.bottom, 4)
                             
-                            TagMultiSelector(title: "Tags", parentView: viewModel)
+                            HStack{
+                                //sort by picker
+                                Picker("Sort by", selection: $sortOrder) {
+                                    ForEach(SortOrder.allCases) { sortOrder in
+                                        Text("Sort by \(sortOrder.rawValue.capitalized)")
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                                
+                                //tag selector
+                                TagMultiSelector(title: "Tags", parentView: viewModel)
+                            }
+                            .padding(.horizontal)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: SortOrder.time, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
+                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterToday: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }

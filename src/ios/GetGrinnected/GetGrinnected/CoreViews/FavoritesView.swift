@@ -39,17 +39,16 @@ struct FavoritesView: View {
                         //selectors and tags
                         HStack{
                             //creating a selector of sort order
-                            Picker("Sort Order", selection: $sortOrder){
-                                //for all cases of our possible sort orders
+                            Picker("Sort by", selection: $sortOrder) {
                                 ForEach(SortOrder.allCases) { sortOrder in
-                                    Text("Sort by \(sortOrder)")
+                                    Text("Sort by \(sortOrder.rawValue.capitalized)")
                                 }
                             }
-                            .padding(.horizontal) //horizontal padding, so the sortorder dropdown isn't right on the leftside of the screen
-                            
-                            Spacer()
+                            .pickerStyle(.segmented)
                             
                             TagMultiSelector(title: "Select Tags", parentView: parentView)
+                            
+                            
                             
                         }//header elements
                         .padding()
