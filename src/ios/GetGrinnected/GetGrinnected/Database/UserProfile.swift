@@ -422,6 +422,7 @@ class UserProfile: ObservableObject {
     
     //this takes user input for a username change and sends it to the API to be stored in the database
     func setUsername(newUsername: String) {
+        print("the set username function is being called at least")
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
             request.httpMethod = "PUT"
@@ -429,12 +430,13 @@ class UserProfile: ObservableObject {
                 "username": newUsername,
             ]
             request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
+                print("There was success")
                 //print("Success! Set username: \(data)")
                 if let raw = String(data: data, encoding: .utf8) {
                     print("Raw API Response: \(raw)")
@@ -445,6 +447,7 @@ class UserProfile: ObservableObject {
                     print(decodedResponse.message ?? "Success but no response to print")
                 }
             case .failure(let error):
+                print("There was not success")
                 print(self.getErrorMessage(error: error))
             }
         })
@@ -531,8 +534,7 @@ class UserProfile: ObservableObject {
          safeApiCall(requestBuilder: { token in
              let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!
              var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-             //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.httpMethod = "GET"
              request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
              request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
@@ -613,7 +615,6 @@ class UserProfile: ObservableObject {
         }, completion: { result in
             switch result {
             case .success(let data):
-                //print("Success! Got data: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse.message ?? "Success but no response to print")
                 }
@@ -671,6 +672,7 @@ class UserProfile: ObservableObject {
         let access_token: String?
         let favorited_events: [Int]?
         let notified_events: [Int]?
+        let username: [Int]?
     }
     
     /*

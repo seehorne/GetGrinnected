@@ -15,7 +15,6 @@ final class UserModel {
     var password: String
     var isPaswordValid: Bool
     var isLoggedIn: Bool = false
-    
     init(username: String = "", email: String = "", password: String = ""){
         self.username = username
         self.email = email

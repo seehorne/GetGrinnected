@@ -80,7 +80,7 @@ struct SettingsView: View {
                                 Button(action: {
                                     print(username)
                                     // set the username that has been typed
-                                    userProfile.setUsername(username)
+                                    userProfile.setUsername(newUsername: username)
                                     print("username submitted")
                                     print(username)
                                 }) {
