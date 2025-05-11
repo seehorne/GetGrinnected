@@ -65,8 +65,6 @@ struct DayView: View {
         if isToday {
             return .appLightBlue
         }
-        //then if the color is weekend, we make the color
-        // our primary color, and if not secondary.
         return .appTextPrimary
     }//color
     
