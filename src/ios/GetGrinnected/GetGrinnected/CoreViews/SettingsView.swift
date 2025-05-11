@@ -90,10 +90,7 @@ struct SettingsView: View {
                                         .imageScale(.large)
                                 } //Button
                             }
-                            
-                            //change username
-                            //changeUsername()
-                            
+                                                
                             
                             // switch for light/dark mode
                             toggleLightDark()
@@ -324,7 +321,7 @@ struct SettingsView: View {
                         
                     Text("Development Team")
                         .font(.headline)
-                    Text("Ellie Seahorn '25")
+                    Text("Ellie Seehorn '25")
                     Text("Michael Paulin '25")
                     Text("Almond Heil '25")
                     Text("Budhil Thijm '25")
