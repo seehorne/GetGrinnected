@@ -31,11 +31,12 @@ For those unfamiliar with the Midwest, arriving in the middle of Iowa as a first
 
 GetGrinnected is a cross-platform app offered on iOS and Android. It reads publicly available event information from the college calendar and displays the information in a cohesive, intuitive, accessible, one-stop shop sort of way for events happening on campus. It offers the user the ability to search, sort, and favorite events to find campus activities that interest them. Additionally, users can turn on notifications to be reminded before an event happens! 
 
-From a Technical and Developmental perspective, our app is composed of 4 primary components:
+From a Technical and Developmental perspective, our app is composed of 5 primary components:
 
 - 2 Front ends
     - Swift (iOS)
     - Kotlin (Android)
+- Web Scraper (Node.js)
 - API (Node.js)
 - Database (SQL)
 
