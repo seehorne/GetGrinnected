@@ -57,13 +57,13 @@ With their feedback, we made it to the next development step, PLANNING, PLANNING
 
 After planning, it was time to put the preparation into action and begin implementation. This was bumpy and definitely where we learned a lot about what goes into software development. But between clear communication via Discord and in-person group meetings, we made forward progress! 
 
-<img src= "images\Home Screen Swift OG.png" width = "25%"> <img src= "" width = "25%">
+<img src= "images\Home Screen Swift OG.png" width = "25%"> <img src = "images\profile page ios.png" width = "25%">
 
 However, about halfway through development, we hit one of our largest challenges! Our ambition! While being excited and passionate about the project was important, it had caused us to vastly overestimate the scope of what we could accomplish in a semester as new software developers. Thus, we had a crucial group meeting where we came back to the requirements we had set and discussed what was really necessary. What made our app our app? This meeting allowed us to reframe our objectives and hone in on the highest-impact features. The choice to make these shifts was a pivotal step in our learning.
 
 Upon adjusting our aims, we spent many weeks implementing features, API calls, testing, etc. With implementation came the oh so dreaded merge conflicts. These were inevitable challenges that afflict most who utilize version control for larger projects. However, we learned that by clearly communicating the section of a project we would be working on and the progress we were making, it allowed us to mitigate these conflicts. While we couldn’t entirely avoid these conflicts, we managed to decrease the frequency at which we ran into them while maintaining parallel development across sub-teams. 
 
-TODO SCREENT SHOTS OF APP
+<img src= "images\Home ScreenShot.png" width = "25%"> <img src= "images\Login ScreenShot.png" width = "25%"> <img src= "images\Swift Favorites Page Final.png" width = "25%"><img src= "images\Swift Home Page Final.png" width = "25%"><img src= "images\Swift Settings Page Final.png" width = "25%">
 
 During our implementation, we had the opportunity to meet with our previous stakeholders from the prototype period, who could test our actual application. They offered us vital feedback, and it was actually at this point that we contacted Rei about logo design and settled on a color scheme for the app! 
 
