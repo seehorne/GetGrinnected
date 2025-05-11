@@ -306,6 +306,7 @@ paths:
       security:
         - auth_token: []
       requestBody:
+        required: true
         description: Array of new favorited event IDs. Any nonexistent IDs will be ignored.
         content:
           application/json:
@@ -386,6 +387,7 @@ paths:
       security:
         - auth_token: []
       requestBody:
+        required: true
         description: Array of new notified event IDs.
         content:
           application/json:
@@ -464,6 +466,7 @@ paths:
       security:
         - auth_token: []
       requestBody:
+        required: true
         description: New username, must fulfil username requirements (<https://getgrinnected.sites.grinnell.edu/docs/ios/login-signup/#sign-up>)
         content:
           application/json:
@@ -538,6 +541,7 @@ paths:
       security:
         - auth_token: []
       requestBody:
+        required: true
         description: New email address,
         content:
           application/json:
