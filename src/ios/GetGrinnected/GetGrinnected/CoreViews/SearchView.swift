@@ -67,7 +67,7 @@ struct SearchView: View {
                             .padding(.horizontal)//for the text field to not at the edge
                             .background(
                                 RoundedRectangle(cornerRadius: 20, style: .circular)
-                                    .fill(.gray.opacity(0.25))
+                                    .fill(.gray.opacity(0.175))//opacity to be similar to swift native
                                     .padding(.horizontal) //for the rectangle to be not at the edge
                             )
                         
