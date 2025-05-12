@@ -367,7 +367,7 @@ struct SettingsView: View {
                         
                     Text("Development Team")
                         .font(.headline)
-                    Text("Almond Heil")
+                    Text("almond Heil")
                     Text("Anthony Schwindt")
                     Text("Budhil Thijm")
                     Text("Ellie Seehorn")
