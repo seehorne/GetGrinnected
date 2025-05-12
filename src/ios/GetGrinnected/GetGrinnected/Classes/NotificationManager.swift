@@ -44,6 +44,10 @@ class NotificationManager{
      call this function when a "notificatoin" is added, to add it
      */
     func scheduleNotification(event: EventModel){
+        /**
+         TODO: if optional name is empty, remove it from the body of the nofication..
+         */
+        //determine content of notificatinos
         let content = UNMutableNotificationContent()
         content.title = "Event \(event.name) begins in 15 minutes!"
         content.subtitle = "\(event.organizations.isEmpty ? "" : "By \(event.organizations.joined(separator: ", "))")"
@@ -51,6 +55,9 @@ class NotificationManager{
         Come by \(event.location!) at \(event.startTimeString!)
         """
         content.sound = UNNotificationSound.default
+        /**
+         TODO: change badge number, instead of 1, create app storage or universal variable that can store the badge number and add to it.
+         */
         content.badge = 1 //the red circle that appears on app
         /**
          To remove the badge when opening the app, underneath the main view..
@@ -82,7 +89,9 @@ class NotificationManager{
         //ID changer
         let request = UNNotificationRequest(identifier: event.id.codingKey.stringValue, content: content, trigger: trigger)
         
+        //add request based on our request..
         UNUserNotificationCenter.current().add(request) { (error) in
+            //error handling
             if let error = error{
                 print("Error scheduling notification: \(error)")
                 return
@@ -93,15 +102,21 @@ class NotificationManager{
         
     }
     
+    //cancel notifiaction through removing them!
     func cancelReminderWithIdentifier(event: EventModel) {
+        //get all pending notifications
         UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
+            //and ids..
            var identifiers: [String] = []
+            //if the notification id matches..
            for notification:UNNotificationRequest in notificationRequests {
                //remove notification if the event has been removed
+               //if matches..
                if notification.identifier == event.id.codingKey.stringValue {
                   identifiers.append(notification.identifier)
                }
            }
+            //remove it!
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
         }
     }
