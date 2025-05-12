@@ -20,6 +20,8 @@ struct SettingsView: View {
     @Binding var isLoggedIn: Bool
     // our users username
     @State private var username: String = "user123"
+    // our users email
+    @State private var email: String = "email@email.com"
     
     @StateObject private var userProfile = UserProfile()
     
@@ -31,9 +33,15 @@ struct SettingsView: View {
     //@State private var userProfile = UserProfile()
     @State private var loggedOut: Bool = false
     
-    @State var isFontSizeSelected = false
-    @State var isSectionSelected = false
-    @State var isAckSelected = false
+    @State var isProfileSelected = false
+    @State var isAppearanceSelected = false
+    @State var isAccessibilitySelected = false
+    @State var isAboutSelected = false
+    
+    @State var showUsernameEditAlert = false
+    @State var showEmailEditAlert = false
+    @State var showDeleteAccountAlert = false
+    @State var showLogOutAlert = false
     
     var body: some View {
         
@@ -44,86 +52,26 @@ struct SettingsView: View {
                 Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
-                    
                     //content
                     VStack {
-                        HStack {
-                            // spacer to right align button
-                            Spacer()
-                            
-                            // Logout button
-                            Button(action: {
-                                // we are logging out
-                                userProfile.updateLoginState(isLoggedIn: false)
-                                loggedOut = true
-                            }) {
-                                Text("Logout")
-                                    .foregroundColor(.border)
-                                Image(systemName: "rectangle.portrait.and.arrow.right")
-                                    .imageScale(.large)
-                            } //Button
-                            .navigationDestination(isPresented: $loggedOut) {
-                                ContentView()
-                            }
-                        }
+                        profileEditing()
                         
-                        InputView(text: $username, title: "Change Username", placeholder: "Username")
-                            .padding()
+                        // switch for light/dark mode
+                        appearance()
                         
-                        //content
-                        VStack {
-                            HStack {
-                                // spacer to right align button
-                                Spacer()
-                                
-                                // username change
-                                Button(action: {
-                                    print(username)
-                                    // set the username that has been typed
-                                    userProfile.setUsername(username)
-                                    print("username submitted")
-                                    print(username)
-                                }) {
-                                    Text("Submit username change")
-                                        .foregroundColor(.border)
-                                    Image(systemName: "square.and.arrow.up")
-                                        .imageScale(.large)
-                                } //Button
-                            }
-                                                
-                            
-                            // switch for light/dark mode
-                            toggleLightDark()
-                            
-                            //fontsize
-                            fontSizeSelector(selection: isFontSizeSelected)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut){
-                                        isFontSizeSelected.toggle()
-                                    }
-                                }
-                            
-                            //about section
-                            about(selection: isSectionSelected)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut){
-                                        isSectionSelected.toggle()
-                                    }
-                                }
-                            
-                            //acknolwedgements
-                            acknowledgements(selection: isAckSelected)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut){
-                                        isAckSelected.toggle()
-                                    }
-                                }
-                            
-                            
-                        } //about
-                        .padding()
+                        //fontsize
+                        accessibility()
                         
-                    }   //vstack
+                        //about section
+                        about()
+                        
+                        //delete account button
+                        deleteAccount()
+                        
+                        //logout button
+                        logOut()
+                    } //about
+                    .padding()
                 }   //Scroll view
                 .edgesIgnoringSafeArea(.top)
                 .foregroundColor(.border)
@@ -165,53 +113,159 @@ struct SettingsView: View {
     //because we are using this in main, we are to use "some View" and not "any View"
 
     /**
-     Changeusername function
-     to hold ui components of changing username. this is useful to make it expandable.
+     Profile editing function
+     to hold ui components of changing username and email. this is useful to make it expandable.
      */
-    func changeUsername() -> some View {
-        // change username field
-        InputView(text: $username, title: "Change Username", placeholder: "Username")
+    func profileEditing() -> some View {
+        VStack {
+            HStack {
+                Text("Profile")
+                Image(systemName: isProfileSelected ? "chevron.down" : "chevron.left")
+            }
+            .font(.headline)
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.appContainer.opacity(0.75))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.appBorder, lineWidth: 1)
-                    )
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            
+            if isProfileSelected {
+                // change username field
+                HStack {
+                    Text("Username:")
+                    
+                    Spacer()
+                    
+                    Text("\(username)")
+                    
+                    Button(action: {
+                        showUsernameEditAlert.toggle()
+                    }) {
+                        Image(systemName: "pencil")
+                    } //Button
+                    .alert("Enter new username", isPresented: $showUsernameEditAlert) {
+                        TextField("Username", text: $username)
+                        Button("OK", action: {showUsernameEditAlert.toggle()})
+                    } //alert
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+//                    .transition(.move(edge: .top)) //alternative transition
+                
+                // change email field
+                HStack {
+                    Text("Email:")
+                    
+                    Spacer()
+                    
+                    Text("\(email)")
+                    
+                    Button(action: {
+                        showEmailEditAlert.toggle()
+                    }) {
+                        Image(systemName: "pencil")
+                    } //Button
+                    .alert("Enter new username", isPresented: $showEmailEditAlert) {
+                        TextField("Username", text: $email)
+                        Button("OK", action: {showEmailEditAlert.toggle()})
+                    } //alert
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+//                    .transition(.move(edge: .top)) //alternative transition
+                
+                // username change
+                Button(action: {
+                    print(username)
+                    // set the username that has been typed
+                    userProfile.setUsername(username)
+                    print("username submitted")
+                    print(username)
+                }) {
+                    Text("Submit username change")
+                        .foregroundColor(.border)
+                    Image(systemName: "square.and.arrow.up")
+                        .imageScale(.large)
+                } //Button
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+//                    .transition(.move(edge: .top)) //alternative transition
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.appContainer.opacity(0.75))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.appBorder, lineWidth: 1)
+                )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {
+            withAnimation(.easeInOut){
+                isProfileSelected.toggle()
+            }
+        }
     }//username change
     
     /**
-     toggleLightDark()
+     appearance()
      change lightdark
      */
-    func toggleLightDark() -> some View {
-        Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
+    func appearance() -> some View {
+        VStack {
+            HStack {
+                Text("Appearance")
+                Image(systemName: isAppearanceSelected ? "chevron.down" : "chevron.left")
+            }
+            .font(.headline)
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.appContainer.opacity(0.75))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.appBorder, lineWidth: 1)
-                    )
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-    }//lightdark
+            
+            if isAppearanceSelected {
+                Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
+                    .padding()
+            }
+        } //VStack
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.appContainer.opacity(0.75))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.appBorder, lineWidth: 1)
+                )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {
+            withAnimation(.easeInOut){
+                isAppearanceSelected.toggle()
+            }
+        }
+    }//appearance
     
     /**
-     fontSizeSelector()
+     accessibility()
      */
-    func fontSizeSelector(selection: Bool) -> some View{
+    func accessibility() -> some View{
         VStack {
-                Text("Font Size")
-                    .font(.headline)
-                    .padding(.top)
-                    .padding(.bottom)
+                HStack{
+                    Text("Accessibility")
+                    Image(systemName: isAccessibilitySelected ? "chevron.down" : "chevron.left")
+                }
+                .font(.headline)
+                .padding(.top)
+                .padding(.bottom)
 
-                if selection {
+                if isAccessibilitySelected {
                     VStack {
                         // slider for text size
                         Slider(
@@ -244,19 +298,28 @@ struct SettingsView: View {
                     )
             )
             .clipShape(RoundedRectangle(cornerRadius: 8))
+            .onTapGesture {
+                withAnimation(.easeInOut){
+                    isAccessibilitySelected.toggle()
+                }
+            }
     }
     
     /**
      section()
      */
-    func about(selection: Bool) -> some View {
+    func about() -> some View {
         VStack{
-            Text("About")
+            HStack {
+                Text("About")
+                Image(systemName: isAboutSelected ? "chevron.down" : "chevron.left")
+            }
                 .font(.headline)
                 .padding(.top)
                 .padding(.bottom)
             
-            if(selection){
+            
+            if(isAboutSelected){
                 VStack{
                     Text("Get Grinnected was developed by Grinnelians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed abotu campus events.")
                     Text("We have a discord, so for those interested in expanding the toolbox offered to Grinnellians, please join! Here are our socials and github: ")
@@ -275,6 +338,7 @@ struct SettingsView: View {
                         }
                         
                     }//hstack
+                    .padding()
                 }//vstack
                 .transition(.asymmetric(
                     insertion: .move(edge: .top),
@@ -282,6 +346,46 @@ struct SettingsView: View {
                 ))
                 .padding(.horizontal)
             }//selection
+            
+            if(isAboutSelected){
+                VStack{
+                    Text("Acknowledgements")
+                        .font(.title2)
+                        .padding(.bottom)
+                    
+                    Text("Logo Design")
+                        .font(.headline)
+                    Text("Rei Yamada")
+                        .padding(.bottom)
+                    
+                    Text("Testing and Stakeholder Feedback")
+                        .font(.headline)
+                    Text("Yuina Iseki")
+                    Text("Lily Freeman")
+                    Text("Regan Stambaugh")
+                        .padding(.bottom)
+                        
+                    Text("Development Team")
+                        .font(.headline)
+                    Text("Ellie Seehorn '25")
+                    Text("Michael Paulin '25")
+                    Text("Almond Heil '25")
+                    Text("Budhil Thijm '25")
+                    Text("Ethan Hughes '25")
+                    Text("Anthony Schwindt '25")
+                        .padding(.bottom)
+                    
+                    Text("Faculty Instructor")
+                        .font(.headline)
+                    Text("Professor Leah Pearlmutter")
+                        .padding(.bottom)
+                }
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition
+                
+            }//seleciton
         }//vstack
         .frame(maxWidth:.infinity)
         .background(
@@ -293,66 +397,83 @@ struct SettingsView: View {
                 )
         ) //background
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {
+            withAnimation(.easeInOut){
+                isAboutSelected.toggle()
+            }
+        }
         
     }
     
     /**
-     acknowledgements()
+     deleteAccount()
+     delete account button
      */
-    func acknowledgements(selection: Bool) -> some View {
-        VStack{
-            Text("Acknowledgements")
-                .padding(.top)
-                .font(.headline)
-                .padding(.bottom)
-            
-            
-            if(selection){
-                VStack{
-                    Text("Logo Design")
-                        .font(.headline)
-                    Text("Rei Yamada")
-                    
-                    Text("Testing and Stakeholder Feedback")
-                        .font(.headline)
-                    Text("Yuina Iseki")
-                    Text("Lily Freeman")
-                    Text("Regan Stambaugh")
-                        
-                    Text("Development Team")
-                        .font(.headline)
-                    Text("Ellie Seehorn '25")
-                    Text("Michael Paulin '25")
-                    Text("Almond Heil '25")
-                    Text("Budhil Thijm '25")
-                    Text("Ethan Hughes '25")
-                    Text("Anthony Schwindt '25")
-                    
-                    Text("Faculty Instructor")
-                        .font(.headline)
-                    Text("Professor Leah Pearlmutter")
-                }
-                .transition(.asymmetric(
-                    insertion: .move(edge: .top),
-                    removal: .move(edge: .top)
-                ))//transition
-                .padding(.horizontal)
-                
-            }//seleciton
-            
-        }//vstack
+    func deleteAccount() -> some View {
+        // Logout button
+        Button(action: {
+            showDeleteAccountAlert.toggle()
+        }) {
+            Text("Delete Account")
+                .foregroundColor(.red)
+                .bold()
+        } //Button
+        .alert("Are you sure you want to delete your account?", isPresented: $showDeleteAccountAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                // TODO add account deletion
+                // we are logging out
+                userProfile.updateLoginState(isLoggedIn: false)
+                loggedOut = true
+            }
+            .foregroundColor(.red)
+        } //alert
+        .navigationDestination(isPresented: $loggedOut) {
+            ContentView()
+        }
+        .padding()
         .frame(maxWidth: .infinity)
-        .padding(.horizontal)
+    }//logOut
+    
+    /**
+     logOut()
+     log out of account button
+     */
+    func logOut() -> some View {
+        // Logout button
+        Button(action: {
+            showLogOutAlert.toggle()
+        }) {
+            Image(systemName: "rectangle.portrait.and.arrow.right")
+                .imageScale(.large)
+                .foregroundColor(.appContainer)
+                .bold()
+            Text("Log Out")
+                .foregroundColor(.appContainer)
+                .bold()
+        } //Button
+        .alert("Are you sure you want to log out?", isPresented: $showLogOutAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Confirm", role: .destructive){
+                // we are logging out
+                userProfile.updateLoginState(isLoggedIn: false)
+                loggedOut = true
+            }
+        } //alert
+        .navigationDestination(isPresented: $loggedOut) {
+            ContentView()
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(Color.appContainer.opacity(0.75))
+                .fill(.border)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.appBorder, lineWidth: 1)
                 )
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
+    }//logOut
     
 } //ProfileView
 

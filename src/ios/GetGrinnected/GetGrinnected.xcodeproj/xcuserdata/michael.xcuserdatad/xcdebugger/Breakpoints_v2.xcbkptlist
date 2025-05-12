@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "234"
             endingLineNumber = "234"
-            landmarkName = "fetchEvents()"
+            landmarkName = "updatePossibleTags(events:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -48,8 +48,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "221"
             endingLineNumber = "221"
-            landmarkName = "EventList"
-            landmarkType = "14">
+            landmarkName = "updateEvents()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -80,7 +80,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "85"
             endingLineNumber = "85"
-            landmarkName = "init(parentView:selectedEvent:sortOrder:filterType:filter:filterToday:)"
+            landmarkName = "init(parentView:selectedEvent:sortOrder:filterType:filter:filterByDate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -96,7 +96,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "94"
             endingLineNumber = "94"
-            landmarkName = "init(parentView:selectedEvent:sortOrder:filterType:filter:filterToday:)"
+            landmarkName = "init(parentView:selectedEvent:sortOrder:filterType:filter:filterByDate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
