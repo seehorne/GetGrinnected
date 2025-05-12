@@ -390,7 +390,7 @@ fun HomeScreen(tags: List<Check>) {
 
 /**
  * takes a date and returns the first three letters of the associated month
- * @param LocalDate a localDate
+ * @param localDate a LocalDate
  */
 @RequiresApi(Build.VERSION_CODES.O)
 fun toMonth(localDate: LocalDate): String{
