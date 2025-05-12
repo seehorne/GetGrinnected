@@ -384,7 +384,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                     enabled = emailError == null
                                 ) {
                                     Text(
-                                        "Save",
+                                        "Change",
                                         color = colorScheme.tertiary,
                                         style = typography.labelLarge
                                     )
@@ -663,7 +663,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                     },
                                 ) {
                                     Text(
-                                        "Confirm",
+                                        "Delete",
                                         color = colorScheme.tertiary,
                                         style = typography.labelLarge
                                     )
@@ -736,7 +736,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                     },
                                 ) {
                                     Text(
-                                        "Confirm",
+                                        "Log out",
                                         color = colorScheme.tertiary,
                                         style = typography.labelLarge
                                     )
