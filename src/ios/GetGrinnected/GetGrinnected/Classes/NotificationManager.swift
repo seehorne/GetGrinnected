@@ -81,8 +81,6 @@ class NotificationManager{
         //calendar
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         
-        //location
-        
         /**
          identifier to remove the notification
          */
@@ -110,13 +108,12 @@ class NotificationManager{
            var identifiers: [String] = []
             //if the notification id matches..
            for notification:UNNotificationRequest in notificationRequests {
-               //remove notification if the event has been removed
                //if matches..
                if notification.identifier == event.id.codingKey.stringValue {
                   identifiers.append(notification.identifier)
                }
            }
-            //remove it!
+            //remove pending notification if the event has been set to unnotified
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
         }
     }
