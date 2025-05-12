@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 // Import routes from their files
 const db = require('../db_connect.js');
 const events = require('./routes/events.cjs');
+const session = require('./routes/session.cjs');
 const user = require('./routes/user.cjs');
 
 /* global vars to store the servers we are running,
@@ -108,7 +109,7 @@ function run() {
   // have to send information and there's the metaphor of creating something new.
   app.post('/session/login',
     [middlewareBodyExists('email')],
-    user.routeSendOTP
+    session.routeSendOTP
   );
   app.post(
     '/session/signup',
@@ -116,14 +117,14 @@ function run() {
       middlewareBodyExists('email'),
       middlewareBodyExists('username'),
     ],
-    user.routeSignUpNewUser
+    session.routeSignUpNewUser
   );
 
   // Resend an OTP code by POSTing the email you need it sent to.
   app.post(
     '/session/resend-code',
     [middlewareBodyExists('email')],
-    user.routeSendOTP
+    session.routeSendOTP
   );
 
   // OTP code verification also through a POST request. If successful, it will
@@ -134,14 +135,14 @@ function run() {
       middlewareBodyExists('email'),
       middlewareBodyExists('code')
     ],
-    user.routeVerifyOTP
+    session.routeVerifyOTP
   );
 
   // When logged in, you can refresh your own tokens whenever needed.
   app.post(
     '/session/refresh',
     [middlewareVerifyJWT(REFRESH_JWT)],
-    user.routeRefreshTokens
+    session.routeRefreshTokens
   );
 
   /*
