@@ -367,12 +367,12 @@ struct SettingsView: View {
                         
                     Text("Development Team")
                         .font(.headline)
-                    Text("Ellie Seehorn '25")
-                    Text("Michael Paulin '25")
-                    Text("Almond Heil '25")
-                    Text("Budhil Thijm '25")
-                    Text("Ethan Hughes '25")
-                    Text("Anthony Schwindt '25")
+                    Text("Almond Heil")
+                    Text("Anthony Schwindt")
+                    Text("Budhil Thijm")
+                    Text("Ellie Seehorn")
+                    Text("Ethan Hughes")
+                    Text("Michael Paulin")
                         .padding(.bottom)
                     
                     Text("Faculty Instructor")
