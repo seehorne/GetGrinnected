@@ -45,15 +45,13 @@ We have other issues tagged with "Bug" from this sprint because we had more than
 
 # (5) Wrap-Up Work
 
-> TODO: DELETEME: A LIST OF THINGS TO WRAP UP.
->
-> - [ ] update external docs
-> - [ ] update README.md for external audiences
-> - [ ] API interaction internal docs page
-> - [ ] general code cleanup
->    - [ ] I am very aware of: move session routes to their own file.
->    - [ ] Kotlin: Homescreen, search, notifications cleanup.
->    - [ ] Swift API calls cleanup
+For our sprint wrap-up, we wanted to make sure not only to make sure our code was cleaned up but also keep our external-facing resources up to date.
+
+We refactored the "session" API routes into their own file to clean them up, and made sure code and comments were cleaned up for the Kotlin homescreen, search, and notifications code as well as the Swift API calls.
+
+We also updated our README.md to be more focused towards audiences outside of this class, while still keeping all the required sections we have accrued throughout the semester. This came in the form of some description changes, but mainly reordering some sections. We also updated our LICENSE file to change from saying the code belonged to `seehorne` (Ellie's Github username), we listed all of our names.
+
+Finally, we made sure our external docs were up-to-date with the functionality of the app in our final build.
 
 # (7) Blog Post
 
