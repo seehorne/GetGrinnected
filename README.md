@@ -316,12 +316,9 @@ You can find the login details from the environment file used to run the databas
 
 # Currently Operational Use Cases
 
-This list will be updated as we progress.
-
-- Partial functionality for Use Case 1, Signing Up.
-
-  - It is possible to go through the sign up screen, but it does not check any fields or send any data over the network to create an account.
-
-- Partial functionality for Use Case 3, Finding an Event
-
-  - It is possible to see events on the home screen, but not search.
+- Use Case 1 (Sign Up): Fully operational, changed from old version that required a password.
+- Use Case 2 (Add Event): Removed from product.
+- Use Case 3 (Find Event): Fully operational.
+- Use Case 4 (Follow Organization): Removed from product.
+- Use Case 5 (Follow-up on Event): Removed from product.
+- Use Case 6 (Adding a New Account): Removed from product.
