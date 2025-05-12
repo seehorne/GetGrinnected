@@ -205,26 +205,33 @@ struct SettingsView: View {
                     print(username)
                     print(email)
                     // set the username that has been typed
-                    userProfile.setUsername(newUsername: username){ result in
-                        switch result {
-                        case .success(let output):
-                            //if succeeded, log it
-                            print("API Response: \(output)")
-                            usernameResponseMessage = "Username successfully changed"
-                        case .failure(let error):
-                            print("API call failed:\(error.localizedDescription)")
-                            if let apiError = error as? UserProfile.APIError {//treat the error as API error object
-                                            switch apiError {
-                                            case .usernameError(let message):
-                                                usernameResponseMessage = message //use the response message if there was one
-                                            default:
-                                                usernameResponseMessage = apiError.localizedDescription
-                                            }
-                                        } else {
-                                            usernameResponseMessage = error.localizedDescription
-                                        }
+                    if username != UserDefaults.standard.string(forKey: "username")!{
+                        userProfile.setUsername(newUsername: username){ result in
+                            switch result {
+                            case .success(let output):
+                                //if succeeded, log it
+                                print("API Response: \(output)")
+                                usernameResponseMessage = "Username successfully changed"
+                                userProfile.setLocalUsername(newUsername: username)
+                            case .failure(let error):
+                                print("API call failed:\(error.localizedDescription)")
+                                if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                    switch apiError {
+                                    case .usernameError(let message):
+                                        usernameResponseMessage = message //use the response message if there was one
+                                    default:
+                                        usernameResponseMessage = apiError.localizedDescription
+                                    }
+                                } else {
+                                    usernameResponseMessage = error.localizedDescription
+                                }
+                            }
                         }
                     }
+                    else {
+                        print("username didn't actually change")
+                    }
+                    
                     if email != UserDefaults.standard.string(forKey: "email")!{
                         userProfile.setEmail(newEmail: email){ result in
                             switch result {
