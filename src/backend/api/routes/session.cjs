@@ -1,5 +1,6 @@
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
+const DBPATH = './src/backend/Database/localOTP.db'
 
 /**
  * Resend an OTP code to a user.

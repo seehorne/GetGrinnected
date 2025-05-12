@@ -1,6 +1,5 @@
 const db = require('../../db_connect.js');
 const util = require('../utils.cjs');
-const DBPATH = './src/backend/Database/localOTP.db'
 
 /**
  * Check if a user exists by username. This route is protected, and
