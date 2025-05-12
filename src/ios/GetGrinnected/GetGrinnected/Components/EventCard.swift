@@ -193,6 +193,12 @@ struct EventCard: View {
                             
                             Button(action: {
                                 event.notified.toggle()
+                                if(event.notified){
+                                    NotificationManager.instance.requestAuthorization()
+                                    NotificationManager.instance.scheduleNotification(event: self.event)
+                                } else {
+                                    NotificationManager.instance.scheduleNotification(event: self.event)
+                                }
                                 try? modelContext.save()
                             }) {
                                 Image(systemName: event.notified ? "bell.fill" : "bell")

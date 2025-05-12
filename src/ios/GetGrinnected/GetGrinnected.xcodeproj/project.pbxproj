@@ -51,6 +51,7 @@
 		CACCD45F2DA31696001D31C0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD44C2DA31696001D31C0 /* ContentView.swift */; };
 		CACCD4612DA31696001D31C0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4502DA31696001D31C0 /* LoginView.swift */; };
 		CACCD4652DA318F3001D31C0 /* EventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACCD4642DA318EE001D31C0 /* EventCard.swift */; };
+		CAD135532DD188160017A80A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD135522DD188110017A80A /* NotificationManager.swift */; };
 		CAE884192DBB6B5100AC9401 /* ArrayTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE884182DBB6B4900AC9401 /* ArrayTransformer.swift */; };
 		CAEB6B772DC0147300ACA39D /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEB6B762DC0146E00ACA39D /* SearchView.swift */; };
 /* End PBXBuildFile section */
@@ -156,6 +157,7 @@
 		CACCD4522DA31696001D31C0 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		CACCD4532DA31696001D31C0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		CACCD4642DA318EE001D31C0 /* EventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCard.swift; sourceTree = "<group>"; };
+		CAD135522DD188110017A80A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		CAE884182DBB6B4900AC9401 /* ArrayTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTransformer.swift; sourceTree = "<group>"; };
 		CAEB6B762DC0146E00ACA39D /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -307,6 +309,7 @@
 		CACCD4472DA31696001D31C0 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CAD135522DD188110017A80A /* NotificationManager.swift */,
 				CAE884182DBB6B4900AC9401 /* ArrayTransformer.swift */,
 				CA3B0A452DBB582A00A270FA /* DateFormatter+apiDateFormatter.swift */,
 				CAA8FE882DB92AF3005C6BBE /* ParentView.swift */,
@@ -541,6 +544,7 @@
 				CACCD45B2DA31696001D31C0 /* MainNavView.swift in Sources */,
 				0CC0E1FA2DBDC33400B179C5 /* VerificationView.swift in Sources */,
 				CACCD45C2DA31696001D31C0 /* SettingsView.swift in Sources */,
+				CAD135532DD188160017A80A /* NotificationManager.swift in Sources */,
 				4C8B24CD2DC3063700901BA3 /* EventModel.swift in Sources */,
 				4C8B24CE2DC3063700901BA3 /* UserProfile.swift in Sources */,
 				4C8B24CF2DC3063700901BA3 /* EventList.swift in Sources */,
