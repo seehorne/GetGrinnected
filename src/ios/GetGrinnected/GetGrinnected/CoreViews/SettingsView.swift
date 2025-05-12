@@ -20,6 +20,8 @@ struct SettingsView: View {
     @Binding var isLoggedIn: Bool
     // our users username
     @State private var username: String = "user123"
+    // our users email
+    @State private var email: String = "email@email.com"
     
     @StateObject private var userProfile = UserProfile()
     
@@ -71,26 +73,6 @@ struct SettingsView: View {
                         //content
                         VStack {
                             profileEditing()
-                            
-                            HStack {
-                                // spacer to right align button
-                                Spacer()
-                                
-                                // username change
-                                Button(action: {
-                                    print(username)
-                                    // set the username that has been typed
-                                    userProfile.setUsername(username)
-                                    print("username submitted")
-                                    print(username)
-                                }) {
-                                    Text("Submit username change")
-                                        .foregroundColor(.border)
-                                    Image(systemName: "square.and.arrow.up")
-                                        .imageScale(.large)
-                                } //Button
-                            }
-                                                
                             
                             // switch for light/dark mode
                             appearance()
@@ -166,7 +148,7 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    Text("\(username)")
+                    TextField("Username", text: $username)
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -182,8 +164,29 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    Text("\(username)")
+                    TextField("Email", text: $email)
                 }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+//                    .transition(.move(edge: .top)) //alternative transition
+                
+                // username change
+                Button(action: {
+                    print(username)
+                    // set the username that has been typed
+                    userProfile.setUsername(username)
+                    print("username submitted")
+                    print(username)
+                }) {
+                    Text("Submit username change")
+                        .foregroundColor(.border)
+                    Image(systemName: "square.and.arrow.up")
+                        .imageScale(.large)
+                } //Button
                 .padding(.horizontal)
                 .padding(.bottom)
                 .transition(.asymmetric(
@@ -326,7 +329,8 @@ struct SettingsView: View {
             if(isAboutSelected){
                 VStack{
                     Text("Acknowledgements")
-                        .font(.title)
+                        .font(.title2)
+                        .padding(.bottom)
                     
                     Text("Logo Design")
                         .font(.headline)
