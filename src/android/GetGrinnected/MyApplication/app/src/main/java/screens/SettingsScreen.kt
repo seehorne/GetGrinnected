@@ -553,12 +553,12 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                             )
 
                             Text(
-                                text = "• Ellie Seehorn \n" +
-                                        "• Michael Paulin \n" +
+                                text = "• almond Heil \n" +
+                                        "• Anthony Schwindt \n" +
                                         "• Budhil Thijm \n" +
-                                        "• Almond Heil \n" +
+                                        "• Ellie Seehorn \n" +
                                         "• Ethan Hughes \n" +
-                                        "• Anthony Schwindt",
+                                        "• Michael Paulin",
                                 style = typography.bodyMedium,
                                 color = colorScheme.onBackground
                             )
