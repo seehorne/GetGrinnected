@@ -33,22 +33,15 @@ To make continual adoption as easy as possible we plan to publish the app to the
 
 Despite moving towards adoption we do plan to complete the work on our product. Finishing any features that are necessary and incomplete by the end of the semester. Examples might end up including timed notifications and search features for kotlin and notifications for swift. We think our current product is worthy of publishing but understand where it could be better. 
 
-
 # (3) Bug Logging
-
-> TODO: DELETE WHEN COMPLETED.
->
-> [Bug Logging](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.o9rl9i8zl8s2) in Sprint Description
->
-> Links to each bug in the issue tracker.
 
 We have other issues tagged with "Bug" from this sprint because we had more than 3 bugs, but here are the bugs required for this part of the assignment.
 
-1. <https://trello.com/c/wV1lMEbg>
+1. <https://trello.com/c/wV1lMEbg> "Routes crash when no body is provided"
 
-2. TODO: FILL THIS IN.
+2. <https://trello.com/c/dSIH5cun> "On Kotlin, changing apps (to check your email) sets back login."
 
-3. TODO: FILL THIS IN.
+3. <https://trello.com/c/LQCBxtmL> "Swift auth won't actually send calls"
 
 # (5) Wrap-Up Work
 
