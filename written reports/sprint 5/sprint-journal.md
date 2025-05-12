@@ -45,11 +45,15 @@ We have other issues tagged with "Bug" from this sprint because we had more than
 
 # (5) Wrap-Up Work
 
-> TODO: DELETE WHEN COMPLETED.
+> TODO: DELETEME: A LIST OF THINGS TO WRAP UP.
 >
-> [Wrap-Up Work](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.uutmho8zfq3b) in Sprint Description
->
-> Describe what we did for our wrap-up work.
+> - [ ] update external docs
+> - [ ] update README.md for external audiences
+> - [ ] API interaction internal docs page
+> - [ ] general code cleanup
+>    - [ ] I am very aware of: move session routes to their own file.
+>    - [ ] Kotlin: Homescreen, search, notifications cleanup.
+>    - [ ] Swift API calls cleanup
 
 # (7) Blog Post
 
