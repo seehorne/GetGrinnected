@@ -428,7 +428,7 @@ class UserProfile: ObservableObject {
     }
     
     //this takes user input for a username change and sends it to the API to be stored in the database
-    func setUsername(newUsername: String) {
+    func setUsername(newUsername: String, completion: @escaping (Result<String, Error>) -> Void) {
         print("the set username function is being called at least")
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
@@ -693,12 +693,14 @@ class UserProfile: ObservableObject {
         case decoderError
         case signInError(String)
         case unauthorized
+        case usernameError(String)
         var localizedStringResource: LocalizedStringResource {
             switch self {
             case .badEmail: return "Email wrong:";
             case .invalidResponse: return "Invalid response from server";
             case .decoderError: return "Could not decode JSON";
             case .signInError(let message):  return "Login error \(message)";
+            case .usernameError(let message): return "Username error \(message)";
             case .unauthorized: return "Could not authenticate user session"
             }
         }

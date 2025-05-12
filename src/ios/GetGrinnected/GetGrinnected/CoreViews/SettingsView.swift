@@ -20,7 +20,7 @@ struct SettingsView: View {
     @Binding var isLoggedIn: Bool
     // our users username
     @State private var username: String
-    @State private var errorMessage: String
+    @State private var usernameResponseMessage: String
     
     @StateObject private var userProfile = UserProfile()
     
@@ -40,7 +40,7 @@ struct SettingsView: View {
     init(username: String, isLoggedIn: Binding<Bool>) {
         self._isLoggedIn = isLoggedIn
         self._username = State(initialValue: UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded")
-        self.errorMessage = ""
+        self.usernameResponseMessage = ""
     }
     
     
@@ -85,9 +85,29 @@ struct SettingsView: View {
                                 
                                 // username change
                                 Button(action: {
+                                    usernameResponseMessage = ""
                                     print(username)
                                     // set the username that has been typed
-                                    userProfile.setUsername(newUsername: username)
+                                    userProfile.setUsername(newUsername: username){ result in
+                                        switch result {
+                                        case .success(let output):
+                                            //if succeeded, log it
+                                            print("API Response: \(output)")
+                                            usernameResponseMessage = "Username successfully changed"
+                                        case .failure(let error):
+                                            print("API call failed:\(error.localizedDescription)")
+                                            if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                                            switch apiError {
+                                                            case .usernameError(let message):
+                                                                usernameResponseMessage = message //use the response message if there was one
+                                                            default:
+                                                                usernameResponseMessage = apiError.localizedDescription
+                                                            }
+                                                        } else {
+                                                            usernameResponseMessage = error.localizedDescription
+                                                        }
+                                        }
+                                    }
                                     print("username submitted")
                                     print(username)
                                 }) {
@@ -176,6 +196,18 @@ struct SettingsView: View {
                     Spacer()
                     
                     Text("\(username)")
+                    
+                    if !usernameResponseMessage.isEmpty{
+                        if usernameResponseMessage == "Username successfully changed"{
+                            Text(usernameResponseMessage)
+                                .foregroundColor(.blue)
+                                .font(.caption)
+                        }else{
+                            Text(usernameResponseMessage)
+                                .foregroundColor(.red)
+                                .font(.caption)
+                        }
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
