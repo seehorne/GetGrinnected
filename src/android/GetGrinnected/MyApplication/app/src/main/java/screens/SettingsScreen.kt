@@ -362,17 +362,21 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                 TextButton(
                                     onClick = {
                                         coroutineScope.launch {
-                                            // Sends our updated email to the remote database
-                                            AppRepository.syncEmail(newEmail)
-                                            SnackBarController.sendEvent(SnackBarEvent("Verification Code sent to Email"))
-                                            // Closes the editing dialog
-                                            showEditEmailDialog = false
-                                            // Set pending verification state so that we go to the verification page with the correct info
-                                            DataStoreSettings.setPendingVerification(context, newEmail, "settings")
-                                            // Navigate to the Verification Page so the user can enter the one time code.
-                                            navController.navigate("verification/${newEmail}/settings") {
-                                                popUpTo(0) { inclusive = false }
-                                                launchSingleTop = true
+                                            if (newEmail != account.email) {
+                                                // Sends our updated email to the remote database
+                                                AppRepository.syncEmail(newEmail)
+                                                SnackBarController.sendEvent(SnackBarEvent("Verification Code sent to Email"))
+                                                // Closes the editing dialog
+                                                showEditEmailDialog = false
+                                                // Set pending verification state so that we go to the verification page with the correct info
+                                                DataStoreSettings.setPendingVerification(context, newEmail, "settings")
+                                                // Navigate to the Verification Page so the user can enter the one time code.
+                                                navController.navigate("verification/${newEmail}/settings") {
+                                                    popUpTo(0) { inclusive = false }
+                                                    launchSingleTop = true
+                                                }
+                                            } else {
+                                                emailError = "Email is the same as your current email"
                                             }
                                         }
                                     },

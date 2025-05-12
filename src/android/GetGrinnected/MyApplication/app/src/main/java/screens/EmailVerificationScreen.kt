@@ -76,17 +76,18 @@ fun EmailVerificationScreen(email: String, previous: String, navController: NavC
     // Boolean associated with specifically a code error to shift field color
     var errCode by remember { mutableStateOf(false) }
 
-    //
+    // This is the persisted email value to be reloaded if the user leaves the app to check their email
     val reloadEmail = produceState<String?>(initialValue = null) {
         value = DataStoreSettings.getPendingVerificationEmail(context).firstOrNull()
     }.value
-
+    // This is the persisted previous value to be reloaded if the user leaves the app to check their email
     val reloadPrevious = produceState<String?>(initialValue = null) {
         value = DataStoreSettings.getPendingPrevious(context).firstOrNull()
     }.value
 
-    val actualEmail = email.ifBlank { reloadEmail ?: email }
-    val actualPrevious = previous.ifBlank { reloadPrevious ?: previous }
+    // This is set to use the persisted states or the states we were passed in from the prior screen
+    val actualEmail = reloadEmail ?: email
+    val actualPrevious = reloadPrevious ?: previous
 
     // This sets up all of our elements in a column layout
     Column(
