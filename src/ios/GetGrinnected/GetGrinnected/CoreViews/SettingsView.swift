@@ -62,9 +62,6 @@ struct SettingsView: View {
                 Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
-                    //content
-                    VStack {
-                        profileEditing()
                         
                         //content
                         VStack {
@@ -75,40 +72,8 @@ struct SettingsView: View {
                                 Spacer()
                                 
                                 // username change
-                                Button(action: {
-                                    usernameResponseMessage = ""
-                                    print(username)
-                                    // set the username that has been typed
-                                    userProfile.setUsername(newUsername: username){ result in
-                                        switch result {
-                                        case .success(let output):
-                                            //if succeeded, log it
-                                            print("API Response: \(output)")
-                                            usernameResponseMessage = "Username successfully changed"
-                                        case .failure(let error):
-                                            print("API call failed:\(error.localizedDescription)")
-                                            if let apiError = error as? UserProfile.APIError {//treat the error as API error object
-                                                            switch apiError {
-                                                            case .usernameError(let message):
-                                                                usernameResponseMessage = message //use the response message if there was one
-                                                            default:
-                                                                usernameResponseMessage = apiError.localizedDescription
-                                                            }
-                                                        } else {
-                                                            usernameResponseMessage = error.localizedDescription
-                                                        }
-                                        }
-                                    }
-                                    print("username submitted")
-                                    print(username)
-                                }) {
-                                    Text("Submit username change")
-                                        .foregroundColor(.border)
-                                    Image(systemName: "square.and.arrow.up")
-                                        .imageScale(.large)
-                                } //Button
                             }
-                                                
+                            
                             
                             // switch for light/dark mode
                             appearance()
@@ -118,38 +83,38 @@ struct SettingsView: View {
                             
                             //about section
                             about()
-                        
+                            
                             //delete account button
                             deleteAccount()
-                        
+                            
                             //logout button
                             logOut()
-                    } //about
-                    .padding()
-                }   //Scroll view
-                .edgesIgnoringSafeArea(.top)
-                .foregroundColor(.border)
-                .tint(.border)
-                
-            }//GeometryReader
-            .preferredColorScheme(viewColorScheme)
-            // run switchAppearance when the view is shown
-            .onAppear {
-                switchAppearance()
-                userProfile.getUsername()
-                username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
-                email = UserDefaults.standard.string(forKey: "email") ?? "current email could not be loaded"
-            }
-            // changes the viewColorScheme when lightModeOn is changed
-            .onChange(of: lightModeOn){ oldValue, newValue in
-                if newValue == true {
-                    viewColorScheme = .light
-                } else {
-                    viewColorScheme = .dark
+                        } //about
+                        .padding()
+                    }   //Scroll view
+                    .edgesIgnoringSafeArea(.top)
+                    .foregroundColor(.border)
+                    .tint(.border)
+                    
+                }//GeometryReader
+                .preferredColorScheme(viewColorScheme)
+                // run switchAppearance when the view is shown
+                .onAppear {
+                    switchAppearance()
+                    userProfile.getUsername()
+                    username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
+                    email = UserDefaults.standard.string(forKey: "email") ?? "current email could not be loaded"
                 }
-            } //onChange
-        }
-    } //body
+                // changes the viewColorScheme when lightModeOn is changed
+                .onChange(of: lightModeOn){ oldValue, newValue in
+                    if newValue == true {
+                        viewColorScheme = .light
+                    } else {
+                        viewColorScheme = .dark
+                    }
+                } //onChange
+            }
+        } //body
     
     /*
      Changes the lightModeOn boolean based on what the current viewColorScheme is
@@ -238,6 +203,7 @@ struct SettingsView: View {
                 // username change
                 Button(action: {
                     print(username)
+                    print(email)
                     // set the username that has been typed
                     userProfile.setUsername(newUsername: username){ result in
                         switch result {
@@ -259,10 +225,35 @@ struct SettingsView: View {
                                         }
                         }
                     }
+                    if email != UserDefaults.standard.string(forKey: "email")!{
+                        userProfile.setEmail(newEmail: email){ result in
+                            switch result {
+                            case .success(let output):
+                                //if succeeded, log it
+                                print("API Response: \(output)")
+                                emailResponseMessage = "Email successfully changed"
+                            case .failure(let error):
+                                print("API call failed:\(error.localizedDescription)")
+                                if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                                switch apiError {
+                                                case .emailError(let message):
+                                                    emailResponseMessage = message //use the response message if there was one
+                                                default:
+                                                    emailResponseMessage = apiError.localizedDescription
+                                                }
+                                            } else {
+                                                emailResponseMessage = error.localizedDescription
+                                            }
+                            }
+                        }
+                    }
+                    else{
+                        print("email didn't actually change")
+                    }
                     print("username submitted")
                     print(username)
                 }) {
-                    Text("Submit username change")
+                    Text("Submit changes")
                         .foregroundColor(.border)
                     Image(systemName: "square.and.arrow.up")
                         .imageScale(.large)

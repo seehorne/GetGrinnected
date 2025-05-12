@@ -760,6 +760,7 @@ class UserProfile: ObservableObject {
         case signInError(String)
         case unauthorized
         case usernameError(String)
+        case emailError(String)
         var localizedStringResource: LocalizedStringResource {
             switch self {
             case .badEmail: return "Email wrong:";
@@ -767,6 +768,7 @@ class UserProfile: ObservableObject {
             case .decoderError: return "Could not decode JSON";
             case .signInError(let message):  return "Login error \(message)";
             case .usernameError(let message): return "Username error \(message)";
+            case .emailError(let message): return "Email error \(message)";
             case .unauthorized: return "Could not authenticate user session"
             }
         }
