@@ -265,17 +265,21 @@ fun HomeScreen(tags: List<Check>) {
                                 Text("Tags", style = typography.labelLarge, maxLines = 1)
                             }
                         }
+                        // the list of tags
                         DropdownMenu(
                             expanded = expanded2.value,
                             onDismissRequest = { expanded2.value = false }) {
+                            // creates the clear option to remove all selected tags
                             DropdownMenuItem(
-                                text = { Text("Unselect All") },
+                                text = { Text("Clear") },
                                 onClick = {
+                                    // goes through and unselects all tags
                                     for (t in tags.indices) {
                                         tags[t].checked.value = false
                                     }
                                 },
                             )
+                            // creates a list item with checkbox for each tag found in the events
                             for (tag in tags.indices) {
                                 DropdownMenuItem(
                                     text = { CheckBox(check = tags[tag]) },
@@ -383,6 +387,11 @@ fun HomeScreen(tags: List<Check>) {
     }
 }
 
+
+/**
+ * takes a date and returns the first three letters of the associated month
+ * @param LocalDate a localDate
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 fun toMonth(localDate: LocalDate): String{
     val formatter2 = DateTimeFormatter.ofPattern("MM")
@@ -398,9 +407,7 @@ fun toMonth(localDate: LocalDate): String{
         "09" -> { "Sep" }
         "10" -> { "Oct" }
         "11" -> { "Nov" }
-        else -> {
-            "Dec"
-        }
+        else -> {"Dec"}
     }).toString()
     return month
 }
