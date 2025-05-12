@@ -363,6 +363,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                     onClick = {
                                         coroutineScope.launch {
                                             if (newEmail != account.email) {
+                                                // Syncs the current account info with the remote db
+                                                AppRepository.syncAccountData(context = context)
                                                 // Sends our updated email to the remote database
                                                 AppRepository.syncEmail(newEmail)
                                                 SnackBarController.sendEvent(SnackBarEvent("Verification Code sent to Email"))
@@ -724,6 +726,8 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                 TextButton(
                                     onClick = {
                                         coroutineScope.launch {
+                                            // syncs current account info with the repo
+                                            AppRepository.syncAccountData(context = context)
                                             // This resets user preferences to default states
                                             DataStoreSettings.clearUserSession(context)
                                             onToggleTheme(false)
