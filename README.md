@@ -42,10 +42,6 @@ The structure of our Repository is as follows:
 - `test procedures/` - Manual test procedures we are keeping.
   - `[COMPONENT].md` - Test procedure to run for a particular COMPONENT.
 
-# Issue Tracking
-
-Our issue manager is Trello. See our Trello board at <https://trello.com/b/pAnl7SQ3/getgrinnected>.
-
 # Developer Guidelines
 
 These guidelines are here to make development easier and make sure we meet class requirements and standards.
@@ -308,11 +304,15 @@ You can find the login details from the environment file used to run the databas
 1. Run the API in a terminal. From the top of the repository, run:
 
    ```
-   node src/backend/api.js
+   node src/backend/api/api.cjs
    ```
 
 2. It announces what ports the API is running on. By default it will run HTTP on port 8080 and HTTPS on port 4443, unless
    otherwise specified in the .env file or environment variables.
+
+# Issue Tracking
+
+Our issue manager is Trello. See our Trello board at <https://trello.com/b/pAnl7SQ3/getgrinnected>.
 
 # Currently Operational Use Cases
 
