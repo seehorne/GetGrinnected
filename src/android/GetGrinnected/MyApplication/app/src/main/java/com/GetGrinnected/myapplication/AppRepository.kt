@@ -267,6 +267,18 @@ object AppRepository {
         }
         return response.isSuccessful
     }
+
+    /**
+     * Syncs local email with remote email.
+     * @param email is the new email we will be switching our email to
+     */
+    suspend fun syncEmail(email: String) {
+        // We make our email call with a placeholder for token as we get our token inside
+        // the safe API call
+        safeApiCall(appContext) { token ->
+            RetrofitApiClient.apiModel.updateEmail(token, UpdateEmailRequest(email))
+        }
+    }
 }
 
 /**

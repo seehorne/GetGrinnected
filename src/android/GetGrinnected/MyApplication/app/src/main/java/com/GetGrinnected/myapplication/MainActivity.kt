@@ -61,6 +61,21 @@ class MainActivity : ComponentActivity() {
             // This is the font size we have stored for the user
             val storedFontSize = DataStoreSettings.getFontSize(applicationContext).first()
 
+            // Get the information associated with the pending verification
+            val pendingEmail = DataStoreSettings.getPendingVerificationEmail(applicationContext).first()
+            // Get the information associated with the pending verification
+            val pendingPrevious = DataStoreSettings.getPendingPrevious(applicationContext).first()
+
+            // Set the start destination
+            // when our pending states are not empty or null we send them into the verification flow
+            // Otherwise if we are logged in we go to the main process ie home page
+            // Else we send them the welcome screen ie our login process
+            val startDestination = when {
+                !pendingEmail.isNullOrEmpty() && !pendingPrevious.isNullOrEmpty()  -> "verification/${pendingEmail}/${pendingPrevious}"
+                isLoggedIn -> "main"
+                else -> "welcome"
+            }
+
             /* The dark theme value is passed down to the switch that we toggle it at
             and then the onToggleTheme is a lambda function that allows us to switch
             the state of dark theme, additionally the darktheme value traces into our
@@ -139,7 +154,7 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         tags = tags.sortedBy { it.label.uppercase() },
-                        startDestination = if (isLoggedIn) "main" else "welcome",
+                        startDestination = startDestination,
                         fontSizeSetting = fontSizePref.key,
                         onFontSizeChange = { key ->
                             // On change we set the stored value reactive state to this new value
