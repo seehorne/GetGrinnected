@@ -31,8 +31,8 @@ object DataStoreSettings {
     private val FONT_SIZE = stringPreferencesKey("font_size")
     // Preference key for when a user is trying too do a verification step
     private val PENDING_EMAIL = stringPreferencesKey("pending_email")
-    // Preference key for which page we came from to get to verification ie the signup flag
-    private val PENDING_FLAG = booleanPreferencesKey("pending_flag")
+    // Preference key for which page we came from to get to verification
+    private val PENDING_PREVIOUS = stringPreferencesKey("pending_previous")
 
     /**
      * Setter for logged in value
@@ -184,12 +184,12 @@ object DataStoreSettings {
      * Sets the necessary values when we move into the verification stage
      * @param context is the current context of the app
      * @param email is the current email of the account being verified
-     * @param flag is whether we are doing a signup or a login verification
+     * @param previous is the prior page we came from to get here
      */
-    suspend fun setPendingVerification(context: Context, email: String, flag: Boolean) {
+    suspend fun setPendingVerification(context: Context, email: String, previous: String) {
         context.dataStore.edit {
             it[PENDING_EMAIL] = email
-            it[PENDING_FLAG] = flag
+            it[PENDING_PREVIOUS] = previous
         }
     }
 
@@ -202,11 +202,12 @@ object DataStoreSettings {
     }
 
     /**
-     * Getter for the flag associated with going to signup or login
+     * Getter for the previous page prior to the verification page
      * @param context is the current app context
+     * @return a flow that tells you the previous page as a string
      */
-    fun getPendingVerificationFlag(context: Context): Flow<Boolean?> {
-        return context.dataStore.data.map { it[PENDING_FLAG] }
+    fun getPendingPrevious(context: Context): Flow<String?> {
+        return context.dataStore.data.map { it[PENDING_PREVIOUS] }
     }
 
     /**
@@ -216,7 +217,7 @@ object DataStoreSettings {
     suspend fun clearPendingVerification(context: Context) {
         context.dataStore.edit {
             it.remove(PENDING_EMAIL)
-            it.remove(PENDING_FLAG)
+            it.remove(PENDING_PREVIOUS)
         }
     }
 }

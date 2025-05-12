@@ -64,12 +64,12 @@ class MainActivity : ComponentActivity() {
             // Get the information associated with the pending verification
             val pendingEmail = DataStoreSettings.getPendingVerificationEmail(applicationContext).first()
             // Get the information associated with the pending verification
-            val pendingFlag = DataStoreSettings.getPendingVerificationFlag(applicationContext).first()
+            val pendingPrevious = DataStoreSettings.getPendingPrevious(applicationContext).first()
 
             // Set the start destination
             val startDestination = when {
+                !pendingEmail.isNullOrEmpty() && !pendingPrevious.isNullOrEmpty()  -> "verification/${pendingEmail}/${pendingPrevious}"
                 isLoggedIn -> "main"
-                !pendingEmail.isNullOrEmpty() && pendingFlag != null -> "verification/${pendingEmail}/${pendingFlag}"
                 else -> "welcome"
             }
 

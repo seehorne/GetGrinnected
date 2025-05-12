@@ -362,19 +362,18 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                                 TextButton(
                                     onClick = {
                                         coroutineScope.launch {
-                                            // Makes a new account entity with the new Email
-                                            val updatedAccount =
-                                                account.copy(email = newEmail)
-                                            // Upserts ie updates the account name
-                                            AppRepository.upsertAccount(updatedAccount.toAccountEntity())
-                                            // Sets our current active account to the given account
-                                            AppRepository.setCurrentAccountById(updatedAccount.accountid)
-                                            // Sends our updated username to the remote database
-                                            /*TODO SEND EMAIL CALL*/
-                                            // Sends snack bar
-                                            SnackBarController.sendEvent(SnackBarEvent("Email was updated"))
+                                            // Sends our updated email to the remote database
+                                            AppRepository.syncEmail(newEmail)
+                                            SnackBarController.sendEvent(SnackBarEvent("Verification Code sent to Email"))
                                             // Closes the editing dialog
                                             showEditEmailDialog = false
+                                            // Set pending verification state so that we go to the verification page with the correct info
+                                            DataStoreSettings.setPendingVerification(context, newEmail, "settings")
+                                            // Navigate to the Verification Page so the user can enter the one time code.
+                                            navController.navigate("verification/${newEmail}/settings") {
+                                                popUpTo(0) { inclusive = false }
+                                                launchSingleTop = true
+                                            }
                                         }
                                     },
                                     // If email is valid the button will be enabled otherwise it will be disabled

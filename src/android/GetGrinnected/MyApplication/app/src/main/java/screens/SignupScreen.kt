@@ -80,8 +80,8 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
     var isLoading by remember { mutableStateOf(false) }
     // Process to launch background tasks
     val coroutineScope = rememberCoroutineScope()
-    // Flag sent to the verification function to indicate a signUp Process
-    val signUp = true
+    // String to send to verification page so it knows what the previous page was
+    val previous = "signup"
     // To access our theme colors
     val colorScheme = MaterialTheme.colorScheme
     // To access our font info from our theme
@@ -238,8 +238,8 @@ fun SignupScreen(modifier: Modifier, navController: NavController) {
                             if (response.isSuccessful) {
                                 // Sets our pending verification states so that we return to the proper
                                 // page if we leave the app to check an the email
-                                DataStoreSettings.setPendingVerification(context, email, signUp)
-                                navController.navigate("verification/${email}/${signUp}") {
+                                DataStoreSettings.setPendingVerification(context, email, previous)
+                                navController.navigate("verification/${email}/${previous}") {
                                     popUpTo(0) { inclusive = true }
                                     launchSingleTop = true
                             }
