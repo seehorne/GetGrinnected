@@ -52,6 +52,13 @@ class UserProfile: ObservableObject {
        UserDefaults.standard.set(newUsername, forKey: "username")
     }
     
+    
+    func setLocalEmail(newEmail: String){
+        if validateEmail(newEmail){
+            UserDefaults.standard.set(newEmail, forKey: "email")
+        }
+    }
+    
     func setLocalPassword(_ newPassword: String) -> Bool {
         if validatePassword(newPassword){
             _password = newPassword
@@ -74,6 +81,7 @@ class UserProfile: ObservableObject {
             print("Invalid email format! Must include @grinnell.edu!")
             return false
         }
+        print("successfully validated email")
         return true
     }//validateEmail()
     
@@ -460,6 +468,63 @@ class UserProfile: ObservableObject {
         })
     }
     
+    
+    //this calls the API to get the username as stored in the database
+    func getEmail() {
+         safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/email")!)
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                    if decodedResponse.email != nil {
+                        print(decodedResponse.username!)
+                        self.setLocalEmail(newEmail: decodedResponse.email!)
+                    }
+                }
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    //this takes user input for a email change and sends it to the API to be stored in the database
+    func setEmail(newEmail: String, completion: @escaping (Result<String, Error>) -> Void) {
+        print("the set email function is being called at least")
+         safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
+            request.httpMethod = "PUT"
+            let body: [String: Any] = [
+                "email": newEmail,
+            ]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("There was success")
+                //print("Success! Set username: \(data)")
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("Raw API Response: \(raw)")
+                } else {
+                    print("Couldn't decode raw data to UTF-8 string.")
+                }
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
+            case .failure(let error):
+                print("There was not success")
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
     //this function takes a model context as a parameter, so that it can save and update the events saved by a user as notified
     //it gets these events by pulling the API for the IDs that are marked by the user as notified
     //then it goes through all events s.t. they can be marked that way in local storage as well
@@ -680,6 +745,7 @@ class UserProfile: ObservableObject {
         let favorited_events: [Int]?
         let notified_events: [Int]?
         let username: String?
+        let email: String?
     }
     
     /*

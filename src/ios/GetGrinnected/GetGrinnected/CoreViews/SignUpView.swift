@@ -54,6 +54,7 @@ struct SignUpView: View{
                     switch result {
                     case .success(let output):
                         print("API Response: \(output)")
+                        userProfile.setLocalUsername(newUsername: username)
                         success=true
                     case .failure(let error):
                         print("API call failed: \(error.localizedDescription)")

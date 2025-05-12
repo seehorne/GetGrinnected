@@ -21,6 +21,8 @@ struct SettingsView: View {
     // our users username
     @State private var username: String
     @State private var usernameResponseMessage: String
+    @State private var email: String
+    @State private var emailResponseMessage: String
     
     @StateObject private var userProfile = UserProfile()
     
@@ -37,10 +39,12 @@ struct SettingsView: View {
     @State var isAccessibilitySelected = false
     @State var isAboutSelected = false
     
-    init(username: String, isLoggedIn: Binding<Bool>) {
+    init(username: String, email: String, isLoggedIn: Binding<Bool>) {
         self._isLoggedIn = isLoggedIn
         self._username = State(initialValue: UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded")
+        self._email = State(initialValue: UserDefaults.standard.string(forKey: "email") ?? "current username could not be loaded")
         self.usernameResponseMessage = ""
+        self.emailResponseMessage = ""
     }
     
     
@@ -145,6 +149,7 @@ struct SettingsView: View {
                 switchAppearance()
                 userProfile.getUsername()
                 username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
+                email = UserDefaults.standard.string(forKey: "email") ?? "current email could not be loaded"
             }
             // changes the viewColorScheme when lightModeOn is changed
             .onChange(of: lightModeOn){ oldValue, newValue in
@@ -223,7 +228,7 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    Text("\(username)")
+                    Text("\(email)")
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -424,7 +429,7 @@ struct SettingsView: View {
 } //ProfileView
 
 #Preview {
-    SettingsView(username: "123", isLoggedIn: .constant(true))
+    SettingsView(username: "user123", email: "dummyemail@grinnell.edu", isLoggedIn: .constant(true))
 }
 
 
