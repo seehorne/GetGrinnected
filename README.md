@@ -48,12 +48,22 @@ These guidelines are here to make development easier and make sure we meet class
 
 ## Branching and Merging
 
-This is the pattern you should follow when you are developing a new code feature.
+We follow a feature branching pattern in this repo. These are the basics of the flow.
 
 1. Change to the main branch, and pull any new changes.
 2. Create a new branch for your feature. It should be named according to the pattern `<NAME>/<FEATURE>`, such as `almond/deploy-api`.
 3. Work on that branch, committing and pushing as needed.
 4. When you are done with your feature, create a Pull Request to merge it into main. You will need approval to merge.
+
+## Continuous Integration
+
+When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
+
+> Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
+
+Pipelines run when pushing to any branch.
+
+Additionally, docs have Continuous Deployment (CD) on merge into main. No other CD exists at this time.
 
 ## Testing
 
@@ -78,14 +88,6 @@ When it makes sense to do so, create test suites to group tests by using `descri
 Add a new test bundle by going to file > new > target and then searching "test". You will then select Unit Testing Bundle and choose Swift as the language and Swift Testing as the testing system. Set your other settings how you want and click finish. Now go to your test file and import your project.
 
 Now you can add tests to your testing file using this site <https://developer.apple.com/documentation/testing/definingtests> as documentation.
-
-## Continuous Integration
-
-When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
-
-Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
-
-Pipelines run when pushing to any feature branch, as well as before merging to main.
 
 ## Commit Messages
 
