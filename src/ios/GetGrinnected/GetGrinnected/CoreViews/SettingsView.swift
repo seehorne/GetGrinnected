@@ -19,6 +19,7 @@ struct SettingsView: View {
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
     // our users username
+
     @State private var username: String
     @State private var usernameResponseMessage: String
     @State private var email: String
@@ -200,8 +201,9 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    Text("\(username)")
-                    
+
+                    TextField("Username", text: $username)
+                                      
                     if !usernameResponseMessage.isEmpty{
                         if usernameResponseMessage == "Username successfully changed"{
                             Text(usernameResponseMessage)
@@ -228,8 +230,29 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    Text("\(email)")
+                    TextField("Email", text: $email)
                 }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+//                    .transition(.move(edge: .top)) //alternative transition
+                
+                // username change
+                Button(action: {
+                    print(username)
+                    // set the username that has been typed
+                    userProfile.setUsername(username)
+                    print("username submitted")
+                    print(username)
+                }) {
+                    Text("Submit username change")
+                        .foregroundColor(.border)
+                    Image(systemName: "square.and.arrow.up")
+                        .imageScale(.large)
+                } //Button
                 .padding(.horizontal)
                 .padding(.bottom)
                 .transition(.asymmetric(
@@ -372,7 +395,8 @@ struct SettingsView: View {
             if(isAboutSelected){
                 VStack{
                     Text("Acknowledgements")
-                        .font(.title)
+                        .font(.title2)
+                        .padding(.bottom)
                     
                     Text("Logo Design")
                         .font(.headline)
