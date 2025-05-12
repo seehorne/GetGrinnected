@@ -54,6 +54,7 @@ struct VerificationView: View {
                             print("API Response: \(output)")
                             self.isLoggedIn=true //and we are good to go to the next one
                             userProfile.updateLoginState(isLoggedIn: true) //set our state to logged in
+                            userProfile.setLocalEmail(newEmail: self.email)
                         case .failure(let error):
                             print("API call failed:\(error.localizedDescription)")
                             if let apiError = error as? UserProfile.APIError {//treat the error as API error object

@@ -54,6 +54,7 @@ struct SignUpView: View{
                     switch result {
                     case .success(let output):
                         print("API Response: \(output)")
+                        userProfile.setLocalUsername(newUsername: username)
                         success=true
                     case .failure(let error):
                         print("API call failed: \(error.localizedDescription)")
@@ -93,7 +94,7 @@ struct SignUpView: View{
         signupError = ""
         
         //setusername first, no validation needed
-        userProfile.setUsername(username)
+        userProfile.setLocalUsername(newUsername: username)
         
         //validate email
         if !userProfile.setEmail(email){
@@ -102,7 +103,7 @@ struct SignUpView: View{
         }
         
         //validate password
-        if !userProfile.setPassword(password){
+        if !userProfile.setLocalPassword(password){
             signupError = "Password must be at least 8 characters long!"
             return
         }

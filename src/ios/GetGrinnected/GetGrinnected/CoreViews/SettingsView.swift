@@ -19,9 +19,11 @@ struct SettingsView: View {
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
     // our users username
-    @State private var username: String = "user123"
-    // our users email
-    @State private var email: String = "email@email.com"
+
+    @State private var username: String
+    @State private var usernameResponseMessage: String
+    @State private var email: String
+    @State private var emailResponseMessage: String
     
     @StateObject private var userProfile = UserProfile()
     
@@ -38,8 +40,16 @@ struct SettingsView: View {
     @State var isAccessibilitySelected = false
     @State var isAboutSelected = false
     
+    init(username: String, email: String, isLoggedIn: Binding<Bool>) {
+        self._isLoggedIn = isLoggedIn
+        self._username = State(initialValue: UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded")
+        self._email = State(initialValue: UserDefaults.standard.string(forKey: "email") ?? "current username could not be loaded")
+        self.usernameResponseMessage = ""
+        self.emailResponseMessage = ""
+    }
+    
+    
     var body: some View {
-        
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
@@ -74,6 +84,46 @@ struct SettingsView: View {
                         VStack {
                             profileEditing()
                             
+                            HStack {
+                                // spacer to right align button
+                                Spacer()
+                                
+                                // username change
+                                Button(action: {
+                                    usernameResponseMessage = ""
+                                    print(username)
+                                    // set the username that has been typed
+                                    userProfile.setUsername(newUsername: username){ result in
+                                        switch result {
+                                        case .success(let output):
+                                            //if succeeded, log it
+                                            print("API Response: \(output)")
+                                            usernameResponseMessage = "Username successfully changed"
+                                        case .failure(let error):
+                                            print("API call failed:\(error.localizedDescription)")
+                                            if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                                            switch apiError {
+                                                            case .usernameError(let message):
+                                                                usernameResponseMessage = message //use the response message if there was one
+                                                            default:
+                                                                usernameResponseMessage = apiError.localizedDescription
+                                                            }
+                                                        } else {
+                                                            usernameResponseMessage = error.localizedDescription
+                                                        }
+                                        }
+                                    }
+                                    print("username submitted")
+                                    print(username)
+                                }) {
+                                    Text("Submit username change")
+                                        .foregroundColor(.border)
+                                    Image(systemName: "square.and.arrow.up")
+                                        .imageScale(.large)
+                                } //Button
+                            }
+                                                
+                            
                             // switch for light/dark mode
                             appearance()
                             
@@ -98,6 +148,9 @@ struct SettingsView: View {
             // run switchAppearance when the view is shown
             .onAppear {
                 switchAppearance()
+                userProfile.getUsername()
+                username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
+                email = UserDefaults.standard.string(forKey: "email") ?? "current email could not be loaded"
             }
             // changes the viewColorScheme when lightModeOn is changed
             .onChange(of: lightModeOn){ oldValue, newValue in
@@ -148,7 +201,20 @@ struct SettingsView: View {
                     
                     Spacer()
                     
+
                     TextField("Username", text: $username)
+                                      
+                    if !usernameResponseMessage.isEmpty{
+                        if usernameResponseMessage == "Username successfully changed"{
+                            Text(usernameResponseMessage)
+                                .foregroundColor(.blue)
+                                .font(.caption)
+                        }else{
+                            Text(usernameResponseMessage)
+                                .foregroundColor(.red)
+                                .font(.caption)
+                        }
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -387,7 +453,7 @@ struct SettingsView: View {
 } //ProfileView
 
 #Preview {
-    SettingsView(isLoggedIn: .constant(true))
+    SettingsView(username: "user123", email: "dummyemail@grinnell.edu", isLoggedIn: .constant(true))
 }
 
 

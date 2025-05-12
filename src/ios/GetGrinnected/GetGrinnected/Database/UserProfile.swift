@@ -47,11 +47,19 @@ class UserProfile: ObservableObject {
     }//function set email
     
     
-    func setUsername(_ newUsername: String){
+    func setLocalUsername(newUsername: String){
        usernameText = newUsername
+       UserDefaults.standard.set(newUsername, forKey: "username")
     }
     
-    func setPassword(_ newPassword: String) -> Bool {
+    
+    func setLocalEmail(newEmail: String){
+        if validateEmail(newEmail){
+            UserDefaults.standard.set(newEmail, forKey: "email")
+        }
+    }
+    
+    func setLocalPassword(_ newPassword: String) -> Bool {
         if validatePassword(newPassword){
             _password = newPassword
             isPasswordValid = true
@@ -73,6 +81,7 @@ class UserProfile: ObservableObject {
             print("Invalid email format! Must include @grinnell.edu!")
             return false
         }
+        print("successfully validated email")
         return true
     }//validateEmail()
     
@@ -413,7 +422,13 @@ class UserProfile: ObservableObject {
         }, completion: { result in
             switch result {
             case .success(let data):
-                print("Success! Got username: \(data)")
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                    if decodedResponse.username != nil {
+                        print(decodedResponse.username!)
+                        self.setLocalUsername(newUsername: decodedResponse.username!)
+                    }
+                }
             case .failure(let error):
                 print(self.getErrorMessage(error: error))
             }
@@ -421,7 +436,8 @@ class UserProfile: ObservableObject {
     }
     
     //this takes user input for a username change and sends it to the API to be stored in the database
-    func setUsername(newUsername: String) {
+    func setUsername(newUsername: String, completion: @escaping (Result<String, Error>) -> Void) {
+        print("the set username function is being called at least")
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
             request.httpMethod = "PUT"
@@ -429,12 +445,13 @@ class UserProfile: ObservableObject {
                 "username": newUsername,
             ]
             request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
         }, completion: { result in
             switch result {
             case .success(let data):
+                print("There was success")
                 //print("Success! Set username: \(data)")
                 if let raw = String(data: data, encoding: .utf8) {
                     print("Raw API Response: \(raw)")
@@ -445,6 +462,64 @@ class UserProfile: ObservableObject {
                     print(decodedResponse.message ?? "Success but no response to print")
                 }
             case .failure(let error):
+                print("There was not success")
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    
+    //this calls the API to get the username as stored in the database
+    func getEmail() {
+         safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/email")!)
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                    if decodedResponse.email != nil {
+                        print(decodedResponse.username!)
+                        self.setLocalEmail(newEmail: decodedResponse.email!)
+                    }
+                }
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
+    //this takes user input for a email change and sends it to the API to be stored in the database
+    func setEmail(newEmail: String, completion: @escaping (Result<String, Error>) -> Void) {
+        print("the set email function is being called at least")
+         safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
+            request.httpMethod = "PUT"
+            let body: [String: Any] = [
+                "email": newEmail,
+            ]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                print("There was success")
+                //print("Success! Set username: \(data)")
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("Raw API Response: \(raw)")
+                } else {
+                    print("Couldn't decode raw data to UTF-8 string.")
+                }
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse.message ?? "Success but no response to print")
+                }
+            case .failure(let error):
+                print("There was not success")
                 print(self.getErrorMessage(error: error))
             }
         })
@@ -531,8 +606,7 @@ class UserProfile: ObservableObject {
          safeApiCall(requestBuilder: { token in
              let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/events/favorited")!
              var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-             //request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.httpMethod = "GET"
              request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
              request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             return request
@@ -613,7 +687,6 @@ class UserProfile: ObservableObject {
         }, completion: { result in
             switch result {
             case .success(let data):
-                //print("Success! Got data: \(data)")
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse.message ?? "Success but no response to print")
                 }
@@ -671,6 +744,8 @@ class UserProfile: ObservableObject {
         let access_token: String?
         let favorited_events: [Int]?
         let notified_events: [Int]?
+        let username: String?
+        let email: String?
     }
     
     /*
@@ -684,12 +759,14 @@ class UserProfile: ObservableObject {
         case decoderError
         case signInError(String)
         case unauthorized
+        case usernameError(String)
         var localizedStringResource: LocalizedStringResource {
             switch self {
             case .badEmail: return "Email wrong:";
             case .invalidResponse: return "Invalid response from server";
             case .decoderError: return "Could not decode JSON";
             case .signInError(let message):  return "Login error \(message)";
+            case .usernameError(let message): return "Username error \(message)";
             case .unauthorized: return "Could not authenticate user session"
             }
         }
