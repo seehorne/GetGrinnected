@@ -268,27 +268,20 @@ fun EmailVerificationScreen(email: String, previous: String, navController: NavC
 
             // This is our cancel button that navigates back to the sign up page
             TextButton(onClick = {
-                if (actualPrevious == "signup") {
-                    coroutineScope.launch {
-                        // Clears all of our states associated with verification
-                        DataStoreSettings.clearPendingVerification(context)
-                        navController.navigate("signup") {
+                coroutineScope.launch {
+                    // Clears all of our states associated with verification
+                    DataStoreSettings.clearPendingVerification(context)
+
+                    // when the previous screen string is signup if we press cancel we navigate back to
+                    // the signup screen and pop the backstack same goes for login and settings respectively
+                    when(actualPrevious){
+                        "signup" -> navController.navigate("signup") {
                             popUpTo(0) { inclusive = true }
                         }
-                    }
-                } else if(actualPrevious == "login") {
-                    coroutineScope.launch {
-                        // Clears all of our states associated with verification
-                        DataStoreSettings.clearPendingVerification(context)
-                        navController.navigate("login") {
+                        "login" -> navController.navigate("login") {
                             popUpTo(0) { inclusive = true }
                         }
-                    }
-                } else {
-                    coroutineScope.launch {
-                        // Clears all of our states associated with verification
-                        DataStoreSettings.clearPendingVerification(context)
-                        navController.navigate("main") {
+                        "settings" -> navController.navigate("main") {
                             popUpTo(0) { inclusive = true }
                         }
                     }

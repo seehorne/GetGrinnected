@@ -67,6 +67,9 @@ class MainActivity : ComponentActivity() {
             val pendingPrevious = DataStoreSettings.getPendingPrevious(applicationContext).first()
 
             // Set the start destination
+            // when our pending states are not empty or null we send them into the verification flow
+            // Otherwise if we are logged in we go to the main process ie home page
+            // Else we send them the welcome screen ie our login process
             val startDestination = when {
                 !pendingEmail.isNullOrEmpty() && !pendingPrevious.isNullOrEmpty()  -> "verification/${pendingEmail}/${pendingPrevious}"
                 isLoggedIn -> "main"
