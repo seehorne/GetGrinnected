@@ -209,13 +209,7 @@ fun HomeScreen(tags: List<Check>) {
                                 Text(
                                     daysList[selectedView].dayOfWeek.getDisplayName(
                                         java.time.format.TextStyle.FULL,
-                                        Locale.getDefault()
-                                    ).substring(
-                                        0,
-                                        3
-                                    ) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(
-                                        formatter3
-                                    ), style = typography.labelLarge
+                                        Locale.getDefault()).substring(0, 3) + ", " + toMonth(daysList[selectedView]) + " " + daysList[selectedView].format(formatter3), style = typography.labelLarge
                                 )
                             }
                         }
@@ -391,6 +385,7 @@ fun HomeScreen(tags: List<Check>) {
 /**
  * takes a date and returns the first three letters of the associated month
  * @param localDate a LocalDate
+ * @return a String that is the first three letters of associated month
  */
 @RequiresApi(Build.VERSION_CODES.O)
 fun toMonth(localDate: LocalDate): String{
