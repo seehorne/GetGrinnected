@@ -1,7 +1,5 @@
 # (1) Adoption Plan
 
-> [Adoption Plan](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.e1kq5sujjap4) in Sprint Description
->
 ## 1. 
 5/5/2025
 ## 2.
