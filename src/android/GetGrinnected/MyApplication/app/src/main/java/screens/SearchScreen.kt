@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
@@ -27,10 +30,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,9 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.GetGrinnected.myapplication.AppRepository
@@ -57,6 +61,7 @@ import java.util.Locale
 /**
  * A composable function that represents the search screen of our app.
  */
+@OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SearchScreen() {
@@ -80,7 +85,7 @@ fun SearchScreen() {
             modifier = Modifier
                 .background(color = colorScheme.primary)
                 .fillMaxWidth()
-                .height(100.dp),
+                .height(160.dp),
         ){
             Row(modifier = Modifier
                 .fillMaxWidth()
@@ -97,13 +102,15 @@ fun SearchScreen() {
                 )
                 androidx.compose.material3.OutlinedTextField(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(colorScheme.secondary),
+                        .fillMaxWidth(),
+                        //.padding(bottom = 90.dp) ,
+                    shape = CircleShape,
                     value = description,
                     onValueChange = {
                         search.value = false
                         description = it
                     },
+                    textStyle = TextStyle(color = colorScheme.onPrimary),
                     singleLine = true,
                     label = {
                         Row(modifier = Modifier) {
@@ -121,13 +128,16 @@ fun SearchScreen() {
                     }
                 )
             }
+            Spacer(modifier = Modifier.height(112.dp))
+            Row(modifier = Modifier.fillMaxWidth().padding(8.dp, top = 90.dp, end = 8.dp)) { // creates day menu
+                selectedDate = datePickerDocked()
+            }
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) { // creates day menu
-            selectedDate = datePickerDocked()
-        }
-        Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) { // creates day menu
+
+        Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
+            horizontalArrangement = Arrangement.Center) { // creates day menu
             Button(
+                modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
                 onClick = { search.value = true },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorScheme.secondary,
@@ -136,7 +146,14 @@ fun SearchScreen() {
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 20.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Search")
+                    androidx.compose.material3.Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search events",
+                        tint = colorScheme.onPrimary,
+                        modifier = Modifier.size(20.dp))
+                    Text("Search" ,
+                        color = colorScheme.onPrimary,
+                        style = typography.labelLarge)
                 }
             }
         }
@@ -209,19 +226,22 @@ fun datePickerDocked(): String{
     val selectedDate = datePickerState.selectedDateMillis?.let {
         convertMillisToDate(it)
     } ?: ""
-
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
         OutlinedTextField(
             value = selectedDate,
             onValueChange = { },
-            label = { Text("Event Date") },
+            textStyle = TextStyle(color = colorScheme.onPrimary),
+            label = { Text("Event Date",
+                color = colorScheme.onPrimary,
+                style = typography.labelLarge) },
             readOnly = true,
             trailingIcon = {
                 IconButton(onClick = { showDatePicker = !showDatePicker }) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
+                        tint = colorScheme.onPrimary,
                         contentDescription = "Select date"
                     )
                 }
@@ -230,7 +250,6 @@ fun datePickerDocked(): String{
                 .fillMaxWidth()
                 .height(64.dp)
         )
-
         if (showDatePicker) {
             Popup(
                 onDismissRequest = { showDatePicker = false },
