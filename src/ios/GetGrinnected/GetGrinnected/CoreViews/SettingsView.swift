@@ -244,7 +244,26 @@ struct SettingsView: View {
                 Button(action: {
                     print(username)
                     // set the username that has been typed
-                    userProfile.setUsername(username)
+                    userProfile.setUsername(newUsername: username){ result in
+                        switch result {
+                        case .success(let output):
+                            //if succeeded, log it
+                            print("API Response: \(output)")
+                            usernameResponseMessage = "Username successfully changed"
+                        case .failure(let error):
+                            print("API call failed:\(error.localizedDescription)")
+                            if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                            switch apiError {
+                                            case .usernameError(let message):
+                                                usernameResponseMessage = message //use the response message if there was one
+                                            default:
+                                                usernameResponseMessage = apiError.localizedDescription
+                                            }
+                                        } else {
+                                            usernameResponseMessage = error.localizedDescription
+                                        }
+                        }
+                    }
                     print("username submitted")
                     print(username)
                 }) {
