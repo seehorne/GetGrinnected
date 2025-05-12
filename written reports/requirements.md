@@ -331,13 +331,9 @@ Note: This use case was written before the requirements for use cases were chang
 8. The user enters the verification code that has been emailed to them.
   - If it matches the correct code, continue the main flow.
   - If it does not match, start the alternative flow "incorrect verification code."
-9. The app changes to a new screen asking the user to enter a password for their account. It lists any password requirements.
-10. The user enters a password. It is checked against requirements.
-  - If it fulfils all requirements, continue the main flow.
-  - If it does not, start the alternative flow "invalid password".
-11. A user account is created in the database
+9. A user account is created in the database
   - If the database cannot be reached for any reason, start the alternative flow "connection error."
-12. The user is let into their account, onto the default landing page.
+10. The user is let into their account, onto the default landing page.
 
 **Alternative flows:**
 
@@ -365,13 +361,6 @@ incorrect verification code:
 
 1. The app displays an error message: "Verification code does not match."
 2. The box(es) where the code was typed get cleared out.
-3. Return to the main flow of whatever step caused this alternate flow.
-
-invalid password:
-
-1. The app displays an error message: "Password does not meet requirements."
-  - Can specify what needs to be fixed.
-2. The password box is cleared, and a new password can be typed.
 3. Return to the main flow of whatever step caused this alternate flow.
 
 ## Use Case 2: Creating an Event

@@ -39,6 +39,11 @@ struct SettingsView: View {
     @State var isAppearanceSelected = false
     @State var isAccessibilitySelected = false
     @State var isAboutSelected = false
+
+    @State var showUsernameEditAlert = false
+    @State var showEmailEditAlert = false
+    @State var showDeleteAccountAlert = false
+    @State var showLogOutAlert = false
     
     init(username: String, email: String, isLoggedIn: Binding<Bool>) {
         self._isLoggedIn = isLoggedIn
@@ -57,28 +62,9 @@ struct SettingsView: View {
                 Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
-                    
                     //content
                     VStack {
-                        HStack {
-                            // spacer to right align button
-                            Spacer()
-                            
-                            // Logout button
-                            Button(action: {
-                                // we are logging out
-                                userProfile.updateLoginState(isLoggedIn: false)
-                                loggedOut = true
-                            }) {
-                                Text("Logout")
-                                    .foregroundColor(.border)
-                                Image(systemName: "rectangle.portrait.and.arrow.right")
-                                    .imageScale(.large)
-                            } //Button
-                            .navigationDestination(isPresented: $loggedOut) {
-                                ContentView()
-                            }
-                        }
+                        profileEditing()
                         
                         //content
                         VStack {
@@ -132,12 +118,14 @@ struct SettingsView: View {
                             
                             //about section
                             about()
-                            
-                            
-                        } //about
-                        .padding()
                         
-                    }   //vstack
+                            //delete account button
+                            deleteAccount()
+                        
+                            //logout button
+                            logOut()
+                    } //about
+                    .padding()
                 }   //Scroll view
                 .edgesIgnoringSafeArea(.top)
                 .foregroundColor(.border)
@@ -201,20 +189,17 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-
-                    TextField("Username", text: $username)
-                                      
-                    if !usernameResponseMessage.isEmpty{
-                        if usernameResponseMessage == "Username successfully changed"{
-                            Text(usernameResponseMessage)
-                                .foregroundColor(.blue)
-                                .font(.caption)
-                        }else{
-                            Text(usernameResponseMessage)
-                                .foregroundColor(.red)
-                                .font(.caption)
-                        }
-                    }
+                    Text("\(username)")
+                    
+                    Button(action: {
+                        showUsernameEditAlert.toggle()
+                    }) {
+                        Image(systemName: "pencil")
+                    } //Button
+                    .alert("Enter new username", isPresented: $showUsernameEditAlert) {
+                        TextField("Username", text: $username)
+                        Button("OK", action: {showUsernameEditAlert.toggle()})
+                    } //alert
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -230,7 +215,17 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    TextField("Email", text: $email)
+                    Text("\(email)")
+                    
+                    Button(action: {
+                        showEmailEditAlert.toggle()
+                    }) {
+                        Image(systemName: "pencil")
+                    } //Button
+                    .alert("Enter new username", isPresented: $showEmailEditAlert) {
+                        TextField("Username", text: $email)
+                        Button("OK", action: {showEmailEditAlert.toggle()})
+                    } //alert
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -303,18 +298,35 @@ struct SettingsView: View {
      change lightdark
      */
     func appearance() -> some View {
-        Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
+        VStack {
+            HStack {
+                Text("Appearance")
+                Image(systemName: isAppearanceSelected ? "chevron.down" : "chevron.left")
+            }
+            .font(.headline)
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.appContainer.opacity(0.75))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.appBorder, lineWidth: 1)
-                    )
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-    }//lightdark
+            
+            if isAppearanceSelected {
+                Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
+                    .padding()
+            }
+        } //VStack
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.appContainer.opacity(0.75))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.appBorder, lineWidth: 1)
+                )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {
+            withAnimation(.easeInOut){
+                isAppearanceSelected.toggle()
+            }
+        }
+    }//appearance
     
     /**
      accessibility()
@@ -468,6 +480,76 @@ struct SettingsView: View {
         }
         
     }
+    
+    /**
+     deleteAccount()
+     delete account button
+     */
+    func deleteAccount() -> some View {
+        // Logout button
+        Button(action: {
+            showDeleteAccountAlert.toggle()
+        }) {
+            Text("Delete Account")
+                .foregroundColor(.red)
+                .bold()
+        } //Button
+        .alert("Are you sure you want to delete your account?", isPresented: $showDeleteAccountAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                // TODO add account deletion
+                // we are logging out
+                userProfile.updateLoginState(isLoggedIn: false)
+                loggedOut = true
+            }
+            .foregroundColor(.red)
+        } //alert
+        .navigationDestination(isPresented: $loggedOut) {
+            ContentView()
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+    }//logOut
+    
+    /**
+     logOut()
+     log out of account button
+     */
+    func logOut() -> some View {
+        // Logout button
+        Button(action: {
+            showLogOutAlert.toggle()
+        }) {
+            Image(systemName: "rectangle.portrait.and.arrow.right")
+                .imageScale(.large)
+                .foregroundColor(.appContainer)
+                .bold()
+            Text("Log Out")
+                .foregroundColor(.appContainer)
+                .bold()
+        } //Button
+        .alert("Are you sure you want to log out?", isPresented: $showLogOutAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Confirm", role: .destructive){
+                // we are logging out
+                userProfile.updateLoginState(isLoggedIn: false)
+                loggedOut = true
+            }
+        } //alert
+        .navigationDestination(isPresented: $loggedOut) {
+            ContentView()
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(.border)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }//logOut
     
 } //ProfileView
 

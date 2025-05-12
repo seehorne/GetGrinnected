@@ -24,6 +24,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -47,6 +48,7 @@ import com.GetGrinnected.myapplication.AppRepository
 import com.GetGrinnected.myapplication.LoginRequest
 import com.GetGrinnected.myapplication.VerifyRequest
 import com.GetGrinnected.myapplication.toAccountEntity
+import kotlinx.coroutines.flow.firstOrNull
 
 /**
  * A composable function that represents the email verification screen of our application.
@@ -58,7 +60,7 @@ import com.GetGrinnected.myapplication.toAccountEntity
  * @param navController used to move through the app
  */
 @Composable
-fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavController, modifier: Modifier = Modifier) {
+fun EmailVerificationScreen(email: String, previous: String, navController: NavController, modifier: Modifier = Modifier) {
     // The code the user inputs
     var codeInput by remember { mutableStateOf("") }
     // General error messages
@@ -73,6 +75,19 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
     val context = LocalContext.current
     // Boolean associated with specifically a code error to shift field color
     var errCode by remember { mutableStateOf(false) }
+
+    // This is the persisted email value to be reloaded if the user leaves the app to check their email
+    val reloadEmail = produceState<String?>(initialValue = null) {
+        value = DataStoreSettings.getPendingVerificationEmail(context).firstOrNull()
+    }.value
+    // This is the persisted previous value to be reloaded if the user leaves the app to check their email
+    val reloadPrevious = produceState<String?>(initialValue = null) {
+        value = DataStoreSettings.getPendingPrevious(context).firstOrNull()
+    }.value
+
+    // This is set to use the persisted states or the states we were passed in from the prior screen
+    val actualEmail = reloadEmail ?: email
+    val actualPrevious = reloadPrevious ?: previous
 
     // This sets up all of our elements in a column layout
     Column(
@@ -156,7 +171,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                     try {
                         // Contact the api to see if our OTP is correct
                         val response = RetrofitApiClient.apiModel.verifyOTP(
-                            VerifyRequest(email = email, code = codeInput)
+                            VerifyRequest(email = actualEmail, code = codeInput)
                         )
                         // If it is we continue
                         if (response.isSuccessful && response.body()?.access_token != null) {
@@ -193,6 +208,8 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                                         AppRepository.syncFromApi()
                                         // Sets the new LastSyncTime to now
                                         DataStoreSettings.setLastSyncTime(context, now)
+                                        // Clears all of our states associated with verification
+                                        DataStoreSettings.clearPendingVerification(context)
                                         // Navigates to main page
                                         navController.navigate("main") {
                                             popUpTo(0) { inclusive = true }
@@ -227,7 +244,7 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
                 coroutineScope.launch {
                     errMsg = try {
                         // Gets a login response to send us another email
-                        val response = RetrofitApiClient.apiModel.login(LoginRequest(email))
+                        val response = RetrofitApiClient.apiModel.login(LoginRequest(actualEmail))
                         // If this is successful we tell them we sent an email
                         if (response.isSuccessful) {
                             "A new code has been sent to your email."
@@ -251,13 +268,22 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
 
             // This is our cancel button that navigates back to the sign up page
             TextButton(onClick = {
-                if (flag) {
-                    navController.navigate("signup") {
-                        popUpTo("verification") { inclusive = true }
-                    }
-                } else {
-                    navController.navigate("login") {
-                        popUpTo("verification") { inclusive = true }
+                coroutineScope.launch {
+                    // Clears all of our states associated with verification
+                    DataStoreSettings.clearPendingVerification(context)
+
+                    // when the previous screen string is signup if we press cancel we navigate back to
+                    // the signup screen and pop the backstack same goes for login and settings respectively
+                    when(actualPrevious){
+                        "signup" -> navController.navigate("signup") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                        "login" -> navController.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                        "settings" -> navController.navigate("main") {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 }
             }) {
@@ -279,5 +305,5 @@ fun EmailVerificationScreen(email: String, flag: Boolean, navController: NavCont
 @Preview (showBackground = true)
 @Composable
 fun EmailVerificationScreenPreview(){
-    EmailVerificationScreen(modifier= Modifier, email= "", flag = true, navController = rememberNavController())
+    EmailVerificationScreen(modifier= Modifier, email= "", previous = "settings", navController = rememberNavController())
 }

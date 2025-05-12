@@ -1,6 +1,6 @@
 # About GetGrinnected
 
-*GetGrinnected* is an iOS and Android app designed to help Grinnell students find out and attend events on and around Grinnell campus. Offering seamless UI that helps sort events based on certain days and event tags allowing you to easily find events you are looking for. Students will sign into accounts with their college emails to confirm their identity as a Grinnell student. This ensures limiting the user base to those who should have access to events limiting potential safety hazards. *GetGrinnected* will also allow students to get in contact with organization leaders to join mailing lists for more direct connections for events. Helping drive engagement with opportunities will benefit campus culture. Helping event organizers advertise and gain attendance and helping students find cool and fun opportunities. 
+*GetGrinnected* is an iOS and Android app designed to help Grinnell students find out and attend events on and around Grinnell campus. You can sign in with your Grinnell email, favorite and follow events, and search for events that interest you.
 
 # Layout of Repository
 
@@ -42,22 +42,28 @@ The structure of our Repository is as follows:
 - `test procedures/` - Manual test procedures we are keeping.
   - `[COMPONENT].md` - Test procedure to run for a particular COMPONENT.
 
-# Issue Tracking
-
-Our issue manager is Trello. See our Trello board at <https://trello.com/b/pAnl7SQ3/getgrinnected>.
-
 # Developer Guidelines
 
 These guidelines are here to make development easier and make sure we meet class requirements and standards.
 
 ## Branching and Merging
 
-This is the pattern you should follow when you are developing a new code feature.
+We follow a feature branching pattern in this repo. These are the basics of the flow.
 
 1. Change to the main branch, and pull any new changes.
 2. Create a new branch for your feature. It should be named according to the pattern `<NAME>/<FEATURE>`, such as `almond/deploy-api`.
 3. Work on that branch, committing and pushing as needed.
 4. When you are done with your feature, create a Pull Request to merge it into main. You will need approval to merge.
+
+## Continuous Integration
+
+When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
+
+> Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
+
+Pipelines run when pushing to any branch.
+
+Additionally, docs have Continuous Deployment (CD) on merge into main. No other CD exists at this time.
 
 ## Testing
 
@@ -82,14 +88,6 @@ When it makes sense to do so, create test suites to group tests by using `descri
 Add a new test bundle by going to file > new > target and then searching "test". You will then select Unit Testing Bundle and choose Swift as the language and Swift Testing as the testing system. Set your other settings how you want and click finish. Now go to your test file and import your project.
 
 Now you can add tests to your testing file using this site <https://developer.apple.com/documentation/testing/definingtests> as documentation.
-
-## Continuous Integration
-
-When you create a pull request modifying code files, it will trigger one or more CI pipelines in order to run unit tests.
-
-Pipelines will be run based on which code files you modify. For instance, if you edit files under `src/ios/` only Swift tests will be run, but if you edit both `src/ios/` and `src/backend/` both Swift and Node.js tests will be run.
-
-Pipelines run when pushing to any feature branch, as well as before merging to main.
 
 ## Commit Messages
 
@@ -308,20 +306,21 @@ You can find the login details from the environment file used to run the databas
 1. Run the API in a terminal. From the top of the repository, run:
 
    ```
-   node src/backend/api.js
+   node src/backend/api/api.cjs
    ```
 
 2. It announces what ports the API is running on. By default it will run HTTP on port 8080 and HTTPS on port 4443, unless
    otherwise specified in the .env file or environment variables.
 
+# Issue Tracking
+
+Our issue manager is Trello. See our Trello board at <https://trello.com/b/pAnl7SQ3/getgrinnected>.
+
 # Currently Operational Use Cases
 
-This list will be updated as we progress.
-
-- Partial functionality for Use Case 1, Signing Up.
-
-  - It is possible to go through the sign up screen, but it does not check any fields or send any data over the network to create an account.
-
-- Partial functionality for Use Case 3, Finding an Event
-
-  - It is possible to see events on the home screen, but not search.
+- Use Case 1 (Sign Up): Fully operational, changed from old version that required a password.
+- Use Case 2 (Add Event): Removed from product.
+- Use Case 3 (Find Event): Fully operational.
+- Use Case 4 (Follow Organization): Removed from product.
+- Use Case 5 (Follow-up on Event): Removed from product.
+- Use Case 6 (Adding a New Account): Removed from product.
