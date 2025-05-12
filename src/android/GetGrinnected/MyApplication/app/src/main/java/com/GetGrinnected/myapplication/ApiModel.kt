@@ -52,4 +52,8 @@ interface ApiModel {
     // Async function to delete the user account
     @DELETE("user")
     suspend fun deleteAccount(@Header("Authorization") token: String): Response<SimpleMessageResponse>
+
+    // Async function to update the remote databases current username for a user
+    @PUT("user/email")
+    suspend fun updateEmail(@Header("Authorization") token: String, @Body emailRequest: UpdateEmailRequest): Response<AuthResponse>
 }

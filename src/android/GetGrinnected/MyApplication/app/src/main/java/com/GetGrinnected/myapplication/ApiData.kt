@@ -67,3 +67,10 @@ data class SimpleMessageResponse(
 data class UpdateUsernameRequest(
     val username: String
 )
+
+/**
+ * Data object of info sent to update an email for a user
+ */
+data class UpdateEmailRequest(
+    val new_email: String
+)

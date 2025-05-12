@@ -29,6 +29,10 @@ object DataStoreSettings {
     private val LAST_SYNC_TIME = longPreferencesKey("last_sync_time")
     // Preference key for the font size
     private val FONT_SIZE = stringPreferencesKey("font_size")
+    // Preference key for when a user is trying too do a verification step
+    private val PENDING_EMAIL = stringPreferencesKey("pending_email")
+    // Preference key for which page we came from to get to verification
+    private val PENDING_PREVIOUS = stringPreferencesKey("pending_previous")
 
     /**
      * Setter for logged in value
@@ -176,4 +180,44 @@ object DataStoreSettings {
         }
     }
 
+    /**
+     * Sets the necessary values when we move into the verification stage
+     * @param context is the current context of the app
+     * @param email is the current email of the account being verified
+     * @param previous is the prior page we came from to get here
+     */
+    suspend fun setPendingVerification(context: Context, email: String, previous: String) {
+        context.dataStore.edit {
+            it[PENDING_EMAIL] = email
+            it[PENDING_PREVIOUS] = previous
+        }
+    }
+
+    /**
+     * Getter for the email we are trying to verify
+     * @param context is the current app context
+     */
+    fun getPendingVerificationEmail(context: Context): Flow<String?> {
+        return context.dataStore.data.map { it[PENDING_EMAIL] }
+    }
+
+    /**
+     * Getter for the previous page prior to the verification page
+     * @param context is the current app context
+     * @return a flow that tells you the previous page as a string
+     */
+    fun getPendingPrevious(context: Context): Flow<String?> {
+        return context.dataStore.data.map { it[PENDING_PREVIOUS] }
+    }
+
+    /**
+     * Clears all of the data stores associated with the verification process
+     * @param context is the current app context
+     */
+    suspend fun clearPendingVerification(context: Context) {
+        context.dataStore.edit {
+            it.remove(PENDING_EMAIL)
+            it.remove(PENDING_PREVIOUS)
+        }
+    }
 }
