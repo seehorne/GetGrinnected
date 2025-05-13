@@ -130,11 +130,11 @@ See Docs: [https://getgrinnected.sites.grinnell.edu/docs/dev/api-v1/](https://ge
 
 ### New Calls / Updates
 
-- Delete User This call is used by the front end to delete a user from our remote database
-- Change Email This call is actually a two part composition:
+- **Delete User:** This call is used by the front end to delete a user from our remote database
+- **Change Email:** This call is actually a two part composition:
     - Call with the new email that checks the that the new email is valid and if so it sends the OTP to the new email destination
     - Verify call when it recieves the code if this code is valid then it updates the email in our remote database.
-- Change Username This call is used by the front end to update a user's username that already exists in the database to new valid username.
+- **Change Username:** This call is used by the front end to update a user's username that already exists in the database to new valid username.
 - Created Demo Account for Apple reviewers to use to get testflight approved. This also meant ensuring that this account code pass as a grinnell email even though it doesn't exist thus when is detected it is allowed to bypass verification.
 - Function to close our database connection, this avoids runs where we would have hanging runs that would just never conclude because our connection was still established.
 
