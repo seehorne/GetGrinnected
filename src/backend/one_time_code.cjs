@@ -68,8 +68,6 @@ If you are not trying to log in, it is safe to ignore this email.
             if (err) {
                 console.error(err)
                 throw err;
-            } else {
-                console.log(`sent OTP to ${email}`);
             }
         }
     );

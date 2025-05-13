@@ -52,9 +52,10 @@ CREATE TABLE `accounts` (
 -- Dumping data for table `accounts`
 --
 
--- create one fake account, which is `email@example.com`. not a grinnell email.
+-- create two fake accounts, both under grinnell emails that do not exist
 INSERT INTO `accounts` (`accountid`, `account_name`, `email`, `password`, `profile_picture`, `favorited_events`, `favorited_orgs`, `drafted_events`, `favorited_tags`, `account_description`, `account_role`, `notified_events`) VALUES
-(1, 'test_account', 'email@example.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 'test_account', 'example1234567890@grinnell.edu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'demo_account', 'getgrinnected.demo@grinnell.edu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 

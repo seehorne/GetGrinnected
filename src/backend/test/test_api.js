@@ -1,8 +1,7 @@
 // testing funcs
-const { it, describe, before, beforeEach, after } = require('node:test');
+const { it, describe, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const request = require('supertest');
-const sinon = require('sinon');
 
 // lodash specific functions
 const isEmpty = require('lodash/isEmpty');
@@ -10,8 +9,6 @@ const arrayXOR = require('lodash/xor');
 
 // local files
 const api = require('../api/api.cjs');
-const events = require('../api/routes/events.cjs');
-const user = require('../api/routes/user.cjs');
 const util = require('../api/utils.cjs');
 
 // return true if the arrays have all the same elements
@@ -149,7 +146,7 @@ describe('Test API', () => {
     describe('Authenticated', () => {
         // Fake the user tokens, as if they had logged in.
         before(() => {
-            const tokens = util.generateUserTokens('email@example.com');
+            const tokens = util.generateUserTokens('example1234567890@grinnell.edu');
             refresh_token = tokens.refresh;
             access_token = tokens.access;
         });
@@ -255,7 +252,7 @@ describe('Test API', () => {
                 });
 
                 it('give 404 when the user does not exist', { concurrency: true }, async t => {
-                    const fakeTokens = util.generateUserTokens('fake@example.com');
+                    const fakeTokens = util.generateUserTokens('fake@grinnell.edu');
 
                     const cases = putRouteData.map(async ({ name, body }) => {
                         var jsonBody = {}
@@ -320,7 +317,7 @@ describe('Test API', () => {
                 });
 
                 it('give 404 when user does not exist', { concurrency: true }, async t => {
-                    const fakeTokens = util.generateUserTokens('fake@example.com');
+                    const fakeTokens = util.generateUserTokens('fake@grinnell.edu');
 
                     const cases = getRouteNames.map(async (name) => {
                         await t.test(name, async () => {
@@ -380,7 +377,7 @@ describe('Test API', () => {
             });
 
             it('gives 404 when the user does not exist', async () => {
-                const fakeTokens = util.generateUserTokens('fake@example.com');
+                const fakeTokens = util.generateUserTokens('fake@grinnell.edu');
                 const res = await req
                     .post('/session/refresh')
                     .set('Authorization', `Bearer ${fakeTokens.refresh}`)
@@ -568,8 +565,71 @@ describe('Test API', () => {
                 assert.strictEqual(res.statusCode, 200, res.text);
                 assert.strictEqual(
                     res.text,
-                    '{"email":"email@example.com"}'
+                    '{"email":"example1234567890@grinnell.edu"}'
                 );
+            });
+        });
+
+        /* 
+         * Test the **errors** of putting our own email, although we can't test
+         * the success.
+         */
+        describe('PUT /user/email', () => {
+            it("rejects changing to the demo account's email", async () => {
+                const res = await req
+                    .put('/user/email')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ 'new_email': 'getgrinnected.demo@grinnell.edu' });
+
+                assert.strictEqual(res.statusCode, 400, res.text);
+                assert.strictEqual(res.text, JSON.stringify({
+                    'error': 'Cannot change email',
+                    'message': 'Cannot change to or from the email associated with the demo account.'
+                }));
+            });
+
+            it("rejects changing from the demo account's email", async () => {
+                const demoAccountTokens = util.generateUserTokens('getgrinnected.demo@grinnell.edu');
+                const res = await req
+                    .put('/user/email')
+                    .set('Authorization', `Bearer ${demoAccountTokens.access}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ 'new_email': 'new_email@grinnell.edu' });
+
+                assert.strictEqual(res.statusCode, 400, res.text);
+                assert.strictEqual(res.text, JSON.stringify({
+                    'error': 'Cannot change email',
+                    'message': 'Cannot change to or from the email associated with the demo account.'
+                }));
+            });
+
+            it("rejects changing to the same email", async () => {
+                const res = await req
+                    .put('/user/email')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ 'new_email': 'example1234567890@grinnell.edu' });
+
+                assert.strictEqual(res.statusCode, 400, res.text);
+                assert.strictEqual(res.text, JSON.stringify({
+                    'error': 'Same email',
+                    'message': 'The old and new emails must be different addresses.'
+                }));
+            });
+
+            it("rejects changing to the same email but capitalized", async () => {
+                const res = await req
+                    .put('/user/email')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ 'new_email': 'example1234567890@grinnell.edu' });
+
+                assert.strictEqual(res.statusCode, 400, res.text);
+                assert.strictEqual(res.text, JSON.stringify({
+                    'error': 'Same email',
+                    'message': 'The old and new emails must be different addresses.'
+                }));
             });
         });
 
@@ -609,7 +669,7 @@ describe('Test API', () => {
 
                 it(`gives 404 when the user does not exist`, async () => {
                     // Generate tokens for a user that's not really in the db.
-                    const fakeTokens = util.generateUserTokens('fake@example.com');
+                    const fakeTokens = util.generateUserTokens('fake@grinnell.edu');
 
                     // Make the request
                     const res = await req
