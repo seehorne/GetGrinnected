@@ -23,6 +23,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Search
@@ -99,7 +100,7 @@ fun SearchScreen() {
                         .size(50.dp)
                 )
                 // the actual search bar
-                OutlinedTextField(
+                TextField(
                     modifier = Modifier
                         .border(
                             width = 2.dp,
