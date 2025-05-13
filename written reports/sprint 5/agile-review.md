@@ -144,6 +144,7 @@ See Docs: [https://getgrinnected.sites.grinnell.edu/docs/dev/api-v1/](https://ge
 - Added testing to all implemented api calls and functions to ensure they function as intended.
 - Implemented common way of checking for body parameters, which also prevented routes from crashing when no body was provided.
 - Tweaked the manner in which we put array information such that if we get an eventID we don't have in our database it is not put into the database but all valid ones are still put.
+- We can now clean out any expired one-time codes from the database, rather than letting them build up
 
 ## Git Diff Link
 
