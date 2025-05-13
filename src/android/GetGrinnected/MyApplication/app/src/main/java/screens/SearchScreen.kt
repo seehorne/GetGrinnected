@@ -5,11 +5,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,11 +17,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material.ExperimentalMaterialApi
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -30,13 +30,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -54,19 +53,16 @@ import com.GetGrinnected.myapplication.Event
 import com.GetGrinnected.myapplication.R
 import com.GetGrinnected.myapplication.toEvent
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 /**
  * A composable function that represents the search screen of our app.
  */
-@OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun SearchScreen() {
-    // grabs the devices current date
-    val today = LocalDate.now()
     // Gets events from our repo
     val eventEntities by AppRepository.events
     // Converts events to event data type
@@ -85,11 +81,12 @@ fun SearchScreen() {
             modifier = Modifier
                 .background(color = colorScheme.primary)
                 .fillMaxWidth()
-                .height(160.dp),
+                .height(100.dp),
         ){
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, top = 25.dp, end = 6.dp)
+                .padding(start = 12.dp, top = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
             ){
                 // adds the logo to the top
                 Image(
@@ -100,10 +97,12 @@ fun SearchScreen() {
                         .background(Color.White)
                         .size(50.dp)
                 )
-                androidx.compose.material3.OutlinedTextField(
+                OutlinedTextField(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                        //.padding(bottom = 90.dp) ,
+                        .border(
+                            width = 2.dp,
+                            brush = SolidColor(colorScheme.onPrimary),
+                            shape = CircleShape,),
                     shape = CircleShape,
                     value = description,
                     onValueChange = {
@@ -113,7 +112,7 @@ fun SearchScreen() {
                     textStyle = TextStyle(color = colorScheme.onPrimary),
                     singleLine = true,
                     label = {
-                        Row(modifier = Modifier) {
+                        Row() {
                             androidx.compose.material3.Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Search events",
@@ -127,11 +126,11 @@ fun SearchScreen() {
                         }
                     }
                 )
-            }
-            Spacer(modifier = Modifier.height(112.dp))
-            Row(modifier = Modifier.fillMaxWidth().padding(8.dp, top = 90.dp, end = 8.dp)) { // creates day menu
                 selectedDate = datePickerDocked()
             }
+            //Spacer(modifier = Modifier.height(112.dp))
+           // Row(modifier = Modifier.fillMaxWidth().padding(8.dp, top = 90.dp, end = 8.dp)) { // creates day menu
+            //    selectedDate = datePickerDocked() }
         }
 
         Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -163,33 +162,40 @@ fun SearchScreen() {
                 for (e in events.indices){
                     if (selectedDate != ""){
                         if (events[e].event_name.uppercase().contains(description.uppercase())
-                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
+                            && events[e].event_start_time.contains(selectedDate)) {
                             sortedEvents.add(events[e])
-                        } else if (events[e].event_description.uppercase().contains(description.uppercase())
-                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
+                        }
+                        if (events[e].event_description.uppercase().contains(description.uppercase())
+                            && events[e].event_start_time.contains(selectedDate)) {
                             sortedEvents.add(events[e])
-                        } else if ((events[e].organizations?.toString()?.uppercase()
-                                ?.contains(description.uppercase()) ?: true) == true
-                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
+                        }
+                        if ((events[e].organizations?.toString()?.uppercase()
+                            ?.contains(description.uppercase()) != false)
+                            && events[e].event_start_time.contains(selectedDate)
+                        ) {
                             sortedEvents.add(events[e])
-                        }else if (events[e].event_location?.uppercase()
-                                ?.contains(description.uppercase()) ?: true
-                            && events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))) {
+                        }
+                        if (events[e].event_location?.uppercase()
+                                ?.contains(description.uppercase()) != false
+                            && events[e].event_start_time.contains(selectedDate)) {
                             sortedEvents.add(events[e])
                         }
                     }
                     else {
                         if (events[e].event_name.uppercase().contains(description.uppercase())) {
                             sortedEvents.add(events[e])
-                        } else if (events[e].event_description.uppercase()
+                        }
+                        if (events[e].event_description.uppercase()
                                 .contains(description.uppercase())
                         ) {
                             sortedEvents.add(events[e])
-                        } else if (events[e].organizations?.toString()?.uppercase()
+                        }
+                        if (events[e].organizations?.toString()?.uppercase()
                                 ?.contains(description.uppercase()) != false
                         ) {
                             sortedEvents.add(events[e])
-                        }else if (events[e].event_location?.uppercase()
+                        }
+                        if (events[e].event_location?.uppercase()
                                 ?.contains(description.uppercase()) != false
                         ) {
                             sortedEvents.add(events[e])
@@ -199,7 +205,7 @@ fun SearchScreen() {
             } else{
                 if (selectedDate != ""){
                     for (e in events.indices) {
-                        if (events[e].event_start_time.contains(selectedDate.substring(6..9) + "-" + selectedDate.substring(0..1) + "-" + selectedDate.substring(3..4))){
+                        if (events[e].event_start_time.contains(selectedDate)){
                             sortedEvents.add(events[e])
                         }
                     }
@@ -226,30 +232,22 @@ fun datePickerDocked(): String{
     val selectedDate = datePickerState.selectedDateMillis?.let {
         convertMillisToDate(it)
     } ?: ""
+    val timeZone: TimeZone = TimeZone.getDefault()
+    val formatter = SimpleDateFormat(
+        selectedDate, Locale.getDefault()
+    )
+    formatter.timeZone = timeZone
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-        OutlinedTextField(
-            value = selectedDate,
-            onValueChange = { },
-            textStyle = TextStyle(color = colorScheme.onPrimary),
-            label = { Text("Event Date",
-                color = colorScheme.onPrimary,
-                style = typography.labelLarge) },
-            readOnly = true,
-            trailingIcon = {
-                IconButton(onClick = { showDatePicker = !showDatePicker }) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        tint = colorScheme.onPrimary,
-                        contentDescription = "Select date"
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-        )
+        IconButton(onClick = { showDatePicker = !showDatePicker }) {
+            Icon(
+                imageVector = Icons.Default.DateRange,
+                tint = colorScheme.onPrimary,
+                contentDescription = "Select date"
+            )
+        }
+
         if (showDatePicker) {
             Popup(
                 onDismissRequest = { showDatePicker = false },
@@ -271,13 +269,19 @@ fun datePickerDocked(): String{
             }
         }
     }
-    return selectedDate
+    if (selectedDate != ""){
+        val update = selectedDate.substring(9).toInt() + 1
+        return selectedDate.substring(0, 9) + update.toString()
+    }
+    else{
+        return selectedDate
+    }
 }
 
 /**
  * takes a millis and returns a date
  */
 fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return formatter.format(Date(millis))
 }

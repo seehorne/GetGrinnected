@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -41,14 +42,17 @@ fun SearchResults(events: List<Event>, modifier: Modifier = Modifier){
             EventCard(events[e])
             Spacer(modifier = Modifier.height(20.dp))
         }
-        Text(
-            "No more events match your search requirements",
-            style = typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            // This ensures we alert a screen reader when we have scrolled down to this section
-            modifier = Modifier.semantics {
-                liveRegion = LiveRegionMode.Polite
-                contentDescription = "No more events match your search requirements"
-            })
+        Row(modifier = Modifier) {
+            Text(
+                "No more events match your search",
+                style = typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                // This ensures we alert a screen reader when we have scrolled down to this section
+                modifier = Modifier.semantics {
+                    liveRegion = LiveRegionMode.Polite
+                    contentDescription = "No more events match your search requirements"
+                })
+        }
+        Spacer(modifier = Modifier.height(50.dp))
     }
 }
