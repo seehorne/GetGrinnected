@@ -175,7 +175,7 @@ struct SearchResults: View {
                     }
                     .pickerStyle(.segmented)
                     
-                    TagMultiSelector(title: "Select Tags", parentView: parentView)
+                    TagMultiSelector(title: "Tags", parentView: parentView)
                     
                 }//header elements
                 .padding()
