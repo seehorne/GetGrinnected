@@ -23,9 +23,9 @@ struct SettingsView: View {
     @State private var toVerifyMessage = "Verify your new email"
     
     @State private var username: String
-    @State private var usernameResponseMessage: String
+    @State private var usernameResponseMessage: String = ""
     @State private var email: String
-    @State private var emailResponseMessage: String
+    @State private var emailResponseMessage: String = ""
     
     @StateObject private var userProfile = UserProfile()
     
@@ -52,8 +52,6 @@ struct SettingsView: View {
         self._isLoggedIn = isLoggedIn
         self._username = State(initialValue: UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded")
         self._email = State(initialValue: UserDefaults.standard.string(forKey: "email") ?? "current username could not be loaded")
-        self.usernameResponseMessage = ""
-        self.emailResponseMessage = ""
     }
     
     
@@ -407,7 +405,7 @@ struct SettingsView: View {
             
             if(isAboutSelected){
                 VStack{
-                    Text("Get Grinnected was developed by Grinnelians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed abotu campus events.")
+                    Text("Get Grinnected was developed by Grinnellians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed abotu campus events.")
                     Text("We have a discord, so for those interested in expanding the toolbox offered to Grinnellians, please join! Here are our socials and github: ")
                     HStack{
                         Link(destination: URL(string: "https://discord.gg/e4PrM4RyEr")!) {
