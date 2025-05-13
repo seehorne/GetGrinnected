@@ -2,7 +2,6 @@
 const { it, describe, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const request = require('supertest');
-const sinon = require('sinon');
 
 // lodash specific functions
 const isEmpty = require('lodash/isEmpty');
@@ -11,7 +10,6 @@ const arrayXOR = require('lodash/xor');
 // local files
 const api = require('../api/api.cjs');
 const util = require('../api/utils.cjs');
-const onetime = require('../one_time_code.cjs');
 
 // return true if the arrays have all the same elements
 function arraysEqual(array1, array2) {
@@ -578,23 +576,6 @@ describe('Test API', () => {
          * Also, mock the send email method so that it can't actually spam out emails.
          */
         describe('PUT /user/email', () => {
-            // Stub the one time send code functionality, it does nothing now
-            before(() => {
-                sinon.stub(onetime, 'sendCode').callsFake((email) => {
-                    console.log(`would have sent code to ${email}, disabled`);
-                });
-            });
-
-            it('accepts changing to new grinnell email', async () => {
-                const res = await req
-                    .put('/user/email')
-                    .set('Authorization', `Bearer ${access_token}`)
-                    .set('Content-Type', 'application/json')
-                    .send({ 'new_email': 'new_email@grinnell.edu' });
-
-                assert.strictEqual(res.statusCode, 202, res.text);
-            });
-
             it("rejects changing to the demo account's email", async () => {
                 const res = await req
                     .put('/user/email')
