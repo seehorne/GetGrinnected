@@ -1,5 +1,7 @@
 # Settings
 
+Select any of the blue blocks to expand their menus and modify the settings inside.
+
 ## Profile
 
 - You can update your username at any time. It still must follow the same requirements.

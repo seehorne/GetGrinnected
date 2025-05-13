@@ -1,5 +1,11 @@
 # Home
 
+!!! note
+
+    The first time you open the app, it will ask you for notification permissions.
+
+    These will be used to send you notifications about events that you follow, and nothing else.
+
 On the homescreen, you see what events are happening today. They are sorted by time.
 
 ## View event details

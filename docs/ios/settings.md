@@ -4,15 +4,17 @@
 
 # Settings
 
+Select any of the blue blocks to expand their menus and modify the settings inside.
+
 ## Profile
 
 - You can update your username at any time. It still must follow the same requirements.
 - You can update your email to a different Grinnell email if you need to. In order to do so, you must verify the new email address.
-- In order to save these settings, click the TODO LABEL button.
+- In order to save these settings, click the "Submit changes" button.
 
 ## Appearance
 
-- You can turn on and off dark mode using the switch.
+- You can turn on and off light mode using the switch.
 
 ## Accessibility
 
