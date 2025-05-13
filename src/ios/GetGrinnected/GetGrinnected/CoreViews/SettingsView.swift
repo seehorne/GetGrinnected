@@ -29,6 +29,7 @@ struct SettingsView: View {
     @State private var email: String
     //string to display if username things were successful or had errors
     @State private var emailResponseMessage: String = ""
+    @State private var verificationCode: String = ""
     
     @StateObject private var userProfile = UserProfile()
     
@@ -36,9 +37,8 @@ struct SettingsView: View {
     @State private var viewColorScheme: ColorScheme = .light
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
+    
     @State private var triedToPass: Bool = false
-    @State private var basicInput: String = ""
-    //@State private var userProfile = UserProfile()
     @State private var loggedOut: Bool = false
     
     @State var isProfileSelected = false
@@ -48,6 +48,7 @@ struct SettingsView: View {
 
     @State var showUsernameEditAlert = false
     @State var showEmailEditAlert = false
+    @State var showVerificationAlert = false
     @State var showDeleteAccountAlert = false
     @State var showLogOutAlert = false
     
@@ -61,9 +62,10 @@ struct SettingsView: View {
     var body: some View {
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
+            
             VStack(){
                 // Header is outside of scrollable so it does not move
-                Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
+                Header(safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
                         
@@ -88,30 +90,30 @@ struct SettingsView: View {
                         } //about
                         .padding()
                     }   //Scroll view
-                    .edgesIgnoringSafeArea(.top)
                     .foregroundColor(.border)
                     .tint(.border)
                     
-                }//GeometryReader
-                .preferredColorScheme(viewColorScheme)
-                // run switchAppearance when the view is shown
-                .onAppear {
-                    switchAppearance()
-                    userProfile.getUsername()
-                    username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
-                    email = UserDefaults.standard.string(forKey: "email") ?? "current email could not be loaded"
+                } //VStack
+                .edgesIgnoringSafeArea(.top)
+            } //GeometryReader
+            .preferredColorScheme(viewColorScheme)
+            //run switchAppearance when the view is shown
+            .onAppear {
+                switchAppearance()
+                userProfile.getUsername()
+                username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
+                email = UserDefaults.standard.string(forKey: "email") ?? "current email could not be loaded"
+            }
+            // changes the viewColorScheme when lightModeOn is changed
+            .onChange(of: lightModeOn){ oldValue, newValue in
+                if newValue == true {
+                    viewColorScheme = .light
+                } else {
+                    viewColorScheme = .dark
                 }
-                // changes the viewColorScheme when lightModeOn is changed
-                .onChange(of: lightModeOn){ oldValue, newValue in
-                    if newValue == true {
-                        viewColorScheme = .light
-                    } else {
-                        viewColorScheme = .dark
-                    }
-                } //onChange
-                .navigationDestination(isPresented: $triedToPass) {
-                    VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
-                }
+            } //onChange
+            .navigationDestination(isPresented: $triedToPass) {
+                VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
             }
         } //body
     
@@ -171,7 +173,6 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
-//                    .transition(.move(edge: .top)) //alternative transition
                 
                 // change email field
                 HStack {
@@ -186,8 +187,8 @@ struct SettingsView: View {
                     }) {
                         Image(systemName: "pencil")
                     } //Button
-                    .alert("Enter new username", isPresented: $showEmailEditAlert) {
-                        TextField("Username", text: $email)
+                    .alert("Enter new email", isPresented: $showEmailEditAlert) {
+                        TextField("Email", text: $email)
                         Button("OK", action: {showEmailEditAlert.toggle()})
                     } //alert
                 }
@@ -196,11 +197,12 @@ struct SettingsView: View {
                 .transition(.asymmetric(
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
-                ))//transition so that it pulls down instead of appearing out of nowhere
-//                    .transition(.move(edge: .top)) //alternative transition
+                ))//transition so that it pulls down instead of appearing out of nowhere=
                 
                 // username change
                 Button(action: {
+                    showVerificationAlert.toggle()
+                    
                     print(username)
                     print(email)
                     // set the username that has been typed iff the username has been changed
@@ -267,13 +269,17 @@ struct SettingsView: View {
                     Image(systemName: "square.and.arrow.up")
                         .imageScale(.large)
                 } //Button
+                .alert("Enter verification code", isPresented: $showVerificationAlert) {
+                    TextField("Verification code", text: $verificationCode)
+                    Button("Cancel", role: .cancel) {}
+                    Button("OK", action: {showVerificationAlert.toggle()})
+                } //alert
                 .padding(.horizontal)
                 .padding(.bottom)
                 .transition(.asymmetric(
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
-//                    .transition(.move(edge: .top)) //alternative transition
             }
         }
         .frame(maxWidth: .infinity)
