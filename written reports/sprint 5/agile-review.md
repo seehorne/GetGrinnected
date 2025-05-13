@@ -59,6 +59,69 @@ The Settings Screen after last sprint required a noticable Revamp as we had deci
 
 ## Swift
 
+### API Connections
+
+#### Connection Features
+
+- Users can now change their username and it will update the remote database account.
+- Favorite events are now updated on the remote database so that the user could login on a different device and still have their favorite events.
+- Notified events are now updated on the remote database so that the user could login on a different device and still have their notified events.
+- Now on the settings page a user can open the profile section, and edit their email (TODO have someone that knows what this looks like in swift explain it)
+
+### New Features
+
+- A user can now press the delete account text button it will provide them with a prompt confirming they want to delete their account, on press they will be moved to the welcome page and their account will be deleted on the remote database.
+- A user can now go to the Accessibility section of the settings page and press on the size dropdown and it will offer them a variety of font sizes, when they select a different one all text on all screen will increase of decrease accordingly.
+- Event cards now have a share icon which when pressed allows the user to copy and send the information in the event card to a friend (Eventually when the app is on the store this will allow them to be sent to an embedded link with in the app that would pop up with the specific event card).
+- Notifications now work as intended meaning a user can press the notification icon and they will be alert x number of minutes before the event starts (x is the number of minutes they have set for this setting in the settings page).
+
+### Search Page
+
+For context, as a team we decided that continuing with the calendar view did not align as well with the functionality of our app as we had originally envisioned. However something that came up in nearly every stakeholder meeting was a note about the importance of a search bar like feature to easily type in an event name an find it. From this the search page was born to take the place of the calendar.
+
+#### Functionalities
+
+- A user can search by the name of an event.
+- A user can also search by the events they have favorited.
+- Generally a user can enter a search prompt and search through events for a match.
+- A user can look between a specific date range for a certain event/s
+- A user can search for events by the standard tags and time sorting found on the home page and favorites page
+
+### Home Page
+
+- Users can now search for events via selecting tags from the dropdown.
+- Users can now search for events by a certain day / time and only see events at that time.
+
+### Favorites Page
+
+All of these are relative to events they have already favorited
+- Users can favorite and unfavorite events and they will appear and disappear from the favorites page respectively.
+- Users can now search for events via selecting tags from the dropdown.
+- Users can now search for events by a certain day / time and only see events at that time.
+
+### Settings Page
+
+The Settings Screen after last sprint required a noticable Revamp as we had decided to move away from the org cards and thus a sectioning of the settings screen was in order. We divided it into the following sections:
+
+- Profile
+    - Edit Username
+    - Edit Email
+- Appearance
+    - Dark / Light Mode Switch
+- Accessibility
+    - Font Size Selector
+- Notification
+    - A user can change the amount of time before an event they want to be notified (ie if a user choose 5 minutes they will be notified 5 minutes before the start time of the event they have notifications on for)
+- About
+    - This section includes a blurb about us the developers, acknowledgement and thanks to stakeholders and professor.
+    - Icons that when pressed take the user to our github and discord respectively.
+- Delete Account Button
+- Log out Button
+
+### Auth
+
+Swift now utilizes authorized api calls via the token system almond setup to ensure that a user is properly logged in and that they make the legal calls with valid access tokens. If the access token is expired a refreshToken call will be made to and so long as the refresh token is valid a new access token will be recieved. This ensures we have secure api calls.
+
 ## API
 
 A general note is that the API docs have also been maintained with the additions of new calls and updates to the structure of the files related to the API calls.
