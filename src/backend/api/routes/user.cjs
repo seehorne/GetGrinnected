@@ -181,6 +181,15 @@ async function routeChangeEmail(req, res, _next) {
   const newEmail = req.body.new_email;
   const oldEmail = req.email;
 
+  // Make sure the emails are not the same, space- and case-insensitively.
+  if (newEmail.trim().toLowerCase() === oldEmail.trim().toLowerCase()) {
+    res.status(400).json({
+      'error': 'Same email',
+      'message': 'The old and new emails must be different addresses.'
+    });
+    return;
+  }
+
   // Reject the response if the email isn't good.
   const valid = util.validateEmail(newEmail);
   if (!valid.result) {
