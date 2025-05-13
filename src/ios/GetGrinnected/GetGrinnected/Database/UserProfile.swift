@@ -496,10 +496,10 @@ class UserProfile: ObservableObject {
     func setEmail(newEmail: String, completion: @escaping (Result<String, Error>) -> Void) {
         print("the set email function is being called at least")
          safeApiCall(requestBuilder: { token in
-            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/username")!)
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user/email")!)
             request.httpMethod = "PUT"
             let body: [String: Any] = [
-                "email": newEmail,
+                "new_email": newEmail,
             ]
             request.httpBody = try? JSONSerialization.data(withJSONObject: body)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")

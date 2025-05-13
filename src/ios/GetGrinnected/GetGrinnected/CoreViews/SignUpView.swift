@@ -17,6 +17,7 @@ struct SignUpView: View{
     @State private var success = Bool()
     @StateObject private var userProfile = UserProfile()
     @State private var signupError = ""
+    @State private var toVerifyMessage = "Start Getting Grinnected!"
     
     var body: some View{
         VStack(spacing: 20) {
@@ -81,7 +82,7 @@ struct SignUpView: View{
             .padding(.top, 24)
             
             .navigationDestination(isPresented: $success) {
-                VerificationView(email: email, isLoggedIn: $isLoggedIn)
+                VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
             }
         }//VStack
         .padding()

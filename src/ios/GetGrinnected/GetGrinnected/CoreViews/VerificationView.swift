@@ -15,14 +15,16 @@ struct VerificationView: View {
     @Binding var isLoggedIn: Bool
     @State private var code = ""
     @State private var email: String
+    @State private var submitMessage: String
     @State private var errorMessage = ""
     @State private var isProcessing = false
     @State private var verifyError = ""
     @State private var resendError = ""
     @StateObject private var userProfile = UserProfile()
     
-    init(email: String, isLoggedIn: Binding<Bool>) {
+    init(email: String, message: String, isLoggedIn: Binding<Bool>) {
         self.email = email
+        self.submitMessage = message
         _isLoggedIn = isLoggedIn // Properly initialize the binding
         self.errorMessage = ""
         self.verifyError = ""
@@ -72,7 +74,7 @@ struct VerificationView: View {
                     //once successfully logged in, jump to main viewport
                 } label: {
                     HStack {
-                        Text("Start Getting Grinnected!")
+                        Text(self.submitMessage)
                             .fontWeight(.semibold)
                         Image (systemName: "arrow.right")
                     }
@@ -123,5 +125,5 @@ struct VerificationView: View {
 
 
 #Preview {
-    VerificationView(email: "test@grinnell.edu", isLoggedIn: .constant(false))
+    VerificationView(email: "test@grinnell.edu", message: "Start Getting Grinnected", isLoggedIn: .constant(false))
 }

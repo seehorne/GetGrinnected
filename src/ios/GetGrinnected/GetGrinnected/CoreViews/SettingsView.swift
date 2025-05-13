@@ -19,7 +19,9 @@ struct SettingsView: View {
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
     // our users username
-
+    
+    @State private var toVerifyMessage = "Verify your new email"
+    
     @State private var username: String
     @State private var usernameResponseMessage: String
     @State private var email: String
@@ -31,6 +33,7 @@ struct SettingsView: View {
     @State private var viewColorScheme: ColorScheme = .light
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
+    @State private var triedToPass: Bool = false
     @State private var basicInput: String = ""
     //@State private var userProfile = UserProfile()
     @State private var loggedOut: Bool = false
@@ -113,6 +116,9 @@ struct SettingsView: View {
                         viewColorScheme = .dark
                     }
                 } //onChange
+                .navigationDestination(isPresented: $triedToPass) {
+                    VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
+                }
             }
         } //body
     
@@ -236,6 +242,9 @@ struct SettingsView: View {
                         userProfile.setEmail(newEmail: email){ result in
                             switch result {
                             case .success(let output):
+                                DispatchQueue.main.async {
+                                    triedToPass = true
+                                }
                                 //if succeeded, log it
                                 print("API Response: \(output)")
                                 emailResponseMessage = "Email successfully changed"
@@ -289,6 +298,9 @@ struct SettingsView: View {
                 isProfileSelected.toggle()
             }
         }
+        .navigationDestination(isPresented: $triedToPass) {
+        VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
+    }
     }//username change
     
     /**
