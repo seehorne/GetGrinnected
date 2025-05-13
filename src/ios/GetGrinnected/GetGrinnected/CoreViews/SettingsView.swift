@@ -18,13 +18,16 @@ struct SettingsView: View {
     
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
-    // our users username
     
     @State private var toVerifyMessage = "Verify your new email"
     
+    // our users username
     @State private var username: String
+    //string to display if username things were successful or had errors
     @State private var usernameResponseMessage: String = ""
+    //our users email
     @State private var email: String
+    //string to display if username things were successful or had errors
     @State private var emailResponseMessage: String = ""
     
     @StateObject private var userProfile = UserProfile()
@@ -67,14 +70,6 @@ struct SettingsView: View {
                         //content
                         VStack {
                             profileEditing()
-                            
-                            HStack {
-                                // spacer to right align button
-                                Spacer()
-                                
-                                // username change
-                            }
-                            
                             
                             // switch for light/dark mode
                             appearance()
@@ -208,7 +203,7 @@ struct SettingsView: View {
                 Button(action: {
                     print(username)
                     print(email)
-                    // set the username that has been typed
+                    // set the username that has been typed iff the username has been changed
                     if username != UserDefaults.standard.string(forKey: "username")!{
                         userProfile.setUsername(newUsername: username){ result in
                             switch result {
@@ -235,7 +230,7 @@ struct SettingsView: View {
                     else {
                         print("username didn't actually change")
                     }
-                    
+                    //updates the email iff the email has been changed. esp important bc if this one gets called erroneously theyll be asked to verify erroneously and no one likes that
                     if email != UserDefaults.standard.string(forKey: "email")!{
                         userProfile.setEmail(newEmail: email){ result in
                             switch result {
