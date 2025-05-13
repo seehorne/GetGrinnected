@@ -119,6 +119,11 @@ fun SettingsScreen(modifier: Modifier = Modifier,
     // Keys associated with the enum of the selected fontsizes
     val selectedFontPref = FontSizePrefs.getFontPrefFromKey(fontSizeSetting)
 
+    // State associated with notification time
+    var notificationDropdownExpanded by remember { mutableStateOf(false) }
+    // tracks chosen notification time
+    var selectedTime by remember { mutableIntStateOf(15) }
+
     // Boolean associated with whether the delete account dialog needs to display or not
     var showDeleteDialog by remember { mutableStateOf(false) }
     // Boolean associated with whether the sign out dialog needs to display or not
@@ -485,10 +490,33 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Time to alert before event",
-                                style = typography.bodyLarge,
-                                color = colorScheme.onBackground
+                            text = "Time to alert before event",
+                            style = typography.bodyLarge,
+                            color = colorScheme.onBackground
+                        )
+                            Spacer(modifier = modifier.width(100.dp))
+                            Text(
+                                text = selectedTime.toString(),
+                                modifier = Modifier.clickable {
+                                    notificationDropdownExpanded = true
+                                },
+                                color = colorScheme.tertiary
                             )
+                            DropdownMenu(
+                                expanded = notificationDropdownExpanded,
+                                onDismissRequest = { notificationDropdownExpanded = false }
+                            ) {
+                                val times = listOf(0,15,30,45,60)
+                                for (t in times.indices) {
+                                    DropdownMenuItem(
+                                        text = { Text(times[t].toString()) },
+                                        onClick = {
+                                            selectedTime = times[t]
+                                            notificationDropdownExpanded = false
+                                        }
+                                    )
+                                }
+                            }
                         }
                     }
 

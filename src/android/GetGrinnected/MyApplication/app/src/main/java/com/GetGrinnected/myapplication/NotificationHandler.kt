@@ -62,7 +62,9 @@ class NotificationHandler(private val context: Context) {
             LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let { it1 ->
                 getDifferenceInMillis(
                     it1,
-                    it
+                    it,
+                    15
+
                 )
             }
         }
@@ -97,9 +99,9 @@ class NotificationHandler(private val context: Context) {
      * @param date1 the current time
      * @param date2 the time the event starts
      */
-    private fun getDifferenceInMillis(date1: Date, date2: Date): Long {
-        val fifteenMinutesInMillis = 15 * 60 * 1000L // 900000L
-        return (date2.time - date1.time) - fifteenMinutesInMillis
+    private fun getDifferenceInMillis(date1: Date, date2: Date, x: Int): Long {
+        val minutesInMillis = x * 60 * 1000L // 900000L
+        return (date2.time - date1.time) - minutesInMillis
     }
 
     //@SuppressLint("ScheduleExactAlarm")
@@ -121,7 +123,8 @@ class NotificationHandler(private val context: Context) {
             LocalDateTime.now().toString().toDate("yyyy-MM-dd'T'HH:mm:ss.SSS")?.let { it1 ->
                 getDifferenceInMillis(
                     it1,
-                    it
+                    it,
+15
                 )
             }
         }
