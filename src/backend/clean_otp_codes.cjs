@@ -1,6 +1,14 @@
 const sqlite3 = require('sqlite3');
 const DBPATH = './src/backend/Database/localOTP.db'
 
+/**
+ * Clean any expired OTP codes in the specified filename. Codes will be cleaned up
+ * if their expiration time is less than the current time when this function is called.
+ * 
+ * If any error happens with the database, will print that error to the screen.
+ * 
+ * @param {string} filename Filename of sqlite database to target.
+ */
 async function otpFileClean(filename) {
     // Format the current time in the same format as the database
     //   example: 2025-05-13T18:51:51.899Z
