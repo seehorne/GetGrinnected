@@ -90,11 +90,11 @@ struct SettingsView: View {
                         } //about
                         .padding()
                     }   //Scroll view
-                    .edgesIgnoringSafeArea(.top)
                     .foregroundColor(.border)
                     .tint(.border)
                     
                 } //VStack
+                .edgesIgnoringSafeArea(.top)
             } //GeometryReader
             .preferredColorScheme(viewColorScheme)
             //run switchAppearance when the view is shown
