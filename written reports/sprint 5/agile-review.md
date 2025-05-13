@@ -63,10 +63,10 @@ The Settings Screen after last sprint required a noticable Revamp as we had deci
 
 #### Connection Features
 
-- Users can now change their username and it will update the remote database account.
+- Users can now change their username by changing their username in the settings page and pressing the submit button which will update the account username at the remote db.
 - Favorite events are now updated on the remote database so that the user could login on a different device and still have their favorite events.
 - Notified events are now updated on the remote database so that the user could login on a different device and still have their notified events.
-- Now on the settings page a user can open the profile section, and edit their email (TODO have someone that knows what this looks like in swift explain it)
+- Now on the settings page a user can open the profile section, and edit their email, when they change it and press the submit button (so long as the email input is valid and meets our standards) a box will pop up on the screen that will ask for the code that was sent to their email. When they enter the code (so long as it is the correct code) thier email will be changed at the remote database and thier account will be linked to this new email.
 
 ### New Features
 
@@ -89,7 +89,7 @@ For context, as a team we decided that continuing with the calendar view did not
 
 ### Home Page
 
-- A user can filter by day and select days through the week view (horizzontal scrolling of dates) date selector for date.
+- A user can filter by day and select days through the week view (horizontal scrolling of dates) date selector for date.
 - A user can apply tag filters and also a sorting picker to sort by name or by time of that day.
 
 ### Favorites Page
