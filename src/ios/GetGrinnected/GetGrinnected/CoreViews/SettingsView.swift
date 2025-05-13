@@ -271,8 +271,11 @@ struct SettingsView: View {
                 } //Button
                 .alert("Enter verification code", isPresented: $showVerificationAlert) {
                     TextField("Verification code", text: $verificationCode)
-                    Button("Cancel", role: .cancel) {}
-                    Button("OK", action: {showVerificationAlert.toggle()})
+                    Button("Cancel", role: .cancel) {
+                        email = UserDefaults.standard.string(forKey: "email")!
+                    }
+                    Button("OK", action:
+                            {showVerificationAlert.toggle()})
                 } //alert
                 .padding(.horizontal)
                 .padding(.bottom)
