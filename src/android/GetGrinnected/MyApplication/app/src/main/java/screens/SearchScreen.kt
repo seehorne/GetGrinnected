@@ -77,6 +77,7 @@ fun SearchScreen() {
     Column(
         modifier = Modifier.fillMaxSize())
     {
+        //creates a top box for search page
         Box(
             modifier = Modifier
                 .background(color = colorScheme.primary)
@@ -97,6 +98,7 @@ fun SearchScreen() {
                         .background(Color.White)
                         .size(50.dp)
                 )
+                // the actual search bar
                 OutlinedTextField(
                     modifier = Modifier
                         .border(
@@ -111,8 +113,9 @@ fun SearchScreen() {
                     },
                     textStyle = TextStyle(color = colorScheme.onPrimary),
                     singleLine = true,
+                    // creates the label for the search bar
                     label = {
-                        Row() {
+                        Row {
                             androidx.compose.material3.Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Search events",
@@ -128,11 +131,8 @@ fun SearchScreen() {
                 )
                 selectedDate = datePickerDocked()
             }
-            //Spacer(modifier = Modifier.height(112.dp))
-           // Row(modifier = Modifier.fillMaxWidth().padding(8.dp, top = 90.dp, end = 8.dp)) { // creates day menu
-            //    selectedDate = datePickerDocked() }
         }
-
+        // creates the search button
         Row(modifier = Modifier.fillMaxWidth().padding(8.dp),
             horizontalArrangement = Arrangement.Center) { // creates day menu
             Button(
@@ -156,8 +156,9 @@ fun SearchScreen() {
                 }
             }
         }
+        // actually sorts events based on search's
         if (search.value) {
-            var sortedEvents = mutableListOf<Event>()
+            val sortedEvents = mutableListOf<Event>()
             if(description != ""){
                 for (e in events.indices){
                     if (selectedDate != ""){
@@ -209,8 +210,6 @@ fun SearchScreen() {
                             sortedEvents.add(events[e])
                         }
                     }
-                } else {
-                    sortedEvents = events.toMutableList()
                 }
             }
             SearchResults(sortedEvents.distinct())
@@ -247,7 +246,7 @@ fun datePickerDocked(): String{
                 contentDescription = "Select date"
             )
         }
-
+        // shows the dates to be picked.
         if (showDatePicker) {
             Popup(
                 onDismissRequest = { showDatePicker = false },
