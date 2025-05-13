@@ -570,10 +570,9 @@ describe('Test API', () => {
             });
         });
 
-        /* Test the **errors** of putting our own email, although we can't test
+        /* 
+         * Test the **errors** of putting our own email, although we can't test
          * the success.
-         *
-         * Also, mock the send email method so that it can't actually spam out emails.
          */
         describe('PUT /user/email', () => {
             it("rejects changing to the demo account's email", async () => {
