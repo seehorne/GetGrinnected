@@ -628,8 +628,8 @@ class UserProfile: ObservableObject {
                             let fetchDescriptor = FetchDescriptor<EventModel>()
                             let allEvents = try context.fetch(fetchDescriptor)
                             for event in allEvents {
+                                event.favorited = favoritedIDs.contains(event.id)
                                 if favoritedIDs.contains(event.id) {
-                                    event.favorited = true
                                     print(event.id)
                                 }
                             }
@@ -696,10 +696,7 @@ class UserProfile: ObservableObject {
         })
     }
     
-    //this function takes a model context as a parameter, so that it can save and update the events saved by a user as notified
-    //it gets these events by pulling the API for the IDs that are marked by the user as notified
-    //then it goes through all events s.t. they can be marked that way in local storage as well
-    //it must be passed this model context from a View, as that is the only place model contexts can actually be updated
+    //this function, called when logged in and authorized, deletes a user's account
     func deleteAccount() {
          safeApiCall(requestBuilder: { token in
             var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user")!)
