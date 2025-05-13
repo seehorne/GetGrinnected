@@ -141,7 +141,7 @@ See Docs: [https://getgrinnected.sites.grinnell.edu/docs/dev/api-v1/](https://ge
 ### Fixes, Tweaks, and Testing
 
 - Added testing to all implemented api calls and functions to ensure they function as intended.
-- Fixed an issue where a route would crash with no body and now no longer results in this unproductive behavior.
+- Implemented common way of checking for body parameters, which also prevented routes from crashing when no body was provided.
 - Tweaked the manner in which we put array information such that if we get an eventID we don't have in our database it is not put into the database but all valid ones are still put.
 
 ## Git Diff Link
