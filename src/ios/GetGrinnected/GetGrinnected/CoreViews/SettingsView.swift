@@ -201,7 +201,6 @@ struct SettingsView: View {
                 
                 // username change
                 Button(action: {
-                    showVerificationAlert.toggle()
                     
                     print(username)
                     print(email)
@@ -234,6 +233,7 @@ struct SettingsView: View {
                     }
                     //updates the email iff the email has been changed. esp important bc if this one gets called erroneously theyll be asked to verify erroneously and no one likes that
                     if email != UserDefaults.standard.string(forKey: "email")!{
+                        showVerificationAlert.toggle()
                         userProfile.setEmail(newEmail: email){ result in
                             switch result {
                             case .success(let output):
@@ -275,7 +275,28 @@ struct SettingsView: View {
                         email = UserDefaults.standard.string(forKey: "email")!
                         //set email back to original email
                     }
-                    Button("OK", action: {showVerificationAlert.toggle()})
+                    Button("OK", action: {
+                        userProfile.verifyUser(email: email, code: verificationCode) { result in
+                            switch result {
+                            case .success(let output):
+                                //if succeeded, log it
+                                print("API Response: \(output)")
+                                userProfile.setLocalEmail(newEmail: self.email)
+                            case .failure(let error):
+                                print("API call failed:\(error.localizedDescription)")
+                                if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                                switch apiError {
+                                                case .signInError(let message):
+                                                    emailResponseMessage = message //use the response message if there was one
+                                                default:
+                                                    emailResponseMessage = apiError.localizedDescription
+                                                }
+                                            } else {
+                                                emailResponseMessage = error.localizedDescription
+                                            }
+                            }
+                        }
+                        showVerificationAlert.toggle()})
                 } //alert
                 .padding(.horizontal)
                 .padding(.bottom)
