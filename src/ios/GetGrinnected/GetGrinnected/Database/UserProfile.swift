@@ -137,6 +137,7 @@ class UserProfile: ObservableObject {
         task.resume()
     }
     
+    //this function is for verifying the code a user submits
     func verifyUser(email: String, code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/session/verify")!
         var request = URLRequest(url: url)
@@ -193,7 +194,7 @@ class UserProfile: ObservableObject {
         task.resume()
     }
     
-    
+    //this helps the API call where a user signs up
     func signUpUser(email: String, user: String, completion: @escaping (Result<String, Error>) -> Void) {
         let url = URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/session/signup")!
         var request = URLRequest(url: url)
