@@ -23,7 +23,6 @@ struct FavoritesView: View {
     
     //Sorting and Filtering parameters
     @State private var sortOrder = SortOrder.time
-    @State private var filterType = FilterType.name
     @State private var filter = ""
     @State private var selectedEvent: Int = -1
     
@@ -47,14 +46,11 @@ struct FavoritesView: View {
                             .pickerStyle(.segmented)
                             
                             TagMultiSelector(title: "Tags", parentView: parentView)
-                            
-                            
-                            
                         }//header elements
                         .padding()
                         
                         //event list view for all the events (may have to pass in some arguments according to the day
-                        EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: "", filterByDate: true)
+                        EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: FilterType.favorites, filter: "", filterByDate: true)
                         
                     }//vstack
                 }
