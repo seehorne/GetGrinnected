@@ -181,6 +181,19 @@ async function routeChangeEmail(req, res, _next) {
   const newEmail = req.body.new_email;
   const oldEmail = req.email;
 
+  // OVERRIDE: Reject the response if they are trying to change the email
+  // of the demo account. We just don't allow that.
+  if (
+    newEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu' ||
+    oldEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu'
+  ) {
+    res.status(400).json({
+      'error': 'Cannot change email',
+      'message': 'Cannot change to or from the email associated with the demo account.'
+    });
+    return;
+  }
+
   // Make sure the emails are not the same, space- and case-insensitively.
   if (newEmail.trim().toLowerCase() === oldEmail.trim().toLowerCase()) {
     res.status(400).json({
@@ -205,19 +218,6 @@ async function routeChangeEmail(req, res, _next) {
     res.status(400).json({
       'error': 'Invalid email',
       'message': valid.reason,
-    });
-    return;
-  }
-
-  // OVERRIDE: Also reject the response if they are trying to change the email
-  // of the demo account. We just don't allow that.
-  if (
-    newEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu' ||
-    oldEmail.trim().toLowerCase() === 'getgrinnected.demo@grinnell.edu'
-  ) {
-    res.status(400).json({
-      'error': 'Cannot change email',
-      'message': 'Cannot change to or from the email associated with the demo account.'
     });
     return;
   }
