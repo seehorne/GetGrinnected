@@ -45,11 +45,13 @@ We have other issues tagged with "Bug" from this sprint because we had more than
 
 # (5) Wrap-Up Work
 
-> TODO: DELETE WHEN COMPLETED.
->
-> [Wrap-Up Work](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.uutmho8zfq3b) in Sprint Description
->
-> Describe what we did for our wrap-up work.
+For our sprint wrap-up, we wanted to make sure not only to make sure our code was cleaned up but also keep our external-facing resources up to date.
+
+We refactored the "session" API routes into their own file to clean them up, and made sure code and comments were cleaned up for the Kotlin homescreen, search, and notifications code as well as the Swift API calls.
+
+We also updated our README.md to be more focused towards audiences outside of this class, while still keeping all the required sections we have accrued throughout the semester. This came in the form of some description changes, but mainly reordering some sections. We also updated our LICENSE file to change from saying the code belonged to `seehorne` (Ellie's Github username), we listed all of our names.
+
+Finally, we made sure our external docs were up-to-date with the functionality of the app in our final build.
 
 # (7) Blog Post
 
