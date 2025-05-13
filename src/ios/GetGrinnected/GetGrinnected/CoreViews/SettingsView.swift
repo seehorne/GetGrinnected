@@ -174,6 +174,19 @@ struct SettingsView: View {
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
                 
+                //username message
+                HStack{
+                        Text(usernameResponseMessage)
+                            .foregroundColor(.appBorder)
+                            .font(.caption)
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+                
                 // change email field
                 HStack {
                     Text("Email:")
@@ -199,10 +212,24 @@ struct SettingsView: View {
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere=
                 
-                // username change
-                Button(action: {
-                    showVerificationAlert.toggle()
-                    
+                //email message
+                HStack{
+                    if !emailResponseMessage.isEmpty{
+                        Text(emailResponseMessage)
+                            .foregroundColor(.appBorder)
+                            .font(.caption)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+                
+                
+                // submit changes
+                Button(action:  {
                     print(username)
                     print(email)
                     // set the username that has been typed iff the username has been changed
@@ -212,10 +239,13 @@ struct SettingsView: View {
                             case .success(let output):
                                 //if succeeded, log it
                                 print("API Response: \(output)")
+                                print("changing username message")
                                 usernameResponseMessage = "Username successfully changed"
                                 userProfile.setLocalUsername(newUsername: username)
                             case .failure(let error):
                                 print("API call failed:\(error.localizedDescription)")
+                                //if failed, put back to original username
+                                username = UserDefaults.standard.string(forKey: "username")!
                                 if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                     switch apiError {
                                     case .usernameError(let message):
@@ -234,23 +264,28 @@ struct SettingsView: View {
                     }
                     //updates the email iff the email has been changed. esp important bc if this one gets called erroneously theyll be asked to verify erroneously and no one likes that
                     if email != UserDefaults.standard.string(forKey: "email")!{
+                        showVerificationAlert.toggle()
                         userProfile.setEmail(newEmail: email){ result in
                             switch result {
                             case .success(let output):
                                 DispatchQueue.main.async {
                                     triedToPass = true
+                                    //if succeeded, log it
+                                    print("API Response: \(output)")
+                                    emailResponseMessage = "Email successfully changed"
                                 }
-                                //if succeeded, log it
-                                print("API Response: \(output)")
-                                emailResponseMessage = "Email successfully changed"
                             case .failure(let error):
                                 print("API call failed:\(error.localizedDescription)")
                                 if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                                 switch apiError {
                                                 case .emailError(let message):
-                                                    emailResponseMessage = message //use the response message if there was one
+                                                    DispatchQueue.main.async {
+                                                        emailResponseMessage = message //use the response message if there was one
+                                                    }
                                                 default:
-                                                    emailResponseMessage = apiError.localizedDescription
+                                                    DispatchQueue.main.async {
+                                                        emailResponseMessage = apiError.localizedDescription
+                                                    }
                                                 }
                                             } else {
                                                 emailResponseMessage = error.localizedDescription
@@ -271,8 +306,34 @@ struct SettingsView: View {
                 } //Button
                 .alert("Enter verification code", isPresented: $showVerificationAlert) {
                     TextField("Verification code", text: $verificationCode)
-                    Button("Cancel", role: .cancel) {}
-                    Button("OK", action: {showVerificationAlert.toggle()})
+                    Button("Cancel", role: .cancel) {
+                        email = UserDefaults.standard.string(forKey: "email")!
+                        //set email back to original email
+                    }
+                    Button("OK", action: {
+                        print($verificationCode)
+                        userProfile.verifyUser(email: email, code: verificationCode) { result in
+                            switch result {
+                            case .success(let output):
+                                //if succeeded, log it
+                                print("API Response: \(output)")
+                                userProfile.setLocalEmail(newEmail: self.email)
+                            case .failure(let error):
+                                email = UserDefaults.standard.string(forKey: "email")!
+                                print("API call failed:\(error.localizedDescription)")
+                                if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                                switch apiError {
+                                                case .signInError(let message):
+                                                    emailResponseMessage = message //use the response message if there was one
+                                                default:
+                                                    emailResponseMessage = apiError.localizedDescription
+                                                }
+                                            } else {
+                                                emailResponseMessage = error.localizedDescription
+                                            }
+                            }
+                        }
+                        showVerificationAlert.toggle()})
                 } //alert
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -280,6 +341,8 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
+                
+                
             }
         }
         .frame(maxWidth: .infinity)
@@ -295,6 +358,8 @@ struct SettingsView: View {
         .onTapGesture {
             withAnimation(.easeInOut){
                 isProfileSelected.toggle()
+                usernameResponseMessage = ""
+                emailResponseMessage = ""
             }
         }
         .navigationDestination(isPresented: $triedToPass) {
