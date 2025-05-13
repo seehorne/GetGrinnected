@@ -29,8 +29,8 @@ struct SignUpView: View{
             /** input fields*/
             //Username
             InputView(text: $username,
-                      title: "Name",
-                      placeholder: "Enter your name..")
+                      title: "Username",
+                      placeholder: "Enter your desired username..")
             
             
             //Signin Email Text Field
