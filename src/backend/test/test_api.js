@@ -631,6 +631,20 @@ describe('Test API', () => {
                     'message': 'The old and new emails must be different addresses.'
                 }));
             });
+
+            it("rejects changing email to an existing account", async () => {
+                const res = await req
+                    .put('/user/email')
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .set('Content-Type', 'application/json')
+                    .send({ 'new_email': 'example0987654321@grinnell.edu' });
+
+                assert.strictEqual(res.statusCode, 400, res.text);
+                assert.strictEqual(res.text, JSON.stringify({
+                    'error': 'Account exists',
+                    'message': 'An account with that email already exists.'
+                }));
+            });
         });
 
         /*
