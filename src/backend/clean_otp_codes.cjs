@@ -11,14 +11,12 @@ async function otpFileClean(filename) {
 
     // Delete all expired events.
     // We can do this in alphabet order, since ISO A < ISO B means that ISO A happened first
-    const sql = `SELECT * FROM data WHERE expire < ?`
+    const sql = `DELETE FROM data WHERE expire < ?`
     db.get(sql, now,
-        // callback function for the db command
-        (err, rows) => {
+        // callback function for the db command. print the error if we hit one.
+        (err, _) => {
             if (err) {
                 console.error(err);
-            } else {
-                console.log(`got rows ${JSON.stringify(rows)}`);
             }
         });
 }
