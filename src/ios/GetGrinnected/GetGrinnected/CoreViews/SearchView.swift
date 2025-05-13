@@ -184,6 +184,12 @@ struct SearchResults: View {
                 EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: filter, filterByDate: true)
                 
             }//scroll view
+            .onAppear{
+                // refresh the events so we remove old ones and refresh the tags
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    parentView.forceRefresh() //add a small delay to ensure eventlist is fully initialized
+                }
+            }
             .padding(.horizontal)
         }
         

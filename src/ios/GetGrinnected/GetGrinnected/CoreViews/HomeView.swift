@@ -11,7 +11,7 @@ import SwiftUI
 //Calendar view
 struct HomeView: View {
     // the parent model used for updating our event list
-    @StateObject private var viewModel = EventListParentViewModel()
+    @StateObject private var parentView = EventListParentViewModel()
     @State private var searchText = ""
     @State private var isLoading = true
     // The type of filter we are using on the event list
@@ -34,7 +34,7 @@ struct HomeView: View {
                     ScrollView(.vertical, showsIndicators: false){
                         //vstack to have some spacing between header and main compoments
                         VStack(spacing: 16) {
-                            WeekView(selectedDate: $viewModel.viewedDate)
+                            WeekView(selectedDate: $parentView.viewedDate)
                                 .padding(.bottom, 4)
                             
                             HStack{
@@ -47,18 +47,18 @@ struct HomeView: View {
                                 .pickerStyle(.segmented)
                                 
                                 //tag selector
-                                TagMultiSelector(title: "Tags", parentView: viewModel)
+                                TagMultiSelector(title: "Tags", parentView: parentView)
                             }
                             .padding(.horizontal)
                             
                             //event list view for all the events (may have to pass in some arguments according to the day
-                            EventList(parentView: viewModel, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterByDate: searchText.isEmpty)
+                            EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: filterType, filter: searchText, filterByDate: searchText.isEmpty)
                         }
                         .padding(.top)//padding on top
                     }
                     .refreshable {
                         //force refresh through the button!
-                        viewModel.forceRefresh() //only changes last change to nil
+                        parentView.forceRefresh() //only changes last change to nil
                     }
                 } //scroll view
                 .edgesIgnoringSafeArea(.top)
@@ -69,22 +69,22 @@ struct HomeView: View {
         }//geometry reader
         .onAppear{
             //set initial date of the calendar.
-            viewModel.timeSpan.start = viewModel.viewedDate
-            viewModel.timeSpan.end = viewModel.viewedDate.startOfNextDay
+            parentView.timeSpan.start = parentView.viewedDate
+            parentView.timeSpan.end = parentView.viewedDate.startOfNextDay
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                viewModel.forceRefresh() //add a small delay to ensure eventlist is fully initialized
+                parentView.forceRefresh() //add a small delay to ensure eventlist is fully initialized
             }
             
         }
         // if the viewedDate changes update timeSpan
-        .onChange(of: viewModel.viewedDate) { oldValue, newValue in
+        .onChange(of: parentView.viewedDate) { oldValue, newValue in
             // update start and end of time span when you are viewing a different day
-            viewModel.timeSpan.start = newValue
-            viewModel.timeSpan.end = newValue.startOfNextDay
+            parentView.timeSpan.start = newValue
+            parentView.timeSpan.end = newValue.startOfNextDay
         }
         .refreshable {
-            viewModel.forceRefresh()
+            parentView.forceRefresh()
         }
     }//main body view
 }
