@@ -63,6 +63,7 @@ class NotificationHandler(private val context: Context) {
                 getDifferenceInMillis(
                     it1,
                     it,
+                    // placeholder for notifications taking an adjustable time before alert
                     15
 
                 )
@@ -124,7 +125,8 @@ class NotificationHandler(private val context: Context) {
                 getDifferenceInMillis(
                     it1,
                     it,
-15
+                    // placeholder for notifications taking an adjustable time before alert
+                 15
                 )
             }
         }
