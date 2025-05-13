@@ -164,6 +164,9 @@ class UserProfile: ObservableObject {
             }
 
             do {
+                if let responseText = String(data: data, encoding: .utf8) {
+                    print(responseText)
+                }
                 let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
                 if let error = decodedResponse.error, !error.isEmpty {
                     //at this point you should have message

@@ -275,7 +275,31 @@ struct SettingsView: View {
                         email = UserDefaults.standard.string(forKey: "email")!
                     }
                     Button("OK", action:
-                            {showVerificationAlert.toggle()})
+                            print($verificationCode)
+                            { userProfile.verifyUser(email: email, code: verificationCode) { result in switch result {
+                        case .success(let output):
+                            //if succeeded, log it
+                            print("API Response: \(output)")
+                            //self.isLoggedIn=true //and we are good to go to the next one
+                            //userProfile.updateLoginState(isLoggedIn: true) //set our state to logged in
+                            userProfile.setLocalEmail(newEmail: email) //new email is now the real email
+                            emailResponseMessage = "Success! Email changed!"
+                        case .failure(let error):
+                            email = UserDefaults.standard.string(forKey: "email")! //set email back to old email
+                            print("API call failed:\(error.localizedDescription)")
+                            if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                            switch apiError {
+                                            case .emailError(let message):
+                                                emailResponseMessage = message //use the response message if there was one
+                                            default:
+                                                emailResponseMessage = apiError.localizedDescription
+                                            }
+                                        } else {
+                                            emailResponseMessage = error.localizedDescription
+                                        }
+                        }
+                    }
+                        showVerificationAlert.toggle()})
                 } //alert
                 .padding(.horizontal)
                 .padding(.bottom)
