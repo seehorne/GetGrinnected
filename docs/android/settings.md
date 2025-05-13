@@ -17,6 +17,7 @@
 ## Notifications
 
 - You can modify the number of minutes before an event you will be sent a notification.
+  - This currently does not have an impact on actual notification timings. (UNDER CONSTRUCTION :building_construction:)
 
 ## Log out or delete account
 

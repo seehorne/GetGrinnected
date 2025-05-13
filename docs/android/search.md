@@ -3,7 +3,7 @@
 ## Basic search
 
 - Tap on the ":mag: Search Events" bar and enter the text you want to search.
-- Click the ":mag: Search" button below to query events matching your search.
+- Tap the ":mag: Search" button below to query events matching your search.
 
 ## Search a particular date
 
