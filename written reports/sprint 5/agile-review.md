@@ -89,8 +89,8 @@ For context, as a team we decided that continuing with the calendar view did not
 
 ### Home Page
 
-- Users can now search for events via selecting tags from the dropdown.
-- Users can now search for events by a certain day / time and only see events at that time.
+- A user can filter by day and select days through the week view (horizzontal scrolling of dates) date selector for date.
+- A user can apply tag filters and also a sorting picker to sort by name or by time of that day.
 
 ### Favorites Page
 
