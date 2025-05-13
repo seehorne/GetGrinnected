@@ -18,10 +18,17 @@ struct SettingsView: View {
     
     // boolean to keep track if we are logged in
     @Binding var isLoggedIn: Bool
+    
+    @State private var toVerifyMessage = "Verify your new email"
+    
     // our users username
-    @State private var username: String = "user123"
-    // our users email
-    @State private var email: String = "email@email.com"
+    @State private var username: String
+    //string to display if username things were successful or had errors
+    @State private var usernameResponseMessage: String = ""
+    //our users email
+    @State private var email: String
+    //string to display if username things were successful or had errors
+    @State private var emailResponseMessage: String = ""
     
     @StateObject private var userProfile = UserProfile()
     
@@ -29,6 +36,7 @@ struct SettingsView: View {
     @State private var viewColorScheme: ColorScheme = .light
     // boolean that says if we are on light mode or not
     @State private var lightModeOn: Bool = true
+    @State private var triedToPass: Bool = false
     @State private var basicInput: String = ""
     //@State private var userProfile = UserProfile()
     @State private var loggedOut: Bool = false
@@ -37,14 +45,20 @@ struct SettingsView: View {
     @State var isAppearanceSelected = false
     @State var isAccessibilitySelected = false
     @State var isAboutSelected = false
-    
+
     @State var showUsernameEditAlert = false
     @State var showEmailEditAlert = false
     @State var showDeleteAccountAlert = false
     @State var showLogOutAlert = false
     
+    init(username: String, email: String, isLoggedIn: Binding<Bool>) {
+        self._isLoggedIn = isLoggedIn
+        self._username = State(initialValue: UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded")
+        self._email = State(initialValue: UserDefaults.standard.string(forKey: "email") ?? "current username could not be loaded")
+    }
+    
+    
     var body: some View {
-        
         GeometryReader{proxy in
             let safeAreaTop = proxy.safeAreaInsets.top
             VStack(){
@@ -52,47 +66,54 @@ struct SettingsView: View {
                 Header(inputText: $basicInput, safeAreaTop: safeAreaTop, title: "Settings", searchBarOn: false)
                 
                 ScrollView(.vertical, showsIndicators: false){
-                    //content
-                    VStack {
-                        profileEditing()
                         
-                        // switch for light/dark mode
-                        appearance()
-                        
-                        //fontsize
-                        accessibility()
-                        
-                        //about section
-                        about()
-                        
-                        //delete account button
-                        deleteAccount()
-                        
-                        //logout button
-                        logOut()
-                    } //about
-                    .padding()
-                }   //Scroll view
-                .edgesIgnoringSafeArea(.top)
-                .foregroundColor(.border)
-                .tint(.border)
-                
-            }//GeometryReader
-            .preferredColorScheme(viewColorScheme)
-            // run switchAppearance when the view is shown
-            .onAppear {
-                switchAppearance()
-            }
-            // changes the viewColorScheme when lightModeOn is changed
-            .onChange(of: lightModeOn){ oldValue, newValue in
-                if newValue == true {
-                    viewColorScheme = .light
-                } else {
-                    viewColorScheme = .dark
+                        //content
+                        VStack {
+                            profileEditing()
+                            
+                            // switch for light/dark mode
+                            appearance()
+                            
+                            //fontsize
+                            accessibility()
+                            
+                            //about section
+                            about()
+                            
+                            //delete account button
+                            deleteAccount()
+                            
+                            //logout button
+                            logOut()
+                        } //about
+                        .padding()
+                    }   //Scroll view
+                    .edgesIgnoringSafeArea(.top)
+                    .foregroundColor(.border)
+                    .tint(.border)
+                    
+                }//GeometryReader
+                .preferredColorScheme(viewColorScheme)
+                // run switchAppearance when the view is shown
+                .onAppear {
+                    switchAppearance()
+                    userProfile.getUsername()
+                    username = UserDefaults.standard.string(forKey: "username") ?? "current username could not be loaded"
+                    email = UserDefaults.standard.string(forKey: "email") ?? "current email could not be loaded"
                 }
-            } //onChange
-        }
-    } //body
+                // changes the viewColorScheme when lightModeOn is changed
+                .onChange(of: lightModeOn){ oldValue, newValue in
+                    if newValue == true {
+                        viewColorScheme = .light
+                    } else {
+                        viewColorScheme = .dark
+                    }
+                } //onChange
+                .navigationDestination(isPresented: $triedToPass) {
+                    VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
+                }
+            }
+        } //body
     
     /*
      Changes the lightModeOn boolean based on what the current viewColorScheme is
@@ -181,12 +202,67 @@ struct SettingsView: View {
                 // username change
                 Button(action: {
                     print(username)
-                    // set the username that has been typed
-                    userProfile.setUsername(username)
+                    print(email)
+                    // set the username that has been typed iff the username has been changed
+                    if username != UserDefaults.standard.string(forKey: "username")!{
+                        userProfile.setUsername(newUsername: username){ result in
+                            switch result {
+                            case .success(let output):
+                                //if succeeded, log it
+                                print("API Response: \(output)")
+                                usernameResponseMessage = "Username successfully changed"
+                                userProfile.setLocalUsername(newUsername: username)
+                            case .failure(let error):
+                                print("API call failed:\(error.localizedDescription)")
+                                if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                    switch apiError {
+                                    case .usernameError(let message):
+                                        usernameResponseMessage = message //use the response message if there was one
+                                    default:
+                                        usernameResponseMessage = apiError.localizedDescription
+                                    }
+                                } else {
+                                    usernameResponseMessage = error.localizedDescription
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        print("username didn't actually change")
+                    }
+                    //updates the email iff the email has been changed. esp important bc if this one gets called erroneously theyll be asked to verify erroneously and no one likes that
+                    if email != UserDefaults.standard.string(forKey: "email")!{
+                        userProfile.setEmail(newEmail: email){ result in
+                            switch result {
+                            case .success(let output):
+                                DispatchQueue.main.async {
+                                    triedToPass = true
+                                }
+                                //if succeeded, log it
+                                print("API Response: \(output)")
+                                emailResponseMessage = "Email successfully changed"
+                            case .failure(let error):
+                                print("API call failed:\(error.localizedDescription)")
+                                if let apiError = error as? UserProfile.APIError {//treat the error as API error object
+                                                switch apiError {
+                                                case .emailError(let message):
+                                                    emailResponseMessage = message //use the response message if there was one
+                                                default:
+                                                    emailResponseMessage = apiError.localizedDescription
+                                                }
+                                            } else {
+                                                emailResponseMessage = error.localizedDescription
+                                            }
+                            }
+                        }
+                    }
+                    else{
+                        print("email didn't actually change")
+                    }
                     print("username submitted")
                     print(username)
                 }) {
-                    Text("Submit username change")
+                    Text("Submit changes")
                         .foregroundColor(.border)
                     Image(systemName: "square.and.arrow.up")
                         .imageScale(.large)
@@ -215,6 +291,9 @@ struct SettingsView: View {
                 isProfileSelected.toggle()
             }
         }
+        .navigationDestination(isPresented: $triedToPass) {
+        VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
+    }
     }//username change
     
     /**
@@ -321,7 +400,7 @@ struct SettingsView: View {
             
             if(isAboutSelected){
                 VStack{
-                    Text("Get Grinnected was developed by Grinnelians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed abotu campus events.")
+                    Text("Get Grinnected was developed by Grinnellians, for Grinnellians, with the goal of creating an intuitive and accessible platform to stay informed abotu campus events.")
                     Text("We have a discord, so for those interested in expanding the toolbox offered to Grinnellians, please join! Here are our socials and github: ")
                     HStack{
                         Link(destination: URL(string: "https://discord.gg/e4PrM4RyEr")!) {
@@ -423,6 +502,7 @@ struct SettingsView: View {
             Button("Delete", role: .destructive) {
                 // TODO add account deletion
                 // we are logging out
+                userProfile.deleteAccount()
                 userProfile.updateLoginState(isLoggedIn: false)
                 loggedOut = true
             }
@@ -478,7 +558,7 @@ struct SettingsView: View {
 } //ProfileView
 
 #Preview {
-    SettingsView(isLoggedIn: .constant(true))
+    SettingsView(username: "user123", email: "dummyemail@grinnell.edu", isLoggedIn: .constant(true))
 }
 
 

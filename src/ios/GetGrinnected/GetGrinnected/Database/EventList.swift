@@ -234,6 +234,10 @@ struct EventList: View {
         userProfile.getUserFavoritedEvents(context: modelContext)
         print("getting notification")
         userProfile.getUserNotifiedEvents(context: modelContext)
+        print("getting username")
+        userProfile.getUsername()
+        print("getting email")
+        userProfile.getUsername()
     }
     
     /*

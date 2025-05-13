@@ -17,6 +17,7 @@ struct LoginView: View {
     @State private var password = ""
     @State private var errorMessage = ""
     @State private var success = Bool()
+    @State private var toVerifyMessage = "Start Getting Grinnected!"
     
     var body: some View {
         
@@ -75,7 +76,7 @@ struct LoginView: View {
                 
                 //if the API call was successful, go to verification 
                 .navigationDestination(isPresented: $success) {
-                    VerificationView(email: email, isLoggedIn: $isLoggedIn)
+                    VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
                 }
             }
             .padding()

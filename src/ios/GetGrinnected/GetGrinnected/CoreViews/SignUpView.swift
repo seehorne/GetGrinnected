@@ -17,6 +17,7 @@ struct SignUpView: View{
     @State private var success = Bool()
     @StateObject private var userProfile = UserProfile()
     @State private var signupError = ""
+    @State private var toVerifyMessage = "Start Getting Grinnected!"
     
     var body: some View{
         VStack(spacing: 20) {
@@ -28,8 +29,8 @@ struct SignUpView: View{
             /** input fields*/
             //Username
             InputView(text: $username,
-                      title: "Name",
-                      placeholder: "Enter your name..")
+                      title: "Username",
+                      placeholder: "Enter your desired username..")
             
             
             //Signin Email Text Field
@@ -54,6 +55,7 @@ struct SignUpView: View{
                     switch result {
                     case .success(let output):
                         print("API Response: \(output)")
+                        userProfile.setLocalUsername(newUsername: username)
                         success=true
                     case .failure(let error):
                         print("API call failed: \(error.localizedDescription)")
@@ -80,7 +82,7 @@ struct SignUpView: View{
             .padding(.top, 24)
             
             .navigationDestination(isPresented: $success) {
-                VerificationView(email: email, isLoggedIn: $isLoggedIn)
+                VerificationView(email: email, message: toVerifyMessage, isLoggedIn: $isLoggedIn)
             }
         }//VStack
         .padding()
@@ -93,7 +95,7 @@ struct SignUpView: View{
         signupError = ""
         
         //setusername first, no validation needed
-        userProfile.setUsername(username)
+        userProfile.setLocalUsername(newUsername: username)
         
         //validate email
         if !userProfile.setEmail(email){
@@ -102,7 +104,7 @@ struct SignUpView: View{
         }
         
         //validate password
-        if !userProfile.setPassword(password){
+        if !userProfile.setLocalPassword(password){
             signupError = "Password must be at least 8 characters long!"
             return
         }

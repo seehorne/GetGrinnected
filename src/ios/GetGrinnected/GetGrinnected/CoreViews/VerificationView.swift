@@ -15,14 +15,16 @@ struct VerificationView: View {
     @Binding var isLoggedIn: Bool
     @State private var code = ""
     @State private var email: String
+    @State private var submitMessage: String
     @State private var errorMessage = ""
     @State private var isProcessing = false
     @State private var verifyError = ""
     @State private var resendError = ""
     @StateObject private var userProfile = UserProfile()
     
-    init(email: String, isLoggedIn: Binding<Bool>) {
+    init(email: String, message: String, isLoggedIn: Binding<Bool>) {
         self.email = email
+        self.submitMessage = message
         _isLoggedIn = isLoggedIn // Properly initialize the binding
         self.errorMessage = ""
         self.verifyError = ""
@@ -54,6 +56,7 @@ struct VerificationView: View {
                             print("API Response: \(output)")
                             self.isLoggedIn=true //and we are good to go to the next one
                             userProfile.updateLoginState(isLoggedIn: true) //set our state to logged in
+                            userProfile.setLocalEmail(newEmail: self.email)
                         case .failure(let error):
                             print("API call failed:\(error.localizedDescription)")
                             if let apiError = error as? UserProfile.APIError {//treat the error as API error object
@@ -71,7 +74,7 @@ struct VerificationView: View {
                     //once successfully logged in, jump to main viewport
                 } label: {
                     HStack {
-                        Text("Start Getting Grinnected!")
+                        Text(self.submitMessage)
                             .fontWeight(.semibold)
                         Image (systemName: "arrow.right")
                     }
@@ -122,5 +125,5 @@ struct VerificationView: View {
 
 
 #Preview {
-    VerificationView(email: "test@grinnell.edu", isLoggedIn: .constant(false))
+    VerificationView(email: "test@grinnell.edu", message: "Start Getting Grinnected", isLoggedIn: .constant(false))
 }
