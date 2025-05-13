@@ -43,7 +43,7 @@ struct GetGrinnectedApp: App {
             print("Container created successfully!")
         } catch {
             //if fail, print an accurate error message
-            print("❌ ModelContainer init failed: \(error.localizedDescription)")
+            print("ModelContainer init failed: \(error.localizedDescription)")
             
             //send out error message using fatalerror
             fatalError("Failed to create ModelContainer: \(error)")

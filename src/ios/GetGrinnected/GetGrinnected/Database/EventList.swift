@@ -7,9 +7,7 @@
 
 import SwiftData //swift data is how we cache information
 import SwiftUI
-
-
-
+import UserNotifications //to remove notification badge
 
 /**
  EventList takes EventDTO, converts into cached EventModel. If event already exists in cache, updates information.
@@ -200,6 +198,14 @@ struct EventList: View {
             }
         }
         .onAppear{
+            //remove notification badge
+            UNUserNotificationCenter.current().setBadgeCount(0) { error in
+                if let error = error {
+                    print("Failed to set badge count: \(error.localizedDescription)")
+                } else {
+                    print("Badge count set to 0")
+                }
+            }
             //refresh on timer, every 30 minutes for now!
             refreshTimer = Timer.scheduledTimer(withTimeInterval: 1800, repeats: true){ _ in
                 Task {

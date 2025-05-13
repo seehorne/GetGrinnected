@@ -210,6 +210,14 @@ struct EventCard: View {
                                     let notifs = userProfile.fetchNotifiedEventIDs(from: modelContext)
                                     userProfile.setUserNotifiedEvents(events: notifs)
                                     userProfile.getUserNotifiedEvents(context: modelContext)
+                                    
+                                    //set notifications
+                                    if(event.notified){
+                                        NotificationManager.instance.requestAuthorization()
+                                        NotificationManager.instance.scheduleNotification(event: self.event)
+                                    } else {
+                                        NotificationManager.instance.scheduleNotification(event: self.event)
+                                    }
                                     try? modelContext.save()
                                 }
                             }) {
