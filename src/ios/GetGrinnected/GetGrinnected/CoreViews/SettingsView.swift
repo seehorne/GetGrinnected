@@ -507,6 +507,7 @@ struct SettingsView: View {
             Button("Delete", role: .destructive) {
                 // TODO add account deletion
                 // we are logging out
+                userProfile.deleteAccount()
                 userProfile.updateLoginState(isLoggedIn: false)
                 loggedOut = true
             }

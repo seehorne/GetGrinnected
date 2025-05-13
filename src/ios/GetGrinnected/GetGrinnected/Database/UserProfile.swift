@@ -696,6 +696,35 @@ class UserProfile: ObservableObject {
         })
     }
     
+    //this function takes a model context as a parameter, so that it can save and update the events saved by a user as notified
+    //it gets these events by pulling the API for the IDs that are marked by the user as notified
+    //then it goes through all events s.t. they can be marked that way in local storage as well
+    //it must be passed this model context from a View, as that is the only place model contexts can actually be updated
+    func deleteAccount() {
+         safeApiCall(requestBuilder: { token in
+            var request = URLRequest(url: URL(string: "https://node16049-csc324--spring2025.us.reclaim.cloud/user")!)
+            request.httpMethod = "DELETE"
+             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            return request
+        }, completion: { result in
+            switch result {
+            case .success(let data):
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("Raw JSON response: \(jsonString)")
+                }
+                if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
+                    print(decodedResponse)
+                    print(decodedResponse.message ?? "Success but no response to print")
+                    //this has to be done on the main thread, since its using a model context
+                    //so even though this isn't an explicitly async function, we have to put it here
+                }
+            case .failure(let error):
+                print(self.getErrorMessage(error: error))
+            }
+        })
+    }
+    
     //this function makes an int array of all the IDs a user has marked as favorited
     //this array is sourced from the cache's account of what has been favorited
     //it goes through all the events, and picks out the ones that match the predicate of favorited
