@@ -1,7 +1,5 @@
 # (1) Adoption Plan
 
-> [Adoption Plan](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.e1kq5sujjap4) in Sprint Description
->
 ## 1. 
 5/5/2025
 ## 2.
@@ -35,30 +33,29 @@ To make continual adoption as easy as possible we plan to publish the app to the
 
 Despite moving towards adoption we do plan to complete the work on our product. Finishing any features that are necessary and incomplete by the end of the semester. Examples might end up including timed notifications and search features for kotlin and notifications for swift. We think our current product is worthy of publishing but understand where it could be better. 
 
+## 1.B 
+5/12/2025
+We created and distribuited posters with QR code links to the IOS and Android Versions of our app. We have allready recieved feedback from users and tried to impliment improvments. One user was confused by the username field being labled name preventing them from logging in. We were unfortunalty not able to find enough time to do everything we wanted for our adoption plan but we are already seeing people interested in our product. 
 
 # (3) Bug Logging
 
-> TODO: DELETE WHEN COMPLETED.
->
-> [Bug Logging](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.o9rl9i8zl8s2) in Sprint Description
->
-> Links to each bug in the issue tracker.
-
 We have other issues tagged with "Bug" from this sprint because we had more than 3 bugs, but here are the bugs required for this part of the assignment.
 
-1. <https://trello.com/c/wV1lMEbg>
+1. <https://trello.com/c/wV1lMEbg> "Routes crash when no body is provided"
 
-2. TODO: FILL THIS IN.
+2. <https://trello.com/c/dSIH5cun> "On Kotlin, changing apps (to check your email) sets back login."
 
-3. TODO: FILL THIS IN.
+3. <https://trello.com/c/LQCBxtmL> "Swift auth won't actually send calls"
 
 # (5) Wrap-Up Work
 
-> TODO: DELETE WHEN COMPLETED.
->
-> [Wrap-Up Work](https://docs.google.com/document/d/e/2PACX-1vRfOfXgJLbJXE-59n7jhwjymxMuWBRAPYXLI69RckQImzUVHGzjb470ogGdbCf1VSOMz0rOmltTiLg3/pub#h.uutmho8zfq3b) in Sprint Description
->
-> Describe what we did for our wrap-up work.
+For our sprint wrap-up, we wanted to make sure not only to make sure our code was cleaned up but also keep our external-facing resources up to date.
+
+We refactored the "session" API routes into their own file to clean them up, and made sure code and comments were cleaned up for the Kotlin homescreen, search, and notifications code as well as the Swift API calls.
+
+We also updated our README.md to be more focused towards audiences outside of this class, while still keeping all the required sections we have accrued throughout the semester. This came in the form of some description changes, but mainly reordering some sections. We also updated our LICENSE file to change from saying the code belonged to `seehorne` (Ellie's Github username), we listed all of our names.
+
+Finally, we made sure our external docs were up-to-date with the functionality of the app in our final build.
 
 ## External Docs Changes
 
