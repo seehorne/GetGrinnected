@@ -165,7 +165,6 @@ async function routeVerifyOTP(req, res, _next) {
       // Use that, along with the old email, to change their account.
       const newEmail = email;
       await db.changeUserEmail(checkResult.oldEmail, newEmail);
-      console.log('finished with db changed email');
     }
 
     // Generate tokens for that user
