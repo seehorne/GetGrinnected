@@ -23,7 +23,6 @@ struct FavoritesView: View {
     
     //Sorting and Filtering parameters
     @State private var sortOrder = SortOrder.time
-    @State private var filterType = FilterType.name
     @State private var filter = ""
     @State private var selectedEvent: Int = -1
     
@@ -46,50 +45,21 @@ struct FavoritesView: View {
                             }
                             .pickerStyle(.segmented)
                             
-                            TagMultiSelector(title: "Select Tags", parentView: parentView)
-                            
-                            
-                            
+                            TagMultiSelector(title: "Tags", parentView: parentView)
                         }//header elements
                         .padding()
                         
-                        
-                        //if empty show that no events are in that time period
-                        if events.isEmpty{
-                            //a more helpful empty message
-                            Text("No Events under those parameters...")
-                                .padding()
-                                .foregroundStyle(.textSecondary)
-                            
-                        }
-                        
-                        //helpful loading page
-                        if isLoading {
-                            //progress View
-                            ProgressView("Loading Events...")
-                                .padding()
-                        } else {
-                            //for every event, based on ID
-                            ForEach(events, id: \.id) { event in
-                                //add an event card of that event that..
-                                EventCard(event: event, isExpanded: (event.id == selectedEvent))//selects based on if the selected event is the same as the event ID
-                                    .onTapGesture { //on tap..
-                                        withAnimation(.easeInOut) { //changes selectedEvent to this event, (and thus expands it)
-                                            //select event
-                                            if (event.id == selectedEvent){
-                                                selectedEvent = -1
-                                            } else {
-                                                selectedEvent = event.id
-                                            }
-                                        }
-                                    }//tap each event, and it sets id = to that event
-                                
-                            }//foreach
-                        }//if loading, else, fetch.
+                        //event list view for all the events (may have to pass in some arguments according to the day
+                        EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: FilterType.favorites, filter: "", filterByDate: true)
                         
                     }//vstack
                 }
-                //TODO: set tags for filtering
+                .onAppear{
+                    // refresh the events so we remove old ones and refresh the tags
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        parentView.forceRefresh() //add a small delay to ensure eventlist is fully initialized
+                    }
+                }
             }
             .edgesIgnoringSafeArea(.top)
             
