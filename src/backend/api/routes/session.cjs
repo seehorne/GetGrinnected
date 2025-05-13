@@ -10,25 +10,25 @@ const DBPATH = './src/backend/Database/localOTP.db'
  * @param {*} _next  Express error handler for async, unused.
  */
 async function routeSendOTP(req, res, _next) {
-    // Get email from the body, we know it is there thanks to the middleware
-    const email = req.body.email;
+  // Get email from the body, we know it is there thanks to the middleware
+  const email = req.body.email;
 
-    // Make sure the user already exists. If it does not, return a HTTP 404 error.
-    // That signifies "resource not found", which is appropriate here.
-    if (!await db.getAccountByEmail(email)) {
-        res.status(404).json({
-            'error': 'No such user',
-            'message': 'No user account exists with that email.'
-        });
-        return;
-    }
-
-    // Send that user an OTP code, then respond we did it successfully!
-    // TODO: we may want sendOTP to return error and deal with that.
-    await util.sendOTP(email);
-    res.status(200).json({
-        'message': 'OTP successfully sent.'
+  // Make sure the user already exists. If it does not, return a HTTP 404 error.
+  // That signifies "resource not found", which is appropriate here.
+  if (!await db.getAccountByEmail(email)) {
+    res.status(404).json({
+      'error': 'No such user',
+      'message': 'No user account exists with that email.'
     });
+    return;
+  }
+
+  // Send that user an OTP code, then respond we did it successfully!
+  // TODO: we may want sendOTP to return error and deal with that.
+  await util.sendOTP(email);
+  res.status(200).json({
+    'message': 'OTP successfully sent.'
+  });
 }
 
 /**
@@ -143,9 +143,9 @@ async function routeVerifyOTP(req, res, _next) {
   const code = req.body.code;
   bypass = false;
 
-  if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu'){
+  if (email.toLowerCase() == 'getgrinnected.demo@grinnell.edu') {
     //give permission to verify regardless of the input
-    bypass= true;
+    bypass = true;
   }
 
   // Check the OTP code the user entered against the codes we have stored.
@@ -164,7 +164,23 @@ async function routeVerifyOTP(req, res, _next) {
       // The email that the user includes in their verify request is the new one.
       // Use that, along with the old email, to change their account.
       const newEmail = email;
-      await db.changeUserEmail(checkResult.oldEmail, newEmail);
+
+      // Try to change the email, but if it has changed since previously verified
+      // we need to make sure to catch that error.
+      try {
+        await db.changeUserEmail(checkResult.oldEmail, newEmail);
+      } catch (e) {
+        // Handl error if account already exists
+        if (e.message === 'Account already exists with new email') {
+          res.status(400).json({
+            'error': 'Account exists',
+            'message': 'Account already exists with new email.'
+          });
+          return;
+        } else {
+          throw(e);
+        }
+      }
     }
 
     // Generate tokens for that user
@@ -181,10 +197,10 @@ async function routeVerifyOTP(req, res, _next) {
 }
 
 if (require.main !== module) {
-    module.exports = {
-        routeSendOTP,
-        routeSignUpNewUser,
-        routeVerifyOTP,
-        routeRefreshTokens,
-    };
+  module.exports = {
+    routeSendOTP,
+    routeSignUpNewUser,
+    routeVerifyOTP,
+    routeRefreshTokens,
+  };
 }

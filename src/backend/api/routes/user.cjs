@@ -190,6 +190,15 @@ async function routeChangeEmail(req, res, _next) {
     return;
   }
 
+  // Check the email they are changing to doesn't already exist.
+  if (await db.getAccountByEmail(newEmail.trim().toLowerCase())) {
+    res.status(400).json({
+      'error': 'Account exists',
+      'message': 'An account with that email already exists.'
+    });
+    return;
+  }
+
   // Reject the response if the email isn't good.
   const valid = util.validateEmail(newEmail);
   if (!valid.result) {
