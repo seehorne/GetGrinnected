@@ -460,10 +460,20 @@ class UserProfile: ObservableObject {
                 }
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse.message ?? "Success but no response to print")
+                    if decodedResponse.error != nil{
+                        completion(.failure(APIError.usernameError(decodedResponse.message ?? "Could not successfully update username")))
+                        return
+                    }
+                    else{
+                        completion(.success("Updated username"))
+                        return
+                    }
                 }
+                completion(.success("Username updated."))
             case .failure(let error):
                 print("There was not success")
                 print(self.getErrorMessage(error: error))
+                completion(.failure(APIError.usernameError(self.getErrorMessage(error: error))))
             }
         })
     }
@@ -517,10 +527,19 @@ class UserProfile: ObservableObject {
                 }
                 if let decodedResponse = try? JSONDecoder().decode(APIResponse.self, from: data) {
                     print(decodedResponse.message ?? "Success but no response to print")
+                    if decodedResponse.error != nil{
+                        completion(.failure(APIError.usernameError(decodedResponse.message ?? "Could not update email"))) //this is not actually a success but it will make the error show
+                        return
+                    }
+                    else{
+                        completion(.success("Updated email"))
+                        return
+                    }
                 }
             case .failure(let error):
                 print("There was not success")
                 print(self.getErrorMessage(error: error))
+                completion(.failure(APIError.emailError(self.getErrorMessage(error: error))))
             }
         })
     }

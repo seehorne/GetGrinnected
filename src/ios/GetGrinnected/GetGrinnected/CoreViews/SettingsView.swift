@@ -177,7 +177,7 @@ struct SettingsView: View {
                 //username message
                 HStack{
                         Text(usernameResponseMessage)
-                            .foregroundColor(usernameResponseMessage.contains("uccess") ? .appContainer : .red)
+                            .foregroundColor(.appBorder)
                             .font(.caption)
                 }
                 .padding(.horizontal)
@@ -216,7 +216,7 @@ struct SettingsView: View {
                 HStack{
                     if !emailResponseMessage.isEmpty{
                         Text(emailResponseMessage)
-                            .foregroundColor(usernameResponseMessage.contains("uccess") ? .appContainer : .red)
+                            .foregroundColor(.appBorder)
                             .font(.caption)
                     }
                 }
@@ -229,8 +229,7 @@ struct SettingsView: View {
                 
                 
                 // submit changes
-                Button(action: {
-                    
+                Button(action:  {
                     print(username)
                     print(email)
                     // set the username that has been typed iff the username has been changed
@@ -269,18 +268,22 @@ struct SettingsView: View {
                             case .success(let output):
                                 DispatchQueue.main.async {
                                     triedToPass = true
+                                    //if succeeded, log it
+                                    print("API Response: \(output)")
+                                    //emailResponseMessage = "Email successfully changed"
                                 }
-                                //if succeeded, log it
-                                print("API Response: \(output)")
-                                emailResponseMessage = "Email successfully changed"
                             case .failure(let error):
                                 print("API call failed:\(error.localizedDescription)")
                                 if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                                 switch apiError {
                                                 case .emailError(let message):
-                                                    emailResponseMessage = message //use the response message if there was one
+                                                    DispatchQueue.main.async {
+                                                        emailResponseMessage = message //use the response message if there was one
+                                                    }
                                                 default:
-                                                    emailResponseMessage = apiError.localizedDescription
+                                                    DispatchQueue.main.async {
+                                                        emailResponseMessage = apiError.localizedDescription
+                                                    }
                                                 }
                                             } else {
                                                 emailResponseMessage = error.localizedDescription
@@ -353,6 +356,8 @@ struct SettingsView: View {
         .onTapGesture {
             withAnimation(.easeInOut){
                 isProfileSelected.toggle()
+                usernameResponseMessage = ""
+                emailResponseMessage = ""
             }
         }
         .navigationDestination(isPresented: $triedToPass) {
