@@ -174,6 +174,19 @@ struct SettingsView: View {
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
                 
+                //username message
+                HStack{
+                        Text(usernameResponseMessage)
+                            .foregroundColor(usernameResponseMessage.contains("uccess") ? .appContainer : .red)
+                            .font(.caption)
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+                
                 // change email field
                 HStack {
                     Text("Email:")
@@ -199,7 +212,23 @@ struct SettingsView: View {
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere=
                 
-                // username change
+                //email message
+                HStack{
+                    if !emailResponseMessage.isEmpty{
+                        Text(emailResponseMessage)
+                            .foregroundColor(usernameResponseMessage.contains("uccess") ? .appContainer : .red)
+                            .font(.caption)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top),
+                    removal: .move(edge: .top)
+                ))//transition so that it pulls down instead of appearing out of nowhere
+                
+                
+                // submit changes
                 Button(action: {
                     
                     print(username)
@@ -211,6 +240,7 @@ struct SettingsView: View {
                             case .success(let output):
                                 //if succeeded, log it
                                 print("API Response: \(output)")
+                                print("changing username message")
                                 usernameResponseMessage = "Username successfully changed"
                                 userProfile.setLocalUsername(newUsername: username)
                             case .failure(let error):
@@ -276,6 +306,7 @@ struct SettingsView: View {
                         //set email back to original email
                     }
                     Button("OK", action: {
+                        print($verificationCode)
                         userProfile.verifyUser(email: email, code: verificationCode) { result in
                             switch result {
                             case .success(let output):
@@ -283,6 +314,7 @@ struct SettingsView: View {
                                 print("API Response: \(output)")
                                 userProfile.setLocalEmail(newEmail: self.email)
                             case .failure(let error):
+                                email = UserDefaults.standard.string(forKey: "email")!
                                 print("API call failed:\(error.localizedDescription)")
                                 if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                                 switch apiError {
@@ -304,6 +336,8 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
+                
+                
             }
         }
         .frame(maxWidth: .infinity)
