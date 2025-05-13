@@ -70,12 +70,16 @@ object AppRepository {
                     val localStartTime = it.event_start_time.toDate().formatTo("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                     // Sets the end time to our local timezone
                     val localEndTime = it.event_end_time.toDate().formatTo("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                    it.copy(
-                        event_start_time = localStartTime,
-                        event_end_time = localEndTime,
-                        is_favorited = currentFavorites.contains(it.eventid),
-                        is_notification = currentNotified.contains(it.eventid)
-                    )
+                    if (localStartTime != null) {
+                        if (localEndTime != null) {
+                            it.copy(
+                                event_start_time = localStartTime,
+                                event_end_time = localEndTime,
+                                is_favorited = currentFavorites.contains(it.eventid),
+                                is_notification = currentNotified.contains(it.eventid)
+                            )
+                        }
+                    }
                 }?.map { it.toEventEntity() }
 
 

@@ -182,6 +182,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+/*
 /**
  * a function that changes the timezone of elements in json list of event objects to the timezone of the device
  *
@@ -225,6 +226,7 @@ fun fixTime(aba: List<Event>): List<Event>{
     }
     return(done)
 }
+*/
 
 /**
  * a function that turns a string into a date
@@ -235,7 +237,7 @@ fun fixTime(aba: List<Event>): List<Event>{
 fun String.toDate(
     dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
     timeZone: TimeZone = TimeZone.getTimeZone("UTC"),
-): Date {
+): Date? {
     val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
     parser.timeZone = timeZone
     return parser.parse(this)
