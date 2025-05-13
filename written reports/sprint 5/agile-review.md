@@ -34,6 +34,7 @@ For context, as a team we decided that continuing with the calendar view did not
 - We added a composable referred to as a snackbar that now when a user presses the favorite button on an event it will pop-up and say "this event has been added to your favorites".
 - Now when a user who utilizes android talk back opens the app we have descriptive alt text for all images and icons so that our app is explanatory to this use case.
 - A user can now go to the Accessibility section of the settings page and press on the size dropdown and it will offer them a variety of font sizes, when they select a different one all text on all screen will increase of decrease accordingly.
+- We added unit testing to our functions for username and email validation to ensure their outputs and functionalities acted as we expected.
 
 ### Refactorred Features / Screens
 
@@ -60,7 +61,25 @@ The Settings Screen after last sprint required a noticable Revamp as we had deci
 
 ## API
 
+A general note is that the API docs have also been maintained with the additions of new calls and updates to the structure of the files related to the API calls.
 
+See Docs: [https://getgrinnected.sites.grinnell.edu/docs/dev/api-v1/](https://getgrinnected.sites.grinnell.edu/docs/dev/api-v1/)
+
+### New Calls / Updates
+
+- Delete User This call is used by the front end to delete a user from our remote database
+- Change Email This call is actually a two part composition:
+    - Call with the new email that checks the that the new email is valid and if so it sends the OTP to the new email destination
+    - Verify call when it recieves the code if this code is valid then it updates the email in our remote database.
+- Change Username This call is used by the front end to update a user's username that already exists in the database to new valid username.
+- Created Demo Account for Apple reviewers to use to get testflight approved. This also meant ensuring that this account code pass as a grinnell email even though it doesn't exist thus when is detected it is allowed to bypass verification.
+- Function to close our database connection, this avoids runs where we would have hanging runs that would just never conclude because our connection was still established.
+
+### Fixes, Tweaks, and Testing
+
+- Added testing to all implemented api calls and functions to ensure they function as intended.
+- Fixed an issue where a route would crash with no body and now no longer results in this unproductive behavior.
+- Tweaked the manner in which we put array information such that if we get an eventID we don't have in our database it is not put into the database but all valid ones are still put.
 
 ## Git Diff Link
 
