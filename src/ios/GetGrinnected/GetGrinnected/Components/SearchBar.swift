@@ -22,6 +22,10 @@ struct SearchBar: View {
                 )
                 .foregroundColor(.white)
                 .tint(.white)
+                .accessibilityLabel("Search field")
+                .accessibilityHint("Enter text to search")
+                .accessibilityAddTraits(.isSearchField)
+
             }
             .padding(.vertical, 10)
             .padding(.horizontal, 15)
