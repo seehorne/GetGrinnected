@@ -152,6 +152,7 @@ struct SettingsView: View {
                 // change username field
                 HStack {
                     Text("Username:")
+                        .accessibilityLabel("Current username is \(username)")
                     
                     Spacer()
                     
@@ -161,7 +162,11 @@ struct SettingsView: View {
                         showUsernameEditAlert.toggle()
                     }) {
                         Image(systemName: "pencil")
+                        .accessibilityLabel("Edit username")
                     } //Button
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Username, \(username)")
+                    .accessibilityHint("Double tap to edit username")
                     .alert("Enter new username", isPresented: $showUsernameEditAlert) {
                         TextField("Username", text: $username)
                         Button("OK", action: {showUsernameEditAlert.toggle()})
@@ -190,6 +195,7 @@ struct SettingsView: View {
                 // change email field
                 HStack {
                     Text("Email:")
+                    .accessibilityLabel("Current email is \(email)")
                     
                     Spacer()
                     
@@ -199,7 +205,11 @@ struct SettingsView: View {
                         showEmailEditAlert.toggle()
                     }) {
                         Image(systemName: "pencil")
+                        .accessibilityLabel("Edit email")
                     } //Button
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Emaill, \(username)")
+                    .accessibilityHint("Double tap to edit email. Remember, this still needs to be a Grinnell email")
                     .alert("Enter new email", isPresented: $showEmailEditAlert) {
                         TextField("Email", text: $email)
                         Button("OK", action: {showEmailEditAlert.toggle()})
@@ -264,17 +274,18 @@ struct SettingsView: View {
                     }
                     //updates the email iff the email has been changed. esp important bc if this one gets called erroneously theyll be asked to verify erroneously and no one likes that
                     if email != UserDefaults.standard.string(forKey: "email")!{
-                        showVerificationAlert.toggle()
                         userProfile.setEmail(newEmail: email){ result in
                             switch result {
                             case .success(let output):
+                                showVerificationAlert.toggle()
                                 DispatchQueue.main.async {
                                     triedToPass = true
                                     //if succeeded, log it
                                     print("API Response: \(output)")
-                                    emailResponseMessage = "Email successfully changed"
+                                    emailResponseMessage = "Email submit for change. Watch out for a code at the new address"
                                 }
                             case .failure(let error):
+                                email = UserDefaults.standard.string(forKey: "email")!
                                 print("API call failed:\(error.localizedDescription)")
                                 if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                                 switch apiError {
@@ -304,8 +315,10 @@ struct SettingsView: View {
                     Image(systemName: "square.and.arrow.up")
                         .imageScale(.large)
                 } //Button
+                .accessibilityHint("Saves any changes made to username or email")
                 .alert("Enter verification code", isPresented: $showVerificationAlert) {
                     TextField("Verification code", text: $verificationCode)
+                        .accessibilityLabel("Verification code input field")
                     Button("Cancel", role: .cancel) {
                         email = UserDefaults.standard.string(forKey: "email")!
                         //set email back to original email
