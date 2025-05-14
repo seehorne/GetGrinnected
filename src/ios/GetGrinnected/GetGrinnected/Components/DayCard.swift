@@ -79,6 +79,26 @@ struct DayView: View {
         return isToday ? .colorBlue : .appBorder
     }
     
+    private var fullDateString: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        return formatter.string(from: date)
+    }
+
+    private var accessibilityLabelText: String {
+        fullDateString
+    }
+
+    private var accessibilityValueText: String {
+        if isSelected {
+            return "Selected"
+        } else if isToday {
+            return "Today"
+        } else {
+            return ""
+        }
+    }
+    
     //Main body view
     var body: some View {
         //Vstack for the weekday and the day, spacing of 8 between two eleemnts
@@ -104,6 +124,12 @@ struct DayView: View {
             }
         )
         .cornerRadius(10) //set the corner radius equal to the rectangle
+        
+        .accessibilityElement()
+            .accessibilityLabel(accessibilityLabelText)
+            .accessibilityValue(accessibilityValueText)
+            .accessibilityHint("Double tap to select this date")
+            .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : .isButton)
     }//body view
 }// day card
 
