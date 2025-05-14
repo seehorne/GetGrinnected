@@ -28,12 +28,17 @@ struct LoginView: View {
                 
                 //Signin Email Text Field
                 InputView(text: $email, title: "Grinnell Email", placeholder: "Enter your Grinnell Email")
+                    .accessibilityLabel("Email input field")
+                    .accessibilityHint("Enter your Grinnell College email address")
+                    .textContentType(.emailAddress)
+                    .keyboardType(.emailAddress)
                 
                 //error
                 if !errorMessage.isEmpty{
                     Text(errorMessage)
                         .foregroundColor(.red)
                         .font(.caption)
+                        .accessibilityLabel("Error: \(errorMessage)")
                 }//if
                 
                 // Button
@@ -57,6 +62,7 @@ struct LoginView: View {
                             .fontWeight(.semibold)
                         Image (systemName: "arrow.right")
                     }
+                    .accessibilityLabel("Sign in with email")
                     .foregroundColor(.white)
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                 } //Button
@@ -70,6 +76,7 @@ struct LoginView: View {
                     SignUpView(isLoggedIn: $isLoggedIn)
                 } label : {
                     Text("Don't have an account?")
+                        .accessibilityHint("Opens the sign up screen")
                         .foregroundColor(Color.appTextSecondary)
                         .padding(.top, 4)
                 }
