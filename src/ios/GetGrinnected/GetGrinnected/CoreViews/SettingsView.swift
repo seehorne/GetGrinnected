@@ -394,10 +394,17 @@ struct SettingsView: View {
             }
             .font(.headline)
             .padding()
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel("Appearance section")
+            .accessibilityHint(isAppearanceSelected ? "Double tap to collapse appearance settings" : "Double tap to expand appearance settings")
             
             if isAppearanceSelected {
                 Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
                     .padding()
+                    .accessibilityLabel("Appearance mode toggle")
+                    .accessibilityValue(lightModeOn ? "Light mode enabled" : "Dark mode enabled")
+                    .accessibilityHint("Double tap to switch between light and dark mode")
             }
         } //VStack
         .frame(maxWidth: .infinity)
@@ -429,6 +436,10 @@ struct SettingsView: View {
                 .font(.headline)
                 .padding(.top)
                 .padding(.bottom)
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isButton)
+                .accessibilityLabel("Accessibility section")
+                .accessibilityHint(isAccessibilitySelected ? "Double tap to collapse accessibility settings" : "Double tap to expand accessibility settings")
 
                 if isAccessibilitySelected {
                     VStack {
@@ -445,6 +456,9 @@ struct SettingsView: View {
                                 .font(.system(size: 45))
                         }
                         .padding()
+                        .accessibilityLabel("Text size")
+                        .accessibilityValue("\(Int(fontSize)) points")
+                        .accessibilityHint("Swipe up or down with one finger to adjust text size")
                     }
                     .transition(.asymmetric(
                         insertion: .move(edge: .top),
