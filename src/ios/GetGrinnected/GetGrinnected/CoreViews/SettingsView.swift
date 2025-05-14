@@ -612,6 +612,8 @@ struct SettingsView: View {
                 .foregroundColor(.red)
                 .bold()
         } //Button
+        .accessibilityLabel("Delete your account")
+        .accessibilityHint("Double tap to open a confirmation dialog about deleting your account. Deleting your account will permanently delete your account and its data")
         .alert("Are you sure you want to delete your account?", isPresented: $showDeleteAccountAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
@@ -647,6 +649,8 @@ struct SettingsView: View {
                 .foregroundColor(.appContainer)
                 .bold()
         } //Button
+        .accessibilityLabel("Log out of your account")
+        .accessibilityHint("Double tap to open a confirmation dialog about deleting your account.")
         .alert("Are you sure you want to log out?", isPresented: $showLogOutAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Confirm", role: .destructive){
