@@ -568,9 +568,10 @@ struct SettingsView: View {
                     }
                     
                     Group {//read intelligibly as one thing
-                        Text("Faculty Instructor")
+                        Text("Faculty")
                             .font(.headline)
-                        Text("Professor Leah Pearlmutter")
+                        Text("Instructor: Professor Leah Pearlmutter")
+                        Text("Digital Liberal Arts Collaborative: Morris Pelzel")
                             .padding(.bottom)
                     }
                 }
