@@ -36,14 +36,19 @@ struct VerificationView: View {
             VStack {
                 //image logo with overlaid circle underneath
                 Logo(size: 200)
+                    .accessibilityHidden(true)
                 
                 //Signin Email Text Field
                 InputView(text: $code, title: "Type your code here", placeholder: "Hint: its six digits long and went to your email")
+                    .accessibilityLabel("Verification code input")
+                    .accessibilityHint("Enter the six-digit code sent to your email")
                 if !verifyError.isEmpty{
                     Text(verifyError)
                         .foregroundColor(.red)
                         .font(.caption)
+                        .accessibilityLabel("Verification error: \(verifyError)")
                 }
+                
                 
                 // Button
                 Button {
@@ -78,6 +83,8 @@ struct VerificationView: View {
                             .fontWeight(.semibold)
                         Image (systemName: "arrow.right")
                     }
+                    .accessibilityLabel("Submit verification code")
+                    .accessibilityHint("Attempts to verify your email and sign you in")
                     .foregroundColor(.white)
                     .frame(width: UIScreen.main.bounds.width - 32, height: 48)
                 }//Button
@@ -107,6 +114,8 @@ struct VerificationView: View {
                     .foregroundColor(.colorBlue)
                     .frame(width: UIScreen.main.bounds.width - 48, height: 32)
                 }//Button
+                .accessibilityLabel("Resend verification code")
+                .accessibilityHint("Sends a new six-digit code to your email")
                 .background (.white)
                     .cornerRadius (10)
                     .padding(.top, 24)
@@ -118,6 +127,7 @@ struct VerificationView: View {
                 Text(resendError)
                     .foregroundColor(.red)
                     .font(.caption)
+                    .accessibilityLabel("Resend error: \(resendError)")
             }
         } //navigation
     } //body

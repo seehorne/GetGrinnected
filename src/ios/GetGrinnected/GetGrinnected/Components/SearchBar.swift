@@ -22,6 +22,10 @@ struct SearchBar: View {
                 )
                 .foregroundColor(.white)
                 .tint(.white)
+                .accessibilityLabel("Search field")
+                .accessibilityHint("Enter text to search")
+                .accessibilityAddTraits(.isSearchField)
+
             }
             .padding(.vertical, 10)
             .padding(.horizontal, 15)
@@ -34,6 +38,7 @@ struct SearchBar: View {
             
             //image
             Logo(size: 35)
+                .accessibilityHidden(true)
         }//HStack for searching
         .padding(.top, safeAreaTop + 10)
         .padding(.leading)

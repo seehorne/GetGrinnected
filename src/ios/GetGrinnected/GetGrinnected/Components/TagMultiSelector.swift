@@ -23,6 +23,8 @@ struct TagMultiSelector: View {
                     // remove tags from selected tags
                     parentView.selectedTags.removeAll()
                 } //TagMultiSelectorRow
+                .accessibilityLabel(Text("Filter events by tags"))
+                .accessibilityHint(Text("Double-tap to select or clear event tags"))
                 
                 //look at each tag
                 ForEach(Array(parentView.possibleTags).sorted(), id: \.self) { tag in
@@ -52,6 +54,8 @@ struct TagMultiSelector: View {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.appContainer, lineWidth: 1)
                 )
+                .accessibilityLabel(Text("Filter events by tags"))
+                        .accessibilityHint(Text("Double-tap to choose or clear event tags"))
         }
         .foregroundColor(.appTextPrimary)
         .font(.title3)

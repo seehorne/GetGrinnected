@@ -52,6 +52,7 @@ struct SearchView: View {
                                 Text("Search by \(filterType)")
                             }
                         }
+                        .accessibilityLabel("Search by filter type")
                         .pickerStyle(.segmented)
                         .padding(.horizontal) //horizontal padding
                         
@@ -61,6 +62,8 @@ struct SearchView: View {
                             .padding(.horizontal)
                             .padding(.top)
                         TextField("Search by \(filterType.rawValue.capitalized)", text: $filter)
+                            .accessibilityLabel("Search field")
+                            .accessibilityHint("Enter your search term by \(filterType.rawValue)")
                             .font(.callout)
                             .autocapitalization(.none)
                             .padding()//for general text to be padded in the background
@@ -83,6 +86,8 @@ struct SearchView: View {
                             selection: $startDate,
                              displayedComponents: [.date, .hourAndMinute]
                         )
+                        .accessibilityLabel("Start Date Picker")
+                        .accessibilityHint("Select the starting date and time for the search range")
                         .padding()
                         .onChange(of: startDate) {
                             // Update parentView timeSpan start
@@ -102,6 +107,8 @@ struct SearchView: View {
                             in:  startDate.addingTimeInterval(24 * 60 * 60)...,
                             displayedComponents: [.date, .hourAndMinute]
                         )
+                        .accessibilityLabel("End Date Picker")
+                        .accessibilityHint("Select the ending date and time for the search range")
                         .padding()
                         .onChange(of: endDate) {
                             // Update parentView timeSpan end
@@ -114,6 +121,8 @@ struct SearchView: View {
                             HStack(){
                                 Text("\(Image(systemName: "magnifyingglass")) Search")
                                     .font(.headline)
+                                    .accessibilityLabel("Search button")
+                                    .accessibilityHint("Executes your search with the current filters")
                                     .foregroundStyle(Color.white)
                                     .padding()
                                     .background(
@@ -173,6 +182,7 @@ struct SearchResults: View {
                             Text("Sort by \(sortOrder.rawValue.capitalized)")
                         }
                     }
+                    .accessibilityLabel("Sort results by")
                     .pickerStyle(.segmented)
                     
                     TagMultiSelector(title: "Tags", parentView: parentView)

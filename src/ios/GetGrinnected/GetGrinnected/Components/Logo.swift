@@ -25,6 +25,9 @@ struct Logo: View {
                         .frame(width: (size * 0.8), height: (size * 0.8))
                         .padding(.vertical, 32)
                 )
+                .accessibilityElement()
+                .accessibilityLabel("GetGrinnected logo: a blue squirrel holding a calendar")
+                .accessibilityHint("This is the app's logo")
         
     }
 }

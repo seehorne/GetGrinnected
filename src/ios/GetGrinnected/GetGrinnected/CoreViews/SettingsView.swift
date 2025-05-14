@@ -145,6 +145,9 @@ struct SettingsView: View {
                 Text("Profile")
                 Image(systemName: isProfileSelected ? "chevron.down" : "chevron.left")
             }
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel("Profile section")
+            .accessibilityHint(isProfileSelected ? "Double tap to collapse" : "Double tap to expand")
             .font(.headline)
             .padding()
             
@@ -152,6 +155,7 @@ struct SettingsView: View {
                 // change username field
                 HStack {
                     Text("Username:")
+                        .accessibilityLabel("Current username is \(username)")
                     
                     Spacer()
                     
@@ -161,7 +165,11 @@ struct SettingsView: View {
                         showUsernameEditAlert.toggle()
                     }) {
                         Image(systemName: "pencil")
+                        .accessibilityLabel("Edit username")
                     } //Button
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Username, \(username)")
+                    .accessibilityHint("Double tap to edit username")
                     .alert("Enter new username", isPresented: $showUsernameEditAlert) {
                         TextField("Username", text: $username)
                         Button("OK", action: {showUsernameEditAlert.toggle()})
@@ -190,6 +198,7 @@ struct SettingsView: View {
                 // change email field
                 HStack {
                     Text("Email:")
+                    .accessibilityLabel("Current email is \(email)")
                     
                     Spacer()
                     
@@ -199,7 +208,11 @@ struct SettingsView: View {
                         showEmailEditAlert.toggle()
                     }) {
                         Image(systemName: "pencil")
+                        .accessibilityLabel("Edit email")
                     } //Button
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Email, \(email)")
+                    .accessibilityHint("Double tap to edit email. Remember, this still needs to be a Grinnell email")
                     .alert("Enter new email", isPresented: $showEmailEditAlert) {
                         TextField("Email", text: $email)
                         Button("OK", action: {showEmailEditAlert.toggle()})
@@ -226,7 +239,6 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
-                
                 
                 // submit changes
                 Button(action:  {
@@ -264,17 +276,18 @@ struct SettingsView: View {
                     }
                     //updates the email iff the email has been changed. esp important bc if this one gets called erroneously theyll be asked to verify erroneously and no one likes that
                     if email != UserDefaults.standard.string(forKey: "email")!{
-                        showVerificationAlert.toggle()
                         userProfile.setEmail(newEmail: email){ result in
                             switch result {
                             case .success(let output):
+                                showVerificationAlert.toggle()
                                 DispatchQueue.main.async {
                                     triedToPass = true
                                     //if succeeded, log it
                                     print("API Response: \(output)")
-                                    emailResponseMessage = "Email successfully changed"
+                                    emailResponseMessage = "Email submit for change. Watch out for a code at the new address"
                                 }
                             case .failure(let error):
+                                email = UserDefaults.standard.string(forKey: "email")!
                                 print("API call failed:\(error.localizedDescription)")
                                 if let apiError = error as? UserProfile.APIError {//treat the error as API error object
                                                 switch apiError {
@@ -304,8 +317,10 @@ struct SettingsView: View {
                     Image(systemName: "square.and.arrow.up")
                         .imageScale(.large)
                 } //Button
+                .accessibilityHint("Saves any changes made to username or email")
                 .alert("Enter verification code", isPresented: $showVerificationAlert) {
                     TextField("Verification code", text: $verificationCode)
+                        .accessibilityLabel("Verification code input field")
                     Button("Cancel", role: .cancel) {
                         email = UserDefaults.standard.string(forKey: "email")!
                         //set email back to original email
@@ -379,10 +394,17 @@ struct SettingsView: View {
             }
             .font(.headline)
             .padding()
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel("Appearance section")
+            .accessibilityHint(isAppearanceSelected ? "Double tap to collapse appearance settings" : "Double tap to expand appearance settings")
             
             if isAppearanceSelected {
                 Toggle(lightModeOn ? "Light Mode" : "Dark Mode", systemImage: lightModeOn ? "lightswitch.on" : "lightswitch.off", isOn: $lightModeOn)
                     .padding()
+                    .accessibilityLabel("Appearance mode toggle")
+                    .accessibilityValue(lightModeOn ? "Light mode enabled" : "Dark mode enabled")
+                    .accessibilityHint("Double tap to switch between light and dark mode")
             }
         } //VStack
         .frame(maxWidth: .infinity)
@@ -414,6 +436,10 @@ struct SettingsView: View {
                 .font(.headline)
                 .padding(.top)
                 .padding(.bottom)
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isButton)
+                .accessibilityLabel("Accessibility section")
+                .accessibilityHint(isAccessibilitySelected ? "Double tap to collapse accessibility settings" : "Double tap to expand accessibility settings")
 
                 if isAccessibilitySelected {
                     VStack {
@@ -430,6 +456,9 @@ struct SettingsView: View {
                                 .font(.system(size: 45))
                         }
                         .padding()
+                        .accessibilityLabel("Text size")
+                        .accessibilityValue("\(Int(fontSize)) points")
+                        .accessibilityHint("Swipe up or down with one finger to adjust text size")
                     }
                     .transition(.asymmetric(
                         insertion: .move(edge: .top),
@@ -467,6 +496,11 @@ struct SettingsView: View {
                 .font(.headline)
                 .padding(.top)
                 .padding(.bottom)
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isButton)
+                .accessibilityLabel("About section")
+                .accessibilityHint(isAboutSelected ? "Double tap to collapse About section" : "Double tap to expand About section")
+
             
             
             if(isAboutSelected){
@@ -478,6 +512,7 @@ struct SettingsView: View {
                             Image("discord_logo")
                                 .resizable()
                                 .frame(width: 50, height: 50)
+                                .accessibilityLabel("Join our Discord server")
                         }
                         
                         // GitHub Link
@@ -485,6 +520,7 @@ struct SettingsView: View {
                             Image("github_logo")
                                 .resizable()
                                 .frame(width: 50, height: 50)
+                                .accessibilityLabel("Check out our Github")
                         }
                         
                     }//hstack
@@ -503,32 +539,40 @@ struct SettingsView: View {
                         .font(.title2)
                         .padding(.bottom)
                     
-                    Text("Logo Design")
-                        .font(.headline)
-                    Text("Rei Yamada")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Logo Design")
+                            .font(.headline)
+                        Text("Rei Yamada")
+                            .padding(.bottom)
+                    }
                     
-                    Text("Testing and Stakeholder Feedback")
-                        .font(.headline)
-                    Text("Yuina Iseki")
-                    Text("Lily Freeman")
-                    Text("Regan Stambaugh")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Testing and Stakeholder Feedback")
+                            .font(.headline)
+                        Text("Yuina Iseki")
+                        Text("Lily Freeman")
+                        Text("Regan Stambaugh")
+                            .padding(.bottom)
+                    }
                         
-                    Text("Development Team")
-                        .font(.headline)
-                    Text("almond Heil")
-                    Text("Anthony Schwindt")
-                    Text("Budhil Thijm")
-                    Text("Ellie Seehorn")
-                    Text("Ethan Hughes")
-                    Text("Michael Paulin")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Development Team")
+                            .font(.headline)
+                        Text("almond Heil")
+                        Text("Anthony Schwindt")
+                        Text("Budhil Thijm")
+                        Text("Ellie Seehorn")
+                        Text("Ethan Hughes")
+                        Text("Michael Paulin")
+                            .padding(.bottom)
+                    }
                     
-                    Text("Faculty Instructor")
-                        .font(.headline)
-                    Text("Professor Leah Pearlmutter")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Faculty Instructor")
+                            .font(.headline)
+                        Text("Professor Leah Pearlmutter")
+                            .padding(.bottom)
+                    }
                 }
                 .transition(.asymmetric(
                     insertion: .move(edge: .top),
@@ -568,6 +612,8 @@ struct SettingsView: View {
                 .foregroundColor(.red)
                 .bold()
         } //Button
+        .accessibilityLabel("Delete your account")
+        .accessibilityHint("Double tap to open a confirmation dialog about deleting your account. Deleting your account will permanently delete your account and its data")
         .alert("Are you sure you want to delete your account?", isPresented: $showDeleteAccountAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
@@ -603,6 +649,8 @@ struct SettingsView: View {
                 .foregroundColor(.appContainer)
                 .bold()
         } //Button
+        .accessibilityLabel("Log out of your account")
+        .accessibilityHint("Double tap to open a confirmation dialog about deleting your account.")
         .alert("Are you sure you want to log out?", isPresented: $showLogOutAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Confirm", role: .destructive){

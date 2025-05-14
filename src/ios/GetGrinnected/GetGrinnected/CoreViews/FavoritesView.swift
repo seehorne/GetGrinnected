@@ -32,7 +32,8 @@ struct FavoritesView: View {
             VStack(){
                 // Header is outside of scrollable so it does not move
                 Header(safeAreaTop: safeAreaTop, title: "Favorites", searchBarOn: false)
-                ScrollView(.vertical, showsIndicators: false){
+                    .accessibilityAddTraits(.isHeader)
+                ScrollView(.vertical){
                 //content of eventlist, show favorites true!, no search string
                     VStack{
                         //selectors and tags
@@ -51,6 +52,7 @@ struct FavoritesView: View {
                         
                         //event list view for all the events (may have to pass in some arguments according to the day
                         EventList(parentView: parentView, selectedEvent: -1, sortOrder: sortOrder, filterType: FilterType.favorites, filter: "", filterByDate: true)
+                            .accessibilityLabel("List of favorited events")
                         
                     }//vstack
                 }

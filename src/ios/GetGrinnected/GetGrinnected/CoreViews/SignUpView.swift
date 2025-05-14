@@ -25,6 +25,7 @@ struct SignUpView: View{
                 .bold()
                 .font(.title)
                 .foregroundColor(.textPrimary)
+                .accessibilityAddTraits(.isHeader)
             
             /** input fields*/
             //Username
@@ -44,6 +45,7 @@ struct SignUpView: View{
                 Text(signupError)
                     .foregroundColor(.red)
                     .font(.caption)
+                    .accessibilityLabel("Error: \(signupError)")
             }//if
             
             
@@ -71,6 +73,7 @@ struct SignUpView: View{
                         .fontWeight(.medium)
                         .padding()
                         .foregroundColor(Color.white)
+                        .accessibilityLabel("Sign up and continue to verification")
                     Image(systemName: "arrow.right")
                         .padding()
                         .foregroundColor(Color.white)

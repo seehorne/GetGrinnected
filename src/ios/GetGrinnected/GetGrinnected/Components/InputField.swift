@@ -21,10 +21,14 @@ struct InputView: View {
                 SecureField(placeholder, text: $text)
                     .font(.callout)
                     .autocapitalization(.none)
+                    .accessibilityLabel(Text(title))
+                    .accessibilityHint(Text("Secure text field. Double-tap to enter your \(title.lowercased())"))
             } else {
                 TextField(placeholder, text: $text)
                     .font(.callout)
                     .autocapitalization(.none)
+                    .accessibilityLabel(Text(title))
+                    .accessibilityHint(Text("Text field. Double-tap to enter your \(title.lowercased())"))
             }
             Divider ()
         }
