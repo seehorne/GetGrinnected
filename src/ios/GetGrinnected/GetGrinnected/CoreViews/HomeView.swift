@@ -29,6 +29,8 @@ struct HomeView: View {
                 VStack(){
                     // Header is outside of scrollable so it does not move
                     Header(inputText: $searchText, safeAreaTop: safeAreaTop, title: "Home", searchBarOn: false)
+                        .accessibilityHeading(.h1)
+                        .accessibilityLabel("Home screen")
                     
                     //vertical scroll view to see more events
                     ScrollView(.vertical, showsIndicators: false){
@@ -44,6 +46,8 @@ struct HomeView: View {
                                         Text("Sort by \(sortOrder.rawValue.capitalized)")
                                     }
                                 }
+                                .accessibilityLabel("Sort events by")
+                                .accessibilityHint("Sorts events by \(sortOrder)")
                                 .pickerStyle(.segmented)
                                 
                                 //tag selector
