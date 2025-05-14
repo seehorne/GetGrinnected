@@ -216,7 +216,7 @@ struct EventCard: View {
                                     .imageScale(.large)
                             }
                             .accessibilityLabel("Favorite")
-                            .accessibilityValue(event.favorited ? "On" : "Off")
+                            .accessibilityValue(event.favorited ? "\(event.name) is favorited"  : "\(event.name) is not favorited")
                             .accessibilityAddTraits(.isButton)
                             .accessibilityAddTraits(event.favorited ? .isSelected : [])
                             .padding(.vertical, 2)//adding space after
@@ -245,7 +245,7 @@ struct EventCard: View {
                                     .imageScale(.large)
                             }
                             .accessibilityLabel("Notifications")
-                            .accessibilityValue(event.notified ? "Enabled" : "Disabled")
+                            .accessibilityValue(event.notified ? "Notifications for \(event.name) on" : "Notifications for \(event.name) off")
                             .accessibilityAddTraits(.isButton)
                             .accessibilityAddTraits(event.notified ? .isSelected : [])
                         } //Vstack
