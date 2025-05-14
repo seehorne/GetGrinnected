@@ -74,6 +74,20 @@ struct EventCard: View {
     
     var body: some View{
         
+        var accessibilityLabelText: String {
+            var label = "\(event.name)"
+            if let location = event.location {
+                label += ", at \(location)"
+            }
+            if let time = event.startTimeString {
+                label += ", at \(time)"
+            }
+            if isExpanded, let descr = event.descr {
+                label += ". Description: \(descr)"
+            }
+            return label
+        }
+        
         /**
             For each event cards, there will be two views: the "compressed view," and the "expanded" (or in this case, "open", after tapping the "compressed view")
          */
@@ -177,6 +191,8 @@ struct EventCard: View {
                                 Image(systemName: "square.and.arrow.up")
                                     .foregroundColor(.border)
                             }//can utilize
+                            .accessibilityLabel("Share event")
+                            .accessibilityHint("Shares event information via available apps.")
                             .padding(.vertical, 2)//adding space after
                             
                             //component that can be reusable
@@ -199,8 +215,11 @@ struct EventCard: View {
                                     .foregroundColor(.border)
                                     .imageScale(.large)
                             }
+                            .accessibilityLabel("Favorite")
+                            .accessibilityValue(event.favorited ? "On" : "Off")
+                            .accessibilityAddTraits(.isButton)
+                            .accessibilityAddTraits(event.favorited ? .isSelected : [])
                             .padding(.vertical, 2)//adding space after
-                            
                             
                             Button(action: {
                                 event.notified.toggle()
@@ -225,6 +244,10 @@ struct EventCard: View {
                                     .foregroundColor(.border)
                                     .imageScale(.large)
                             }
+                            .accessibilityLabel("Notifications")
+                            .accessibilityValue(event.notified ? "Enabled" : "Disabled")
+                            .accessibilityAddTraits(.isButton)
+                            .accessibilityAddTraits(event.notified ? .isSelected : [])
                         } //Vstack
                         .padding(.vertical, 2)//adding space after
                         .frame(alignment: .trailing)
@@ -236,6 +259,9 @@ struct EventCard: View {
                     /**
                      source: https://stackoverflow.com/questions/69633018/how-do-i-extend-the-width-of-my-button-component-in-my-swiftui-view
                      */
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(accessibilityLabelText)
+                    .accessibilityHint("Double-tap for more details or actions.")
                 }
                 .foregroundStyle(Color(.container))
                 .cornerRadius(20)//make the corner radius small enough
