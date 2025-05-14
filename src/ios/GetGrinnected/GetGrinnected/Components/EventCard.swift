@@ -259,7 +259,7 @@ struct EventCard: View {
                     /**
                      source: https://stackoverflow.com/questions/69633018/how-do-i-extend-the-width-of-my-button-component-in-my-swiftui-view
                      */
-                    .accessibilityElement(children: .combine)
+                    .accessibilityElement(children: .contain)
                     .accessibilityLabel(accessibilityLabelText)
                     .accessibilityHint("Double-tap for more details or actions.")
                 }
