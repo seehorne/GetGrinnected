@@ -145,6 +145,9 @@ struct SettingsView: View {
                 Text("Profile")
                 Image(systemName: isProfileSelected ? "chevron.down" : "chevron.left")
             }
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel("Profile section")
+            .accessibilityHint(isProfileSelected ? "Double tap to collapse" : "Double tap to expand")
             .font(.headline)
             .padding()
             
@@ -208,7 +211,7 @@ struct SettingsView: View {
                         .accessibilityLabel("Edit email")
                     } //Button
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("Emaill, \(username)")
+                    .accessibilityLabel("Email, \(email)")
                     .accessibilityHint("Double tap to edit email. Remember, this still needs to be a Grinnell email")
                     .alert("Enter new email", isPresented: $showEmailEditAlert) {
                         TextField("Email", text: $email)
@@ -236,7 +239,6 @@ struct SettingsView: View {
                     insertion: .move(edge: .top),
                     removal: .move(edge: .top)
                 ))//transition so that it pulls down instead of appearing out of nowhere
-                
                 
                 // submit changes
                 Button(action:  {
