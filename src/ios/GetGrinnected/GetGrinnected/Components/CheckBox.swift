@@ -38,6 +38,11 @@ struct CheckBox: View {
                 
                 if(item.name != nil) {
                     Text(item.name!)
+                        .accessibilityElement()
+                        .accessibilityLabel(item.name ?? "Option")
+                        .accessibilityValue(item.isChecked ? "Checked" : "Unchecked")
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityAddTraits(item.isChecked ? .isSelected : [])
                         .onTapGesture { // if text is tapped, toggle checkmark
                             item.isChecked.toggle()
                         } //Text
