@@ -45,7 +45,7 @@ struct TagMultiSelector: View {
             Label(title, systemImage: "chevron.down")
                 .padding(.all, 3)
                 .font(.subheadline)
-                .foregroundColor(.white)
+                .foregroundColor(Color.appBorder)
                 .background(Color.appContainer.opacity(0.75))
                 .cornerRadius(10)
                 .overlay(
