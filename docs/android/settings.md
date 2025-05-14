@@ -1,33 +1,27 @@
-!!! warning
-
-    TODO: THIS NEEDS A REWRITE
-
 # Settings
 
-## Sign out
-- Press sign out button to log out
-- Next time you open the app, will be returned to [welcome page](#welcome)
-- Back to [table of contents](#table-of-contents)
+Select any of the blue blocks to expand their menus and modify the settings inside.
 
-## Light and dark mode
-- Use slider to toggle between light mode and dark mode
-- Back to [table of contents](#table-of-contents)
+## Profile
 
-## Explore org info
-- Click on an org card to see details about the org (UNDER CONSTRUCTION :building_construction:)
-- Follow an org from its card (UNDER CONSTRUCTION :building_construction:)
-- Back to [table of contents](#table-of-contents)
+- You can update your username at any time. It still must follow the same requirements.
+- You can update your email to a different Grinnell email if you need to. In order to do so, you must verify the new email address.
 
-## Follow and unfollow orgs
-- Coming soon! Stay tuned :tada:
-- Back to [table of contents](#table-of-contents)
+## Appearance
 
-## Change username
-- Coming soon! Stay tuned :tada:
-- Back to [table of contents](#table-of-contents)
+- You can turn on and off dark mode using the switch.
 
-## Switch account
-- Coming soon! Stay tuned :tada:
-    - This feature will allow switching between personal accounts and org accounts
-        - Org leaders will have access to the account for their organization
-- Back to [table of contents](#table-of-contents)
+## Accessibility
+
+- You can change the font size of the app by tapping the text on the right side.
+- The default size is "Medium".
+
+## Notifications
+
+- You can modify the number of minutes before an event you will be sent a notification.
+  - This currently does not have an impact on actual notification timings. (UNDER CONSTRUCTION :building_construction:)
+
+## Log out or delete account
+
+- Click the "Delete Account" button to delete your account. It will ask for confirmation first. 
+- Click the "Log Out" button to log out of your account. It will ask for confirmation first.

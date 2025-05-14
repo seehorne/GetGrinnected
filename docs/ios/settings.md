@@ -4,29 +4,27 @@
 
 # Settings
 
-## Light and dark mode
-- Use slider to toggle between light mode and dark mode
-- Back to [table of contents](#table-of-contents)
+Select any of the blue blocks to expand their menus and modify the settings inside.
 
-## Change username
-- Type desired username in text box on settings page (UNDER CONSTRUCTION :building_construction:)
-    - Under construction because changed username does not currently save, and updated username is not checked for validity by original username rules
-- Back to [table of contents](#table-of-contents)
+## Profile
 
-## Sign out
-- Coming soon! Stay tuned :tada:
-- Back to [table of contents](#table-of-contents)
+- You can update your username at any time. It still must follow the same requirements.
+- You can update your email to a different Grinnell email if you need to. In order to do so, you must verify the new email address.
+- In order to save these settings, click the "Submit changes" button.
 
-## Explore organizations
-- Coming soon! Stay tuned :tada:
-- Back to [table of contents](#table-of-contents)
+## Appearance
 
-## Follow and unfollow organizations
-- Coming soon! Stay tuned :tada:
-- Back to [table of contents](#table-of-contents)
+- You can turn on and off light mode using the switch.
 
-## Switch account
-- Coming soon! Stay tuned :tada:
-    - This feature will allow switching between personal accounts and org accounts
-        - Org leaders will have access to the account for their organization
-- Back to [table of contents](#table-of-contents)
+## Accessibility
+
+- You can change the font size of the app by moving the slider to the left for a smaller font, or to the right for a larger one.
+
+## Notifications
+
+- You can modify the number of minutes before an event you will be sent a notification.
+
+## Log out or delete account
+
+- Click the "Delete Account" button to delete your account. It will ask for confirmation first. 
+- Click the "Log Out" button to log out of your account. It will ask for confirmation first.

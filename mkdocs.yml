@@ -3,14 +3,18 @@ nav:
   - Home: index.md
   - iOS User Guide:
     - 'Login & Signup': ios/login-signup.md
-    - General Navigation: ios/navigation.md
     - Home: ios/home.md
+    - Search: ios/search.md
+    - Favorites: ios/favorites.md
     - Settings: ios/settings.md
+    - Navigation: ios/navigation.md
   - Android User Guide:
     - 'Login & Signup': android/login-signup.md
-    - General Navigation: android/navigation.md
     - Home: android/home.md
+    - Search: android/search.md
+    - Favorites: android/favorites.md
     - Settings: android/settings.md
+    - Navigation: android/navigation.md
   - Developer Guide:
     - API v1: dev/api-v1.md
 
