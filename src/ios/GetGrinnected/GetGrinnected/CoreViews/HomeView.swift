@@ -33,7 +33,7 @@ struct HomeView: View {
                         .accessibilityLabel("Home screen")
                     
                     //vertical scroll view to see more events
-                    ScrollView(.vertical, showsIndicators: false){
+                    ScrollView(.vertical){
                         //vstack to have some spacing between header and main compoments
                         VStack(spacing: 16) {
                             WeekView(selectedDate: $parentView.viewedDate)
