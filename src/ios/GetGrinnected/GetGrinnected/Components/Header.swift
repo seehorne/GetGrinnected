@@ -37,6 +37,7 @@ struct Header: View{
                     .font(.title)
                     .bold()
                     .foregroundStyle(.colorWhite)
+                    .accessibilityAddTraits(.isHeader)
             }//hstack for content and buttons
             .padding(.bottom)
             .frame(maxWidth: .infinity)
@@ -51,6 +52,9 @@ struct Header: View{
                             get: { inputText },
                             set: { inputText = $0 }))
                         .tint(.white)
+                        .accessibilityLabel("Search field")
+                        .accessibilityHint("Enter keywords to search")
+                        .accessibilityAddTraits(.isSearchField)
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal, 15)
@@ -63,6 +67,7 @@ struct Header: View{
                     
                     //image
                     Logo(size: 35)
+                        .accessibilityHidden(true)
                 }//HStack for searching
                 
             }//only if searchbar is on

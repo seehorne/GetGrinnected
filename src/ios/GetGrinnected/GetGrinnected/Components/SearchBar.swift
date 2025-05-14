@@ -38,6 +38,7 @@ struct SearchBar: View {
             
             //image
             Logo(size: 35)
+                .accessibilityHidden(true)
         }//HStack for searching
         .padding(.top, safeAreaTop + 10)
         .padding(.leading)
