@@ -496,6 +496,11 @@ struct SettingsView: View {
                 .font(.headline)
                 .padding(.top)
                 .padding(.bottom)
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isButton)
+                .accessibilityLabel("About section")
+                .accessibilityHint(isAboutSelected ? "Double tap to collapse About section" : "Double tap to expand About section")
+
             
             
             if(isAboutSelected){
@@ -507,6 +512,7 @@ struct SettingsView: View {
                             Image("discord_logo")
                                 .resizable()
                                 .frame(width: 50, height: 50)
+                                .accessibilityLabel("Join our Discord server")
                         }
                         
                         // GitHub Link
@@ -514,6 +520,7 @@ struct SettingsView: View {
                             Image("github_logo")
                                 .resizable()
                                 .frame(width: 50, height: 50)
+                                .accessibilityLabel("Check out our Github")
                         }
                         
                     }//hstack
@@ -532,32 +539,40 @@ struct SettingsView: View {
                         .font(.title2)
                         .padding(.bottom)
                     
-                    Text("Logo Design")
-                        .font(.headline)
-                    Text("Rei Yamada")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Logo Design")
+                            .font(.headline)
+                        Text("Rei Yamada")
+                            .padding(.bottom)
+                    }
                     
-                    Text("Testing and Stakeholder Feedback")
-                        .font(.headline)
-                    Text("Yuina Iseki")
-                    Text("Lily Freeman")
-                    Text("Regan Stambaugh")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Testing and Stakeholder Feedback")
+                            .font(.headline)
+                        Text("Yuina Iseki")
+                        Text("Lily Freeman")
+                        Text("Regan Stambaugh")
+                            .padding(.bottom)
+                    }
                         
-                    Text("Development Team")
-                        .font(.headline)
-                    Text("almond Heil")
-                    Text("Anthony Schwindt")
-                    Text("Budhil Thijm")
-                    Text("Ellie Seehorn")
-                    Text("Ethan Hughes")
-                    Text("Michael Paulin")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Development Team")
+                            .font(.headline)
+                        Text("almond Heil")
+                        Text("Anthony Schwindt")
+                        Text("Budhil Thijm")
+                        Text("Ellie Seehorn")
+                        Text("Ethan Hughes")
+                        Text("Michael Paulin")
+                            .padding(.bottom)
+                    }
                     
-                    Text("Faculty Instructor")
-                        .font(.headline)
-                    Text("Professor Leah Pearlmutter")
-                        .padding(.bottom)
+                    Group {//read intelligibly as one thing
+                        Text("Faculty Instructor")
+                            .font(.headline)
+                        Text("Professor Leah Pearlmutter")
+                            .padding(.bottom)
+                    }
                 }
                 .transition(.asymmetric(
                     insertion: .move(edge: .top),
