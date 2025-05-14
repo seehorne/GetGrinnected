@@ -38,6 +38,7 @@ struct WeekRowView: View {
         }
     }
     
+    
     //Body main view
     var body: some View {
         //Spacing for horizontal stack
@@ -49,6 +50,9 @@ struct WeekRowView: View {
                     date: date,//this is how we go forward in days
                     isSelected: calendar.isDate(date, inSameDayAs: selectedDate)
                 )
+                .accessibilityElement()
+                .accessibilityLabel(date.formatted(.dateTime.weekday().month().day()))
+                .accessibilityHint("Tap to select this date")
                 .onTapGesture {//on tap, we change the selected date to that day that is selected (HERE IS WHERE THE TAP LOGIC IS)
                     selectedDate = date
                 }//tap gesture
