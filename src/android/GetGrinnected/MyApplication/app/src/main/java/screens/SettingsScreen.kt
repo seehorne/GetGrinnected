@@ -592,13 +592,19 @@ fun SettingsScreen(modifier: Modifier = Modifier,
                             )
 
                             Text(
-                                text = "Faculty Instructor",
+                                text = "Faculty",
                                 style = typography.titleMedium,
                                 color = colorScheme.onBackground
                             )
 
                             Text(
                                 text = "• Prof. Leah",
+                                style = typography.bodyMedium,
+                                color = colorScheme.onBackground
+                            )
+
+                            Text(
+                                text = "• Morris Pelzel",
                                 style = typography.bodyMedium,
                                 color = colorScheme.onBackground
                             )

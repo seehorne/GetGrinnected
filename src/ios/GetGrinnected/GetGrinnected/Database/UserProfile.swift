@@ -365,7 +365,7 @@ class UserProfile: ObservableObject {
         //Make the API call
         //this is an internal function, not my favorite, but does the job
         func makeRequest(token: String) {
-            var request = requestBuilder(token)
+            let request = requestBuilder(token)
             let task = URLSession.shared.dataTask(with: request) { data , response, error in
                 if let error = error {
                     completion(.failure(error))
