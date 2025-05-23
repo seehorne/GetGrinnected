@@ -17,6 +17,7 @@ nav:
     - Navigation: android/navigation.md
   - Developer Guide:
     - API v1: dev/api-v1.md
+    - Backend: dev/backend.md
 
 ################################################################################
 
